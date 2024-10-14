@@ -51,7 +51,7 @@ from utilities.reproduction.paper_reproduction import (
     simulate_data_driven_mpc_control_loops_reproduction,
     plot_input_output_reproduction)
 
-from utilities.model_simulation import LTISystemModel
+from utilities.models.lti_model import LTISystemModel
 
 # Directory paths
 dirname = os.path.dirname

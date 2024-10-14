@@ -3,7 +3,7 @@ from typing import Tuple
 import numpy as np
 from numpy.random import Generator
 
-from utilities.model_simulation import LTIModel
+from utilities.models.lti_model import LTIModel
 
 from utilities.controller.controller_creation import (
     DataDrivenMPCParamsDictType)

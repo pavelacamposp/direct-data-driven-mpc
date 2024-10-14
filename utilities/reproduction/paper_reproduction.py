@@ -12,7 +12,7 @@ from utilities.controller.controller_operation import (
 from utilities.visualization.data_visualization import (
     plot_input_output, create_input_output_figure)
 
-from utilities.model_simulation import LTIModel
+from utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
     DirectDataDrivenMPCController)
 

@@ -43,7 +43,7 @@ from utilities.visualization.data_visualization import (
 from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
     DataDrivenMPCType, SlackVarConstraintTypes)
 
-from utilities.model_simulation import LTISystemModel
+from utilities.models.lti_model import LTISystemModel
 
 from utilities.visualization.plot_styles import (
     INPUT_OUTPUT_PLOT_PARAMS, INPUT_OUTPUT_PLOT_PARAMS_SMALL)
