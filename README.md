@@ -122,8 +122,8 @@ The figure below shows the expected output from executing this script. The contr
 ## Code Structure
 
 ### Direct Data-Driven MPC Controller
-The project is structured as a Python package, encapsulating the **Data-Driven Model Predictive Control (MPC)** controller logic within the `DirectDataDrivenMPCController` class. This class implements a controller based on the **Nominal** and **Robust** Data-Driven MPC schemes described in the paper, ensuring that the stability and robustness guarantees are maintained by validating that the controller parameters satisfy the required assumptions and conditions.
-- [`direct_data_driven_mpc/direct_data_driven_mpc_controller.py`](direct_data_driven_mpc/direct_data_driven_mpc_controller.py): Implements the main Data-Driven MPC controller in the `DirectDataDrivenMPCController` class.
+The project is structured as a Python package, encapsulating the **Data-Driven Model Predictive Control (MPC)** controller logic within the `LTIDataDrivenMPCController` class. This class implements a controller based on the **Nominal** and **Robust** Data-Driven MPC schemes described in the paper, ensuring that the stability and robustness guarantees are maintained by validating that the controller parameters satisfy the required assumptions and conditions.
+- [`direct_data_driven_mpc/direct_data_driven_mpc_controller.py`](direct_data_driven_mpc/direct_data_driven_mpc_controller.py): Implements the main Data-Driven MPC controller in the `LTIDataDrivenMPCController` class.
 - [`direct_data_driven_mpc/utilities/hankel_matrix.py`](direct_data_driven_mpc/utilities/hankel_matrix.py): Provides functions for constructing Hankel matrices and evaluating whether data sequences are persistently exciting of a given order.
 
 ### Simulation
@@ -146,7 +146,7 @@ To modularize the controller creation and operation, the following utility modul
 
 ### Configuration Files
 The system and controller parameters used in the example and reproduction scripts are defined in YAML configuration files in the `examples/config` directory. These parameters are based on the example in Section V of the paper.
-- [`examples/config/controllers/data_driven_mpc_example_params.yaml`](examples/config/controllers/data_driven_mpc_example_params.yaml): Defines Data-Driven MPC controller parameters.
+- [`examples/config/controllers/lti_dd_mpc_example_params.yaml`](examples/config/controllers/lti_dd_mpc_example_params.yaml): Defines Data-Driven MPC controller parameters.
 - [`examples/config/models/four_tank_system_params.yaml`](examples/config/models/four_tank_system_params.yaml): Contains the system model parameters of a linearized version of a four-tank system.
 
 A YAML loading function is provided in  [`utilities/yaml_config_loading.py`](utilities/yaml_config_loading.py).

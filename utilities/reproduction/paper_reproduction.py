@@ -13,8 +13,8 @@ from utilities.visualization.data_visualization import (
     plot_input_output, create_input_output_figure)
 
 from utilities.models.lti_model import LTIModel
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DirectDataDrivenMPCController)
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController)
 
 from utilities.visualization.plot_styles import (
     SETPOINT_LINE_PARAMS, LEGEND_PARAMS)
@@ -120,9 +120,9 @@ def create_data_driven_mpc_controllers_reproduction(
     u_d: np.ndarray,
     y_d: np.ndarray,
     data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme]
-) -> List[DirectDataDrivenMPCController]:
+) -> List[LTIDataDrivenMPCController]:
     """
-    Create `DirectDataDrivenMPCController` instances for a specified list of
+    Create `LTIDataDrivenMPCController` instances for a specified list of
     Data-Driven MPC schemes.
     
     This function uses a base Data-Driven MPC controller configuration and
@@ -150,9 +150,10 @@ def create_data_driven_mpc_controllers_reproduction(
             Data-Driven MPC schemes based on the paper example from [1].
 
     Returns:
-        List[DirectDataDrivenMPCController]: A list of
-            `DirectDataDrivenMPCController` instances, which represent
-            Data-Driven MPC controllers based on specified configurations.
+        List[LTIDataDrivenMPCController]: A list of
+            `LTIDataDrivenMPCController` instances, which represent
+            Data-Driven MPC controllers designed for Linear Time-Invariant
+            (LTI) systems, based on specified configurations.
 
     References:
         [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
@@ -202,7 +203,7 @@ def create_data_driven_mpc_controllers_reproduction(
 
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
-    data_driven_mpc_controllers: List[DirectDataDrivenMPCController],
+    data_driven_mpc_controllers: List[LTIDataDrivenMPCController],
     n_steps: int,
     np_random: Generator,
     verbose: int,
@@ -213,15 +214,15 @@ def simulate_data_driven_mpc_control_loops_reproduction(
 
     This function extends the simulation of a Data-Driven MPC control loop to
     reproduce examples involving multiple controllers. It simulates several
-    `DirectDataDrivenMPCController` instances independently on the same system
+    `LTIDataDrivenMPCController` instances independently on the same system
     model by saving the system's initial internal state and resetting it to
     this state before each simulation.
 
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        data_driven_mpc_controllers (List[DirectDataDrivenMPCController]): A
-            list of `DirectDataDrivenMPCController` instances representing the
+        data_driven_mpc_controllers (List[LTIDataDrivenMPCController]): A
+            list of `LTIDataDrivenMPCController` instances representing the
             Data-Driven MPC controllers to be simulated.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating

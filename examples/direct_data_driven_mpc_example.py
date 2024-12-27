@@ -40,8 +40,8 @@ from utilities.controller.controller_operation import (
 from utilities.visualization.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
 
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DataDrivenMPCType, SlackVarConstraintTypes)
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCType, SlackVarConstraintType)
 
 from utilities.models.lti_model import LTISystemModel
 
@@ -63,7 +63,7 @@ default_model_config_path = os.path.join(models_config_dir,
 default_model_key_value = 'FourTankSystem'
 
 # Data-Driven MPC controller configuration file
-default_controller_config_file = 'data_driven_mpc_example_params.yaml'
+default_controller_config_file = 'lti_dd_mpc_example_params.yaml'
 default_controller_config_path = os.path.join(controller_config_dir,
                                               default_controller_config_file)
 default_controller_key_value = 'data_driven_mpc_params'
@@ -77,13 +77,13 @@ default_anim_points_per_frame = 5
 
 # Data-Driven MPC controller parameters
 controller_type_mapping = {
-    "Nominal": DataDrivenMPCType.NOMINAL,
-    "Robust": DataDrivenMPCType.ROBUST,
+    "Nominal": LTIDataDrivenMPCType.NOMINAL,
+    "Robust": LTIDataDrivenMPCType.ROBUST,
 }
 slack_var_constraint_type_mapping = {
-    "NonConvex": SlackVarConstraintTypes.NON_CONVEX,
-    "Convex": SlackVarConstraintTypes.CONVEX,
-    "None": SlackVarConstraintTypes.NONE
+    "NonConvex": SlackVarConstraintType.NON_CONVEX,
+    "Convex": SlackVarConstraintType.CONVEX,
+    "None": SlackVarConstraintType.NONE
 }
 default_t_sim = 400  # Default simulation length in time steps
 

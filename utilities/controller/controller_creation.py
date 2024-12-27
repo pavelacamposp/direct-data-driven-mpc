@@ -5,21 +5,22 @@ import os
 
 from utilities.yaml_config_loading import load_yaml_config_params
 
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DirectDataDrivenMPCController, DataDrivenMPCType, SlackVarConstraintTypes)
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController, LTIDataDrivenMPCType,
+    SlackVarConstraintType)
 
-# Define Data-Driven MPC controller types
+# Define LTI Data-Driven MPC controller types
 DataDrivenMPCTypesMap = {
-    0: DataDrivenMPCType.NOMINAL,
-    1: DataDrivenMPCType.ROBUST
+    0: LTIDataDrivenMPCType.NOMINAL,
+    1: LTIDataDrivenMPCType.ROBUST
 }
 
 # Define Slack Variable Constraint Types Mapping
 # (based on controller configuration file)
 SlackVarConstraintTypesMap = {
-    0: SlackVarConstraintTypes.NONE,
-    1: SlackVarConstraintTypes.CONVEX,
-    2: SlackVarConstraintTypes.NON_CONVEX
+    0: SlackVarConstraintType.NONE,
+    1: SlackVarConstraintType.CONVEX,
+    2: SlackVarConstraintType.NON_CONVEX
 }
 
 # Define the dictionary type hint of Data-Driven MPC controller parameters
@@ -39,9 +40,9 @@ class DataDrivenMPCParamsDictType(TypedDict, total=False):
     u_range: Tuple[float, float]  # Range of the persistently exciting input u
 
     # Slack variable constraint type
-    slack_var_constraint_type: SlackVarConstraintTypes
+    slack_var_constraint_type: SlackVarConstraintType
 
-    controller_type: DataDrivenMPCType  # Data-Driven MPC controller type
+    controller_type: LTIDataDrivenMPCType  # Data-Driven MPC controller type
     n_mpc_step: int  # Number of consecutive applications of the optimal input
     
     u_s: np.ndarray  # Control input setpoint
@@ -152,13 +153,13 @@ def get_data_driven_mpc_controller_params(
     slack_var_constraint_type_config = params['slack_var_constraint_type']
     dd_mpc_params['slack_var_constraint_type'] = (
         SlackVarConstraintTypesMap.get(slack_var_constraint_type_config,
-                                       SlackVarConstraintTypes.NONE))
+                                       SlackVarConstraintType.NONE))
     
     # Controller type
     controller_type_config = params['controller_type']
     dd_mpc_params['controller_type'] = (
         DataDrivenMPCTypesMap.get(controller_type_config,
-                                  DataDrivenMPCType.ROBUST))
+                                  LTIDataDrivenMPCType.ROBUST))
 
     # Number of consecutive applications of the optimal input
     # for an n-Step Data-Driven MPC Scheme (multi-step)
@@ -204,9 +205,9 @@ def create_data_driven_mpc_controller(
     u_d: np.ndarray,
     y_d: np.ndarray,
     use_terminal_constraint: bool = True
-) -> DirectDataDrivenMPCController:
+) -> LTIDataDrivenMPCController:
     """
-    Create a `DirectDataDrivenMPCController` instance using a specified
+    Create an `LTIDataDrivenMPCController` instance using a specified
     Data-Driven MPC controller configuration and initial input-output
     trajectory data measured from a system.
 
@@ -225,9 +226,9 @@ def create_data_driven_mpc_controller(
             controller will not enforce this constraint. Defaults to True.
     
     Returns:
-        DirectDataDrivenMPCController: A `DirectDataDrivenMPCController`
-            instance, which represents a Data-Driven MPC controller based on
-            the specified configuration.
+        LTIDataDrivenMPCController: An `LTIDataDrivenMPCController` instance,
+            which represents a Data-Driven MPC controller designed for Linear
+            Time-Invariant (LTI) systems, based on the specified configuration.
     """
     # Get model parameters from input-output trajectory data
     m = u_d.shape[1]  # Number of inputs
@@ -262,7 +263,7 @@ def create_data_driven_mpc_controller(
     n_mpc_step = controller_config['n_mpc_step']
 
     # Create Data-Driven MPC controller
-    direct_data_driven_mpc_controller = DirectDataDrivenMPCController(
+    direct_data_driven_mpc_controller = LTIDataDrivenMPCController(
         n=n,
         m=m,
         p=p,

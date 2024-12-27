@@ -1,6 +1,6 @@
-# Data-Driven MPC Parameters
+# LTI Data-Driven MPC Parameters
 # Based on the Data-Driven MPC implementation example for the control of a
-# four-tank system from Section V of the paper:
+# linearized four-tank system from Section V of the paper:
 # [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
 #     Model Predictive Control With Stability and Robustness Guarantees," in
 #     IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,

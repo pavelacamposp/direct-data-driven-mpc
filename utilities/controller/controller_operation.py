@@ -7,8 +7,8 @@ from utilities.models.lti_model import LTIModel
 
 from utilities.controller.controller_creation import (
     DataDrivenMPCParamsDictType)
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DirectDataDrivenMPCController)
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController)
 
 def randomize_initial_system_state(
     system_model: LTIModel,
@@ -200,7 +200,7 @@ def simulate_n_input_output_measurements(
 
 def simulate_data_driven_mpc_control_loop(
     system_model: LTIModel,
-    data_driven_mpc_controller: DirectDataDrivenMPCController,
+    data_driven_mpc_controller: LTIDataDrivenMPCController,
     n_steps: int,
     np_random: Generator,
     verbose: int
@@ -216,9 +216,9 @@ def simulate_data_driven_mpc_control_loop(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        data_driven_mpc_controller (DirectDataDrivenMPCController): A
-            `DirectDataDrivenMPCController` instance representing a
-            Data-Driven MPC controller.
+        data_driven_mpc_controller (LTIDataDrivenMPCController): An
+            `LTIDataDrivenMPCController` instance representing a Data-Driven
+            MPC controller designed for Linear Time-Invariant (LTI) systems.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating
             random noise for the system's output.

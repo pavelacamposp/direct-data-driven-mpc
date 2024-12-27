@@ -8,12 +8,12 @@ from direct_data_driven_mpc.utilities.hankel_matrix import (
     hankel_matrix, evaluate_persistent_excitation)
 
 # Define Direct Data-Driven MPC Controller Types
-class DataDrivenMPCType(Enum):
+class LTIDataDrivenMPCType(Enum):
     NOMINAL = 0  # Nominal Data-Driven MPC
     ROBUST = 1  # Robust Data-Driven MPC
 
 # Define Slack Variable Constraint Types for Robust Data-Driven MPC
-class SlackVarConstraintTypes(Enum):
+class SlackVarConstraintType(Enum):
     # Non-Convex slack variable constraint
     NON_CONVEX = 0
     # Convex slack variable constraint
@@ -22,12 +22,12 @@ class SlackVarConstraintTypes(Enum):
     # constraint is implicitly satisfied
     NONE = 2
 
-class DirectDataDrivenMPCController():
+class LTIDataDrivenMPCController():
     """
     A class that implements a Data-Driven Model Predictive Control (MPC)
-    controller. This controller can be configured as either a Nominal or a
-    Robust controller. The implementation is based on research by J.
-    Berberich et al., as described in [1].
+    controller for Linear Time-Invariant (LTI) systems. This controller can be
+    configured as either a Nominal or a Robust controller. The implementation
+    is based on research by J. Berberich et al., as described in [1].
 
     Attributes:
         controller_type (DataDrivenMPCType): The Data-Driven MPC controller
@@ -111,17 +111,17 @@ class DirectDataDrivenMPCController():
         lamb_alpha: Optional[float] = None,
         lamb_sigma: Optional[float] = None,
         c: Optional[float] = None,
-        slack_var_constraint_type: SlackVarConstraintTypes = (
-            SlackVarConstraintTypes.CONVEX),
-        controller_type: DataDrivenMPCType = DataDrivenMPCType.NOMINAL,
+        slack_var_constraint_type: SlackVarConstraintType = (
+            SlackVarConstraintType.CONVEX),
+        controller_type: LTIDataDrivenMPCType = (
+            LTIDataDrivenMPCType.NOMINAL),
         n_mpc_step: int = 1,
         use_terminal_constraint: bool = True
     ):
         """
-        Initialize a Direct Data-Driven MPC with specified system model
+        Initialize a Direct LTI Data-Driven MPC with specified system model
         parameters, an initial input-output data trajectory measured from the
-        system, Data-Driven MPC parameters, and a specified Data-Driven MPC
-        controller type.
+        system, and LTI Data-Driven MPC parameters.
 
         Note:
             The input data `u_d` used to excite the system to get the initial
@@ -165,8 +165,8 @@ class DirectDataDrivenMPCController():
         self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
-        controller_types = [DataDrivenMPCType.NOMINAL,
-                            DataDrivenMPCType.ROBUST]
+        controller_types = [LTIDataDrivenMPCType.NOMINAL,
+                            LTIDataDrivenMPCType.ROBUST]
         if controller_type not in controller_types:
             raise ValueError("Unsupported controller type.")
 
@@ -210,14 +210,14 @@ class DirectDataDrivenMPCController():
         # variable constraint type
 
         # Validate slack variable constraint type
-        slack_var_constraint_types = [SlackVarConstraintTypes.NON_CONVEX,
-                                      SlackVarConstraintTypes.CONVEX,
-                                      SlackVarConstraintTypes.NONE]
+        slack_var_constraint_types = [SlackVarConstraintType.NON_CONVEX,
+                                      SlackVarConstraintType.CONVEX,
+                                      SlackVarConstraintType.NONE]
         if slack_var_constraint_type not in slack_var_constraint_types:
             raise ValueError("Unsupported slack variable constraint type.")
 
         # Ensure correct parameter definition for Robust MPC controller
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if None in (eps_max, lamb_alpha, lamb_sigma, c):
                 raise ValueError("All robust MPC parameters (eps_max, "
                                  "lamb_alpha, lamb_sigma, c) must be "
@@ -315,12 +315,12 @@ class DirectDataDrivenMPCController():
         References:
             [1]: See class-level docstring for full reference details.
         """
-        if self.controller_type == DataDrivenMPCType.NOMINAL:
+        if self.controller_type == LTIDataDrivenMPCType.NOMINAL:
             if self.L < self.n:
                 raise ValueError("The prediction horizon (`L`) must be "
                                  "greater than or equal to the estimated "
                                  "system order `n`.")
-        elif self.controller_type == DataDrivenMPCType.ROBUST:
+        elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if self.L < 2 * self.n:
                 raise ValueError("The prediction horizon (`L`) must be "
                                  "greater than or equal to two times the "
@@ -442,7 +442,7 @@ class DirectDataDrivenMPCController():
         # since the last `n` inputs and outputs are used to invoke a unique
         # initial state at time `t`, as described in Definition 3 from [1].
         
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             # sigma(t)
             self.sigma = cp.Variable(((self.L + self.n) * self.p, 1))
     
@@ -496,7 +496,7 @@ class DirectDataDrivenMPCController():
         # Define Slack Variable Constraint if controller type is Robust
         self.slack_var_constraint = (
             self.define_slack_variable_constraint()
-            if self.controller_type == DataDrivenMPCType.ROBUST
+            if self.controller_type == LTIDataDrivenMPCType.ROBUST
             else [])
             
         # Combine constraints
@@ -532,13 +532,13 @@ class DirectDataDrivenMPCController():
         References:
             [1]: See class-level docstring for full reference details.
         """
-        if self.controller_type == DataDrivenMPCType.NOMINAL:
+        if self.controller_type == LTIDataDrivenMPCType.NOMINAL:
             # Define system dynamic constraint for Nominal MPC
             # based on Equation 3b from [1]
             dynamics_constraint = [
                 cp.vstack([self.ubar, self.ybar]) ==
                 cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha]
-        elif self.controller_type == DataDrivenMPCType.ROBUST:
+        elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
             # Define system dynamic constraint for Robust MPC
             # including a slack variable to account for noise,
             # based on Equation 6a from [1]
@@ -664,13 +664,13 @@ class DirectDataDrivenMPCController():
         # on the noise constraint type
         slack_variable_constraint = []
         if (self.slack_var_constraint_type ==
-            SlackVarConstraintTypes.NON_CONVEX):
+            SlackVarConstraintType.NON_CONVEX):
             # Raise NotImplementedError for NON-CONVEX constraint
             raise NotImplementedError(
                 "Robust Data-Driven MPC with a Non-Convex slack variable "
                 "constraint is not currently implemented, since it cannot "
                 "be efficiently solved.")
-        elif self.slack_var_constraint_type == SlackVarConstraintTypes.CONVEX:
+        elif self.slack_var_constraint_type == SlackVarConstraintType.CONVEX:
             # Define slack variable constraint considering
             # a CONVEX constraint based on Remark 3 [1]
             slack_variable_constraint = [cp.norm(sigma_pred, "inf") <=
@@ -712,7 +712,7 @@ class DirectDataDrivenMPCController():
             cp.quad_form(ybar_pred - np.tile(self.y_s, (self.L, 1)), self.Q))
         
         # Define noise-related cost if controller type is Robust
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             noise_cost = (
                 self.lamb_alpha * self.eps_max * cp.norm(self.alpha, 2) ** 2 +
                 self.lamb_sigma * cp.norm(self.sigma, 2) ** 2)
