@@ -282,7 +282,7 @@ class NonlinearDataDrivenMPCController():
             self.lamb_sigma_s = lamb_sigma_s
         elif alpha_reg_type == AlphaRegType.PREVIOUS:
             # Previous alpha value initialized with 0            
-            self.prev_alpha_val = 0
+            self.prev_alpha_val = np.zeros((self.N - self.L - self.n, 1))
 
         # Extended Output Representation and Incremental Input
         # If True: The controller uses an extended output representation
@@ -467,6 +467,8 @@ class NonlinearDataDrivenMPCController():
         
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
+        self.define_optimization_parameters()
+        self.update_optimization_parameters()
         self.define_mpc_constraints()
         self.define_cost_function()
         self.define_mpc_problem()
@@ -475,21 +477,23 @@ class NonlinearDataDrivenMPCController():
         self.solve_mpc_problem()
         self.get_optimal_control_input()
 
-    def update_and_solve_data_driven_mpc(self) -> None:
+    def update_and_solve_data_driven_mpc(self, warm_start: bool = False) -> None:
         """
-        Update the Data-Driven MPC problem constraints and formulation, solve
-        it, and store the optimal control input.
+        Update the Data-Driven MPC optimization parameters, solve the problem,
+        and store the optimal control input.
 
         This method performs the following tasks:
         1. Constructs Hankel matrices using the latest measured input-output
            data. If the tracking cost value from the previous solution is
            small enough (less than `update_cost_threshold`), omits this step
            and the previously defined matrices are used.
-        2. Updates the MPC constraints and cost function, and reformulates the
-           problem to incorporate the latest system measurements.
+        2. Updates the MPC optimization parameters to use the latest
+           input-output measurements. Additionally, it updates the value of
+           `alpha_Lin^sr(D_t)` if `alpha` is not regularized with respect to
+           zero.
            
            Note: The value of `alpha_Lin^sr(D_t)` is computed during the
-           cost function update.
+           optimization parameter update.
         3. Solves the MPC problem and stores the resulting optimal control
            input.
         4. Stores the optimal value of `alpha` if `alpha` is regularized
@@ -515,17 +519,14 @@ class NonlinearDataDrivenMPCController():
             # H_{L+n+1}(y)
             self.HLn1_y = hankel_matrix(self.y, self.L + self.n + 1)
 
-        # Update MPC constraints and cost function,
-        # and reformulate the problem
+        # Update MPC optimization parameters
         #
         # Note: The value of `alpha_Lin^sr(D_t)` is computed
-        # during the cost function update.
-        self.define_mpc_constraints()
-        self.define_cost_function()
-        self.define_mpc_problem()
+        # during the optimization parameter update.
+        self.update_optimization_parameters()
 
         # Solve MPC problem and store the optimal input
-        self.solve_mpc_problem()
+        self.solve_mpc_problem(warm_start=warm_start)
         self.get_optimal_control_input()
 
         # Update previous alpha value if the alpha
@@ -666,8 +667,94 @@ class NonlinearDataDrivenMPCController():
                 slices = [self.sigma_s[start:start + self.m]
                           for start in start_indices]
                 self.sigma_s_ubar = cp.vstack(slices)
-
     
+    def define_optimization_parameters(self) -> None:
+        """
+        Define MPC optimization parameters that are updated at every step
+        iteration.
+        
+        This method initializes the following MPC parameters:
+        
+        - Hankel matrices: `HLn1_u_param` and `HLn1_y_param`.
+        - Past inputs and outputs: `u_past_param` and `y_past_param`.
+        - Past input increments: `du_past_param` (if applicable).
+        - Computed value of `alpha_Lin^sr(D_t)`: `alpha_sr_Lin_D_param` (if
+          `alpha` is not regularized with respect to zero).
+        
+        These parameters are updated at each MPC iteration. Using CVXPY
+        `Parameter` objects allows efficient updates without the need of
+        reformulating the MPC problem at every step.
+        """
+        # H_{L+n+1}(u) - H_{L+n+1}(du)
+        self.HLn1_u_param = cp.Parameter(self.HLn1_u.shape, name="HLn1_u")
+        
+        # H_{L+n+1}(y)
+        self.HLn1_y_param = cp.Parameter(self.HLn1_y.shape, name="HLn1_y")
+        
+        # u[t-n, t-1]
+        self.u_past_param = cp.Parameter((self.n * self.m, 1), name="u_past")
+        
+        # du[t-n, t-1]
+        if self.ext_out_incr_in:
+            self.du_past_param = cp.Parameter(
+                (self.n * self.m, 1), name="du_past")
+            
+        # y[t-n, t-1]
+        if self.ext_out_incr_in:
+            self.y_past_param = cp.Parameter(
+                (self.n * (self.m + self.p), 1), name="y_past")
+        else:
+            self.y_past_param = cp.Parameter(
+                (self.n * self.p, 1), name="y_past")
+        
+        # alpha_sr_Lin_D
+        if self.alpha_reg_type != AlphaRegType.ZERO:
+            self.alpha_sr_Lin_D_param = cp.Parameter(
+                (self.N - self.L - self.n, 1), name="alpha_sr_Lin_D")
+    
+    def update_optimization_parameters(self) -> None:
+        """
+        Update MPC optimization parameters.
+
+        This method updates the MPC optimization parameters using the most
+        recent input-output measurement data.
+        
+        Additionally, it updates the computed `alpha_Lin^sr(D_t)` value based
+        on the alpha regularization type:
+        
+        - `alpha_reg_type == AlphaRegType.APPROXIMATED`: Computes
+          `alpha_Lin^sr(D_t)` solving Equation (23) of [2] and updates its
+          value.
+        - `alpha_reg_type == AlphaRegType.PREVIOUS`: Updates
+          `alpha_Lin^sr(D_t)` with the previous optimal value of `alpha`.
+        
+        References:
+            [2]: See class-level docstring for full reference details.
+        """
+        # Update Hankel matrices if data updates are enabled
+        if self.update_data:
+            # H_{L+n+1}(u) - H_{L+n+1}(du)
+            self.HLn1_u_param.value = self.HLn1_u
+
+            # H_{L+n+1}(y)
+            self.HLn1_y_param.value = self.HLn1_y
+
+        # y[t-n, t-1]
+        self.y_past_param.value = self.y[-self.n:].reshape(-1, 1)
+
+        if self.ext_out_incr_in:
+            # du[t-n, t-1]
+            self.du_past_param.value = self.du[-self.n:].reshape(-1, 1)
+        else:
+            # u[t-n, t-1]
+            self.u_past_param.value = self.u[-self.n:].reshape(-1, 1)
+        
+        # alpha_sr_Lin_D
+        if self.alpha_reg_type == AlphaRegType.APPROXIMATED:
+            self.alpha_sr_Lin_D_param.value = self.solve_alpha_sr_Lin_Dt()
+        elif self.alpha_reg_type == AlphaRegType.PREVIOUS:
+            self.alpha_sr_Lin_D_param.value = self.prev_alpha_val
+
     def define_mpc_constraints(self) -> None:
         """
         Define the constraints for the Data-Driven MPC formulation.
@@ -739,8 +826,8 @@ class NonlinearDataDrivenMPCController():
             cp.vstack([self.ubar,
                        self.ybar + self.sigma,
                        cp.Constant(self.ones_1)]) ==
-            cp.vstack([self.HLn1_u,
-                       self.HLn1_y,
+            cp.vstack([self.HLn1_u_param,
+                       self.HLn1_y_param,
                        cp.Constant(self.ones_NLn)
                        ]) @ self.alpha
         ]
@@ -771,19 +858,14 @@ class NonlinearDataDrivenMPCController():
         References:
             [2]: See class-level docstring for full reference details.
         """
-        # y[t-n, t-1]
-        y_past = self.y[-self.n:].reshape(-1, 1)
-
         if self.ext_out_incr_in:
-            du_past = self.du[-self.n:].reshape(-1, 1)  # du[t-n, t-1]
             internal_state_constraints = [
                 cp.vstack([self.ubar_state, self.ybar_state]) ==
-                cp.vstack([du_past, y_past])]
+                cp.vstack([self.du_past_param, self.y_past_param])]
         else:
-            u_past = self.u[-self.n:].reshape(-1, 1)  # u[t-n, t-1]
             internal_state_constraints = [
                 cp.vstack([self.ubar_state, self.ybar_state]) ==
-                cp.vstack([u_past, y_past])]
+                cp.vstack([self.u_past_param, self.y_past_param])]
         
         return internal_state_constraints
     
@@ -880,15 +962,13 @@ class NonlinearDataDrivenMPCController():
                         cp.quad_form(self.y_s[:self.p] - self.y_r, self.S))
         
         # Define alpha-related cost
-        if self.alpha_reg_type == AlphaRegType.APPROXIMATED:
-            alpha_sr_Lin_D = self.solve_alpha_sr_Lin_Dt()
-        elif self.alpha_reg_type == AlphaRegType.PREVIOUS:
-            alpha_sr_Lin_D = self.prev_alpha_val
-        elif self.alpha_reg_type == AlphaRegType.ZERO:
-            alpha_sr_Lin_D = 0
-        
-        alpha_cost = (self.lamb_alpha * 
-                      cp.norm(self.alpha - alpha_sr_Lin_D, 2) ** 2)
+        if self.alpha_reg_type == AlphaRegType.ZERO:
+            alpha_cost = self.lamb_alpha * cp.norm(self.alpha, 2) ** 2
+        else:
+            alpha_cost = (
+                self.lamb_alpha *
+                cp.norm(self.alpha - self.alpha_sr_Lin_D_param, 2) ** 2
+            )
 
         # Define sigma-related cost
         sigma_cost = self.lamb_sigma * cp.norm(self.sigma) ** 2
@@ -911,7 +991,7 @@ class NonlinearDataDrivenMPCController():
         objective = cp.Minimize(self.cost)
         self.problem = cp.Problem(objective, self.constraints)
         
-    def solve_mpc_problem(self) -> str:
+    def solve_mpc_problem(self, warm_start: bool = False) -> str:
         """
         Solve the optimization problem for the Data-Driven MPC formulation.
 
@@ -925,7 +1005,7 @@ class NonlinearDataDrivenMPCController():
             It solves the problem and updates the `problem` attribute with the
             solution status.
         """
-        self.problem.solve()
+        self.problem.solve(warm_start=warm_start)
         
         return self.problem.status
     
