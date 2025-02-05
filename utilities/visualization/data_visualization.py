@@ -131,8 +131,8 @@ def plot_input_output(
                          "y_s should match.")
     
     # Retrieve number of input and output data sequences and their length
-    m = u_k.shape[1] # Number of inputs
-    p = y_k.shape[1] # Number of outputs
+    m = u_k.shape[1]  # Number of inputs
+    p = y_k.shape[1]  # Number of outputs
 
     # Error handling for y-limit lengths
     if u_ylimits and len(u_ylimits) != u_k.shape[1]:
@@ -143,7 +143,7 @@ def plot_input_output(
                          f"not match the number of output subplots ({p}).")
     
     # Create figure if lists of Axes are not provided
-    is_ext_fig = axs_u is not None and axs_y is not None # External figure
+    is_ext_fig = axs_u is not None and axs_y is not None  # External figure
     if not is_ext_fig:
         # Create figure and subplots
         fig, axs_u, axs_y = create_input_output_figure(m=m,
@@ -289,7 +289,7 @@ def plot_data(
             handlelength).
         fig (Figure): The Matplotlib figure object containing the axis.
     """
-    T = data.shape[0] # Data length
+    T = data.shape[0]  # Data length
 
     # Plot data series
     axis.plot(range(0, T),
@@ -472,9 +472,9 @@ def plot_input_output_animation(
                          "y_s should match.")
     
     # Retrieve number of input and output data sequences and their length
-    m = u_k.shape[1] # Number of inputs
-    p = y_k.shape[1] # Number of outputs
-    T = u_k.shape[0] # Length of data
+    m = u_k.shape[1]  # Number of inputs
+    p = y_k.shape[1]  # Number of outputs
+    T = u_k.shape[0]  # Length of data
 
     # Create figure and subplots
     fig, axs_u, axs_y = create_input_output_figure(
@@ -697,7 +697,7 @@ def initialize_data_animation(
         It also adjusts the y-axis limits to a fixed range and stores the
         center values in `y_axis_centers`.
     """
-    T = data.shape[0] # Data length
+    T = data.shape[0]  # Data length
 
     # Initialize plot lines
     lines.append(axis.plot([], [],

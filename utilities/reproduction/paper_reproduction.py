@@ -48,7 +48,7 @@ DD_MPC_SCHEME_CONFIG = {
     },
     DataDrivenMPCScheme.TEC_N_STEP: {
         'label': 'TEC, n-step',
-        'n_mpc_step': -1, # -1 used as a placeholder for 'n' steps
+        'n_mpc_step': -1,  # -1 used as a placeholder for 'n' steps
         'terminal_constraint': True,
     },
     DataDrivenMPCScheme.UCON: {
@@ -315,8 +315,8 @@ def plot_input_output_reproduction(
         title (Optional[str]): The title for the created plot figure.
     """
     # Retrieve number of input and output data sequences and their length
-    m = u_data[0].shape[1] # Number of inputs
-    p = y_data[0].shape[1] # Number of outputs
+    m = u_data[0].shape[1]  # Number of inputs
+    p = y_data[0].shape[1]  # Number of outputs
 
     # Create example figure subplots
     _, axs_u, axs_y = create_input_output_figure(

@@ -17,7 +17,7 @@ def observability_matrix(A: np.ndarray, C: np.ndarray) -> np.ndarray:
         np.ndarray: The observability matrix of the system.
     """
     # Get number of states
-    n = A.shape[0] # Number of states
+    n = A.shape[0]  # Number of states
 
     Ot = np.vstack([C @ np.linalg.matrix_power(A, i) for i in range(n)])
     
@@ -73,8 +73,8 @@ def toeplitz_input_output_matrix(
         raise ValueError("The number of time steps t must be positive.")
 
     # Get number of inputs and outputs
-    m = B.shape[1] # Number of inputs
-    p = C.shape[0] # Number of outputs
+    m = B.shape[1]  # Number of inputs
+    p = C.shape[0]  # Number of outputs
 
     # Precompute powers of A
     A_pows = [np.linalg.matrix_power(A, i) for i in range(t)]
@@ -159,7 +159,7 @@ def calculate_equilibrium_output_from_input(
         np.ndarray: The equilibrium output `y_eq` corresponding to the input
             `u_eq`.
     """
-    n = A.shape[0] # Order of the system
+    n = A.shape[0]  # Order of the system
 
     # Calculate equilibrium output using the final value theorem,
     # assuming zero initial conditions
@@ -195,7 +195,7 @@ def calculate_equilibrium_input_from_output(
         np.ndarray: The equilibrium input `u_eq` corresponding to the output
             `y_eq`.
     """
-    n = A.shape[0] # Order of the system
+    n = A.shape[0]  # Order of the system
 
     # Calculate equilibrium input using the final value theorem,
     # assuming zero initial conditions

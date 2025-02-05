@@ -53,9 +53,9 @@ class LTIModel:
         self.D = D
         self.eps_max = eps_max
         # System order, number of inputs, and number of outputs
-        self.n = A.shape[0] # System order
-        self.m = B.shape[1] # Number of inputs
-        self.p = C.shape[0] # Number of outputs
+        self.n = A.shape[0]  # System order
+        self.m = B.shape[1]  # Number of inputs
+        self.p = C.shape[0]  # Number of outputs
 
         # System state
         self.x = np.zeros(self.n)

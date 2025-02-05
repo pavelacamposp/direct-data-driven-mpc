@@ -25,11 +25,11 @@ def hankel_matrix(X: np.ndarray, L: int) -> np.ndarray:
     
     Examples:
         >>> import numpy as np
-        >>> N = 4 # Data length
-        >>> L = 2 # Hankel matrix window length
-        >>> n = 2 # Data vector length
-        >>> rng = np.random.default_rng(0) # RNG for reproducibility
-        >>> u_d = rng.uniform(-1, 1, (N, n)) # Generate data matrix
+        >>> N = 4  # Data length
+        >>> L = 2  # Hankel matrix window length
+        >>> n = 2  # Data vector length
+        >>> rng = np.random.default_rng(0)  # RNG for reproducibility
+        >>> u_d = rng.uniform(-1, 1, (N, n))  # Generate data matrix
         >>> print(hankel_matrix(u_d, L))
         [[ 0.27392337 -0.91805295  0.62654048]
          [-0.46042657 -0.96694473  0.82551115]

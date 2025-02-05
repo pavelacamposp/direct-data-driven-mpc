@@ -220,17 +220,17 @@ def create_data_driven_mpc_controller(
             the specified configuration.
     """
     # Get model parameters from input-output trajectory data
-    m = u_d.shape[1] # Number of inputs
-    p = y_d.shape[1] # Number of outputs
+    m = u_d.shape[1]  # Number of inputs
+    p = y_d.shape[1]  # Number of outputs
 
     # Retrieve Data-Driven MPC controller parameters
-    n = controller_config['n'] # Estimated system order
-    L = controller_config['L'] # Prediction horizon
-    Q = controller_config['Q'] # Output weighting matrix
-    R = controller_config['R'] # Input weighting matrix
+    n = controller_config['n']  # Estimated system order
+    L = controller_config['L']  # Prediction horizon
+    Q = controller_config['Q']  # Output weighting matrix
+    R = controller_config['R']  # Input weighting matrix
 
-    u_s = controller_config['u_s'] # Control input setpoint
-    y_s = controller_config['y_s'] # System output setpoint
+    u_s = controller_config['u_s']  # Control input setpoint
+    y_s = controller_config['y_s']  # System output setpoint
 
     # Estimated upper bound of the system measurement noise
     eps_max = controller_config['eps_max']

@@ -73,13 +73,13 @@ controller_config_path = os.path.join(controller_config_dir,
 controller_key_value = 'data_driven_mpc_params'
 
 # Simulation parameters
-default_t_sim = 600 # Default simulation length in time steps
-default_seed = 4 # Default seed for the RNG
+default_t_sim = 600  # Default simulation length in time steps
+default_seed = 4  # Default seed for the RNG
 
 # Paper reproduction parameters
-y_0 = [0.4, 0.4] # Initial system output for reproduction
-u_ylimits = [[-15.0, 15.0], [-15.0, 15.0]] # Control input plot Y-axis limits
-y_ylimits = [[0.4, 1.0], [0.4, 1.0]] # System output plot Y-axis limits
+y_0 = [0.4, 0.4]  # Initial system output for reproduction
+u_ylimits = [[-15.0, 15.0], [-15.0, 15.0]]  # Control input plot Y-axis limits
+y_ylimits = [[0.4, 1.0], [0.4, 1.0]]  # System output plot Y-axis limits
 
 # Robust Data-Driven MPC controllers showcased in paper example
 dd_mpc_controller_schemes = [DataDrivenMPCScheme.TEC,
@@ -133,8 +133,8 @@ def main() -> None:
               "configuration file")
 
     # Load Data-Driven MPC controller parameters from configuration file
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
     dd_mpc_config = get_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
@@ -143,7 +143,7 @@ def main() -> None:
         verbose=verbose)
 
     # --- Define Control Simulation parameters ---
-    n_steps = t_sim + 1 # Number of simulation steps
+    n_steps = t_sim + 1  # Number of simulation steps
 
     # Create a Random Number Generator for reproducibility
     np_random = np.random.default_rng(seed=seed)
@@ -280,7 +280,7 @@ def main() -> None:
     # used to store the past `n` input-output measurements for each
     # controller. Here, `n` is the estimated system order from the Data-Driven
     # MPC controller configuration.
-    n = dd_mpc_config['n'] # Estimated system order (Data-Driven MPC)
+    n = dd_mpc_config['n']  # Estimated system order (Data-Driven MPC)
     u_sys_data, y_sys_data = (
         simulate_data_driven_mpc_control_loops_reproduction(
             system_model=system_model,
@@ -297,8 +297,8 @@ def main() -> None:
     # =========================================
     # 8. Plot Control System Inputs and Outputs
     # =========================================
-    u_s = dd_mpc_config['u_s'] # Control input setpoint
-    y_s = dd_mpc_config['y_s'] # System output setpoint
+    u_s = dd_mpc_config['u_s']  # Control input setpoint
+    y_s = dd_mpc_config['y_s']  # System output setpoint
 
     # --- Plot control system inputs and outputs ---
     if verbose:
@@ -316,7 +316,7 @@ def main() -> None:
         dpi=100,
         title="Robust Data-Driven MPC Reproduction")
     
-    plt.close() # Close figures
+    plt.close()  # Close figures
 
 if __name__ == "__main__":
     main()

@@ -9,15 +9,18 @@ from direct_data_driven_mpc.utilities.hankel_matrix import (
 
 # Define Direct Data-Driven MPC Controller Types
 class DataDrivenMPCType(Enum):
-    NOMINAL = 0, # Nominal Data-Driven MPC
-    ROBUST = 1 # Robust Data-Driven MPC
+    NOMINAL = 0  # Nominal Data-Driven MPC
+    ROBUST = 1  # Robust Data-Driven MPC
 
 # Define Slack Variable Constraint Types for Robust Data-Driven MPC
 class SlackVarConstraintTypes(Enum):
-    NON_CONVEX = 0, # A Non-Convex slack variable constraint
-    CONVEX = 1, # A Convex slack variable constraint
-    NONE = 2 # Omits an explicit constraint. The slack variable
+    # Non-Convex slack variable constraint
+    NON_CONVEX = 0
+    # Convex slack variable constraint
+    CONVEX = 1
+    # Omit an explicit constraint. The slack variable
     # constraint is implicitly satisfied
+    NONE = 2
 
 class DirectDataDrivenMPCController():
     """
@@ -159,7 +162,7 @@ class DirectDataDrivenMPCController():
                 controller will not enforce this constraint.
         """
         # Set controller type
-        self.controller_type = controller_type # Nominal or Robust Controller
+        self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
         controller_types = [DataDrivenMPCType.NOMINAL,
@@ -168,43 +171,42 @@ class DirectDataDrivenMPCController():
             raise ValueError("Unsupported controller type.")
 
         # Define system model
-        # System Model
-        self.n = n # Estimated system order
-        self.m = m # Number of inputs
-        self.p = p # Number of outputs
+        self.n = n  # Estimated system order
+        self.m = m  # Number of inputs
+        self.p = p  # Number of outputs
 
         # Initial Input-Output trajectory data
-        self.u_d = u_d # Input trajectory data
-        self.y_d = y_d # Output trajectory data
-        self.N = u_d.shape[0] # Initial input-output trajectory length
+        self.u_d = u_d  # Input trajectory data
+        self.y_d = y_d  # Output trajectory data
+        self.N = u_d.shape[0]  # Initial input-output trajectory length
 
         # Initialize storage variables for past `n` input-output measurements
         # (used for the internal state constraint that ensures predictions
         # align with the internal state of the system's trajectory)
-        self.u_past = u_d[-n:,:].reshape(-1, 1) # u[t-n, t-1]
-        self.y_past = y_d[-n:,:].reshape(-1, 1) # y[t-n, t-1]
+        self.u_past = u_d[-n:,:].reshape(-1, 1)  # u[t-n, t-1]
+        self.y_past = y_d[-n:,:].reshape(-1, 1)  # y[t-n, t-1]
 
         # Define MPC parameters
-        self.L = L # Prediction horizon
-        self.Q = Q # Output weighting matrix
-        self.R = R # Input weighting matrix
+        self.L = L  # Prediction horizon
+        self.Q = Q  # Output weighting matrix
+        self.R = R  # Input weighting matrix
 
         # Define Input-Output setpoint pair
-        self.u_s = u_s # Control input setpoint
-        self.y_s = y_s # System output setpoint
+        self.u_s = u_s  # Control input setpoint
+        self.y_s = y_s  # System output setpoint
         
         # Define Robust MPC parameters
-        self.eps_max = eps_max # Upper limit of bounded measurement noise
-        self.lamb_alpha = lamb_alpha # Ridge regularization base weight for
+        self.eps_max = eps_max  # Upper limit of bounded measurement noise
+        self.lamb_alpha = lamb_alpha  # Ridge regularization base weight for
         # alpha. It is scaled by `eps_max`.
 
-        self.lamb_sigma = lamb_sigma # Ridge regularization weight for sigma
+        self.lamb_sigma = lamb_sigma  # Ridge regularization weight for sigma
         # (If large enough, can neglect noise constraint)
 
-        self.c = c # Convex slack variable constraint:
+        self.c = c  # Convex slack variable constraint:
         # ||sigma||_inf <= c * eps_max
 
-        self.slack_var_constraint_type = slack_var_constraint_type # Slack
+        self.slack_var_constraint_type = slack_var_constraint_type  # Slack
         # variable constraint type
 
         # Validate slack variable constraint type
@@ -222,7 +224,7 @@ class DirectDataDrivenMPCController():
                                  "provided for a 'ROBUST' controller.")
         
         # n-Step Data-Driven MPC Scheme parameters
-        self.n_mpc_step = n_mpc_step # Number of consecutive applications
+        self.n_mpc_step = n_mpc_step  # Number of consecutive applications
         # of the optimal input
 
         # Terminal constraint use in Data-Driven MPC formulation
@@ -261,7 +263,7 @@ class DirectDataDrivenMPCController():
             [1]: See class-level docstring for full reference details.
         """
         # Get the length of the elements of the data sequence
-        u_d_n = self.u_d.shape[1] # m - Number of inputs
+        u_d_n = self.u_d.shape[1]  # m - Number of inputs
 
         # Check if the number of inputs matches the expected
         # number of inputs of the system
@@ -336,10 +338,10 @@ class DirectDataDrivenMPCController():
         expected_input_shape = (self.m * self.L, self.m * self.L)
 
         if self.Q.shape != expected_output_shape:
-            raise ValueError("Output weighting square matrix Q should be"
+            raise ValueError("Output weighting square matrix Q should be "
                              "of order (p * L)")
         if self.R.shape != expected_input_shape:
-            raise ValueError("Input weighting square matrix R should be"
+            raise ValueError("Input weighting square matrix R should be "
                              "of order (m * L)")
         
     def initialize_data_driven_mpc(self) -> None:
@@ -373,8 +375,8 @@ class DirectDataDrivenMPCController():
         # the data-driven characterization of the unknown system used for the
         # system dynamic constraint defined by Equation 3b (Nominal MPC) and
         # Equation 6a (Robust MPC).
-        self.HLn_ud = hankel_matrix(self.u_d, self.L + self.n) # H_{L+n}(u^d)
-        self.HLn_yd = hankel_matrix(self.y_d, self.L + self.n) # H_{L+n}(y^d)
+        self.HLn_ud = hankel_matrix(self.u_d, self.L + self.n)  # H_{L+n}(u^d)
+        self.HLn_yd = hankel_matrix(self.y_d, self.L + self.n)  # H_{L+n}(y^d)
         
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
@@ -574,8 +576,8 @@ class DirectDataDrivenMPCController():
         """
         # Define internal state constraint for Nominal and Robust MPC
         # based on Equation 3c and Equation 6b from [1], respectively
-        ubar_state = self.ubar[:self.n * self.m] # ubar[-n, -1]
-        ybar_state = self.ybar[:self.n * self.p] # ybar[-n, -1]
+        ubar_state = self.ubar[:self.n * self.m]  # ubar[-n, -1]
+        ybar_state = self.ybar[:self.n * self.p]  # ybar[-n, -1]
         internal_state_constraint = [
             cp.vstack([ubar_state, ybar_state]) ==
             cp.vstack([self.u_past, self.y_past])]
@@ -656,7 +658,7 @@ class DirectDataDrivenMPCController():
             [1]: See class-level docstring for full reference details.
         """
         # Get prediction segments of sigma variable
-        sigma_pred = self.sigma[self.n * self.p:] # sigma[0,L-1]
+        sigma_pred = self.sigma[self.n * self.p:]  # sigma[0,L-1]
 
         # Define slack variable constraint for Robust MPC based
         # on the noise constraint type

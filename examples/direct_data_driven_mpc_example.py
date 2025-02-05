@@ -85,7 +85,7 @@ slack_var_constraint_type_mapping = {
     "Convex": SlackVarConstraintTypes.CONVEX,
     "None": SlackVarConstraintTypes.NONE
 }
-default_t_sim = 400 # Default simulation length in time steps
+default_t_sim = 400  # Default simulation length in time steps
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Direct Data-Driven MPC "
@@ -215,8 +215,8 @@ def main() -> None:
               "configuration file")
 
     # Load Data-Driven MPC controller parameters from configuration file
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
     dd_mpc_config = get_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
@@ -260,7 +260,7 @@ def main() -> None:
                   f"{dd_mpc_config['slack_var_constraint_type'].name}")
 
     # --- Define Control Simulation parameters ---
-    n_steps = t_sim + 1 # Number of simulation steps
+    n_steps = t_sim + 1  # Number of simulation steps
 
     # Create a Random Number Generator for reproducibility
     np_random = np.random.default_rng(seed=seed)
@@ -338,9 +338,9 @@ def main() -> None:
     # =====================================================
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
-    N = dd_mpc_config['N'] # Initial input-output trajectory length
-    u_s = dd_mpc_config['u_s'] # Control input setpoint
-    y_s = dd_mpc_config['y_s'] # System output setpoint
+    N = dd_mpc_config['N']  # Initial input-output trajectory length
+    u_s = dd_mpc_config['u_s']  # Control input setpoint
+    y_s = dd_mpc_config['y_s']  # System output setpoint
 
     # --- Plot control system inputs and outputs ---
     plot_title = f"{controller_type_str} Data-Driven MPC"
@@ -393,7 +393,7 @@ def main() -> None:
                                        points_per_frame=anim_points_per_frame,
                                        title=plot_title,
                                        **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
-    plt.show() # Show animation
+    plt.show()  # Show animation
     
     if save_anim:
         # Calculate the number of total animation frames
@@ -419,7 +419,7 @@ def main() -> None:
         if verbose:
             print("Animation file saved successfully")
 
-    plt.close() # Close figures
+    plt.close()  # Close figures
 
 if __name__ == "__main__":
     main()

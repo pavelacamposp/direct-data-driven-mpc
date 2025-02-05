@@ -45,14 +45,14 @@ def randomize_initial_system_state(
             state of the system, where `n` is the system's order.
     """
     # Retrieve model parameters
-    ns = system_model.get_system_order() # System order (simulation)
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
-    eps_max_sim = system_model.get_eps_max() # Upper bound of the system
+    ns = system_model.get_system_order()  # System order (simulation)
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
+    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
-    u_range = controller_config['u_range'] # Range of the persistently
+    u_range = controller_config['u_range']  # Range of the persistently
     # exciting input u_d
     
     # Randomize initial system state before excitation
@@ -112,14 +112,14 @@ def generate_initial_input_output_data(
             of system outputs.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
-    eps_max_sim = system_model.get_eps_max() # Upper bound of the system
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
+    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
-    N = controller_config['N'] # Initial input-output trajectory length
-    u_range = controller_config['u_range'] # Range of the persistently
+    N = controller_config['N']  # Initial input-output trajectory length
+    u_range = controller_config['u_range']  # Range of the persistently
     # exciting input u_d
 
     # Generate a persistently exciting input `u_d` from 0 to (N - 1)
@@ -177,14 +177,14 @@ def simulate_n_input_output_measurements(
                 number of system outputs.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
-    eps_max_sim = system_model.get_eps_max() # Upper bound of the system
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
+    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
     # measurement noise
 
     # Retrieve Data-Driven MPC controller parameters
-    n = controller_config['n'] # Estimated system order
-    u_s = controller_config['u_s'] # Control input setpoint
+    n = controller_config['n']  # Estimated system order
+    u_s = controller_config['u_s']  # Control input setpoint
 
     # Construct input array from controller's input setpoint
     U_n = np.tile(u_s, (n, 1)).reshape(n, m)
@@ -241,9 +241,9 @@ def simulate_data_driven_mpc_control_loop(
             doi: 10.1109/TAC.2020.3000182.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs() # Number of inputs
-    p = system_model.get_number_outputs() # Number of outputs
-    eps_max_sim = system_model.get_eps_max() # Upper bound of the system
+    m = system_model.get_number_inputs()  # Number of inputs
+    p = system_model.get_number_outputs()  # Number of outputs
+    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
@@ -283,7 +283,7 @@ def simulate_data_driven_mpc_control_loop(
             #    over the next `n` time steps. 
 
             # Update control input
-            n_step = k - t # Time step `n`. Results 0 for n_mpc_step = 1
+            n_step = k - t  # Time step `n`. Results 0 for n_mpc_step = 1
             optimal_u_step_n = (
                 data_driven_mpc_controller.get_optimal_control_input_at_step(
                     n_step=n_step))
