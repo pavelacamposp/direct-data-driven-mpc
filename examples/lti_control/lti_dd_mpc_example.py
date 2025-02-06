@@ -1,12 +1,14 @@
 """
-Direct Data-Driven Model Predictive Control (MPC) Example Script
+Direct LTI Data-Driven Model Predictive Control (MPC) Example Script
 
 This script demonstrates the setup, simulation, and visualization of a Direct
-Data-Driven MPC controller applied to a four-tank system model based on
-research by J. Berberich et al. [1]. The implementation follows the parameters
-defined in the example presented in Section V of [1], including those for the
-system model, the initial input-output data generation, and the Data-Driven
-MPC controller setup.
+Data-Driven MPC controller for Linear Time-Invariant (LTI) systems, applied to
+a linearized four-tank system model based on the research of J. Berberich et
+al. [1].
+
+The implementation follows the parameters defined in the example presented in
+Section V of [1], including those for the system model, the initial
+input-output data generation, and the Data-Driven MPC controller setup.
 
 To illustrate a typical controller operation, this script does not set the
 initial system output to `y_0 = [0.4, 0.4]`, as shown in the closed-loop
@@ -50,7 +52,7 @@ from utilities.visualization.plot_styles import (
 
 # Directory paths
 dirname = os.path.dirname
-project_dir = dirname(dirname(__file__))
+project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')

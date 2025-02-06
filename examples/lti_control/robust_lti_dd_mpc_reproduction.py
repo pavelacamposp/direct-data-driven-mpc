@@ -1,10 +1,10 @@
 """
-Robust Data-Driven Model Predictive Control (MPC) Reproduction
+Robust LTI Data-Driven Model Predictive Control (MPC) Reproduction
 
 This script implements a reproduction of the example presented by J. Berberich
 et al. in Section V of [1], which illustrates various Robust Data-Driven MPC
-controller schemes applied to a four-tank system model. The implemented
-controller schemes are:
+controller schemes applied to a linearized four-tank system model. The
+implemented controller schemes are:
     - 1-step Robust Data-Driven MPC scheme with terminal equality constraints
         (TEC)
     - n-step Robust Data-Driven MPC scheme  with terminal equality constraints
@@ -55,7 +55,7 @@ from utilities.models.lti_model import LTISystemModel
 
 # Directory paths
 dirname = os.path.dirname
-project_dir = dirname(dirname(__file__))
+project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')

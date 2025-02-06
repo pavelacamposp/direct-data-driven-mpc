@@ -79,11 +79,11 @@ Follow these steps to create a virtual environment and install this package:
     ```
 
 ## Usage
-The example script `direct_data_driven_mpc_example.py` demonstrates the setup, simulation, and data visualization of the Data-Driven MPC controller applied to a system.
+The example script `lti_dd_mpc_example.py` demonstrates the setup, simulation, and data visualization of the Data-Driven MPC controller applied to a system.
 
 To run the example script with a `seed` of `0`, simulation length of `400` steps, and save the generated animation to a file, use the following command:
 ```bash
-python examples/direct_data_driven_mpc_example.py --seed 0 --t_sim 400 --save_anim
+python examples/lti_control/lti_dd_mpc_example.py --seed 0 --t_sim 400 --save_anim
 ```
 > [!NOTE]
 > The `--save_anim` flag requires FFmpeg to be installed. See the [Requirements](#requirements) section for more details.
@@ -102,17 +102,17 @@ To use different controller and system parameters, the configuration files in `e
 
 To get the full list of arguments, run the program with the `--help` flag:
 ```bash
-python examples/direct_data_driven_mpc_example.py --help
+python examples/lti_control/lti_dd_mpc_example.py --help
 ```
 
 For a deeper understanding of the project and how the controller operates, we recommend reading through the script and the docstrings of each utility function and class used. These docstrings include detailed descriptions of how the implementation follows the data-driven MPC controller schemes and algorithms described in the referenced paper.
 
 ## Paper Reproduction
-A reproduction script of the paper's results is implemented in `robust_data_driven_mpc_reproduction.py` to validate our implementation. This script closely follows the example presented in Section V of the paper, which demonstrates various Robust Data-Driven MPC controller schemes applied to a four-tank system model.
+A reproduction script of the paper's results is implemented in `robust_lti_dd_mpc_reproduction.py` to validate our implementation. This script closely follows the example presented in Section V of the paper, which demonstrates various Robust Data-Driven MPC controller schemes applied to a four-tank system model.
 
 To run the reproduction script, execute the following command:
 ```bash
-python examples/robust_data_driven_mpc_reproduction.py
+python examples/lti_control/robust_lti_dd_mpc_reproduction.py
 ```
 The figure below shows the expected output from executing this script. The control output graphs from our results closely resemble those shown in Fig. 2 of the paper, with minor differences due to randomization.
 
@@ -136,8 +136,8 @@ Custom functions are implemented in [`utilities/visualization/data_visualization
 
 ### Examples
 The `examples` directory includes scripts to demonstrate the operation of the Data-Driven MPC controller and reproduce the results presented in the paper.
-- [`examples/direct_data_driven_mpc_example.py`](examples/direct_data_driven_mpc_example.py): Demonstrates the setup, simulation, and data visualization of a Direct Data-Driven MPC controller applied to a system.
-- [`examples/robust_data_driven_mpc_reproduction.py`](examples/robust_data_driven_mpc_reproduction.py): Implements a reproduction of the example presented in the paper.
+- [`examples/lti_control/lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_example.py): Demonstrates the setup, simulation, and data visualization of a Direct Data-Driven MPC controller applied to a system.
+- [`examples/lti_control/robust_lti_dd_mpc_reproduction.py`](examples/lti_control/robust_lti_dd_mpc_reproduction.py): Implements a reproduction of the example presented in the paper.
 
 To modularize the controller creation and operation, the following utility modules are used:
 - [`utilities/controller/controller_creation.py`](utilities/controller/controller_creation.py): Provides functions for loading controller parameters from YAML configuration files and creating controller instances.
