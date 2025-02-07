@@ -68,7 +68,7 @@ default_model_key_value = 'FourTankSystem'
 default_controller_config_file = 'lti_dd_mpc_example_params.yaml'
 default_controller_config_path = os.path.join(controller_config_dir,
                                               default_controller_config_file)
-default_controller_key_value = 'data_driven_mpc_params'
+default_controller_key_value = 'lti_data_driven_mpc_params'
 
 # Animation default parameters
 default_anim_name = "data-driven_mpc_sim.gif"

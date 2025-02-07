@@ -6,7 +6,7 @@
 #     IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
 #     April 2021, doi: 10.1109/TAC.2020.3000182.
 
-data_driven_mpc_params:
+lti_data_driven_mpc_params:
   n: 4  # Estimated system order
 
   N: 400  # Initial input-output trajectory length

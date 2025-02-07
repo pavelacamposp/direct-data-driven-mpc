@@ -70,7 +70,7 @@ model_key_value = 'FourTankSystem'
 controller_config_file = 'lti_dd_mpc_example_params.yaml'
 controller_config_path = os.path.join(controller_config_dir,
                                       controller_config_file)
-controller_key_value = 'data_driven_mpc_params'
+controller_key_value = 'lti_data_driven_mpc_params'
 
 # Simulation parameters
 default_t_sim = 600  # Default simulation length in time steps
