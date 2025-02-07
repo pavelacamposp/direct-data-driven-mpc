@@ -101,7 +101,7 @@ def get_equilibrium_state_from_output(
             equilibrium output.
     """
     # Get system order
-    n = system_model.get_system_order()
+    n = system_model.n
 
     # Calculate the control input that corresponds to the equilibrium output
     u_eq = system_model.get_equilibrium_input_from_output(y_eq=y_eq)
@@ -240,7 +240,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
     """
     # Store the internal state of the system to start
     # multiple simulations at the same state
-    model_initial_state = system_model.get_state()
+    model_initial_state = system_model.x
 
     # Initialize simulated input-output data storage
     u_sys_data = []

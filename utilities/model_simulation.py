@@ -212,51 +212,6 @@ class LTIModel:
         
         return u_eq
     
-    def get_system_order(self) -> int:
-        """
-        Get the order of the system (number of states).
-
-        Returns:
-            int: The system order of the system.
-        """
-        return self.n
-    
-    def get_number_inputs(self) -> int:
-        """
-        Get the number of inputs to the system.
-
-        Returns:
-            int: The number of inputs of the system.
-        """
-        return self.m
-    
-    def get_number_outputs(self) -> int:
-        """
-        Get the number of outputs of the system.
-
-        Returns:
-            int: The number of outputs of the system.
-        """
-        return self.p
-    
-    def get_state(self) -> np.ndarray:
-        """
-        Get the current state of the system.
-
-        Returns:
-            np.ndarray: The current state vector of the system.
-        """
-        return self.x
-    
-    def get_eps_max(self) -> float:
-        """
-        Get the upper bound of the system measurement noise.
-
-        Returns:
-            float: The upper bound of the system measurement noise.
-        """
-        return self.eps_max
-    
     def set_state(self, state: np.ndarray) -> None:
         """
         Set a new state for the system.

@@ -133,8 +133,8 @@ def main() -> None:
               "configuration file")
 
     # Load Data-Driven MPC controller parameters from configuration file
-    m = system_model.get_number_inputs()  # Number of inputs
-    p = system_model.get_number_outputs()  # Number of outputs
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
     dd_mpc_config = get_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,

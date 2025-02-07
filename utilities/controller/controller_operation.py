@@ -45,10 +45,10 @@ def randomize_initial_system_state(
             state of the system, where `n` is the system's order.
     """
     # Retrieve model parameters
-    ns = system_model.get_system_order()  # System order (simulation)
-    m = system_model.get_number_inputs()  # Number of inputs
-    p = system_model.get_number_outputs()  # Number of outputs
-    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
+    ns = system_model.n  # System order (simulation)
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
+    eps_max_sim = system_model.eps_max  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
@@ -112,9 +112,9 @@ def generate_initial_input_output_data(
             of system outputs.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs()  # Number of inputs
-    p = system_model.get_number_outputs()  # Number of outputs
-    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
+    eps_max_sim = system_model.eps_max  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
@@ -177,9 +177,9 @@ def simulate_n_input_output_measurements(
                 number of system outputs.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs()  # Number of inputs
-    p = system_model.get_number_outputs()  # Number of outputs
-    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
+    eps_max_sim = system_model.eps_max  # Upper bound of the system
     # measurement noise
 
     # Retrieve Data-Driven MPC controller parameters
@@ -241,9 +241,9 @@ def simulate_data_driven_mpc_control_loop(
             doi: 10.1109/TAC.2020.3000182.
     """
     # Retrieve model parameters
-    m = system_model.get_number_inputs()  # Number of inputs
-    p = system_model.get_number_outputs()  # Number of outputs
-    eps_max_sim = system_model.get_eps_max()  # Upper bound of the system
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
+    eps_max_sim = system_model.eps_max  # Upper bound of the system
     # measurement noise (simulation)
 
     # Retrieve Data-Driven MPC controller parameters
