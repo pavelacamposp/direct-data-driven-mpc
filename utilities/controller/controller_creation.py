@@ -24,28 +24,35 @@ SlackVarConstraintTypesMap = {
 
 # Define the dictionary type hint of Data-Driven MPC controller parameters
 class DataDrivenMPCParamsDictType(TypedDict, total=False):
-    u_range: Tuple[float, float]
-    N: int
-    n: int
-    eps_max: float
-    L: int
-    Q: np.ndarray
-    R: np.ndarray
-    lamb_alpha: float
-    lamb_sigma: float
-    c: float
+    n: int  # Estimated system order
+    
+    N: int  # Initial input-output trajectory length
+    L: int  # Prediction horizon
+    Q: np.ndarray  # Output weighting matrix Q
+    R: np.ndarray  # Input weighting matrix R
+
+    eps_max: float  # Estimated upper bound of system measurement noise
+    lamb_alpha: float  # Regularization parameter for alpha
+    lamb_sigma: float  # Regularization parameter for sigma
+    c: float  # Convex slack variable constraint constant
+
+    u_range: Tuple[float, float]  # Range of the persistently exciting input u
+
+    # Slack variable constraint type
     slack_var_constraint_type: SlackVarConstraintTypes
-    controller_type: DataDrivenMPCType
-    n_mpc_step: int
-    u_s: np.ndarray
-    y_s: np.ndarray
+
+    controller_type: DataDrivenMPCType  # Data-Driven MPC controller type
+    n_mpc_step: int  # Number of consecutive applications of the optimal input
+    
+    u_s: np.ndarray  # Control input setpoint
+    y_s: np.ndarray  # System output setpoint
 
 # Define a list of required Data-Driven controller parameters
 # from configuration files
-DD_MPC_FILE_PARAMS = ['N', 'u_d_range', 'epsilon_bar', 'L', 'Q_scalar',
-                      'R_scalar', 'lambda_sigma', 'lambda_alpha_epsilon_bar',
-                      'slack_var_constraint_type', 'controller_type', 'n',
-                      'u_s', 'y_s']
+DD_MPC_FILE_PARAMS = [
+    'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'epsilon_bar', 'lambda_sigma',
+    'lambda_alpha_epsilon_bar', 'u_d_range', 'slack_var_constraint_type',
+    'controller_type', 'u_s', 'y_s']
 
 def get_data_driven_mpc_controller_params(
     config_file: str,

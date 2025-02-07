@@ -7,14 +7,18 @@
 #     April 2021, doi: 10.1109/TAC.2020.3000182.
 
 data_driven_mpc_params:
+  n: 4  # Estimated system order
+
   N: 400  # Initial input-output trajectory length
-  u_d_range: [-1, 1]  # Range of the persistently exciting input u_d
-  epsilon_bar: 0.002  # Estimated upper bound of system measurement noise
   L: 30  # Prediction horizon
   Q_scalar: 3  # Scalar multiplier for the output weighting matrix Q
   R_scalar: 1.0e-4  # Scalar multiplier for the input weighting matrix R
+
+  epsilon_bar: 0.002  # Estimated upper bound of system measurement noise
   lambda_sigma: 1000  # Regularization parameter for the slack variable
   lambda_alpha_epsilon_bar: 0.1  # Regularization parameter for alpha
+
+  u_d_range: [-1, 1]  # Range of the persistently exciting input u_d
 
   slack_var_constraint_type: 0  # Slack variable constraint type:
                                 # - 0 = None → Omit explicit constraint. The
@@ -30,8 +34,6 @@ data_driven_mpc_params:
   controller_type: 1  # Data-Driven MPC controller type:
                       # - 0 → Nominal Data-Driven MPC
                       # - 1 → Robust Data-Driven MPC
-
-  n: 4  # Estimated system order
 
   u_s: [1, 1]  # Control input setpoint
   y_s: [0.65, 0.77]  # System output setpoint
