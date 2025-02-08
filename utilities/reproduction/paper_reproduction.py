@@ -5,8 +5,10 @@ import numpy as np
 from numpy.random import Generator
 import matplotlib.pyplot as plt
 
+from utilities.controller.controller_params import (
+    LTIDataDrivenMPCParamsDictType)
 from utilities.controller.controller_creation import (
-    LTIDataDrivenMPCParamsDictType, create_data_driven_mpc_controller)
+    create_data_driven_mpc_controller)
 from utilities.controller.controller_operation import (
     simulate_data_driven_mpc_control_loop)
 from utilities.visualization.data_visualization import (

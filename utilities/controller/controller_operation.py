@@ -5,7 +5,7 @@ from numpy.random import Generator
 
 from utilities.models.lti_model import LTIModel
 
-from utilities.controller.controller_creation import (
+from utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCController)

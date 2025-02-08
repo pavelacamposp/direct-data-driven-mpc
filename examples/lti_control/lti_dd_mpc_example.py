@@ -33,8 +33,10 @@ import matplotlib.pyplot as plt
 import os
 import math
 
+from utilities.controller.controller_params import (
+    get_lti_data_driven_mpc_controller_params)
 from utilities.controller.controller_creation import (
-    get_lti_data_driven_mpc_controller_params, create_data_driven_mpc_controller)
+    create_data_driven_mpc_controller)
 from utilities.controller.controller_operation import (
     randomize_initial_system_state, generate_initial_input_output_data,
     simulate_data_driven_mpc_control_loop)

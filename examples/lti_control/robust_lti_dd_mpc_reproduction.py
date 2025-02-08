@@ -40,7 +40,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from utilities.controller.controller_creation import (
+from utilities.controller.controller_params import (
     get_lti_data_driven_mpc_controller_params)
 from utilities.controller.controller_operation import (
     randomize_initial_system_state, simulate_n_input_output_measurements,
