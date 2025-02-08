@@ -37,7 +37,7 @@ from utilities.controller.controller_params import (
     get_lti_data_driven_mpc_controller_params)
 from utilities.controller.controller_creation import (
     create_lti_data_driven_mpc_controller)
-from utilities.controller.controller_operation import (
+from utilities.controller.initial_data_generation import (
     randomize_initial_system_state, generate_initial_input_output_data)
 from utilities.controller.data_driven_mpc_sim import (
     simulate_data_driven_mpc_control_loop)
