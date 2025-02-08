@@ -37,3 +37,7 @@ data_driven_mpc_params:
 
   u_s: [1, 1]  # Control input setpoint
   y_s: [0.65, 0.77]  # System output setpoint
+
+  n_n_mpc_step: true  # Enable n-Step Data-Driven MPC:
+                      # - true = n-Step Data-Driven MPC
+                      # - false = 1-Step Data-Driven MPC

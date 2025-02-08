@@ -52,7 +52,7 @@ class DataDrivenMPCParamsDictType(TypedDict, total=False):
 DD_MPC_FILE_PARAMS = [
     'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'epsilon_bar', 'lambda_sigma',
     'lambda_alpha_epsilon_bar', 'u_d_range', 'slack_var_constraint_type',
-    'controller_type', 'u_s', 'y_s']
+    'controller_type', 'u_s', 'y_s', 'n_n_mpc_step']
 
 def get_data_driven_mpc_controller_params(
     config_file: str,
@@ -162,9 +162,12 @@ def get_data_driven_mpc_controller_params(
 
     # Number of consecutive applications of the optimal input
     # for an n-Step Data-Driven MPC Scheme (multi-step)
-    dd_mpc_params['n_mpc_step'] = n
-    # Defaults to the estimated system order, as defined
-    # in Algorithm 2 from [1]
+    if params['n_n_mpc_step']:
+        dd_mpc_params['n_mpc_step'] = n
+        # Defaults to the estimated system order, as defined
+        # # in Algorithm 2 from [1]
+    else:
+        dd_mpc_params['n_mpc_step'] = 1
 
     # Define Input-Output equilibrium setpoint pair
     u_s = params['u_s']
