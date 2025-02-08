@@ -1,12 +1,16 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 from numpy.random import Generator
 
 from utilities.models.lti_model import LTIModel
+from utilities.models.nonlinear_model import NonlinearSystem
 
 from utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
+from utilities.controller.controller_params import (
+    NonlinearDataDrivenMPCParamsDictType)
+
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCController)
 
@@ -78,8 +82,9 @@ def randomize_initial_system_state(
     return x_0
 
 def generate_initial_input_output_data(
-    system_model: LTIModel,
-    controller_config: LTIDataDrivenMPCParamsDictType,
+    system_model: Union[LTIModel, NonlinearSystem],
+    controller_config: Union[LTIDataDrivenMPCParamsDictType,
+                             NonlinearDataDrivenMPCParamsDictType],
     np_random: Generator
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -89,17 +94,19 @@ def generate_initial_input_output_data(
     This function generates a persistently exciting input `u_d` and random
     noise based on the specified controller and system parameters. Then, it
     simulates the system using these input and noise sequences to generate the
-    output reponse `y_d`. The resulting `u_d` and `y_d` arrays represent the
+    output response `y_d`. The resulting `u_d` and `y_d` arrays represent the
     input-output trajectory data measured from the system, which is necessary
     for system characterization in a Data-Driven MPC formulation.
 
     Args:
-        system_model (LTIModel): An `LTIModel` instance representing a Linear
-            Time-Invariant (LTI) system.
-        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+        system_model (Union[LTIModel, NonlinearSystem]): An instance of
+            `LTIModel` representing a Linear Time-Invariant (LTI) system or 
+            `NonlinearSystem` representing a Nonlinear system.
+        controller_config (Union[LTIDataDrivenMPCParamsDictType,
+            NonlinearDataDrivenMPCParamsDictType]): A dictionary
             containing parameters for a Data-Driven MPC controller designed
-            for Linear Time-Invariant (LTI) systems, including the initial
-            input-output trajectory length (`N`) and the range of the
+            for Linear Time-Invariant (LTI) or Nonlinear systems. Includes the
+            initial input-output trajectory length (`N`) and the range of the
             persistently exciting input (`u_range`).
         np_random (Generator): A Numpy random number generator for generating
             the persistently exciting input and random noise for the system's
