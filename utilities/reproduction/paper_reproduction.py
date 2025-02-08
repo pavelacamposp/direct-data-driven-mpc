@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
 from utilities.controller.controller_creation import (
-    create_data_driven_mpc_controller)
+    create_lti_data_driven_mpc_controller)
 from utilities.controller.controller_operation import (
     simulate_data_driven_mpc_control_loop)
 from utilities.visualization.data_visualization import (
@@ -193,7 +193,7 @@ def create_data_driven_mpc_controllers_reproduction(
         use_terminal_constraint =  scheme_config['terminal_constraint']
 
         # Create Data-Driven MPC controller based on scheme config
-        dd_mpc_controller = create_data_driven_mpc_controller(
+        dd_mpc_controller = create_lti_data_driven_mpc_controller(
                 controller_config=base_controller_config,
                 u_d=u_d,
                 y_d=y_d,

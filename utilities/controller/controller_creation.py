@@ -1,11 +1,16 @@
 import numpy as np
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
-    LTIDataDrivenMPCController)
 from utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
+from utilities.controller.controller_params import (
+    NonlinearDataDrivenMPCParamsDictType)
 
-def create_data_driven_mpc_controller(
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController)
+from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
+    NonlinearDataDrivenMPCController)
+
+def create_lti_data_driven_mpc_controller(
     controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
@@ -69,7 +74,7 @@ def create_data_driven_mpc_controller(
     n_mpc_step = controller_config['n_mpc_step']
 
     # Create Data-Driven MPC controller
-    direct_data_driven_mpc_controller = LTIDataDrivenMPCController(
+    lti_data_driven_mpc_controller = LTIDataDrivenMPCController(
         n=n,
         m=m,
         p=p,
@@ -89,4 +94,95 @@ def create_data_driven_mpc_controller(
         n_mpc_step=n_mpc_step,
         use_terminal_constraint=use_terminal_constraint)
     
-    return direct_data_driven_mpc_controller
+    return lti_data_driven_mpc_controller
+
+def create_nonlinear_data_driven_mpc_controller(
+    controller_config: NonlinearDataDrivenMPCParamsDictType,
+    u: np.ndarray,
+    y: np.ndarray,
+) -> NonlinearDataDrivenMPCController:
+    """
+    Create a `NonlinearDataDrivenMPCController` instance using a specified
+    Data-Driven MPC controller configuration and initial input-output
+    trajectory data measured from a system.
+
+    Args:
+        controller_config (NonlinearDataDrivenMPCParamsDictType): A dictionary
+            containing configuration parameters for a Data-Driven MPC
+            controller designed for Nonlinear systems.
+        u (np.ndarray): An array of shape `(N, m)` representing a
+            persistently exciting input sequence used to generate output data
+            from the system. `N` is the trajectory length and `m` is the
+            number of control inputs.
+        y (np.ndarray): An array of shape `(N, p)` representing the system's
+            output response to `u`. `N` is the trajectory length and `p` is
+            the number of system outputs.
+    
+    Returns:
+        NonlinearDataDrivenMPCController: A `NonlinearDataDrivenMPCController`
+            instance, which represents a Data-Driven MPC controller designed
+            for Nonlinear systems, based on the specified configuration.
+    """
+    # Get model parameters from input-output trajectory data
+    m = u.shape[1]  # Number of inputs
+    p = y.shape[1]  # Number of outputs
+
+    # Retrieve Data-Driven MPC controller parameters
+    n = controller_config['n']  # Estimated system order
+    L = controller_config['L']  # Prediction horizon
+    Q = controller_config['Q']  # Output weighting matrix
+    R = controller_config['R']  # Input weighting matrix
+    S = controller_config['S']  # Output setpoint weighting matrix
+
+    # Ridge regularization weight for alpha
+    lamb_alpha = controller_config['lamb_alpha']
+    # Ridge regularization weight for sigma
+    lamb_sigma = controller_config['lamb_sigma']
+
+    # Bounds for the predicted input
+    U = controller_config['U']
+    # Bounds for the predicted input setpoint
+    Us = controller_config['Us']
+
+    # Alpha regularization type
+    alpha_reg_type = controller_config['alpha_reg_type']
+
+    # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
+    # Ridge regularization weight for alpha_s
+    lamb_alpha_s = controller_config['lamb_alpha_s']
+    # Ridge regularization weight for sigma_s
+    lamb_sigma_s = controller_config['lamb_sigma_s']
+
+    # System Output setpoint
+    y_r = controller_config['y_r']
+
+    # Extended Output Representation and Incremental Input
+    ext_out_incr_in = controller_config['ext_out_incr_in']
+
+    # n-Step Data-Driven MPC Scheme parameters
+    # Number of consecutive applications of the optimal input
+    n_mpc_step = controller_config['n_mpc_step']
+
+    # Create Data-Driven MPC controller
+    nonlinear_data_driven_mpc_controller = NonlinearDataDrivenMPCController(
+        n=n,
+        m=m,
+        p=p,
+        u=u,
+        y=y,
+        L=L,
+        Q=Q,
+        R=R,
+        S=S,
+        y_r=y_r,
+        lamb_alpha=lamb_alpha,
+        lamb_sigma=lamb_sigma,
+        U=U,
+        Us=Us,
+        lamb_alpha_s=lamb_alpha_s,
+        lamb_sigma_s=lamb_sigma_s,
+        alpha_reg_type=alpha_reg_type,
+        ext_out_incr_in=ext_out_incr_in,
+        n_mpc_step=n_mpc_step)
+    
+    return nonlinear_data_driven_mpc_controller
