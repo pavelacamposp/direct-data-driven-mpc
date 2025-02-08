@@ -17,6 +17,7 @@ class NonlinearSystem:
         n (int): The number of system states.
         m (int): The number of inputs to the system.
         p (int): The number of outputs of the system.
+        eps_max (float): The upper bound of the system measurement noise.
         x (np.ndarray): The internal state vector of the system.
     """
     def __init__(
@@ -25,7 +26,8 @@ class NonlinearSystem:
         h: Callable[[np.ndarray, np.ndarray], np.ndarray],
         n: int,
         m: int,
-        p: int):
+        p: int,
+        eps_max: float = 0.0):
         """
         Initialize a Nonlinear Dynamical system with a dynamics function `f`
         and an output function `h`.
@@ -38,12 +40,17 @@ class NonlinearSystem:
             n (int): The number of system states.
             m (int): The number of inputs to the system.
             p (int): The number of outputs of the system.
+            eps_max (float): The upper bound of the system measurement noise.
+                Defaults to 0.0.
         """
         self.f = f
         self.h = h
         self.n = n
         self.m = m
         self.p = p
+        self.eps_max = eps_max
+
+        # System state
         self.x = np.zeros(self.n)
 
     def simulate_step(self, u: np.ndarray, w: np.ndarray) -> np.ndarray:
