@@ -6,13 +6,13 @@ from numpy.random import Generator
 from utilities.models.lti_model import LTIModel
 
 from utilities.controller.controller_creation import (
-    DataDrivenMPCParamsDictType)
+    LTIDataDrivenMPCParamsDictType)
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCController)
 
 def randomize_initial_system_state(
     system_model: LTIModel,
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     np_random: Generator
 ) -> np.ndarray:
     """
@@ -33,9 +33,10 @@ def randomize_initial_system_state(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller parameters, including the
-            range of the persistently exciting input (`u_range`).
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing parameters for a Data-Driven MPC controller designed
+            for Linear Time-Invariant (LTI) systems, including the range of
+            the persistently exciting input (`u_range`).
         np_random (Generator): A Numpy random number generator for generating 
             the random initial system state, persistently exciting input, and
             system output noise.
@@ -78,7 +79,7 @@ def randomize_initial_system_state(
 
 def generate_initial_input_output_data(
     system_model: LTIModel,
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     np_random: Generator
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -95,9 +96,10 @@ def generate_initial_input_output_data(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller parameters, including the
-            initial input-output trajectory length (`N`) and the range of the
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing parameters for a Data-Driven MPC controller designed
+            for Linear Time-Invariant (LTI) systems, including the initial
+            input-output trajectory length (`N`) and the range of the
             persistently exciting input (`u_range`).
         np_random (Generator): A Numpy random number generator for generating
             the persistently exciting input and random noise for the system's
@@ -136,7 +138,7 @@ def generate_initial_input_output_data(
 
 def simulate_n_input_output_measurements(
     system_model: LTIModel,
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     np_random: Generator
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
@@ -160,10 +162,10 @@ def simulate_n_input_output_measurements(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller configuration parameters,
-            including the estimated system order (`n`) and the control input
-            setpoint (`u_s`).
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing parameters for a Data-Driven MPC controller designed
+            for Linear Time-Invariant (LTI) systems, including the estimated
+            system order (`n`) and the control input setpoint (`u_s`).
         np_random (Generator): A Numpy random number generator for generating
             random noise for the system's output.
 

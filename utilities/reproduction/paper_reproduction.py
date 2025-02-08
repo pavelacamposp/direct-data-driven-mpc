@@ -6,7 +6,7 @@ from numpy.random import Generator
 import matplotlib.pyplot as plt
 
 from utilities.controller.controller_creation import (
-    DataDrivenMPCParamsDictType, create_data_driven_mpc_controller)
+    LTIDataDrivenMPCParamsDictType, create_data_driven_mpc_controller)
 from utilities.controller.controller_operation import (
     simulate_data_driven_mpc_control_loop)
 from utilities.visualization.data_visualization import (
@@ -116,7 +116,7 @@ def get_equilibrium_state_from_output(
     return x_eq
 
 def create_data_driven_mpc_controllers_reproduction(
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
     data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme]
@@ -135,9 +135,10 @@ def create_data_driven_mpc_controllers_reproduction(
         controller schemes presented in the paper example from [1].
 
     Args:
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller configuration parameters
-            used as a base configuration.
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing configuration parameters for a Data-Driven MPC
+            controller designed for Linear Time-Invariant (LTI) systems. Used
+            as a base configuration.
         u_d (np.ndarray): An array of shape `(N, m)` representing a
             persistently exciting input sequence used to generate output data
             from the system. `N` is the trajectory length and `m` is the

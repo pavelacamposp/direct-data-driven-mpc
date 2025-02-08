@@ -10,7 +10,7 @@ from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     SlackVarConstraintType)
 
 # Define LTI Data-Driven MPC controller types
-DataDrivenMPCTypesMap = {
+LTIDataDrivenMPCTypesMap = {
     0: LTIDataDrivenMPCType.NOMINAL,
     1: LTIDataDrivenMPCType.ROBUST
 }
@@ -23,8 +23,8 @@ SlackVarConstraintTypesMap = {
     2: SlackVarConstraintType.NON_CONVEX
 }
 
-# Define the dictionary type hint of Data-Driven MPC controller parameters
-class DataDrivenMPCParamsDictType(TypedDict, total=False):
+# Define dictionary type hints for Data-Driven MPC controller parameters
+class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
     n: int  # Estimated system order
     
     N: int  # Initial input-output trajectory length
@@ -50,21 +50,21 @@ class DataDrivenMPCParamsDictType(TypedDict, total=False):
 
 # Define a list of required Data-Driven controller parameters
 # from configuration files
-DD_MPC_FILE_PARAMS = [
+LTI_DD_MPC_FILE_PARAMS = [
     'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'epsilon_bar', 'lambda_sigma',
     'lambda_alpha_epsilon_bar', 'u_d_range', 'slack_var_constraint_type',
     'controller_type', 'u_s', 'y_s', 'n_n_mpc_step']
 
-def get_data_driven_mpc_controller_params(
+def get_lti_data_driven_mpc_controller_params(
     config_file: str,
     controller_key_value: str,
     m: int,
     p: int,
     verbose: int = 0
-) -> DataDrivenMPCParamsDictType:
+) -> LTIDataDrivenMPCParamsDictType:
     """
-    Load and initialize parameters for a Data-Driven MPC controller from a
-    YAML configuration file.
+    Load and initialize parameters for a Data-Driven MPC controller designed
+    for Linear Time-Invariant (LTI) systems from a YAML configuration file.
     
     The controller parameters are defined based on the Nominal and Robust
     Data-Driven MPC controller formulations from [1]. The number of control
@@ -81,8 +81,9 @@ def get_data_driven_mpc_controller_params(
                 output, 2 = detailed output.
     
     Returns:
-        DataDrivenMPCParamsDictType: A dictionary of parameters configured for
-            the Data-Driven MPC controller.
+        LTIDataDrivenMPCParamsDictType: A dictionary of configuration
+            parameters for a Data-Driven MPC controller designed for Linear
+            Time-Invariant (LTI) systems.
     
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
@@ -105,7 +106,7 @@ def get_data_driven_mpc_controller_params(
               f"{config_file} with key '{controller_key_value}'")
     
     # Validate that required parameter keys are present
-    for key in DD_MPC_FILE_PARAMS:
+    for key in LTI_DD_MPC_FILE_PARAMS:
         if key not in params:
             raise ValueError(f"Missing required parameter key '{key}' in the "
                              "configuration file.")
@@ -158,8 +159,8 @@ def get_data_driven_mpc_controller_params(
     # Controller type
     controller_type_config = params['controller_type']
     dd_mpc_params['controller_type'] = (
-        DataDrivenMPCTypesMap.get(controller_type_config,
-                                  LTIDataDrivenMPCType.ROBUST))
+        LTIDataDrivenMPCTypesMap.get(controller_type_config,
+                                     LTIDataDrivenMPCType.ROBUST))
 
     # Number of consecutive applications of the optimal input
     # for an n-Step Data-Driven MPC Scheme (multi-step)
@@ -201,7 +202,7 @@ def get_data_driven_mpc_controller_params(
     return dd_mpc_params
 
 def create_data_driven_mpc_controller(
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
     use_terminal_constraint: bool = True
@@ -212,8 +213,9 @@ def create_data_driven_mpc_controller(
     trajectory data measured from a system.
 
     Args:
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller configuration parameters.
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing configuration parameters for a Data-Driven MPC
+            controller designed for Linear Time-Invariant (LTI) systems.
         u_d (np.ndarray): An array of shape `(N, m)` representing a
             persistently exciting input sequence used to generate output data
             from the system. `N` is the trajectory length and `m` is the

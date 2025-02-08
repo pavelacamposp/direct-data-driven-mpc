@@ -34,7 +34,7 @@ import os
 import math
 
 from utilities.controller.controller_creation import (
-    get_data_driven_mpc_controller_params, create_data_driven_mpc_controller)
+    get_lti_data_driven_mpc_controller_params, create_data_driven_mpc_controller)
 from utilities.controller.controller_operation import (
     randomize_initial_system_state, generate_initial_input_output_data,
     simulate_data_driven_mpc_control_loop)
@@ -219,7 +219,7 @@ def main() -> None:
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs
     p = system_model.p  # Number of outputs
-    dd_mpc_config = get_data_driven_mpc_controller_params(
+    dd_mpc_config = get_lti_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
         m=m,

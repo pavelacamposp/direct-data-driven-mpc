@@ -41,7 +41,7 @@ import matplotlib.pyplot as plt
 import os
 
 from utilities.controller.controller_creation import (
-    get_data_driven_mpc_controller_params)
+    get_lti_data_driven_mpc_controller_params)
 from utilities.controller.controller_operation import (
     randomize_initial_system_state, simulate_n_input_output_measurements,
     generate_initial_input_output_data)
@@ -135,7 +135,7 @@ def main() -> None:
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs
     p = system_model.p  # Number of outputs
-    dd_mpc_config = get_data_driven_mpc_controller_params(
+    dd_mpc_config = get_lti_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
         m=m,
