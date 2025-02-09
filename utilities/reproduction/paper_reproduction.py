@@ -10,7 +10,7 @@ from utilities.controller.controller_params import (
 from utilities.controller.controller_creation import (
     create_lti_data_driven_mpc_controller)
 from utilities.controller.data_driven_mpc_sim import (
-    simulate_data_driven_mpc_control_loop)
+    simulate_lti_data_driven_mpc_control_loop)
 from utilities.visualization.data_visualization import (
     plot_input_output, create_input_output_figure)
 
@@ -260,7 +260,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
         system_model.set_state(state=model_initial_state)
 
         # Simulate controller
-        u_sys, y_sys = simulate_data_driven_mpc_control_loop(
+        u_sys, y_sys = simulate_lti_data_driven_mpc_control_loop(
             system_model=system_model,
             data_driven_mpc_controller=controller,
             n_steps=n_steps,

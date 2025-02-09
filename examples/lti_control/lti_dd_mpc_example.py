@@ -40,7 +40,7 @@ from utilities.controller.controller_creation import (
 from utilities.controller.initial_data_generation import (
     randomize_initial_system_state, generate_initial_input_output_data)
 from utilities.controller.data_driven_mpc_sim import (
-    simulate_data_driven_mpc_control_loop)
+    simulate_lti_data_driven_mpc_control_loop)
 
 from utilities.visualization.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
@@ -333,7 +333,7 @@ def main() -> None:
     # Simulate the Data-Driven MPC control system following Algorithm 1 for a
     # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC
     # Scheme, as described in [1].
-    u_sys, y_sys = simulate_data_driven_mpc_control_loop(
+    u_sys, y_sys = simulate_lti_data_driven_mpc_control_loop(
         system_model=system_model,
         data_driven_mpc_controller=dd_mpc_controller,
         n_steps=n_steps,
