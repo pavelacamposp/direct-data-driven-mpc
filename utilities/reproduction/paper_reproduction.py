@@ -279,8 +279,8 @@ def plot_input_output_reproduction(
     y_data: List[np.ndarray],
     u_s: np.ndarray,
     y_s: np.ndarray,
-    u_ylimits: Optional[List[Tuple[float, float]]],
-    y_ylimits: Optional[List[Tuple[float, float]]],
+    u_ylimits_list: Optional[List[Tuple[float, float]]],
+    y_ylimits_list: Optional[List[Tuple[float, float]]],
     figsize: Tuple[int, int] =(14, 8),
     dpi: int = 300,
     fontsize: int = 12,
@@ -308,10 +308,14 @@ def plot_input_output_reproduction(
             setpoint values considered for the controller simulations.
         y_s (np.ndarray): An array of shape `(p, 1)` containing the `p` output
             setpoint values considered for the controller simulations.
-        u_ylimits (Optional[List[Tuple[float, float]]]): A list of tuples
-            specifying the Y-axis limits for the input subplots.
-        y_ylimits (Optional[List[Tuple[float, float]]]): A list of tuples
-            specifying the Y-axis limits for the output subplots.
+        u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            input subplot. If `None`, the Y-axis limits will be determined
+            automatically.
+        y_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            output subplot. If `None`, the Y-axis limits will be determined
+            automatically.
         figsize (Tuple[int, int]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
@@ -343,8 +347,8 @@ def plot_input_output_reproduction(
                           outputs_line_params=controller_line_params,
                           setpoints_line_params=SETPOINT_LINE_PARAMS,
                           data_label=f" ({scheme_config['label']})",
-                          u_ylimits=u_ylimits,
-                          y_ylimits=y_ylimits,
+                          u_ylimits_list=u_ylimits_list,
+                          y_ylimits_list=y_ylimits_list,
                           axs_u=axs_u,
                           axs_y=axs_y,
                           dpi=dpi,

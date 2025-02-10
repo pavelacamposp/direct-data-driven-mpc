@@ -9,6 +9,11 @@ OUTPUT_LINE_PARAMS = {
     'linestyle': 'solid',
     'linewidth': 2.0
 }
+BOUND_LINE_PARAMS = {
+    'color': 'darkorange',
+    'linestyle': '--',
+    'linewidth': 2.0
+}
 SETPOINT_LINE_PARAMS = {
     'color': 'red',
     'linestyle': 'solid',
@@ -21,6 +26,9 @@ INPUT_LINE_SMALL_PARAMS['linewidth'] = 1.5
 
 OUTPUT_LINE_SMALL_PARAMS = OUTPUT_LINE_PARAMS.copy()
 OUTPUT_LINE_SMALL_PARAMS['linewidth'] = 1.5
+
+BOUND_LINE_SMALL_PARAMS = BOUND_LINE_PARAMS.copy()
+BOUND_LINE_SMALL_PARAMS['linewidth'] = 1.5
 
 SETPOINT_LINE_SMALL_PARAMS = SETPOINT_LINE_PARAMS.copy()
 SETPOINT_LINE_SMALL_PARAMS['linewidth'] = 1.5
@@ -39,6 +47,7 @@ LEGEND_PARAMS = {
 INPUT_OUTPUT_PLOT_PARAMS = {
     'inputs_line_params': INPUT_LINE_PARAMS,
     'outputs_line_params': OUTPUT_LINE_PARAMS,
+    'bounds_line_params': BOUND_LINE_PARAMS,
     'setpoints_line_params': SETPOINT_LINE_PARAMS,
     'legend_params': LEGEND_PARAMS,
 }
@@ -46,6 +55,7 @@ INPUT_OUTPUT_PLOT_PARAMS = {
 INPUT_OUTPUT_PLOT_PARAMS_SMALL = {
     'inputs_line_params': INPUT_LINE_SMALL_PARAMS,
     'outputs_line_params': OUTPUT_LINE_SMALL_PARAMS,
+    'bounds_line_params': BOUND_LINE_SMALL_PARAMS,
     'setpoints_line_params': SETPOINT_LINE_SMALL_PARAMS,
     'legend_params': LEGEND_PARAMS,
 }

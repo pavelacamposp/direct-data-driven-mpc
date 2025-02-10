@@ -78,8 +78,8 @@ default_seed = 4  # Default seed for the RNG
 
 # Paper reproduction parameters
 y_0 = [0.4, 0.4]  # Initial system output for reproduction
-u_ylimits = [[-15.0, 15.0], [-15.0, 15.0]]  # Control input plot Y-axis limits
-y_ylimits = [[0.4, 1.0], [0.4, 1.0]]  # System output plot Y-axis limits
+u_ylimits_list = [[-15.0, 15.0], [-15.0, 15.0]]  # Input plot Y-axis limits
+y_ylimits_list = [[0.4, 1.0], [0.4, 1.0]]  # Output plot Y-axis limits
 
 # Robust Data-Driven MPC controllers showcased in paper example
 dd_mpc_controller_schemes = [DataDrivenMPCScheme.TEC,
@@ -310,8 +310,8 @@ def main() -> None:
         y_data=y_sys_data,
         u_s=u_s,
         y_s=y_s,
-        u_ylimits=u_ylimits,
-        y_ylimits=y_ylimits,
+        u_ylimits_list=u_ylimits_list,
+        y_ylimits_list=y_ylimits_list,
         figsize=(12, 8),
         dpi=100,
         title="Robust Data-Driven MPC Reproduction")
