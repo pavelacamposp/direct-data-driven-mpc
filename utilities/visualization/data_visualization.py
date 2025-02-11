@@ -58,8 +58,8 @@ class HandlerInitMeasurementRect(HandlerPatch):
 def plot_input_output(
     u_k: np.ndarray,
     y_k: np.ndarray,
-    u_s: np.ndarray,
     y_s: np.ndarray,
+    u_s: Optional[np.ndarray] = None,
     u_bounds_list: Optional[List[Tuple[float, float]]] = None,
     y_bounds_list: Optional[List[Tuple[float, float]]] = None,
     inputs_line_params: dict[str, Any] = {},
@@ -116,8 +116,9 @@ def plot_input_output(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (np.ndarray): An array of shape (m, 1) containing `m` input
-            setpoint values.
+        u_s (Optional[np.ndarray]): An array of shape (m, 1) containing `m`
+            input setpoint values. If `None`, input setpoint lines will not
+            be plotted. Defaults to `None`.
         y_s (np.ndarray): An array of shape (p, 1) containing `p` output
             setpoint values.
         u_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
@@ -202,11 +203,18 @@ def plot_input_output(
     # Check input-output data dimensions
     if not (u_k.shape[0] == y_k.shape[0]):
         raise ValueError("Dimension mismatch. The number of time steps for "
-                         "u_k and y_k do not match.")
-    if not (u_k.shape[1] == u_s.shape[0] and y_k.shape[1] == y_s.shape[0]):
-        raise ValueError("Dimension mismatch. The number of inputs from u_k "
-                         "and u_s, and the number of outputs from y_k and "
-                         "y_s should match.")
+                         f"u_k ({u_k.shape[0]}) and y_k ({y_k.shape[0]}) "
+                         "must match.")
+    if y_k.shape[1] != y_s.shape[0]:
+        raise ValueError("Dimension mismatch. The number of outputs from y_k "
+                         f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must "
+                         "match.")
+    # If input setpoint is passed, verify input data dimension match
+    if u_s is not None:
+        if u_k.shape[1] != u_s.shape[0]:
+            raise ValueError("Dimension mismatch. The number of outputs from "
+                             f"u_k ({u_k.shape[1]}) and u_s ({u_s.shape[0]}) "
+                             "must match.")
     
     # Retrieve number of input and output data sequences
     m = u_k.shape[1]  # Number of inputs
@@ -248,6 +256,8 @@ def plot_input_output(
 
     # Plot input data
     for i in range(m):
+        # Get input setpoint if provided
+        u_setpoint = u_s[i, :] if u_s is not None else None
         # Define plot index based on the number of input plots
         plot_index = -1 if m == 1 else i
         # Get input bounds if provided
@@ -257,7 +267,7 @@ def plot_input_output(
         # Plot data
         plot_data(axis=axs_u[i],
                   data=u_k[:, i],
-                  setpoint=u_s[i, :],
+                  setpoint=u_setpoint,
                   index=plot_index,
                   data_line_params=inputs_line_params,
                   bounds_line_params=bounds_line_params,
@@ -315,7 +325,7 @@ def plot_input_output(
 def plot_data(
     axis: Axes,
     data: np.ndarray,
-    setpoint: float,
+    setpoint: Optional[float],
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -348,7 +358,8 @@ def plot_data(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float): The setpoint value for the data.
+        setpoint (Optional[float]): The setpoint value for the data. If
+            `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
             labels.
@@ -405,12 +416,13 @@ def plot_data(
               **data_line_params,
               label=f'${var_symbol}{index_str}${data_label}')
     
-    # Plot setpoint
+    # Plot setpoint if provided
     setpoint_label = f'${setpoint_var_symbol}{index_str}$'
-    axis.plot(range(0, T),
-              np.full(T, setpoint),
-              **setpoint_line_params,
-              label=setpoint_label)
+    if setpoint is not None:
+        axis.plot(range(0, T),
+                  np.full(T, setpoint),
+                  **setpoint_line_params,
+                  label=setpoint_label)
     
     # Plot bounds if provided
     if bounds is not None:
@@ -494,8 +506,8 @@ def plot_data(
 def plot_input_output_animation(
     u_k: np.ndarray,
     y_k: np.ndarray,
-    u_s: np.ndarray,
     y_s: np.ndarray,
+    u_s: Optional[np.ndarray] = None,
     u_bounds_list: Optional[List[Tuple[float, float]]] = None,
     y_bounds_list: Optional[List[Tuple[float, float]]] = None,
     inputs_line_params: dict[str, Any] = {},
@@ -552,8 +564,9 @@ def plot_input_output_animation(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (np.ndarray): An array of shape (m, 1) containing `m` input
-            setpoint values.
+        u_s (Optional[np.ndarray]): An array of shape (m, 1) containing `m`
+            input setpoint values. If `None`, input setpoint lines will not
+            be plotted. Defaults to `None`.
         y_s (np.ndarray): An array of shape (p, 1) containing `p` output
             setpoint values.
         u_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
@@ -637,11 +650,18 @@ def plot_input_output_animation(
     # Check input-output data dimensions
     if not (u_k.shape[0] == y_k.shape[0]):
         raise ValueError("Dimension mismatch. The number of time steps for "
-                         "u_k and y_k do not match.")
-    if not (u_k.shape[1] == u_s.shape[0] and y_k.shape[1] == y_s.shape[0]):
-        raise ValueError("Dimension mismatch. The number of inputs from u_k "
-                         "and u_s, and the number of outputs from y_k and "
-                         "y_s should match.")
+                         f"u_k ({u_k.shape[0]}) and y_k ({y_k.shape[0]}) "
+                         "must match.")
+    if y_k.shape[1] != y_s.shape[0]:
+        raise ValueError("Dimension mismatch. The number of outputs from y_k "
+                         f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must "
+                         "match.")
+    # If input setpoint is passed, verify input data dimension match
+    if u_s is not None:
+        if u_k.shape[1] != u_s.shape[0]:
+            raise ValueError("Dimension mismatch. The number of outputs from "
+                             f"u_k ({u_k.shape[1]}) and u_s ({u_s.shape[0]}) "
+                             "must match.")
     
     # Retrieve number of input and output data sequences and their length
     m = u_k.shape[1]  # Number of inputs
@@ -684,13 +704,15 @@ def plot_input_output_animation(
         
     # Initialize input plot elements
     for i in range(m):
+        # Get input setpoint if provided
+        u_setpoint = u_s[i, :] if u_s is not None else None
         # Define plot index based on the number of input plots
         plot_index = -1 if m == 1 else i
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
         initialize_data_animation(axis=axs_u[i],
                                   data=u_k[:, i],
-                                  setpoint=u_s[i, :],
+                                  setpoint=u_setpoint,
                                   index=plot_index,
                                   data_line_params=inputs_line_params,
                                   bounds_line_params=bounds_line_params,
@@ -833,7 +855,7 @@ def plot_input_output_animation(
 def initialize_data_animation(
     axis: Axes,
     data: np.ndarray,
-    setpoint: float,
+    setpoint: Optional[float],
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -872,7 +894,8 @@ def initialize_data_animation(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float): The setpoint value for the data.
+        setpoint (Optional[float]): The setpoint value for the data. If
+            `None`, a setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
             labels.
@@ -965,12 +988,17 @@ def initialize_data_animation(
     
     # Plot setpoint
     setpoint_label = f'${setpoint_var_symbol}{index_str}$'
-    axis.plot(range(0, T), np.full(T, setpoint),
-              **setpoint_line_params,
-              label=setpoint_label)
+    if setpoint is not None:
+        axis.plot(range(0, T),
+                  np.full(T, setpoint),
+                  **setpoint_line_params,
+                  label=setpoint_label)
 
     # Define axis limits
-    u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
+    if setpoint is not None:
+        u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
+    else:
+        u_lim_min, u_lim_max = get_padded_limits(data, data)
     axis.set_xlim([0, T - 1])
     axis.set_ylim(u_lim_min, u_lim_max)
     y_axis_centers.append((u_lim_min + u_lim_max) / 2)
