@@ -269,14 +269,7 @@ def plot_input_output(
                   bounds=u_bounds,
                   initial_steps=initial_steps,
                   plot_ylimits=u_plot_ylimit)
-        
-        # Remove duplicate labels from legend
-        # if figure was created externally
-        if is_ext_fig:
-            remove_legend_duplicates(axis=axs_u[i],
-                                     legend_params=legend_params,
-                                     last_label=f'$u_{i + 1}^s$')
-
+    
     # Plot output data
     for j in range(p):
         # Define plot index based on the number of output plots
@@ -306,14 +299,7 @@ def plot_input_output(
                   bounds=y_bounds,
                   initial_steps=initial_steps,
                   plot_ylimits=y_plot_ylimits)
-        
-        # Remove duplicate labels from legend
-        # if figure was created externally
-        if is_ext_fig:
-            remove_legend_duplicates(axis=axs_y[j],
-                                     legend_params=legend_params,
-                                     last_label=f'$y_{j + 1}^s$')
-            
+                
     # Show the plot if the figure was created internally
     if not is_ext_fig:
         plt.show()
@@ -407,19 +393,22 @@ def plot_data(
               data,
               **data_line_params,
               label=f'${var_symbol}{index_str}${data_label}')
+    
     # Plot setpoint
+    setpoint_label = f'${var_symbol}{index_str}^s$'
     axis.plot(range(0, T),
               np.full(T, setpoint),
               **setpoint_line_params,
-              label=f'${var_symbol}{index_str}^s$')
+              label=setpoint_label)
     
     # Plot bounds if provided
-    if bounds:
+    if bounds is not None:
         lower_bound, upper_bound = bounds
+        bounds_label = "Constraints"
         # Plot lower bound line
         axis.axhline(y=lower_bound,
                      **bounds_line_params,
-                     label='Constraints')
+                     label=bounds_label)
         # Plot upper bound line
         axis.axhline(y=upper_bound,
                      **bounds_line_params)
@@ -472,6 +461,17 @@ def plot_data(
                     fontsize=fontsize)
     axis.legend(**legend_params)
     axis.tick_params(axis='both', labelsize=fontsize)
+
+    # Remove duplicate labels from legend (required for external figures
+    # that plot multiple data sequences on the same plot to avoid label
+    # repetition) and reposition labels
+    end_labels_list = [setpoint_label]
+    if bounds is not None:
+        end_labels_list.append(bounds_label)
+    
+    filter_and_reorder_legend(axis=axis,
+                              legend_params=legend_params,
+                              end_labels_list=end_labels_list)
     
     # Set x-limits
     axis.set_xlim([0, T - 1])
@@ -930,20 +930,22 @@ def initialize_data_animation(
                            label=f'${var_symbol}{index_str}$')[0])
     
     # Plot bounds if provided
-    if bounds:
+    if bounds is not None:
         lower_bound, upper_bound = bounds
+        bounds_label = "Constraints"
         # Plot lower bound line
         axis.axhline(y=lower_bound,
                      **bounds_line_params,
-                     label='Constraints')
+                     label=bounds_label)
         # Plot upper bound line
         axis.axhline(y=upper_bound,
                      **bounds_line_params)
     
     # Plot setpoint
+    setpoint_label = f'${var_symbol}{index_str}^s$'
     axis.plot(range(0, T), np.full(T, setpoint),
               **setpoint_line_params,
-              label=f'${var_symbol}{index_str}^s$')
+              label=setpoint_label)
 
     # Define axis limits
     u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
@@ -990,6 +992,7 @@ def initialize_data_animation(
                     fontsize=fontsize)
     axis.tick_params(axis='both', labelsize=fontsize)
 
+    # Format legend:
     # Collect all legend handles and labels
     handles, labels = axis.get_legend_handles_labels()
     custom_handlers = {}
@@ -1001,10 +1004,26 @@ def initialize_data_animation(
 
         # Add legend with custom handlers
         custom_handlers = {Rectangle: HandlerInitMeasurementRect()}
+
+    # Create a mapping of labels to handles for labels repositioning
+    labels_map = dict(zip(labels, handles))
     
+    # Reposition labels to move bound and setpoint labels to the last
+    end_labels_list = [setpoint_label]
+    if bounds is not None:
+        end_labels_list.append(bounds_label)
+    if initial_steps_label:
+        end_labels_list.append(initial_steps_label)
+    
+    for last_label in end_labels_list:
+        if last_label in labels_map:
+            # Move the last label to the end
+            last_handle = labels_map.pop(last_label)
+            labels_map[last_label] = last_handle
+
     # Format legend
-    axis.legend(handles=handles,
-                labels=labels,
+    axis.legend(handles=labels_map.values(),
+                labels=labels_map.keys(),
                 handler_map=custom_handlers,
                 **legend_params,
                 loc=legend_loc)
@@ -1214,14 +1233,14 @@ def get_text_width_in_data(
     
     return text_box_width
 
-def remove_legend_duplicates(
+def filter_and_reorder_legend(
     axis: Axes,
     legend_params: dict[str, Any],
-    last_label: Optional[str] = None
+    end_labels_list: Optional[List[str]] = None
 ) -> None:
     """
     Remove duplicate entries from the legend of a Matplotlib axis. Optionally,
-    move a specified label to the end of the legend.
+    move specified labels to the end of the legend.
 
     Note:
         The appearance of the plot legend can be customized by passing a
@@ -1232,21 +1251,28 @@ def remove_legend_duplicates(
         legend_params (dict[str, Any]): A dictionary of Matplotlib properties
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength).
-        last_label (Optional[str]): The label that should appear last in the
-            legend. If not provided, no specific label is moved to the end.
-            Defaults to `None`.
+        end_labels_list (Optional[List[str]]): A list of labels to move to
+            the end of the legend. Labels are moved in the order provided,
+            with the last label in the list becoming the final legend entry.
+            If not provided, the legend labels will not be reordered. Defaults
+            to `None`.
     """
+    # Initialize `last_labels_list` if not provided
+    if end_labels_list is None:
+        end_labels_list = []
+
     # Get labels and handles from axis without duplicates
     handles, labels = axis.get_legend_handles_labels()
-    by_label = dict(zip(labels, handles))
+    unique_labels = dict(zip(labels, handles))
 
-    # If a last_label is provided and exists, move it to the end
-    if last_label and last_label in by_label:
-        last_handle = by_label.pop(last_label)
-        by_label[last_label] = last_handle
+    # Reorder labels if `last_label_list` is provided
+    for last_label in end_labels_list:
+        if last_label in unique_labels:
+            last_handle = unique_labels.pop(last_label)
+            unique_labels[last_label] = last_handle
 
     # Update the legend with the unique handles and labels
-    axis.legend(by_label.values(), by_label.keys(), **legend_params)
+    axis.legend(unique_labels.values(), unique_labels.keys(), **legend_params)
 
 def create_input_output_figure(
     m: int,
