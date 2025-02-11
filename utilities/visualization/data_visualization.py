@@ -1,9 +1,12 @@
-from typing import Tuple, Optional, List, Any
+from typing import Tuple, Optional, List, Union, Any
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.legend_handler import HandlerPatch
+from matplotlib.legend import Legend
+from matplotlib.transforms import Transform
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,6 +14,46 @@ from matplotlib.animation import FuncAnimation, FFMpegWriter
 from tqdm import tqdm
 import os
 import math
+
+# Define a custom legend handler for the rectangle representing
+# the initial input-output measurement period in plots
+class HandlerInitMeasurementRect(HandlerPatch):
+    def create_artists(
+        self,
+        legend: Legend,
+        orig_handle: Rectangle,
+        xdescent: float,
+        ydescent: float,
+        width: float,
+        height: float,
+        fontsize: float,
+        trans: Transform
+    ) -> List[Union[Rectangle, Line2D]]:
+        # Define the main rectangle
+        rect = Rectangle([xdescent, ydescent],
+                         width,
+                         height,
+                         transform=trans,
+                         color=orig_handle.get_facecolor(),
+                         alpha=orig_handle.get_alpha())
+        
+        # Create dashed vertical lines at the sides of the rectangle
+        line1 = Line2D([xdescent, xdescent],
+                       [ydescent, ydescent + height],
+                       color='black',
+                       linestyle=(0, (2, 2)),
+                       linewidth=1)
+        line2 = Line2D([xdescent + width, xdescent + width],
+                       [ydescent, ydescent + height],
+                       color='black',
+                       linestyle=(0, (2, 2)),
+                       linewidth=1)
+        
+        # Add transform to the vertical lines
+        line1.set_transform(trans)
+        line2.set_transform(trans)
+        
+        return [rect, line1, line2]
 
 def plot_input_output(
     u_k: np.ndarray,
@@ -441,6 +484,7 @@ def plot_input_output_animation(
     setpoints_line_params: dict[str, Any] = {},
     bounds_line_params: dict[str, Any] = {},
     initial_steps: Optional[int] = None,
+    initial_steps_label: Optional[str] = None,
     continuous_updates: bool = False,
     initial_excitation_text: str = "Init. Excitation",
     initial_measurement_text: str = "Init. Measurement",
@@ -521,6 +565,10 @@ def plot_input_output_animation(
             characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
             will be applied. Defaults to `None`.
+        initial_steps_label (Optional[str]): Label text to use for the legend
+            entry representing the initial input-output measurement highlight
+            in the plot. If `None`, this element will not appear in the
+            legend. Defaults to `None`.
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
             input-output measurement updates. Defaults to `False`.
@@ -635,6 +683,7 @@ def plot_input_output_animation(
                                   y_axis_centers=u_y_axis_centers,
                                   bounds=u_bounds,
                                   initial_steps=initial_steps,
+                                  initial_steps_label=initial_steps_label,
                                   continuous_updates=continuous_updates,
                                   legend_loc='upper right')
     
@@ -664,6 +713,7 @@ def plot_input_output_animation(
                                   y_axis_centers=y_y_axis_centers,
                                   bounds=y_bounds,
                                   initial_steps=initial_steps,
+                                  initial_steps_label=initial_steps_label,
                                   continuous_updates=continuous_updates,
                                   legend_loc='lower right')
     
@@ -772,6 +822,7 @@ def initialize_data_animation(
     y_axis_centers: List[float],
     bounds: Optional[Tuple[float, float]] = None,
     initial_steps: Optional[int] = None,
+    initial_steps_label: Optional[str] = None,
     continuous_updates: bool = False,
     legend_loc: str = 'best'
 ) -> None:
@@ -839,6 +890,10 @@ def initialize_data_animation(
             characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
             will be applied. Defaults to `None`.
+        initial_steps_label (Optional[str]): Label text to use for the legend
+            entry representing the initial input-output measurement highlight
+            in the plot. If `None`, this element will not appear in the
+            legend. Defaults to `None`.
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
             input-output measurement updates. Defaults to `False`.
@@ -874,12 +929,6 @@ def initialize_data_animation(
               **setpoint_line_params,
               label=f'${var_symbol}_{index + 1}^s$')
 
-    # Format labels, legend and ticks
-    axis.set_xlabel('Time step $k$', fontsize=fontsize)
-    axis.set_ylabel(f'{var_label} ${var_symbol}_{index + 1}$', fontsize=fontsize)
-    axis.legend(**legend_params, loc=legend_loc)
-    axis.tick_params(axis='both', labelsize=fontsize)
-
     # Define axis limits
     u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
     axis.set_xlim([0, T - 1])
@@ -889,7 +938,8 @@ def initialize_data_animation(
     # Highlight initial input-output data measurement period if provided
     if initial_steps:
         # Initialize initial measurement rectangle
-        rects.append(axis.axvspan(0, 0, color='gray', alpha=0.1))
+        rect = axis.axvspan(0, 0, color='gray', alpha=0.1)
+        rects.append(rect)
        
         # Initialize initial measurement rectangle boundary lines
         right_rect_lines.append(axis.axvline(
@@ -913,6 +963,30 @@ def initialize_data_animation(
             control_text, fontsize=fontsize - 1, ha='center',
             va='center', color='black', bbox=dict(facecolor='white',
                                                     edgecolor='black')))
+        
+    # Format labels and ticks
+    axis.set_xlabel('Time step $k$', fontsize=fontsize)
+    axis.set_ylabel(f'{var_label} ${var_symbol}_{index + 1}$', fontsize=fontsize)
+    axis.tick_params(axis='both', labelsize=fontsize)
+
+    # Collect all legend handles and labels
+    handles, labels = axis.get_legend_handles_labels()
+    custom_handlers = {}
+
+    # Add rectangle to legend with custom handler if used
+    if initial_steps and initial_steps_label:
+        handles.append(rect)
+        labels.append(initial_steps_label)
+
+        # Add legend with custom handlers
+        custom_handlers = {Rectangle: HandlerInitMeasurementRect()}
+    
+    # Format legend
+    axis.legend(handles=handles,
+                labels=labels,
+                handler_map=custom_handlers,
+                **legend_params,
+                loc=legend_loc)
 
 def update_data_animation(
     index: int,
