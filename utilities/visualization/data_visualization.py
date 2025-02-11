@@ -80,13 +80,13 @@ def plot_input_output(
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
-            input data sequences.
+            input data sequences. Defaults to `None`.
         y_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each output data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
-            output data sequences.
+            output data sequences. Defaults to `None`.
         inputs_line_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the lines used to plot the input data
             series (e.g., color, linestyle, linewidth). If not provided,
@@ -103,11 +103,11 @@ def plot_input_output(
             properties for customizing the lines used to plot the bounds of
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
-        initial_steps (Optional[int]): The number of initial time steps where
-            input-output measurements were taken for the data-driven
-            characterization of the system. This will highlight the initial
+        initial_steps (Optional[int]): The number of initial time steps during
+            which input-output measurements were taken for the data-driven
+            characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
-            will be applied.
+            will be applied. Defaults to `None`.
         initial_excitation_text (str): Label text to display over the initial
             excitation period of the input plots. Default is
             "Init. Excitation".
@@ -126,21 +126,24 @@ def plot_input_output(
         u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             input subplot. If `None`, the Y-axis limits will be determined
-            automatically.
+            automatically. Defaults to `None`.
         y_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot. If `None`, the Y-axis limits will be determined
-            automatically.
+            automatically. Defaults to `None`.
         fontsize (int): The fontsize for labels and axes ticks.
         legend_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the plot legends (e.g., fontsize,
             loc, handlelength).
         data_label (str): The label for the current data sequences.
         axs_u (Optional[List[Axes]]): List of external axes for input plots.
+            Defaults to `None`.
         axs_y (Optional[List[Axes]]): List of external axes for output plots.
+            Defaults to `None`.
         title (Optional[str]): The title for the created plot figure. Set
             only if the figure is created internally (i.e., `axs_u` and
             `axs_y` are not provided). If `None`, no title will be displayed.
+            Defaults to `None`.
     
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
@@ -292,9 +295,9 @@ def plot_data(
 ) -> None:
     """
     Plot a data series with setpoints in a specified axis. Optionally,
-    highlight an initial measurement phase and a control phase using shaded
-    regions and text labels. The labels will be displayed if there is enough
-    space to prevent them from overlapping with other plot elements.
+    highlight the initial measurement and control phases using shaded regions
+    and text labels. The labels will be displayed if there is enough space to
+    prevent them from overlapping with other plot elements.
 
     Note:
         The appearance of plot lines and legend can be customized by passing
@@ -336,14 +339,15 @@ def plot_data(
         bounds (Optional[Tuple[float, float]]): A tuple (lower_bound,
             upper_bound) specifying the bounds of the data to be plotted. If
             provided, horizontal lines representing these bounds will be
-            plotted.
-        initial_steps (Optional[int]): The number of initial time steps where
-            input-output measurements were taken for the data-driven
-            characterization of the system. This will highlight the initial
-            measurement period in the plot.
+            plotted. Defaults to `None`.
+        initial_steps (Optional[int]): The number of initial time steps during
+            which input-output measurements were taken for the data-driven
+            characterization of the system. This highlights the initial
+            measurement period in the plot. Defaults to `None`.
         plot_ylimits (Optional[Tuple[float, float]]): A tuple (lower_limit,
             upper_limit) specifying the Y-axis limits for the plot. If `None`,
-            the Y-axis limits will be determined automatically.
+            the Y-axis limits will be determined automatically. Defaults to
+            `None`.
     """
     T = data.shape[0]  # Data length
 
@@ -464,7 +468,7 @@ def plot_input_output_animation(
 
     The number of data points shown in each animation frame and the animation
     speed can be configured via the `points_per_frame` and `interval`
-    parameters, respectively. These paramaters allow control over the speed
+    parameters, respectively. These parameters allow control over the speed
     at which data is shown in the animation, as well as the total number of
     animation frames required to display all the data.
 
@@ -492,13 +496,13 @@ def plot_input_output_animation(
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
-            input data sequences.
+            input data sequences. Defaults to `None`.
         y_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each output data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
-            output data sequences.
+            output data sequences. Defaults to `None`.
         inputs_line_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the lines used to plot the input data
             series (e.g., color, linestyle, linewidth).
@@ -512,14 +516,14 @@ def plot_input_output_animation(
             properties for customizing the lines used to plot the bounds of
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
-        initial_steps (Optional[int]): The number of initial time steps where
-            input-output measurements were taken for the data-driven
-            characterization of the system. This will highlight the initial
+        initial_steps (Optional[int]): The number of initial time steps during
+            which input-output measurements were taken for the data-driven
+            characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
-            will be applied.
+            will be applied. Defaults to `None`.
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
-            input-output measurement updates.
+            input-output measurement updates. Defaults to `False`.
         initial_excitation_text (str): Label text to display over the initial
             excitation period of the input plots. Default is
             "Init. Excitation".
@@ -546,7 +550,7 @@ def plot_input_output_animation(
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength).
         title (Optional[str]): The title for the created plot figure. If
-            `None`, no title will be displayed.
+            `None`, no title will be displayed. Defaults to `None`.
     
     Returns:
         FuncAnimation: A Matplotlib `FuncAnimation` object that animates the
@@ -829,15 +833,15 @@ def initialize_data_animation(
         bounds (Optional[Tuple[float, float]]): A tuple (lower_bound,
             upper_bound) specifying the bounds of the data to be plotted. If
             provided, horizontal lines representing these bounds will be
-            plotted.
-        initial_steps (Optional[int]): The number of initial time steps where
-            input-output measurements were taken for the data-driven
-            characterization of the system. This will highlight the initial
+            plotted. Defaults to `None`.
+        initial_steps (Optional[int]): The number of initial time steps during
+            which input-output measurements were taken for the data-driven
+            characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
-            will be applied.
+            will be applied. Defaults to `None`.
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
-            input-output measurement updates.
+            input-output measurement updates. Defaults to `False`.
         legend_loc (str): The location of the legend on the plot. Corresponds
             to Matplotlib's `loc` parameter for legends. Defaults to 'best'.
     
@@ -945,9 +949,9 @@ def update_data_animation(
         data_length (int): The length of the `data` array.
         points_per_frame (int): The number of data points shown per animation
             frame.
-        initial_steps (Optional[int]): The number of initial time steps where
-            input-output measurements were taken for the data-driven
-            characterization of the system. This will highlight the initial
+        initial_steps (Optional[int]): The number of initial time steps during
+            which input-output measurements were taken for the data-driven
+            characterization of the system. This highlights the initial
             measurement period in the plot.
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
@@ -1135,6 +1139,7 @@ def remove_legend_duplicates(
             handlelength).
         last_label (Optional[str]): The label that should appear last in the
             legend. If not provided, no specific label is moved to the end.
+            Defaults to `None`.
     """
     # Get labels and handles from axis without duplicates
     handles, labels = axis.get_legend_handles_labels()
@@ -1173,7 +1178,7 @@ def create_input_output_figure(
         dpi (int): The DPI resolution of the figure.
         fontsize (int): The fontsize for suptitles.
         title (Optional[str]): The title for the overall figure. If `None`,
-            no title will be added.
+            no title will be added. Defaults to `None`.
     
     Returns:
         Tuple: A tuple containing:
