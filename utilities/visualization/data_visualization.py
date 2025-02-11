@@ -995,10 +995,18 @@ def initialize_data_animation(
                   label=setpoint_label)
 
     # Define axis limits
+    # Get minimum and maximum Y-axis values from data and setpoint
     if setpoint is not None:
         u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
     else:
-        u_lim_min, u_lim_max = get_padded_limits(data, data)
+        u_lim_min, u_lim_max = get_padded_limits(data)
+    
+    # Compare minimum and maximum values with bounds, if provided
+    if bounds is not None:
+        u_lim_min, u_lim_max = get_padded_limits(
+            np.array([u_lim_min, u_lim_max]), bounds)
+    
+    # Set axis limits
     axis.set_xlim([0, T - 1])
     axis.set_ylim(u_lim_min, u_lim_max)
     y_axis_centers.append((u_lim_min + u_lim_max) / 2)
@@ -1226,7 +1234,7 @@ def save_animation(
 
 def get_padded_limits(
     X: np.ndarray,
-    X_s: np.ndarray,
+    X_s: Optional[np.ndarray] = None,
     pad_percentage: float = 0.05
 ) -> Tuple[float, float]:
     """
@@ -1235,7 +1243,8 @@ def get_padded_limits(
 
     Args:
         X (np.ndarray): First data array.
-        X_s (np.ndarray): Second data array.
+        X_s (Optional[np.ndarray], optional): Second data array. If `None`,
+            only `X` is considered. Defaults to `None`.
         pad_percentage (float, optional): The percentage of the data range
             to be used as padding. Defaults to 0.05.
 
@@ -1245,9 +1254,12 @@ def get_padded_limits(
     """
     # Get minimum and maximum limits from data sequences
     X_min, X_max = np.min(X), np.max(X)
-    X_s_min, X_s_max = np.min(X_s), np.max(X_s)
-    X_lim_min = min(X_min, X_s_min)
-    X_lim_max = max(X_max, X_s_max)
+    if X_s is not None:
+        X_s_min, X_s_max = np.min(X_s), np.max(X_s)
+        X_lim_min = min(X_min, X_s_min)
+        X_lim_max = max(X_max, X_s_max)
+    else:
+        X_lim_min, X_lim_max = X_min, X_max
 
     # Extend limits by a percentage of the overall data range
     X_range = X_lim_max - X_lim_min
