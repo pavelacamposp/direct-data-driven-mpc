@@ -242,6 +242,8 @@ def plot_input_output(
 
     # Plot input data
     for i in range(m):
+        # Define plot index based on the number of input plots
+        plot_index = -1 if m == 1 else i
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
         # Get plot Y-axis limit if provided
@@ -250,7 +252,7 @@ def plot_input_output(
         plot_data(axis=axs_u[i],
                   data=u_k[:, i],
                   setpoint=u_s[i, :],
-                  index=i,
+                  index=plot_index,
                   data_line_params=inputs_line_params,
                   bounds_line_params=bounds_line_params,
                   setpoint_line_params=setpoints_line_params,
@@ -277,6 +279,8 @@ def plot_input_output(
 
     # Plot output data
     for j in range(p):
+        # Define plot index based on the number of output plots
+        plot_index = -1 if p == 1 else j
         # Get output bounds if provided
         y_bounds = y_bounds_list[i] if y_bounds_list else None
         # Get plot Y-axis limit if provided
@@ -285,7 +289,7 @@ def plot_input_output(
         plot_data(axis=axs_y[j],
                   data=y_k[:, j],
                   setpoint=y_s[j, :],
-                  index=j,
+                  index=plot_index,
                   data_line_params=outputs_line_params,
                   bounds_line_params=bounds_line_params,
                   setpoint_line_params=setpoints_line_params,
@@ -351,7 +355,8 @@ def plot_data(
         data (np.ndarray): An array containing data to be plotted.
         setpoint (float): The setpoint value for the data.
         index (int): The index of the data used for labeling purposes (e.g.,
-            "u_1", "u_2").
+            "u_1", "u_2"). If set to -1, subscripts will not be added to
+            labels.
         data_line_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the line used to plot the data series
             (e.g., color, linestyle, linewidth).
@@ -394,16 +399,19 @@ def plot_data(
     """
     T = data.shape[0]  # Data length
 
+    # Construct index label string based on index value
+    index_str = f'_{index + 1}' if index != -1 else ''
+
     # Plot data series
     axis.plot(range(0, T),
               data,
               **data_line_params,
-              label=f'${var_symbol}_{index + 1}${data_label}')
+              label=f'${var_symbol}{index_str}${data_label}')
     # Plot setpoint
     axis.plot(range(0, T),
               np.full(T, setpoint),
               **setpoint_line_params,
-              label=f'${var_symbol}_{index + 1}^s$')
+              label=f'${var_symbol}{index_str}^s$')
     
     # Plot bounds if provided
     if bounds:
@@ -460,7 +468,7 @@ def plot_data(
     
     # Format labels, legend and ticks
     axis.set_xlabel('Time step $k$', fontsize=fontsize)
-    axis.set_ylabel(f'{var_label} ${var_symbol}_{index + 1}$',
+    axis.set_ylabel(f'{var_label} ${var_symbol}{index_str}$',
                     fontsize=fontsize)
     axis.legend(**legend_params)
     axis.tick_params(axis='both', labelsize=fontsize)
@@ -659,12 +667,14 @@ def plot_input_output_animation(
         
     # Initialize input plot elements
     for i in range(m):
+        # Define plot index based on the number of input plots
+        plot_index = -1 if m == 1 else i
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
         initialize_data_animation(axis=axs_u[i],
                                   data=u_k[:, i],
                                   setpoint=u_s[i, :],
-                                  index=i,
+                                  index=plot_index,
                                   data_line_params=inputs_line_params,
                                   bounds_line_params=bounds_line_params,
                                   setpoint_line_params=setpoints_line_params,
@@ -689,12 +699,14 @@ def plot_input_output_animation(
     
     # Initialize output plot elements
     for j in range(p):
+        # Define plot index based on the number of output plots
+        plot_index = -1 if p == 1 else j
         # Get output bounds if provided
         y_bounds = y_bounds_list[i] if y_bounds_list else None
         initialize_data_animation(axis=axs_y[j],
                                   data=y_k[:, j],
                                   setpoint=y_s[j, :],
-                                  index=j,
+                                  index=plot_index,
                                   data_line_params=outputs_line_params,
                                   bounds_line_params=bounds_line_params,
                                   setpoint_line_params=setpoints_line_params,
@@ -842,7 +854,8 @@ def initialize_data_animation(
         data (np.ndarray): An array containing data to be plotted.
         setpoint (float): The setpoint value for the data.
         index (int): The index of the data used for labeling purposes (e.g.,
-            "u_1", "u_2").
+            "u_1", "u_2"). If set to -1, subscripts will not be added to
+            labels.
         data_line_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the line used to plot the data series
             (e.g., color, linestyle, linewidth).
@@ -908,10 +921,13 @@ def initialize_data_animation(
     """
     T = data.shape[0]  # Data length
 
+    # Construct index label string based on index value
+    index_str = f'_{index + 1}' if index != -1 else ''
+
     # Initialize plot lines
     lines.append(axis.plot([], [],
                            **data_line_params,
-                           label=f'${var_symbol}_{index + 1}$')[0])
+                           label=f'${var_symbol}{index_str}$')[0])
     
     # Plot bounds if provided
     if bounds:
@@ -927,7 +943,7 @@ def initialize_data_animation(
     # Plot setpoint
     axis.plot(range(0, T), np.full(T, setpoint),
               **setpoint_line_params,
-              label=f'${var_symbol}_{index + 1}^s$')
+              label=f'${var_symbol}{index_str}^s$')
 
     # Define axis limits
     u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
@@ -949,24 +965,29 @@ def initialize_data_animation(
             # Add left boundary line to show continuous updates, if enabled
             left_rect_lines.append(axis.axvline(
                 x=0, color='black', linestyle=(0, (5, 5)), linewidth=1))
-    
+
+        # Get y axis center
+        y_axis_center = (y_axis_centers[index]
+                         if index != -1 else y_axis_centers[0])
+
         # Initialize initial measurement text
         init_texts.append(axis.text(
-            initial_steps / 2, y_axis_centers[index],
+            initial_steps / 2, y_axis_center,
             initial_text, fontsize=fontsize - 1, ha='center',
             va='center', color='black', bbox=dict(facecolor='white',
                                                     edgecolor='black')))
 
         # Initialize control text
         control_texts.append(axis.text(
-            (T + initial_steps) / 2, y_axis_centers[index],
+            (T + initial_steps) / 2, y_axis_center,
             control_text, fontsize=fontsize - 1, ha='center',
             va='center', color='black', bbox=dict(facecolor='white',
                                                     edgecolor='black')))
         
     # Format labels and ticks
     axis.set_xlabel('Time step $k$', fontsize=fontsize)
-    axis.set_ylabel(f'{var_label} ${var_symbol}_{index + 1}$', fontsize=fontsize)
+    axis.set_ylabel(f'{var_label} ${var_symbol}{index_str}$',
+                    fontsize=fontsize)
     axis.tick_params(axis='both', labelsize=fontsize)
 
     # Collect all legend handles and labels
