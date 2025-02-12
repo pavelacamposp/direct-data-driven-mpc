@@ -65,7 +65,7 @@ default_animation_dir = os.path.join(project_dir, 'animation_outputs')
 default_model_config_file = 'four_tank_system_params.yaml'
 default_model_config_path = os.path.join(models_config_dir,
                                          default_model_config_file)
-default_model_key_value = 'FourTankSystem'
+default_model_key_value = 'four_tank_system'
 
 # Data-Driven MPC controller configuration file
 default_controller_config_file = 'lti_dd_mpc_example_params.yaml'

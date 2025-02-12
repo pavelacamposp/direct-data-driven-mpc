@@ -64,7 +64,7 @@ controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
 model_config_file = 'four_tank_system_params.yaml'
 model_config_path = os.path.join(models_config_dir,
                                  model_config_file)
-model_key_value = 'FourTankSystem'
+model_key_value = 'four_tank_system'
 
 # Data-Driven MPC controller configuration file
 controller_config_file = 'lti_dd_mpc_example_params.yaml'

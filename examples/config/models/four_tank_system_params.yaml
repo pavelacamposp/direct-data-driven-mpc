@@ -1,12 +1,12 @@
 # Four-Tank System Parameters
 # Parameters of the linearized version of a four-tank system considered in
-# the implemementation example in Section V from the paper:
+# the implemementation example in Section V of the paper:
 # J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven Model
 # Predictive Control With Stability and Robustness Guarantees," in IEEE
 # Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717, April
 # 2021, doi: 10.1109/TAC.2020.3000182.
 
-FourTankSystem:
+four_tank_system:
   A:  # System state matrix
     - [0.921, 0, 0.041, 0]
     - [0, 0.918, 0, 0.033]
