@@ -1,0 +1,19 @@
+# Nonlinear Continuous Stirred Tank Reactor Parameters
+# Parameters of the nonlinear continuous stirred tank reactor (CSTR) system
+# considered in the implementation example in Section V of the paper:
+# J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear Tracking MPC
+# for Nonlinear Systems—Part II: The Data-Driven Case," in IEEE Transactions
+# on Automatic Control, vol. 67, no. 9, pp. 4406-4421, Sept. 2022, doi:
+# 10.1109/TAC.2022.3166851.
+
+cstr_system:
+  # System parameters
+  Ts: 0.2  # Sampling time
+  theta: 20
+  k: 300
+  M: 5
+  xf: 0.3947
+  xc: 0.3816
+  alpha: 0.117
+
+  eps_max: 0.0  # Upper bound of the system measurement noise
