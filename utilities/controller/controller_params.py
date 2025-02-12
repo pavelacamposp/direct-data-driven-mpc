@@ -236,6 +236,11 @@ def get_lti_data_driven_mpc_controller_params(
             elif key in ['controller_type', 'slack_var_constraint_type']:
                 # Print name for enum types
                 print(f"    {key}: {value.name}")
+            elif key in ['u_range']:
+                # Format input bounds and ranges
+                formatted_array = ', '.join([f"[{', '.join(map(str, row))}]"
+                                             for row in value])
+                print(f"    {key}: [{formatted_array}]")
             elif key in ['u_s', 'y_s']:
                 # Format setpoint arrays in a single line
                 formatted_array = ', '.join([f"[{row[0]}]" for row in value])
@@ -400,6 +405,11 @@ def get_nonlinear_data_driven_mpc_controller_params(
             elif key in ['alpha_reg_type']:
                 # Print name for enum types
                 print(f"    {key}: {value.name}")
+            elif key in ['u_range', 'U', 'Us']:
+                # Format input bounds and ranges
+                formatted_array = ', '.join([f"[{', '.join(map(str, row))}]"
+                                             for row in value])
+                print(f"    {key}: [{formatted_array}]")
             elif key in ['y_r']:
                 # Format setpoint arrays in a single line
                 formatted_array = ', '.join([f"[{row[0]}]" for row in value])
