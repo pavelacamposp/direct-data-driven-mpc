@@ -18,7 +18,11 @@ lti_data_driven_mpc_params:
   lambda_sigma: 1000  # Regularization parameter for the slack variable
   lambda_alpha_epsilon_bar: 0.1  # Regularization parameter for alpha
 
-  u_d_range: [-1, 1]  # Range of the persistently exciting input u_d
+  # Range of the persistently exciting input u_d
+  # Note: Each input must have an associated vector of ranges [min, max]
+  u_d_range:
+    - [-1, 1]
+    - [-1, 1]
 
   slack_var_constraint_type: 0  # Slack variable constraint type:
                                 # - 0 = None → Omit explicit constraint. The

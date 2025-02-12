@@ -18,10 +18,21 @@ nonlinear_data_driven_mpc_params:
   lambda_alpha: 3.0e-6  # Regularization parameter for alpha
   lambda_sigma: 1.0e+7  # Regularization parameter for sigma
 
-  U: [0.1, 2]  # Bounds for the predicted input
-  Us: [0.11, 1.99]  # Bounds for the predicted input setpoint
-                    # (must be a subset of U)
-  u_range: [0.1, 1]  # Range of the persistently exciting input u
+  # Parameters for input bounds and ranges
+  # Note: Each input must have an associated vector of
+  # bounds or ranges [min, max].
+  
+  # Bounds for the predicted input
+  U:
+    - [0.1, 2]
+
+  # Bounds for the predicted input setpoint (must be a subset of U)
+  Us:
+    - [0.11, 1.99]
+
+  # Range of the persistently exciting input u
+  u_range:
+    - [0.1, 1]
 
   alpha_reg_type: 1  # Alpha regularization type:
                      # - 0 = Approximated → Regularized w.r.t. an approximation

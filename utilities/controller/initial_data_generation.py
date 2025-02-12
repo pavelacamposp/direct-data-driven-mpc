@@ -62,7 +62,8 @@ def randomize_initial_system_state(
     system_model.set_state(state=x_i0)
 
     # Generate a random input array
-    u_i = np_random.uniform(*u_range, (ns, m))
+    u_i = np.hstack([np_random.uniform(*u_range[i], (ns, 1))
+                     for i in range(m)])
 
     # Generate bounded uniformly distributed additive measurement noise
     w_i = eps_max_sim * np_random.uniform(-1.0, 1.0, (ns, p))
@@ -129,7 +130,8 @@ def generate_initial_input_output_data(
     # exciting input u_d
 
     # Generate a persistently exciting input `u_d` from 0 to (N - 1)
-    u_d = np_random.uniform(*u_range, (N, m))
+    u_d = np.hstack([np_random.uniform(*u_range[i], (N, 1))
+                     for i in range(m)])
 
     # Generate bounded uniformly distributed additive measurement noise
     w_d = eps_max_sim * np_random.uniform(-1.0, 1.0, (N, p))

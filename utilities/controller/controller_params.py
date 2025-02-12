@@ -46,7 +46,7 @@ class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
     lamb_sigma: float  # Regularization parameter for sigma
     c: float  # Convex slack variable constraint constant
 
-    u_range: Tuple[float, float]  # Range of the persistently exciting input u
+    u_range: np.ndarray  # Range of the persistently exciting input u
 
     # Slack variable constraint type
     slack_var_constraint_type: SlackVarConstraintType
@@ -70,9 +70,9 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
     lamb_sigma: float  # Regularization parameter for sigma
     c: float  # Convex slack variable constraint constant
 
-    U: Tuple[float, float]  # Bounds for the predicted input
-    Us: Tuple[float, float]  # Bounds for the predicted input setpoint
-    u_range: Tuple[float, float]  # Range of the persistently exciting input u
+    U: np.ndarray  # Bounds for the predicted input
+    Us: np.ndarray  # Bounds for the predicted input setpoint
+    u_range: np.ndarray  # Range of the persistently exciting input u
 
     alpha_reg_type: AlphaRegType  # Alpha regularization type
 
@@ -160,7 +160,7 @@ def get_lti_data_driven_mpc_controller_params(
 
     # --- Define initial Input-Output data generation parameters ---
     # Persistently exciting input range
-    dd_mpc_params['u_range'] = params['u_d_range']
+    dd_mpc_params['u_range'] = np.array(params['u_d_range'], dtype=float)
     # Initial input-output trajectory length
     dd_mpc_params['N'] = params['N']
 
@@ -305,7 +305,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     # --- Define initial Input-Output data generation parameters ---
     # Persistently exciting input range
-    dd_mpc_params['u_range'] = params['u_range']
+    dd_mpc_params['u_range'] = np.array(params['u_range'], dtype=float)
     # Initial input-output trajectory length
     dd_mpc_params['N'] = params['N']
 
@@ -360,9 +360,9 @@ def get_nonlinear_data_driven_mpc_controller_params(
     dd_mpc_params['lamb_sigma'] = params['lambda_sigma']
 
     # Bounds for the predicted input
-    dd_mpc_params['U'] = params['U']
+    dd_mpc_params['U'] = np.array(params['U'], dtype=float)
     # Bounds for the predicted input setpoint
-    dd_mpc_params['Us'] = params['Us']
+    dd_mpc_params['Us'] = np.array(params['Us'], dtype=float)
 
     # Alpha regularization type
     alpha_reg_type_value = params['alpha_reg_type']
