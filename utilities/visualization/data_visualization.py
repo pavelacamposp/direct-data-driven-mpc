@@ -66,8 +66,8 @@ def plot_input_output(
     outputs_line_params: dict[str, Any] = {},
     setpoints_line_params: dict[str, Any] = {},
     bounds_line_params: dict[str, Any] = {},
-    u_setpoint_var_symbol: str = "u_s",
-    y_setpoint_var_symbol: str = "y_s",
+    u_setpoint_var_symbol: str = "u^s",
+    y_setpoint_var_symbol: str = "y^s",
     initial_steps: Optional[int] = None,
     initial_excitation_text: str = "Init. Excitation",
     initial_measurement_text: str = "Init. Measurement",
@@ -150,9 +150,9 @@ def plot_input_output(
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
         u_setpoint_var_symbol (str): The variable symbol used to label the
-            input setpoint data series (e.g., "u_s").
+            input setpoint data series (e.g., "u^s").
         y_setpoint_var_symbol (str): The variable symbol used to label the
-            output setpoint data series (e.g., "y_s").
+            output setpoint data series (e.g., "y^s").
         initial_steps (Optional[int]): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
@@ -375,7 +375,7 @@ def plot_data(
         var_symbol (str): The variable symbol used to label the data series
             (e.g., "u" for inputs, "y" for outputs).
         setpoint_var_symbol (str): The variable symbol used to label the
-            setpoint data series (e.g., "u_s" for inputs, "y_s" for outputs).
+            setpoint data series (e.g., "u^s" for inputs, "y^s" for outputs).
         var_label (str): The variable label representing the control signal
             (e.g., "Input", "Output").
         data_label (str): The label for the current data sequence.
@@ -514,8 +514,8 @@ def plot_input_output_animation(
     outputs_line_params: dict[str, Any] = {},
     setpoints_line_params: dict[str, Any] = {},
     bounds_line_params: dict[str, Any] = {},
-    u_setpoint_var_symbol: str = "u_s",
-    y_setpoint_var_symbol: str = "y_s",
+    u_setpoint_var_symbol: str = "u^s",
+    y_setpoint_var_symbol: str = "y^s",
     initial_steps: Optional[int] = None,
     initial_steps_label: Optional[str] = None,
     continuous_updates: bool = False,
@@ -595,9 +595,9 @@ def plot_input_output_animation(
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
         u_setpoint_var_symbol (str): The variable symbol used to label the
-            input setpoint data series (e.g., "u_s").
+            input setpoint data series (e.g., "u^s").
         y_setpoint_var_symbol (str): The variable symbol used to label the
-            output setpoint data series (e.g., "y_s").
+            output setpoint data series (e.g., "y^s").
         initial_steps (Optional[int]): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
@@ -911,7 +911,7 @@ def initialize_data_animation(
         var_symbol (str): The variable symbol used to label the data series
             (e.g., "u" for inputs, "y" for outputs).
         setpoint_var_symbol (str): The variable symbol used to label the
-            setpoint data series (e.g., "u_s" for inputs, "y_s" for outputs).
+            setpoint data series (e.g., "u^s" for inputs, "y^s" for outputs).
         var_label (str): The variable label representing the control signal
             (e.g., "Input", "Output").
         initial_text (str): Label text to display over the initial measurement
