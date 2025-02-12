@@ -1396,8 +1396,9 @@ def create_input_output_figure(
     axs_y = subfigs[1].subplots(1, p)
 
     # Ensure axs_u and axs_y are always lists
-    if max(m, p) == 1:
+    if m == 1:
         axs_u = [axs_u]
+    if p == 1:
         axs_y = [axs_y]
 
     return fig, axs_u, axs_y
