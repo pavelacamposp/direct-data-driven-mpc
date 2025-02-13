@@ -357,7 +357,7 @@ def main() -> None:
                       y_k=y_sys,
                       u_s=u_s,
                       y_s=y_s,
-                      figsize=(14, 8),
+                      figsize=(9, 12),
                       dpi=100,
                       title=plot_title,
                       **INPUT_OUTPUT_PLOT_PARAMS)
@@ -378,7 +378,7 @@ def main() -> None:
                       u_s=u_s,
                       y_s=y_s,
                       initial_steps=N,
-                      figsize=(14, 8),
+                      figsize=(9, 12),
                       dpi=100,
                       title=plot_title,
                       **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
@@ -392,7 +392,7 @@ def main() -> None:
                                        u_s=u_s,
                                        y_s=y_s,
                                        initial_steps=N,
-                                       figsize=(14, 8),
+                                       figsize=(9, 12),
                                        dpi=100,
                                        interval=1000/anim_fps,
                                        points_per_frame=anim_points_per_frame,
