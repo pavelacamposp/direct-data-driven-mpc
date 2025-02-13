@@ -111,7 +111,7 @@ def get_lti_data_driven_mpc_controller_params(
     for Linear Time-Invariant (LTI) systems from a YAML configuration file.
     
     The controller parameters are defined based on the Nominal and Robust
-    Data-Driven MPC controller formulations from [1]. The number of control
+    Data-Driven MPC controller formulations of [1]. The number of control
     inputs (`m`) and system outputs (`p`) are used to construct the output
     (`Q`) and input (`R`) weighting matrices.
 
@@ -191,7 +191,7 @@ def get_lti_data_driven_mpc_controller_params(
     # Ridge regularization weight for sigma
     dd_mpc_params['lamb_sigma'] = params['lambda_sigma']
 
-    # Convex slack variable constraint constant (see Remark 3 from [1])
+    # Convex slack variable constraint constant (see Remark 3 of [1])
     dd_mpc_params['c'] = 1.0
 
     # Slack variable constraint type
@@ -211,7 +211,7 @@ def get_lti_data_driven_mpc_controller_params(
     if params['n_n_mpc_step']:
         dd_mpc_params['n_mpc_step'] = n
         # Defaults to the estimated system order, as defined
-        # # in Algorithm 2 from [1]
+        # in Algorithm 2 of [1]
     else:
         dd_mpc_params['n_mpc_step'] = 1
 
@@ -262,7 +262,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
     for Nonlinear systems from a YAML configuration file.
     
     The controller parameters are defined based on the Nonlinear Data-Driven
-    MPC controller formulation from [2]. The number of control inputs (`m`)
+    MPC controller formulation of [2]. The number of control inputs (`m`)
     and system outputs (`p`) are used to construct the output (`Q`), input
     (`R`), and output setpoint (`S`) weighting matrices.
 
@@ -320,12 +320,12 @@ def get_nonlinear_data_driven_mpc_controller_params(
     dd_mpc_params['n'] = n
 
     # Extended Output Representation and Incremental Input
-    # If True: The controller uses an extended output representation
-    #          (y_ext[k] = [y[k], u[k]]) and updates the control input
-    #          incrementally (u[k] = u[k-1] + du[k-1]). This ensures
-    #          control-affine system dynamics (Section V of [2]).
-    # If False: The controller directly applies control inputs without
-    #           extending its state representation.
+    # If `True`: The controller uses an extended output representation
+    #            (y_ext[k] = [y[k], u[k]]) and updates the control input
+    #            incrementally (u[k] = u[k-1] + du[k-1]). This ensures
+    #            control-affine system dynamics (Section V of [2]).
+    # If `False`: The controller directly applies control inputs without
+    #             extending its state representation.
     ext_out_incr_in = params['ext_out_incr_in']
     dd_mpc_params['ext_out_incr_in'] = ext_out_incr_in
     

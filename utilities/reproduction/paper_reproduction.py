@@ -46,17 +46,17 @@ DD_MPC_SCHEME_CONFIG = {
     DataDrivenMPCScheme.TEC: {
         'label': 'TEC',
         'n_mpc_step': 1,
-        'terminal_constraint': True,
+        'terminal_constraints': True,
     },
     DataDrivenMPCScheme.TEC_N_STEP: {
         'label': 'TEC, n-step',
         'n_mpc_step': -1,  # -1 used as a placeholder for 'n' steps
-        'terminal_constraint': True,
+        'terminal_constraints': True,
     },
     DataDrivenMPCScheme.UCON: {
         'label': 'UCON',
         'n_mpc_step': 1,
-        'terminal_constraint': False,
+        'terminal_constraints': False,
     }
 }
 
@@ -189,15 +189,15 @@ def create_data_driven_mpc_controllers_reproduction(
             # n-step Data-Driven MPC control
             base_controller_config['n_mpc_step'] = base_controller_config['n']
         
-        # Terminal constraint use in Data-Driven MPC formulation
-        use_terminal_constraint =  scheme_config['terminal_constraint']
+        # Terminal constraints use in Data-Driven MPC formulations
+        use_terminal_constraints =  scheme_config['terminal_constraints']
 
         # Create Data-Driven MPC controller based on scheme config
         dd_mpc_controller = create_lti_data_driven_mpc_controller(
                 controller_config=base_controller_config,
                 u_d=u_d,
                 y_d=y_d,
-                use_terminal_constraint=use_terminal_constraint)
+                use_terminal_constraints=use_terminal_constraints)
         
         # Store controller
         data_driven_mpc_controllers.append(dd_mpc_controller)

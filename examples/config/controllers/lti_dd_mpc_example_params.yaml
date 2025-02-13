@@ -32,7 +32,7 @@ lti_data_driven_mpc_params:
                                 # - 1 = Convex → Convex slack variable
                                 #                constraint (Remark 3 of [1]).
                                 # - 2 = Non-Convex → Non-Convex slack variable
-                                #                    constraint (Equation 6d
+                                #                    constraint (Equation (6d)
                                 #                    of [1]).
 
   controller_type: 1  # Data-Driven MPC controller type:

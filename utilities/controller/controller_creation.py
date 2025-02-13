@@ -14,7 +14,7 @@ def create_lti_data_driven_mpc_controller(
     controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
-    use_terminal_constraint: bool = True
+    use_terminal_constraints: bool = True
 ) -> LTIDataDrivenMPCController:
     """
     Create an `LTIDataDrivenMPCController` instance using a specified
@@ -32,9 +32,9 @@ def create_lti_data_driven_mpc_controller(
         y_d (np.ndarray): An array of shape `(N, p)` representing the system's
             output response to `u_d`. `N` is the trajectory length and `p` is
             the number of system outputs.
-        use_terminal_constraint (bool): If True, include terminal equality
-            constraints in the Data-Driven MPC formulation. If False, the
-            controller will not enforce this constraint. Defaults to True.
+        use_terminal_constraints (bool): If `True`, include terminal equality
+            constraints in the Data-Driven MPC formulation. If `False`, the
+            controller will not enforce these constraints. Defaults to `True`.
     
     Returns:
         LTIDataDrivenMPCController: An `LTIDataDrivenMPCController` instance,
@@ -92,7 +92,7 @@ def create_lti_data_driven_mpc_controller(
         slack_var_constraint_type=slack_var_constraint_type,
         controller_type=controller_type,
         n_mpc_step=n_mpc_step,
-        use_terminal_constraint=use_terminal_constraint)
+        use_terminal_constraints=use_terminal_constraints)
     
     return lti_data_driven_mpc_controller
 
