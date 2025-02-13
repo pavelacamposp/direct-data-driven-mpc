@@ -74,7 +74,7 @@ def plot_input_output(
     control_text: str = "Data-Driven MPC",
     display_initial_text: bool = True,
     display_control_text: bool = True,
-    figsize: Tuple[int, int] = (12, 8),
+    figsize: Tuple[float, float] = (12.0, 8.0),
     dpi: int = 300,
     u_ylimits_list: Optional[List[Tuple[float, float]]] = None,
     y_ylimits_list: Optional[List[Tuple[float, float]]] = None,
@@ -170,7 +170,7 @@ def plot_input_output(
             label on the plot. Default is True.
         display_control_text (bool): Whether to display the `control_text`
             label on the plot. Default is True.
-        figsize (Tuple[int, int]): The (width, height) dimensions of the
+        figsize (Tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
@@ -524,7 +524,7 @@ def plot_input_output_animation(
     control_text: str = "Data-Driven MPC",
     display_initial_text: bool = True,
     display_control_text: bool = True,
-    figsize: Tuple[int, int] = (12, 8),
+    figsize: Tuple[float, float] = (12.0, 8.0),
     dpi: int = 300,
     interval: float = 20.0,
     points_per_frame: int = 1,
@@ -622,7 +622,7 @@ def plot_input_output_animation(
             label on the plot. Default is True.
         display_control_text (bool): Whether to display the `control_text`
             label on the plot. Default is True.
-        figsize (Tuple[int, int]): The (width, height) dimensions of the
+        figsize (Tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         interval (float): The time between frames in milliseconds. Defaults
@@ -1339,7 +1339,7 @@ def filter_and_reorder_legend(
 def create_input_output_figure(
     m: int,
     p: int,
-    figsize: Tuple[int, int],
+    figsize: Tuple[float, float],
     dpi: int,
     fontsize: int,
     title: Optional[str] = None
@@ -1356,7 +1356,7 @@ def create_input_output_figure(
     Args:
         m (int): The number of control inputs (subplots in the first row).
         p (int): The number of system outputs (subplots in the second row).
-        figsize (Tuple[int, int]): The (width, height) dimensions of the
+        figsize (Tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         fontsize (int): The fontsize for suptitles.
