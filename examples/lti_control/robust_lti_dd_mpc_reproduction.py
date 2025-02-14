@@ -84,9 +84,9 @@ plot_params_config_path = os.path.join(plot_params_config_dir,
 
 # Simulation parameters
 default_t_sim = 600  # Default simulation length in time steps
-default_seed = 4  # Default seed for the RNG
+default_seed = 0  # Default seed for the RNG
 
-# Paper reproduction parameters
+# Paper reproduction parameters (based on the example from Section V of [2])
 y_0 = [0.4, 0.4]  # Initial system output for reproduction
 u_ylimits_list = [[-15.0, 15.0], [-15.0, 15.0]]  # Input plot Y-axis limits
 y_ylimits_list = [[0.4, 1.0], [0.4, 1.0]]  # Output plot Y-axis limits
@@ -323,13 +323,17 @@ def main() -> None:
     u_s = dd_mpc_config['u_s']  # Control input setpoint
     y_s = dd_mpc_config['y_s']  # System output setpoint
 
-    # --- Plot control system inputs and outputs ---
+    # --- Plot results in a figure replicating Fig. 2 of [1] ---
     plot_title = "Robust Data-Driven MPC Reproduction"
     plot_params = get_reproduction_plot_params(
         config_path=plot_params_config_path)
+    
+    # Update figure size to fit figure in `README.md`
+    plot_params['figsize'] = (9, 8)
 
     if verbose:
-        print("Displaying control system inputs and outputs plot")
+        print("Displaying reproduction plot: Data-Driven MPC for LTI "
+              "systems")
 
     plot_input_output_reproduction(
         data_driven_mpc_controller_schemes=dd_mpc_controller_schemes,

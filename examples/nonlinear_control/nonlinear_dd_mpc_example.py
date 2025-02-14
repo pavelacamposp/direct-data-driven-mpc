@@ -85,6 +85,11 @@ alpha_reg_type_mapping = {
 }
 default_t_sim = 3000 # Default simulation length in time steps
 
+# Paper reproduction parameters (based on the example from Section V of [2])
+x_0 = [0.9492, 0.43]  # Initial state for reproduction
+u_ylimits_list = [[0.0, 1.0]]  # Input plot Y-axis limits
+y_ylimits_list = [[0.4, 0.7]]  # Output plot Y-axis limits
+
 # Define function to retrieve plot parameters from configuration file
 def get_plot_params(config_path):
     line_params = load_yaml_config_params(
@@ -265,14 +270,11 @@ def main() -> None:
     # ============================================
     # 2. Set Initial System State for Reproduction
     # ============================================
-    # Define initial state considered in the example from Section V of [2]
-    x_0 = np.array([0.9492, 0.43])
-
     if verbose:
         print(f"Setting initial system state to x0 = {x_0}")
     
     # Set system state to x_0 for reproduction
-    system_model.x = x_0
+    system_model.x = np.array(x_0)
 
     if verbose > 1:
         print(f"    Initial system state set to: {x_0}")
@@ -363,6 +365,27 @@ def main() -> None:
                       y_setpoint_var_symbol=y_setpoint_var_symbol,
                       title=plot_title,
                       **plot_params)
+    
+    # --- Plot results in a figure replicating Fig. 2 of [2] ---
+    plot_title_reprod = "Nonlinear Data-Driven MPC Reproduction"
+    
+    # Update figure size to fit figure in `README.md`
+    plot_params_reprod = plot_params.copy()
+    plot_params_reprod['figsize'] = (6, 8)
+    
+    if verbose:
+        print("Displaying reproduction plot: Data-Driven MPC for Nonlinear "
+              "systems")
+    
+    plot_input_output(u_k=U_data,
+                      y_k=Y_data,
+                      y_s=y_r,
+                      u_bounds_list=u_bounds_list,
+                      y_setpoint_var_symbol=y_setpoint_var_symbol,
+                      u_ylimits_list=u_ylimits_list,
+                      y_ylimits_list=y_ylimits_list,
+                      title=plot_title_reprod,
+                      **plot_params_reprod)
 
     # --- Animate extended input-output data ---
     if verbose:
