@@ -1,0 +1,37 @@
+# Matplotlib Parameters for Input-Output plots
+
+# Line style parameters
+line_params:
+  input:  # Parameters for control input lines
+    color: "tab:blue"
+    linestyle: "solid"
+    linewidth: 1.5
+
+  output:  # Parameters for system output lines
+    color: "black"
+    linestyle: "solid"
+    linewidth: 1.5
+
+  bounds:  # Parameters for input bounds lines
+    color: "darkorange"
+    linestyle: "--"
+    linewidth: 1.5
+
+  setpoint:  # Parameters for setpoint lines
+    color: "red"
+    linestyle: "solid"
+    linewidth: 1.5
+
+# Parameters for customizing legends
+legend_params:
+  fontsize: 11
+  handlelength: 2.9
+  labelspacing: 0.2
+  borderpad: 0.4
+  fancybox: false
+  edgecolor: "black"
+
+# Parameters for figure-level properties
+figure_params:
+  figsize: [9, 12]
+  dpi: 100

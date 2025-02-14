@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Any
 from enum import Enum
 
 import numpy as np
@@ -11,15 +11,12 @@ from direct_data_driven_mpc.utilities.controller.controller_creation import (
     create_lti_data_driven_mpc_controller)
 from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_lti_data_driven_mpc_control_loop)
-from direct_data_driven_mpc.utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.data_visualization import (
     plot_input_output, create_input_output_figure)
 
 from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCController)
-
-from direct_data_driven_mpc.utilities.visualization.plot_styles import (
-    SETPOINT_LINE_PARAMS, LEGEND_PARAMS)
 
 # Define Data-Driven MPC controller schemes
 class DataDrivenMPCScheme(Enum):
@@ -281,6 +278,8 @@ def plot_input_output_reproduction(
     y_s: np.ndarray,
     u_ylimits_list: Optional[List[Tuple[float, float]]],
     y_ylimits_list: Optional[List[Tuple[float, float]]],
+    setpoints_line_params: dict[str, Any] = {},
+    legend_params: dict[str, Any] = {},
     figsize: Tuple[int, int] =(14, 8),
     dpi: int = 300,
     fontsize: int = 12,
@@ -316,6 +315,12 @@ def plot_input_output_reproduction(
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot. If `None`, the Y-axis limits will be determined
             automatically.
+        setpoints_line_params (dict[str, Any]): A dictionary of Matplotlib
+            properties for customizing the lines used to plot the setpoint
+            values (e.g., color, linestyle, linewidth).
+        legend_params (dict[str, Any]): A dictionary of Matplotlib
+            properties for customizing the plot legends (e.g., fontsize,
+            loc, handlelength).
         figsize (Tuple[int, int]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
@@ -345,7 +350,7 @@ def plot_input_output_reproduction(
                           y_s=y_s,
                           inputs_line_params=controller_line_params,
                           outputs_line_params=controller_line_params,
-                          setpoints_line_params=SETPOINT_LINE_PARAMS,
+                          setpoints_line_params=setpoints_line_params,
                           data_label=f" ({scheme_config['label']})",
                           u_ylimits_list=u_ylimits_list,
                           y_ylimits_list=y_ylimits_list,
@@ -353,7 +358,7 @@ def plot_input_output_reproduction(
                           axs_y=axs_y,
                           dpi=dpi,
                           fontsize=fontsize,
-                          legend_params=LEGEND_PARAMS)
+                          legend_params=legend_params)
     
     # Show plot
     plt.show()

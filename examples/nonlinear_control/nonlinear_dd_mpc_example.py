@@ -35,14 +35,14 @@ from direct_data_driven_mpc.utilities.controller.initial_data_generation import 
 from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_nonlinear_data_driven_mpc_control_loop)
 
-from direct_data_driven_mpc.utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
+
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
 
 from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     AlphaRegType)
-
-from direct_data_driven_mpc.utilities.visualization.plot_styles import (
-    INPUT_OUTPUT_PLOT_PARAMS, INPUT_OUTPUT_PLOT_PARAMS_SMALL)
 
 # Directory paths
 dirname = os.path.dirname
@@ -50,6 +50,7 @@ project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
+plot_params_config_dir = os.path.join(examples_dir, 'config', 'plots')
 default_animation_dir = os.path.join(project_dir, 'animation_outputs')
 
 # Nonlinear Continuous Stirred Tank Reactor (CSTR) configuration file
@@ -63,6 +64,11 @@ default_controller_config_file = 'nonlinear_dd_mpc_example_params.yaml'
 default_controller_config_path = os.path.join(controller_config_dir,
                                               default_controller_config_file)
 default_controller_key_value = 'nonlinear_data_driven_mpc_params'
+
+# Plot parameters configuration file
+plot_params_config_file = 'plot_params.yaml'
+plot_params_config_path = os.path.join(plot_params_config_dir,
+                                       plot_params_config_file)
 
 # Animation default parameters
 default_anim_name = "nonlinear_data-driven_mpc_sim.gif"
@@ -78,6 +84,22 @@ alpha_reg_type_mapping = {
     "Zero": AlphaRegType.ZERO,
 }
 default_t_sim = 3000 # Default simulation length in time steps
+
+# Define function to retrieve plot parameters from configuration file
+def get_plot_params(config_path):
+    line_params = load_yaml_config_params(
+        config_file=config_path, key='line_params')
+    legend_params = load_yaml_config_params(
+        config_file=config_path, key='legend_params')
+    figure_params = load_yaml_config_params(
+        config_file=config_path, key='figure_params')
+
+    return {'inputs_line_params': line_params['input'],
+            'outputs_line_params': line_params['output'],
+            'setpoints_line_params': line_params['setpoint'],
+            'bounds_line_params': line_params['bounds'],
+            'legend_params': legend_params,
+            **figure_params}
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Nonlinear Data-Driven MPC "
@@ -311,6 +333,7 @@ def main() -> None:
     plot_title = "Nonlinear Data-Driven MPC"
     y_setpoint_var_symbol = "y^r"
     initial_steps_label = "Online measurements"
+    plot_params = get_plot_params(config_path=plot_params_config_path)
     
     if verbose:
         print("Displaying control system inputs and outputs plot")
@@ -320,10 +343,8 @@ def main() -> None:
                       y_s=y_r,
                       u_bounds_list=u_bounds_list,
                       y_setpoint_var_symbol=y_setpoint_var_symbol,
-                      figsize=(9, 12),
-                      dpi=100,
                       title=plot_title,
-                      **INPUT_OUTPUT_PLOT_PARAMS)
+                      **plot_params)
     
     # --- Plot data including initial input-output sequences ---
     # Construct data arrays including initial input-output data
@@ -340,10 +361,8 @@ def main() -> None:
                       y_s=y_r,
                       u_bounds_list=u_bounds_list,
                       y_setpoint_var_symbol=y_setpoint_var_symbol,
-                      figsize=(9, 12),
-                      dpi=100,
                       title=plot_title,
-                      **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
+                      **plot_params)
 
     # --- Animate extended input-output data ---
     if verbose:
@@ -360,12 +379,10 @@ def main() -> None:
         continuous_updates=True,
         display_initial_text=False,
         display_control_text=False,
-        figsize=(9, 12),
-        dpi=100,
-        interval=1000/anim_fps,
+        interval=1000.0/anim_fps,
         points_per_frame=anim_points_per_frame,
         title=plot_title,
-        **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
+        **plot_params)
     plt.show()  # Show animation
     
     if save_anim:

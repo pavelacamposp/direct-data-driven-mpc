@@ -54,12 +54,16 @@ from paper_reproduction_utils import (
     simulate_data_driven_mpc_control_loops_reproduction,
     plot_input_output_reproduction)
 
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
+
 # Directory paths
 dirname = os.path.dirname
 project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
+plot_params_config_dir = os.path.join(examples_dir, 'config', 'plots')
 
 # Model configuration file
 model_config_file = 'four_tank_system_params.yaml'
@@ -72,6 +76,11 @@ controller_config_file = 'lti_dd_mpc_example_params.yaml'
 controller_config_path = os.path.join(controller_config_dir,
                                       controller_config_file)
 controller_key_value = 'lti_data_driven_mpc_params'
+
+# Plot parameters configuration file
+plot_params_config_file = 'plot_params.yaml'
+plot_params_config_path = os.path.join(plot_params_config_dir,
+                                       plot_params_config_file)
 
 # Simulation parameters
 default_t_sim = 600  # Default simulation length in time steps
@@ -86,6 +95,19 @@ y_ylimits_list = [[0.4, 1.0], [0.4, 1.0]]  # Output plot Y-axis limits
 dd_mpc_controller_schemes = [DataDrivenMPCScheme.TEC,
                              DataDrivenMPCScheme.TEC_N_STEP,
                              DataDrivenMPCScheme.UCON]
+
+# Define function to retrieve plot parameters from configuration file
+def get_reproduction_plot_params(config_path):
+    line_params = load_yaml_config_params(
+        config_file=config_path, key='line_params')
+    legend_params = load_yaml_config_params(
+        config_file=config_path, key='legend_params')
+    figure_params = load_yaml_config_params(
+        config_file=config_path, key='figure_params')
+
+    return {'setpoints_line_params': line_params['setpoint'],
+            'legend_params': legend_params,
+            **figure_params}
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Data-Driven MPC "
@@ -302,6 +324,10 @@ def main() -> None:
     y_s = dd_mpc_config['y_s']  # System output setpoint
 
     # --- Plot control system inputs and outputs ---
+    plot_title = "Robust Data-Driven MPC Reproduction"
+    plot_params = get_reproduction_plot_params(
+        config_path=plot_params_config_path)
+
     if verbose:
         print("Displaying control system inputs and outputs plot")
 
@@ -313,9 +339,8 @@ def main() -> None:
         y_s=y_s,
         u_ylimits_list=u_ylimits_list,
         y_ylimits_list=y_ylimits_list,
-        figsize=(12, 8),
-        dpi=100,
-        title="Robust Data-Driven MPC Reproduction")
+        title=plot_title,
+        **plot_params)
     
     plt.close()  # Close figures
 
