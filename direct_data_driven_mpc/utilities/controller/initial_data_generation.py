@@ -3,12 +3,13 @@ from typing import Tuple, Union
 import numpy as np
 from numpy.random import Generator
 
-from utilities.models.lti_model import LTIModel
-from utilities.models.nonlinear_model import NonlinearSystem
+from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+    NonlinearSystem)
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     NonlinearDataDrivenMPCParamsDictType)
 
 def randomize_initial_system_state(

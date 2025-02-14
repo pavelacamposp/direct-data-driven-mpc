@@ -40,18 +40,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     get_lti_data_driven_mpc_controller_params)
-from utilities.controller.initial_data_generation import (
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
     randomize_initial_system_state, simulate_n_input_output_measurements,
     generate_initial_input_output_data)
-from utilities.reproduction.paper_reproduction import (
+
+from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
+
+from paper_reproduction_utils import (
     DataDrivenMPCScheme, get_equilibrium_state_from_output,
     create_data_driven_mpc_controllers_reproduction,
     simulate_data_driven_mpc_control_loops_reproduction,
     plot_input_output_reproduction)
-
-from utilities.models.lti_model import LTISystemModel
 
 # Directory paths
 dirname = os.path.dirname

@@ -1,8 +1,8 @@
 import numpy as np
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     NonlinearDataDrivenMPCParamsDictType)
 
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (

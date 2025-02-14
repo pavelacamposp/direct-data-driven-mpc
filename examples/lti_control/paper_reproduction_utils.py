@@ -5,20 +5,20 @@ import numpy as np
 from numpy.random import Generator
 import matplotlib.pyplot as plt
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     LTIDataDrivenMPCParamsDictType)
-from utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
     create_lti_data_driven_mpc_controller)
-from utilities.controller.data_driven_mpc_sim import (
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_lti_data_driven_mpc_control_loop)
-from utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.visualization.data_visualization import (
     plot_input_output, create_input_output_figure)
 
-from utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCController)
 
-from utilities.visualization.plot_styles import (
+from direct_data_driven_mpc.utilities.visualization.plot_styles import (
     SETPOINT_LINE_PARAMS, LEGEND_PARAMS)
 
 # Define Data-Driven MPC controller schemes

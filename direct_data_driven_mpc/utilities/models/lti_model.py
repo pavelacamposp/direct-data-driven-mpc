@@ -1,10 +1,11 @@
 import numpy as np
 
-from utilities.initial_state_estimation import (
+from direct_data_driven_mpc.utilities.initial_state_estimation import (
     observability_matrix, toeplitz_input_output_matrix,
     estimate_initial_state, calculate_equilibrium_output_from_input,
     calculate_equilibrium_input_from_output)
-from utilities.yaml_config_loading import load_yaml_config_params
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
 
 class LTIModel:
     """

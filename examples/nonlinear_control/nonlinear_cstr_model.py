@@ -2,8 +2,10 @@ import numpy as np
 import math
 from functools import partial
 
-from utilities.yaml_config_loading import load_yaml_config_params
-from utilities.models.nonlinear_model import NonlinearSystem
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
+from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+    NonlinearSystem)
 
 def cstr_dynamics(
     x: np.ndarray,

@@ -33,24 +33,24 @@ import matplotlib.pyplot as plt
 import os
 import math
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     get_lti_data_driven_mpc_controller_params)
-from utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
     create_lti_data_driven_mpc_controller)
-from utilities.controller.initial_data_generation import (
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
     randomize_initial_system_state, generate_initial_input_output_data)
-from utilities.controller.data_driven_mpc_sim import (
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_lti_data_driven_mpc_control_loop)
 
-from utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.visualization.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
 
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCType, SlackVarConstraintType)
 
-from utilities.models.lti_model import LTISystemModel
+from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
 
-from utilities.visualization.plot_styles import (
+from direct_data_driven_mpc.utilities.visualization.plot_styles import (
     INPUT_OUTPUT_PLOT_PARAMS, INPUT_OUTPUT_PLOT_PARAMS_SMALL)
 
 # Directory paths

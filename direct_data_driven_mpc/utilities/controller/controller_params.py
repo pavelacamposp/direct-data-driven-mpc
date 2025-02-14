@@ -2,7 +2,8 @@ from typing import TypedDict, Tuple, Optional
 
 import numpy as np
 
-from utilities.yaml_config_loading import load_yaml_config_params
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
 
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
     LTIDataDrivenMPCType, SlackVarConstraintType)

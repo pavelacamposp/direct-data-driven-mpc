@@ -26,22 +26,22 @@ import math
 
 from nonlinear_cstr_model import create_nonlinear_cstr_system
 
-from utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
     get_nonlinear_data_driven_mpc_controller_params)
-from utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
     create_nonlinear_data_driven_mpc_controller)
-from utilities.controller.initial_data_generation import (
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
     generate_initial_input_output_data)
-from utilities.controller.data_driven_mpc_sim import (
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_nonlinear_data_driven_mpc_control_loop)
 
-from utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.visualization.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
 
 from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     AlphaRegType)
 
-from utilities.visualization.plot_styles import (
+from direct_data_driven_mpc.utilities.visualization.plot_styles import (
     INPUT_OUTPUT_PLOT_PARAMS, INPUT_OUTPUT_PLOT_PARAMS_SMALL)
 
 # Directory paths
