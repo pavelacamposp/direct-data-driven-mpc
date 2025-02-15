@@ -1,27 +1,20 @@
 """
-Direct Data-Driven Model Predictive Control (MPC) Example Script
+Nonlinear Data-Driven Model Predictive Control (MPC) Example Script
 
 This script demonstrates the setup, simulation, and visualization of a Direct
-Data-Driven MPC controller applied to a four-tank system model based on
-research by J. Berberich et al. [1]. The implementation follows the parameters
-defined in the example presented in Section V of [1], including those for the
-system model, the initial input-output data generation, and the Data-Driven
-MPC controller setup.
+Data-Driven MPC controller for Nonlinear systems, applied to a nonlinear
+continuous stirred tank reactor (CSTR) based on the research of J. Berberich
+et al. [2].
 
-To illustrate a typical controller operation, this script does not set the
-initial system output to `y_0 = [0.4, 0.4]`, as shown in the closed-loop
-output graphs from Fig. 2 in [1]. Instead, the initial system state is
-estimated using a randomized input sequence.
-
-For a closer approximation of the results presented in the paper's example,
-which assumes the initial system output `y_0 = [0.4, 0.4]`, please refer to
-'robust_data_driven_mpc_reproduction.py'.
+The implementation follows the parameters defined in the example presented in
+Section V of [2], including those for the system model, the initial
+input-output data generation, and the Data-Driven MPC controller setup.
 
 References:
-    [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
-        Model Predictive Control With Stability and Robustness Guarantees," in
-        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
-        April 2021, doi: 10.1109/TAC.2020.3000182.
+    [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
 """
 
 import argparse
@@ -31,74 +24,91 @@ import matplotlib.pyplot as plt
 import os
 import math
 
-from utilities.controller.controller_creation import (
-    get_data_driven_mpc_controller_params, create_data_driven_mpc_controller)
-from utilities.controller.controller_operation import (
-    randomize_initial_system_state, generate_initial_input_output_data,
-    simulate_data_driven_mpc_control_loop)
+from nonlinear_cstr_model import create_nonlinear_cstr_system
 
-from utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    get_nonlinear_data_driven_mpc_controller_params)
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
+    create_nonlinear_data_driven_mpc_controller)
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
+    generate_initial_input_output_data)
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    simulate_nonlinear_data_driven_mpc_control_loop)
+
+from direct_data_driven_mpc.utilities.data_visualization import (
     plot_input_output, plot_input_output_animation, save_animation)
 
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DataDrivenMPCType, SlackVarConstraintTypes)
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
 
-from utilities.model_simulation import LTISystemModel
-
-from utilities.visualization.plot_styles import (
-    INPUT_OUTPUT_PLOT_PARAMS, INPUT_OUTPUT_PLOT_PARAMS_SMALL)
+from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
+    AlphaRegType)
 
 # Directory paths
 dirname = os.path.dirname
-project_dir = dirname(dirname(__file__))
+project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
+plot_params_config_dir = os.path.join(examples_dir, 'config', 'plots')
 default_animation_dir = os.path.join(project_dir, 'animation_outputs')
 
-# Model configuration file
-default_model_config_file = 'four_tank_system_params.yaml'
-default_model_config_path = os.path.join(models_config_dir,
-                                         default_model_config_file)
-default_model_key_value = 'FourTankSystem'
+# Nonlinear Continuous Stirred Tank Reactor (CSTR) configuration file
+cstr_model_config_file = 'nonlinear_cstr_system_params.yaml'
+cstr_model_config_path = os.path.join(models_config_dir,
+                                      cstr_model_config_file)
+cstr_model_key_value = 'cstr_system'
 
 # Data-Driven MPC controller configuration file
-default_controller_config_file = 'data_driven_mpc_example_params.yaml'
+default_controller_config_file = 'nonlinear_dd_mpc_example_params.yaml'
 default_controller_config_path = os.path.join(controller_config_dir,
                                               default_controller_config_file)
-default_controller_key_value = 'data_driven_mpc_params'
+default_controller_key_value = 'nonlinear_data_driven_mpc_params'
+
+# Plot parameters configuration file
+plot_params_config_file = 'plot_params.yaml'
+plot_params_config_path = os.path.join(plot_params_config_dir,
+                                       plot_params_config_file)
 
 # Animation default parameters
-default_anim_name = "data-driven_mpc_sim.gif"
+default_anim_name = "nonlinear_data-driven_mpc_sim.gif"
 default_anim_path = os.path.join(default_animation_dir, default_anim_name)
 default_anim_fps = 50.0
 default_anim_bitrate = 4500
-default_anim_points_per_frame = 5
+default_anim_points_per_frame = 20
 
-# Data-Driven MPC controller parameters
-controller_type_mapping = {
-    "Nominal": DataDrivenMPCType.NOMINAL,
-    "Robust": DataDrivenMPCType.ROBUST,
+# Nonlinear Data-Driven MPC controller parameters
+alpha_reg_type_mapping = {
+    "Approx": AlphaRegType.APPROXIMATED,
+    "Previous": AlphaRegType.PREVIOUS,
+    "Zero": AlphaRegType.ZERO,
 }
-slack_var_constraint_type_mapping = {
-    "NonConvex": SlackVarConstraintTypes.NON_CONVEX,
-    "Convex": SlackVarConstraintTypes.CONVEX,
-    "None": SlackVarConstraintTypes.NONE
-}
-default_t_sim = 400  # Default simulation length in time steps
+default_t_sim = 3000 # Default simulation length in time steps
+
+# Paper reproduction parameters (based on the example from Section V of [2])
+x_0 = [0.9492, 0.43]  # Initial state for reproduction
+u_ylimits_list = [[0.0, 1.0]]  # Input plot Y-axis limits
+y_ylimits_list = [[0.4, 0.7]]  # Output plot Y-axis limits
+
+# Define function to retrieve plot parameters from configuration file
+def get_plot_params(config_path):
+    line_params = load_yaml_config_params(
+        config_file=config_path, key='line_params')
+    legend_params = load_yaml_config_params(
+        config_file=config_path, key='legend_params')
+    figure_params = load_yaml_config_params(
+        config_file=config_path, key='figure_params')
+
+    return {'inputs_line_params': line_params['input'],
+            'outputs_line_params': line_params['output'],
+            'setpoints_line_params': line_params['setpoint'],
+            'bounds_line_params': line_params['bounds'],
+            'legend_params': legend_params,
+            **figure_params}
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Direct Data-Driven MPC "
+    parser = argparse.ArgumentParser(description="Nonlinear Data-Driven MPC "
                                      "Controller Example")
-    # Model configuration file arguments
-    parser.add_argument("--model_config_path", type=str,
-                        default=default_model_config_path,
-                        help="The path to the YAML configuration file "
-                        "containing the model parameters.")
-    parser.add_argument("--model_key_value", type=str,
-                        default=default_model_key_value,
-                        help="The key to access the model parameters in the "
-                        "configuration file.")
     # Data-Driven MPC controller configuration file arguments
     parser.add_argument("--controller_config_path", type=str,
                         default=default_controller_config_path,
@@ -109,20 +119,16 @@ def parse_args() -> argparse.Namespace:
                         default=default_controller_key_value,
                         help="The key to access the Data-Driven MPC "
                         "controller parameters in the configuration file.")
-    # Data-Driven MPC controller arguments
+    # Nonlinear Data-Driven MPC controller arguments
     parser.add_argument("--n_mpc_step", type=int,
                         default=None,
                         help="The number of consecutive applications of the "
                         "optimal input for an n-Step Data-Driven MPC Scheme.")
-    parser.add_argument("--controller_type", type=str,
+    parser.add_argument("--alpha_reg_type", type=str,
                         default=None,
-                        choices=["Nominal", "Robust"],
-                        help="The Data-Driven MPC Controller type.")
-    parser.add_argument("--slack_var_const_type", type=str,
-                        default=None,
-                        choices=["None", "Convex", "NonConvex"],
-                        help="The constraint type for the slack variable "
-                        "`sigma` in a Robust Data-Driven MPC formulation.")
+                        choices=["Approx", "Previous", "Zero"],
+                        help="The Alpha regularization type for the "
+                        "Nonlinear Data-Driven MPC.")
     parser.add_argument("--t_sim", type=int, default=default_t_sim,
                         help="The simulation length in time steps.")
     parser.add_argument("--seed", type=int, default=None,
@@ -170,18 +176,13 @@ def main() -> None:
     # --- Parse arguments ---
     args = parse_args()
 
-    # Model parameters
-    model_config_path = args.model_config_path
-    model_key_value = args.model_key_value
-
     # Data-Driven MPC controller parameters
     controller_config_path = args.controller_config_path
     controller_key_value = args.controller_key_value
     
     # Data-Driven MPC controller arguments
     n_mpc_step = args.n_mpc_step
-    controller_type_arg = args.controller_type
-    slack_var_const_type_arg = args.slack_var_const_type
+    alpha_reg_type_arg = args.alpha_reg_type
 
     # Simulation parameters
     t_sim = args.t_sim
@@ -204,10 +205,14 @@ def main() -> None:
     # --- Define system model (simulation) ---
     if verbose:
         print("Loading system parameters from configuration file")
-
-    system_model = LTISystemModel(config_file=model_config_path,
-                                  model_key_value=model_key_value,
-                                  verbose=verbose)
+    
+    system_model = create_nonlinear_cstr_system(
+        cstr_model_config_path=cstr_model_config_path,
+        cstr_model_key_value=cstr_model_key_value,
+        verbose=verbose)
+    
+    if verbose:
+        print("Initialized nonlinear Continuous Stirred Tank Reactor system")
 
     # --- Define Data-Driven MPC Controller Parameters ---
     if verbose:
@@ -217,7 +222,7 @@ def main() -> None:
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs
     p = system_model.p  # Number of outputs
-    dd_mpc_config = get_data_driven_mpc_controller_params(
+    dd_mpc_config = get_nonlinear_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
         m=m,
@@ -225,8 +230,8 @@ def main() -> None:
         verbose=verbose)
     
     # Override controller parameters with parsed arguments
-    if (n_mpc_step is not None or controller_type_arg is not None
-        or slack_var_const_type_arg is not None):
+    if (n_mpc_step is not None or
+        alpha_reg_type_arg is not None):
         if verbose:
             print("Overriding Data-Driven MPC controller parameters")
     
@@ -237,28 +242,19 @@ def main() -> None:
         dd_mpc_config['n_mpc_step'] = n_mpc_step
 
         if verbose > 1:
-            print("    n-Step Data-Driven MPC scheme parameter "
-                  f"(`n_mpc_step`) set to: {n_mpc_step}")
+            print("    n-Step Data-Driven MPC parameter (`n_mpc_step`) set "
+                  f"to: {n_mpc_step}")
     
-    # Override the Controller type with parsed argument if passed
-    if controller_type_arg is not None:
-        dd_mpc_config['controller_type'] = controller_type_mapping[
-            controller_type_arg]
-        
-        if verbose > 1:
-            print("    Data-Driven MPC controller type set to: "
-                  f"{dd_mpc_config['controller_type'].name}")
-    
-    # Override the slack variable constraint type
+    # Override the alpha regularization type type
     # with parsed argument if passed
-    if slack_var_const_type_arg is not None:
-        dd_mpc_config['slack_var_constraint_type'] = (
-            slack_var_constraint_type_mapping[slack_var_const_type_arg])
+    if alpha_reg_type_arg is not None:
+        dd_mpc_config['alpha_reg_type_arg'] = alpha_reg_type_mapping[
+            alpha_reg_type_arg]
         
         if verbose > 1:
-            print("    Slack variable constraint type set to: "
-                  f"{dd_mpc_config['slack_var_constraint_type'].name}")
-
+            print("    Data-Driven MPC alpha regularization type set to: "
+                  f"{dd_mpc_config['alpha_reg_type_arg'].name}")
+    
     # --- Define Control Simulation parameters ---
     n_steps = t_sim + 1  # Number of simulation steps
 
@@ -271,20 +267,14 @@ def main() -> None:
         else:
             print(f"Random number generator initialized with seed: {seed}")
 
-    # ==============================================
-    # 2. Randomize Initial System State (Simulation)
-    # ==============================================
+    # ============================================
+    # 2. Set Initial System State for Reproduction
+    # ============================================
     if verbose:
-        print(f"Randomizing initial system state")
-
-    # Randomize the initial internal state of the system to ensure
-    # the model starts in a plausible random state
-    x_0 = randomize_initial_system_state(system_model=system_model,
-                                         controller_config=dd_mpc_config,
-                                         np_random=np_random)
+        print(f"Setting initial system state to x0 = {x_0}")
     
-    # Set system state to the estimated plausible random initial state
-    system_model.set_state(state=x_0)
+    # Set system state to x_0 for reproduction
+    system_model.x = np.array(x_0)
 
     if verbose > 1:
         print(f"    Initial system state set to: {x_0}")
@@ -297,38 +287,34 @@ def main() -> None:
 
     # Generate initial input-output data using a
     # generated persistently exciting input
-    u_d, y_d = generate_initial_input_output_data(
+    u, y = generate_initial_input_output_data(
         system_model=system_model,
         controller_config=dd_mpc_config,
         np_random=np_random)
     
     if verbose > 1:
-        print(f"    Input data shape: {u_d.shape}, Output data shape: "
-              f"{y_d.shape}")
+        print(f"    Input data shape: {u.shape}, Output data shape: "
+              f"{y.shape}")
 
     # ===============================================
     # 4. Data-Driven MPC Controller Instance Creation
     # ===============================================
-    controller_type_str = dd_mpc_config['controller_type'].name.capitalize()
     if verbose:
-        print(f"Initializing {controller_type_str} Data-Driven MPC "
-              "controller")
+        print("Initializing Nonlinear Data-Driven MPC controller")
 
     # Create a Direct Data-Driven MPC controller
-    dd_mpc_controller = create_data_driven_mpc_controller(
-        controller_config=dd_mpc_config, u_d=u_d, y_d=y_d)
+    dd_mpc_controller = create_nonlinear_data_driven_mpc_controller(
+        controller_config=dd_mpc_config, u=u, y=y)
 
     # ===============================
     # 5. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
-        print(f"Starting {controller_type_str} Data-Driven MPC control "
-              "system simulation")
+        print("Starting Nonlinear Data-Driven MPC control system simulation")
 
-    # Simulate the Data-Driven MPC control system following Algorithm 1 for a
-    # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC
-    # Scheme, as described in [1].
-    u_sys, y_sys = simulate_data_driven_mpc_control_loop(
+    # Simulate the Data-Driven MPC control system following the
+    # Nonlinear Data-Driven MPC Scheme described in Algorithm 1 of [2].
+    u_sys, y_sys = simulate_nonlinear_data_driven_mpc_control_loop(
         system_model=system_model,
         data_driven_mpc_controller=dd_mpc_controller,
         n_steps=n_steps,
@@ -339,60 +325,87 @@ def main() -> None:
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
     N = dd_mpc_config['N']  # Initial input-output trajectory length
-    u_s = dd_mpc_config['u_s']  # Control input setpoint
-    y_s = dd_mpc_config['y_s']  # System output setpoint
+    y_r = dd_mpc_config['y_r']  # System output setpoint
+    U = dd_mpc_config['U']  # Bounds for the predicted input
+    
+    # Construct input bounds tuple list for plotting
+    u_bounds_list = U.tolist()
 
     # --- Plot control system inputs and outputs ---
-    plot_title = f"{controller_type_str} Data-Driven MPC"
+    plot_title = "Nonlinear Data-Driven MPC"
+    y_setpoint_var_symbol = "y^r"
+    initial_steps_label = "Online measurements"
+    plot_params = get_plot_params(config_path=plot_params_config_path)
     
     if verbose:
         print("Displaying control system inputs and outputs plot")
     
     plot_input_output(u_k=u_sys,
                       y_k=y_sys,
-                      u_s=u_s,
-                      y_s=y_s,
-                      figsize=(14, 8),
-                      dpi=100,
+                      y_s=y_r,
+                      u_bounds_list=u_bounds_list,
+                      y_setpoint_var_symbol=y_setpoint_var_symbol,
                       title=plot_title,
-                      **INPUT_OUTPUT_PLOT_PARAMS)
+                      **plot_params)
     
     # --- Plot data including initial input-output sequences ---
-    # Create data arrays including initial input-output data used for
-    # the data-driven characterization of the system
-    U = np.vstack([u_d, u_sys])
-    Y = np.vstack([y_d, y_sys])
+    # Construct data arrays including initial input-output data
+    U_data = np.vstack([u, u_sys])
+    Y_data = np.vstack([y, y_sys])
 
     # Plot extended input-output data
     if verbose:
         print("Displaying control system inputs and outputs including "
               "initial input-output measurements")
     
-    plot_input_output(u_k=U,
-                      y_k=Y,
-                      u_s=u_s,
-                      y_s=y_s,
-                      initial_steps=N,
-                      figsize=(14, 8),
-                      dpi=100,
+    plot_input_output(u_k=U_data,
+                      y_k=Y_data,
+                      y_s=y_r,
+                      u_bounds_list=u_bounds_list,
+                      y_setpoint_var_symbol=y_setpoint_var_symbol,
                       title=plot_title,
-                      **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
+                      **plot_params)
+    
+    # --- Plot results in a figure replicating Fig. 2 of [2] ---
+    plot_title_reprod = "Nonlinear Data-Driven MPC Reproduction"
+    
+    # Update figure size to fit figure in `README.md`
+    plot_params_reprod = plot_params.copy()
+    plot_params_reprod['figsize'] = (6, 8)
+    
+    if verbose:
+        print("Displaying reproduction plot: Data-Driven MPC for Nonlinear "
+              "systems")
+    
+    plot_input_output(u_k=U_data,
+                      y_k=Y_data,
+                      y_s=y_r,
+                      u_bounds_list=u_bounds_list,
+                      y_setpoint_var_symbol=y_setpoint_var_symbol,
+                      u_ylimits_list=u_ylimits_list,
+                      y_ylimits_list=y_ylimits_list,
+                      title=plot_title_reprod,
+                      **plot_params_reprod)
 
     # --- Animate extended input-output data ---
     if verbose:
         print("Displaying animation from extended input-output data")
     
-    anim = plot_input_output_animation(u_k=U,
-                                       y_k=Y,
-                                       u_s=u_s,
-                                       y_s=y_s,
-                                       initial_steps=N,
-                                       figsize=(14, 8),
-                                       dpi=100,
-                                       interval=1000/anim_fps,
-                                       points_per_frame=anim_points_per_frame,
-                                       title=plot_title,
-                                       **INPUT_OUTPUT_PLOT_PARAMS_SMALL)
+    anim = plot_input_output_animation(
+        u_k=U_data,
+        y_k=Y_data,
+        y_s=y_r,
+        u_bounds_list=u_bounds_list,
+        y_setpoint_var_symbol=y_setpoint_var_symbol,
+        initial_steps=N,
+        initial_steps_label=initial_steps_label,
+        continuous_updates=True,
+        display_initial_text=False,
+        display_control_text=False,
+        interval=1000.0/anim_fps,
+        points_per_frame=anim_points_per_frame,
+        title=plot_title,
+        **plot_params)
     plt.show()  # Show animation
     
     if save_anim:

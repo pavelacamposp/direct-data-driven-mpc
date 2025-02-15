@@ -1,0 +1,65 @@
+# Nonlinear Data-Driven MPC Parameters
+# Based on the Nonlinear Data-Driven MPC implementation example for the
+# control of a nonlinear continuous stirred tank reactor (CSTR) from Section V
+# of the paper:
+# [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear Tracking
+#     MPC for Nonlinear Systems—Part II: The Data-Driven Case," in IEEE
+#     Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421, Sept.
+#     2022, doi: 10.1109/TAC.2022.3166851.
+
+nonlinear_data_driven_mpc_params:
+  n: 3  # Estimated system order
+
+  N: 120  # Initial input-output trajectory length
+  L: 40  # Prediction horizon
+  Q_scalar: 1  # Scalar multiplier for the output weighting matrix Q
+  R_scalar: 5.0e-2  # Scalar multiplier for the input weighting matrix R
+  S_scalar: 10  # Scalar multiplier for the output setpoint weighting matrix S
+  lambda_alpha: 3.0e-6  # Regularization parameter for alpha
+  lambda_sigma: 1.0e+7  # Regularization parameter for sigma
+
+  # Parameters for input bounds and ranges
+  # Note: Each input must have an associated vector of
+  # bounds or ranges [min, max].
+  
+  # Bounds for the predicted input
+  U:
+    - [0.1, 2]
+
+  # Bounds for the predicted input setpoint (must be a subset of U)
+  Us:
+    - [0.11, 1.99]
+
+  # Range of the persistently exciting input u
+  u_range:
+    - [0.1, 1]
+
+  alpha_reg_type: 1  # Alpha regularization type:
+                     # - 0 = Approximated → Regularized w.r.t. an approximation
+                     #                      of alpha_Lin^sr(D_t) (Remark 1 of
+                     #                      [2]).
+                     # - 1 = Previous → Regularized w.r.t. a previous optimal
+                     #                  alpha value to encourage stationary
+                     #                  behavior (Section V of [2]).
+                     # - 2 = Zero → Regularized w.r.t. zero.
+  
+  # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
+  lamb_alpha_s: null  #  Regularization parameter for alpha_s (optional)
+  lamb_sigma_s: null  #  Regularization parameter for sigma_s (optional)
+  
+  y_r: [0.6519]  # System output setpoint
+
+  ext_out_incr_in: true  # Enables the following controller structure:
+                         # - true → Controller uses an extended output
+                         #          representation (y_ext[k] = [y[k], u[k]])
+                         #          and input increments where the control
+                         #          input is updated incrementally as:
+                         #          u[k] = u[k-1] + du[k-1].
+                         #          This ensures control-affine system
+                         #          dynamics (Section V of [2]).
+                         # - false → Standard controller operation. Direct
+                         #           control input, without extensions.
+
+  n_n_mpc_step: true  # Enable n-Step Data-Driven MPC:
+                      # - true = n-Step Data-Driven MPC
+                      # - false = 1-Step Data-Driven MPC

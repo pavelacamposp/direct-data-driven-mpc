@@ -1,12 +1,12 @@
-# Data-Driven MPC Parameters
+# LTI Data-Driven MPC Parameters
 # Based on the Data-Driven MPC implementation example for the control of a
-# four-tank system from Section V of the paper:
+# linearized four-tank system from Section V of the paper:
 # [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
 #     Model Predictive Control With Stability and Robustness Guarantees," in
 #     IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
 #     April 2021, doi: 10.1109/TAC.2020.3000182.
 
-data_driven_mpc_params:
+lti_data_driven_mpc_params:
   n: 4  # Estimated system order
 
   N: 400  # Initial input-output trajectory length
@@ -18,7 +18,11 @@ data_driven_mpc_params:
   lambda_sigma: 1000  # Regularization parameter for the slack variable
   lambda_alpha_epsilon_bar: 0.1  # Regularization parameter for alpha
 
-  u_d_range: [-1, 1]  # Range of the persistently exciting input u_d
+  # Range of the persistently exciting input u_d
+  # Note: Each input must have an associated vector of ranges [min, max]
+  u_d_range:
+    - [-1, 1]
+    - [-1, 1]
 
   slack_var_constraint_type: 0  # Slack variable constraint type:
                                 # - 0 = None → Omit explicit constraint. The
@@ -28,7 +32,7 @@ data_driven_mpc_params:
                                 # - 1 = Convex → Convex slack variable
                                 #                constraint (Remark 3 of [1]).
                                 # - 2 = Non-Convex → Non-Convex slack variable
-                                #                    constraint (Equation 6d
+                                #                    constraint (Equation (6d)
                                 #                    of [1]).
 
   controller_type: 1  # Data-Driven MPC controller type:

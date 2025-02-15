@@ -1,10 +1,10 @@
 """
-Robust Data-Driven Model Predictive Control (MPC) Reproduction
+Robust LTI Data-Driven Model Predictive Control (MPC) Reproduction
 
 This script implements a reproduction of the example presented by J. Berberich
 et al. in Section V of [1], which illustrates various Robust Data-Driven MPC
-controller schemes applied to a four-tank system model. The implemented
-controller schemes are:
+controller schemes applied to a linearized four-tank system model. The
+implemented controller schemes are:
     - 1-step Robust Data-Driven MPC scheme with terminal equality constraints
         (TEC)
     - n-step Robust Data-Driven MPC scheme  with terminal equality constraints
@@ -40,51 +40,74 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from utilities.controller.controller_creation import (
-    get_data_driven_mpc_controller_params)
-from utilities.controller.controller_operation import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    get_lti_data_driven_mpc_controller_params)
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
     randomize_initial_system_state, simulate_n_input_output_measurements,
     generate_initial_input_output_data)
-from utilities.reproduction.paper_reproduction import (
+
+from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
+
+from paper_reproduction_utils import (
     DataDrivenMPCScheme, get_equilibrium_state_from_output,
     create_data_driven_mpc_controllers_reproduction,
     simulate_data_driven_mpc_control_loops_reproduction,
     plot_input_output_reproduction)
 
-from utilities.model_simulation import LTISystemModel
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params)
 
 # Directory paths
 dirname = os.path.dirname
-project_dir = dirname(dirname(__file__))
+project_dir = dirname(dirname(dirname(__file__)))
 examples_dir = os.path.join(project_dir, 'examples')
 models_config_dir = os.path.join(examples_dir, 'config', 'models')
 controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
+plot_params_config_dir = os.path.join(examples_dir, 'config', 'plots')
 
 # Model configuration file
 model_config_file = 'four_tank_system_params.yaml'
 model_config_path = os.path.join(models_config_dir,
                                  model_config_file)
-model_key_value = 'FourTankSystem'
+model_key_value = 'four_tank_system'
 
 # Data-Driven MPC controller configuration file
-controller_config_file = 'data_driven_mpc_example_params.yaml'
+controller_config_file = 'lti_dd_mpc_example_params.yaml'
 controller_config_path = os.path.join(controller_config_dir,
                                       controller_config_file)
-controller_key_value = 'data_driven_mpc_params'
+controller_key_value = 'lti_data_driven_mpc_params'
+
+# Plot parameters configuration file
+plot_params_config_file = 'plot_params.yaml'
+plot_params_config_path = os.path.join(plot_params_config_dir,
+                                       plot_params_config_file)
 
 # Simulation parameters
 default_t_sim = 600  # Default simulation length in time steps
-default_seed = 4  # Default seed for the RNG
+default_seed = 0  # Default seed for the RNG
 
-# Paper reproduction parameters
+# Paper reproduction parameters (based on the example from Section V of [2])
 y_0 = [0.4, 0.4]  # Initial system output for reproduction
-u_ylimits = [[-15.0, 15.0], [-15.0, 15.0]]  # Control input plot Y-axis limits
-y_ylimits = [[0.4, 1.0], [0.4, 1.0]]  # System output plot Y-axis limits
+u_ylimits_list = [[-15.0, 15.0], [-15.0, 15.0]]  # Input plot Y-axis limits
+y_ylimits_list = [[0.4, 1.0], [0.4, 1.0]]  # Output plot Y-axis limits
 
 # Robust Data-Driven MPC controllers showcased in paper example
 dd_mpc_controller_schemes = [DataDrivenMPCScheme.TEC,
                              DataDrivenMPCScheme.TEC_N_STEP,
                              DataDrivenMPCScheme.UCON]
+
+# Define function to retrieve plot parameters from configuration file
+def get_reproduction_plot_params(config_path):
+    line_params = load_yaml_config_params(
+        config_file=config_path, key='line_params')
+    legend_params = load_yaml_config_params(
+        config_file=config_path, key='legend_params')
+    figure_params = load_yaml_config_params(
+        config_file=config_path, key='figure_params')
+
+    return {'setpoints_line_params': line_params['setpoint'],
+            'legend_params': legend_params,
+            **figure_params}
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Data-Driven MPC "
@@ -135,7 +158,7 @@ def main() -> None:
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs
     p = system_model.p  # Number of outputs
-    dd_mpc_config = get_data_driven_mpc_controller_params(
+    dd_mpc_config = get_lti_data_driven_mpc_controller_params(
         config_file=controller_config_path,
         controller_key_value=controller_key_value,
         m=m,
@@ -300,9 +323,17 @@ def main() -> None:
     u_s = dd_mpc_config['u_s']  # Control input setpoint
     y_s = dd_mpc_config['y_s']  # System output setpoint
 
-    # --- Plot control system inputs and outputs ---
+    # --- Plot results in a figure replicating Fig. 2 of [1] ---
+    plot_title = "Robust Data-Driven MPC Reproduction"
+    plot_params = get_reproduction_plot_params(
+        config_path=plot_params_config_path)
+    
+    # Update figure size to fit figure in `README.md`
+    plot_params['figsize'] = (9, 8)
+
     if verbose:
-        print("Displaying control system inputs and outputs plot")
+        print("Displaying reproduction plot: Data-Driven MPC for LTI "
+              "systems")
 
     plot_input_output_reproduction(
         data_driven_mpc_controller_schemes=dd_mpc_controller_schemes,
@@ -310,11 +341,10 @@ def main() -> None:
         y_data=y_sys_data,
         u_s=u_s,
         y_s=y_s,
-        u_ylimits=u_ylimits,
-        y_ylimits=y_ylimits,
-        figsize=(12, 8),
-        dpi=100,
-        title="Robust Data-Driven MPC Reproduction")
+        u_ylimits_list=u_ylimits_list,
+        y_ylimits_list=y_ylimits_list,
+        title=plot_title,
+        **plot_params)
     
     plt.close()  # Close figures
 

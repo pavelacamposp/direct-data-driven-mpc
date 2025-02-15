@@ -8,12 +8,12 @@ from direct_data_driven_mpc.utilities.hankel_matrix import (
     hankel_matrix, evaluate_persistent_excitation)
 
 # Define Direct Data-Driven MPC Controller Types
-class DataDrivenMPCType(Enum):
+class LTIDataDrivenMPCType(Enum):
     NOMINAL = 0  # Nominal Data-Driven MPC
     ROBUST = 1  # Robust Data-Driven MPC
 
 # Define Slack Variable Constraint Types for Robust Data-Driven MPC
-class SlackVarConstraintTypes(Enum):
+class SlackVarConstraintType(Enum):
     # Non-Convex slack variable constraint
     NON_CONVEX = 0
     # Convex slack variable constraint
@@ -22,12 +22,12 @@ class SlackVarConstraintTypes(Enum):
     # constraint is implicitly satisfied
     NONE = 2
 
-class DirectDataDrivenMPCController():
+class LTIDataDrivenMPCController():
     """
     A class that implements a Data-Driven Model Predictive Control (MPC)
-    controller. This controller can be configured as either a Nominal or a
-    Robust controller. The implementation is based on research by J.
-    Berberich et al., as described in [1].
+    controller for Linear Time-Invariant (LTI) systems. This controller can be
+    configured as either a Nominal or a Robust controller. The implementation
+    is based on research by J. Berberich et al., as described in [1].
 
     Attributes:
         controller_type (DataDrivenMPCType): The Data-Driven MPC controller
@@ -37,8 +37,8 @@ class DirectDataDrivenMPCController():
         p (int): The number of system outputs.
         u_d (np.ndarray): A persistently exciting input sequence.
         y_d (np.ndarray): The system's output response to `u_d`.
-        N (int): The initial input (`u_d`) and output (`y_d`) trajectory
-            length.
+        N (int): The length of the initial input (`u_d`) and output (`y_d`)
+            trajectories.
         u_past (np.ndarray): The past `n` input measurements (u[t-n, t-1]).
         y_past (np.ndarray): The past `n` output measurements (y[t-n, t-1]).
         L (int): The prediction horizon length.
@@ -58,9 +58,9 @@ class DirectDataDrivenMPCController():
             type for the slack variable `sigma` in a Robust MPC formulation.
         n_mpc_step (int): The number of consecutive applications of the
             optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
-        use_terminal_constraint (bool): If True, include terminal equality
-            constraints in the Data-Driven MPC formulation. If False, the
-            controller will not enforce this constraint.
+        use_terminal_constraints (bool): If `True`, include terminal equality
+            constraints in the Data-Driven MPC formulation. If `False`, the
+            controller will not enforce these constraints.
         HLn_ud (np.ndarray): The Hankel matrix constructed from the input data
             `u_d`.
         HLn_yd (np.ndarray): The Hankel matrix constructed from the output
@@ -71,11 +71,11 @@ class DirectDataDrivenMPCController():
         ybar (cp.Variable): The predicted system output variable.
         sigma (Optional[cp.Variable]): The slack variable to account for noisy
             measurements in a Robust Data-Driven MPC.
-        dynamics_constraint (List[cp.Constraint]): The system dynamics
+        dynamics_constraints (List[cp.Constraint]): The system dynamics
             constraints for a Data-Driven MPC formulation.
-        internal_state_constraint (List[cp.Constraint]): The internal state
+        internal_state_constraints (List[cp.Constraint]): The internal state
             constraints for a Data-Driven MPC formulation.
-        terminal_constraint (List[cp.Constraint]): The terminal state
+        terminal_constraints (List[cp.Constraint]): The terminal state
             constraints for a Data-Driven MPC formulation.
         slack_var_constraint (List[cp.Constraint]): The slack variable
             constraints for a Robust Data-Driven MPC formulation.
@@ -111,22 +111,22 @@ class DirectDataDrivenMPCController():
         lamb_alpha: Optional[float] = None,
         lamb_sigma: Optional[float] = None,
         c: Optional[float] = None,
-        slack_var_constraint_type: SlackVarConstraintTypes = (
-            SlackVarConstraintTypes.CONVEX),
-        controller_type: DataDrivenMPCType = DataDrivenMPCType.NOMINAL,
+        slack_var_constraint_type: SlackVarConstraintType = (
+            SlackVarConstraintType.CONVEX),
+        controller_type: LTIDataDrivenMPCType = (
+            LTIDataDrivenMPCType.NOMINAL),
         n_mpc_step: int = 1,
-        use_terminal_constraint: bool = True
+        use_terminal_constraints: bool = True
     ):
         """
-        Initialize a Direct Data-Driven MPC with specified system model
+        Initialize a Direct LTI Data-Driven MPC with specified system model
         parameters, an initial input-output data trajectory measured from the
-        system, Data-Driven MPC parameters, and a specified Data-Driven MPC
-        controller type.
+        system, and LTI Data-Driven MPC parameters.
 
         Note:
             The input data `u_d` used to excite the system to get the initial
             output data must be persistently exciting of order (L + 2 * n), as
-            defined by the Data-Driven MPC formulations in [1].
+            defined in the Data-Driven MPC formulations in [1].
         
         Args:
             n (int): The estimated order of the system.
@@ -157,16 +157,16 @@ class DirectDataDrivenMPCController():
             n_mpc_step (int): The number of consecutive applications of the
                 optimal input for an n-Step Data-Driven MPC Scheme
                 (multi-step). Defaults to 1.
-            use_terminal_constraint (bool): If True, include terminal equality
-                constraints in the Data-Driven MPC formulation. If False, the
-                controller will not enforce this constraint.
+            use_terminal_constraints (bool): If `True`, include terminal
+                equality constraints in the Data-Driven MPC formulation. If
+                `False`, the controller will not enforce these constraints.
         """
         # Set controller type
         self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
-        controller_types = [DataDrivenMPCType.NOMINAL,
-                            DataDrivenMPCType.ROBUST]
+        controller_types = [LTIDataDrivenMPCType.NOMINAL,
+                            LTIDataDrivenMPCType.ROBUST]
         if controller_type not in controller_types:
             raise ValueError("Unsupported controller type.")
 
@@ -181,27 +181,25 @@ class DirectDataDrivenMPCController():
         self.N = u_d.shape[0]  # Initial input-output trajectory length
 
         # Initialize storage variables for past `n` input-output measurements
-        # (used for the internal state constraint that ensures predictions
+        # (used for the internal state constraints that ensure predictions
         # align with the internal state of the system's trajectory)
         self.u_past = u_d[-n:,:].reshape(-1, 1)  # u[t-n, t-1]
         self.y_past = y_d[-n:,:].reshape(-1, 1)  # y[t-n, t-1]
 
-        # Define MPC parameters
+        # Define Data-Driven MPC parameters
         self.L = L  # Prediction horizon
         self.Q = Q  # Output weighting matrix
         self.R = R  # Input weighting matrix
 
-        # Define Input-Output setpoint pair
         self.u_s = u_s  # Control input setpoint
         self.y_s = y_s  # System output setpoint
         
-        # Define Robust MPC parameters
         self.eps_max = eps_max  # Upper limit of bounded measurement noise
         self.lamb_alpha = lamb_alpha  # Ridge regularization base weight for
         # alpha. It is scaled by `eps_max`.
 
         self.lamb_sigma = lamb_sigma  # Ridge regularization weight for sigma
-        # (If large enough, can neglect noise constraint)
+        # (If large enough, can neglect noise constraints)
 
         self.c = c  # Convex slack variable constraint:
         # ||sigma||_inf <= c * eps_max
@@ -210,14 +208,14 @@ class DirectDataDrivenMPCController():
         # variable constraint type
 
         # Validate slack variable constraint type
-        slack_var_constraint_types = [SlackVarConstraintTypes.NON_CONVEX,
-                                      SlackVarConstraintTypes.CONVEX,
-                                      SlackVarConstraintTypes.NONE]
+        slack_var_constraint_types = [SlackVarConstraintType.NON_CONVEX,
+                                      SlackVarConstraintType.CONVEX,
+                                      SlackVarConstraintType.NONE]
         if slack_var_constraint_type not in slack_var_constraint_types:
             raise ValueError("Unsupported slack variable constraint type.")
 
         # Ensure correct parameter definition for Robust MPC controller
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if None in (eps_max, lamb_alpha, lamb_sigma, c):
                 raise ValueError("All robust MPC parameters (eps_max, "
                                  "lamb_alpha, lamb_sigma, c) must be "
@@ -227,8 +225,8 @@ class DirectDataDrivenMPCController():
         self.n_mpc_step = n_mpc_step  # Number of consecutive applications
         # of the optimal input
 
-        # Terminal constraint use in Data-Driven MPC formulation
-        self.use_terminal_constraint = use_terminal_constraint
+        # Terminal constraints use in Data-Driven MPC formulation
+        self.use_terminal_constraints = use_terminal_constraints
 
         # Evaluate if input trajectory data is persistently exciting of
         # order (L + 2 * n)
@@ -273,7 +271,7 @@ class DirectDataDrivenMPCController():
                              f"inputs of the system ({self.m}).")
 
         # Compute the minimum required length of the input sequence
-        # based on Remark 1 from [1]
+        # based on Remark 1 of [1]
         N_min = self.m * (self.L + 2 * self.n) + self.L + 2 * self.n - 1
 
         # Check if the length of the input sequence is sufficient
@@ -315,12 +313,12 @@ class DirectDataDrivenMPCController():
         References:
             [1]: See class-level docstring for full reference details.
         """
-        if self.controller_type == DataDrivenMPCType.NOMINAL:
+        if self.controller_type == LTIDataDrivenMPCType.NOMINAL:
             if self.L < self.n:
                 raise ValueError("The prediction horizon (`L`) must be "
                                  "greater than or equal to the estimated "
                                  "system order `n`.")
-        elif self.controller_type == DataDrivenMPCType.ROBUST:
+        elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if self.L < 2 * self.n:
                 raise ValueError("The prediction horizon (`L`) must be "
                                  "greater than or equal to two times the "
@@ -349,20 +347,20 @@ class DirectDataDrivenMPCController():
         Initialize the Data-Driven MPC controller.
 
         This method performs the following tasks:
-        1. Construct Hankel matrices from the initial input-output trajectory
-            data (`u_d`, `y_d`). These matrices are used for the data-driven
-            characterization of the unknown system, as defined by the system
-            dynamic constraint in the Robust and Nominal Data-Driven MPC
-            formulations from [1].
-        2. Define the optimization variables for the Data-Driven MPC problem.
-        3. Define the constraints for the MPC problem, which include the
-            system dynamics, internal state, terminal state, and, for a Robust
-            MPC controller, the slack variable constraint.
-        4. Define the cost function for the MPC problem.
+        1. Constructs Hankel matrices from the initial input-output trajectory
+           data (`u_d`, `y_d`). These matrices are used for the data-driven
+           characterization of the unknown system, as defined by the system
+           dynamic constraints in the Robust and Nominal Data-Driven MPC
+           formulations of [1].
+        2. Defines the optimization variables for the Data-Driven MPC problem.
+        3. Defines the constraints for the MPC problem, which include the
+           system dynamics, internal state, terminal state, and, for a Robust
+           MPC controller, the slack variable constraint.
+        4. Defines the cost function for the MPC problem.
         5. Formulates the MPC problem as a Quadratic Programming (QP) problem.
         6. Solves the initialized MPC problem to ensure the formulation is
-            valid and retrieve the optimal control input for the initial
-            setup.
+           valid and retrieve the optimal control input for the initial
+           setup.
 
         This initialization process ensures that all necessary components for
         the Data-Driven MPC are correctly defined and that the MPC problem is
@@ -371,10 +369,10 @@ class DirectDataDrivenMPCController():
         References:
             [1]: See class-level docstring for full reference details.
         """
-        # Construct Hankel Matrices from initial input-output trajectory for
-        # the data-driven characterization of the unknown system used for the
-        # system dynamic constraint defined by Equation 3b (Nominal MPC) and
-        # Equation 6a (Robust MPC).
+        # Construct Hankel Matrices from the initial input-output trajectory
+        # for the data-driven characterization of the unknown system.
+        # Used for the system dynamic constraints, as defined by Equations
+        # (3b) (Nominal) and (6a) (Robust) of [1].
         self.HLn_ud = hankel_matrix(self.u_d, self.L + self.n)  # H_{L+n}(u^d)
         self.HLn_yd = hankel_matrix(self.y_d, self.L + self.n)  # H_{L+n}(y^d)
         
@@ -391,20 +389,21 @@ class DirectDataDrivenMPCController():
     def update_and_solve_data_driven_mpc(self) -> None:
         """
         Update the Data-Driven MPC problem constraints and formulation, solve
-        it and store the optimal control input.
+        it, and store the optimal control input.
 
-        This method updates the MPC constraints definition and problem
-        formulation to account for updated past `n` input-output measurements
-        of the system. This stored historical data is used for the Internal
-        State constraint defined by Equation 3c (Nominal) and Equation 6b
-        (Robust) from [1]. Then, the method solves the MPC problem and stores
-        the optimal control input derived from the solution.
+        This method updates the MPC constraints and reformulates the problem
+        to incorporate the latest `n` input-output measurements of the system.
+        It then solves the MPC problem and stores the resulting optimal
+        control input.
 
         References:
             [1]: See class-level docstring for full reference details.
         """
+        # Update MPC constraints and reformulate the problem
         self.define_mpc_constraints()
         self.define_mpc_problem()
+
+        # Solve MPC problem and store the optimal input
         self.solve_mpc_problem()
         self.get_optimal_control_input()
 
@@ -418,10 +417,10 @@ class DirectDataDrivenMPCController():
         - **Nominal MPC**: Defines the variable `alpha` for a data-driven
             input-output trajectory characterization of the system, and the
             predicted input (`ubar`) and output (`ybar`) variables, as
-            described in Equation 3.
+            described in Equation (3).
         - **Robust MPC**: In addition to the optimization variables defined
             for a Nominal MPC formulation, defines the `sigma` variable to
-            account for noisy measurements, as described in Equation 6.
+            account for noisy measurements, as described in Equation (6).
         
         Note:
             This method initializes the `alpha`, `ubar`, `ybar`, and `sigma`
@@ -440,9 +439,9 @@ class DirectDataDrivenMPCController():
         self.ybar = cp.Variable(((self.L + self.n) * self.p, 1))
         # The time indices of the predicted input and output start at k = −n,
         # since the last `n` inputs and outputs are used to invoke a unique
-        # initial state at time `t`, as described in Definition 3 from [1].
+        # initial state at time `t`, as described in Definition 3 of [1].
         
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             # sigma(t)
             self.sigma = cp.Variable(((self.L + self.n) * self.p, 1))
     
@@ -457,27 +456,27 @@ class DirectDataDrivenMPCController():
             trajectories of the system based on a data-driven characterization
             of all its input-output trajectories. In a Robust MPC scheme, adds
             a slack variable to account for noisy measurements. Defined by
-            Equation 3b (Nominal) and Equation 6a (Robust).
+            Equations (3b) (Nominal) and (6a) (Robust).
         - **Internal state**: Ensures predictions align with the internal
             state of the system's trajectory. This constrains the first `n`
             input-output predictions to match the past `n` input-output
             measurements of the system, guaranteeing that the predictions
-            consider the initial state of the system. Defined by Equation 3c
-            (Nominal) and Equation 6b (Robust).
+            consider the initial state of the system. Defined by Equations
+            (3c) (Nominal) and (6b) (Robust).
         - **Terminal state**: Aims to stabilize the internal state of the
             system so it aligns with the steady-state that corresponds to the
             input-output pair (`u_s`, `y_s`) in any minimal realization (last
             `n` input-output predictions, as considered in [1]). Defined by
-            Equation 3d (Nominal) and Equation 6c (Robust).
+            Equations (3d) (Nominal) and (6c) (Robust).
         - **Slack Variable**: Bounds a slack variable that accounts
             for noisy online measurements and for noisy data used for
             prediction (used to construct the Hankel matrices). Defined by
-            Equation 6d, for a Non-Convex constraint, and Remark 3, for a
+            Equation (6d), for a Non-Convex constraint, and Remark 3, for a
             Convex constraint and an implicit alternative.
         
         Note:
-            This method initializes the `dynamics_constraint`,
-            `internal_state_constraint`, `terminal_constraint`,
+            This method initializes the `dynamics_constraints`,
+            `internal_state_constraints`, `terminal_constraints`,
             `slack_var_constraint`, and `constraints` attributes to define the
             MPC constraints based on the MPC controller type.
         
@@ -485,87 +484,86 @@ class DirectDataDrivenMPCController():
             [1]: See class-level docstring for full reference details.
         """
         # Define System Dynamic, Internal State and Terminal State Constraints
-        self.dynamics_constraint = self.define_system_dynamic_constraint()
-        self.internal_state_constraint = (
-            self.define_internal_state_constraint())
-        self.terminal_constraint = (
-            self.define_terminal_state_constraint(u_s=self.u_s, y_s=self.y_s)
-            if self.use_terminal_constraint
+        self.dynamics_constraints = self.define_system_dynamic_constraints()
+        self.internal_state_constraints = (
+            self.define_internal_state_constraints())
+        self.terminal_constraints = (
+            self.define_terminal_state_constraints(u_s=self.u_s, y_s=self.y_s)
+            if self.use_terminal_constraints
             else [])
         
         # Define Slack Variable Constraint if controller type is Robust
         self.slack_var_constraint = (
             self.define_slack_variable_constraint()
-            if self.controller_type == DataDrivenMPCType.ROBUST
+            if self.controller_type == LTIDataDrivenMPCType.ROBUST
             else [])
             
         # Combine constraints
-        self.constraints = (self.dynamics_constraint +
-                            self.internal_state_constraint +
-                            self.terminal_constraint +
+        self.constraints = (self.dynamics_constraints +
+                            self.internal_state_constraints +
+                            self.terminal_constraints +
                             self.slack_var_constraint)
 
-    def define_system_dynamic_constraint(self) -> List[cp.Constraint]:
+    def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
         """
-        Define the system dynamic constraint for the Data-Driven MPC
+        Define the system dynamic constraints for the Data-Driven MPC
         formulation corresponding to the specified MPC controller type.
 
-        This constraint uses a data-driven characterization of all the
+        These constraints use a data-driven characterization of all the
         input-output trajectories of a system, as defined by Theorem 1 [1], to
         ensure predictions are possible system trajectories. This is analogous
-        to the system dynamics contraint in a typical MPC formulation.
+        to the system dynamics constraints in a typical MPC formulation.
 
-        In a Robust MPC scheme, this constraint adds a slack variable to
+        In a Robust MPC scheme, these constraints include a slack variable to
         account for noisy online measurements and for noisy data used for
         prediction (used to construct the Hankel matrices).
 
-        The constraint is defined according to the following equations from
-        the Nominal and Robust MPC formulations in [1]:
-        - Nominal MPC: Equation 3b.
-        - Robust MPC: Equation 6a.
+        Theese constraints are defined according to the following equations
+        from the Nominal and Robust MPC formulations in [1]:
+        - Nominal MPC: Equation (3b).
+        - Robust MPC: Equation (6a).
 
         Returns:
             List[cp.Constraint]: A list containing the CVXPY system dynamic
-                constraint for the Data-Driven MPC controller, corresponding
+                constraints for the Data-Driven MPC controller, corresponding
                 to the specified MPC controller type.
         
         References:
             [1]: See class-level docstring for full reference details.
         """
-        if self.controller_type == DataDrivenMPCType.NOMINAL:
-            # Define system dynamic constraint for Nominal MPC
-            # based on Equation 3b from [1]
-            dynamics_constraint = [
+        if self.controller_type == LTIDataDrivenMPCType.NOMINAL:
+            # Define system dynamic constraints for Nominal MPC
+            # based on Equation (3b) of [1]
+            dynamics_constraints = [
                 cp.vstack([self.ubar, self.ybar]) ==
                 cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha]
-        elif self.controller_type == DataDrivenMPCType.ROBUST:
-            # Define system dynamic constraint for Robust MPC
+        elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
+            # Define system dynamic constraints for Robust MPC
             # including a slack variable to account for noise,
-            # based on Equation 6a from [1]
-            dynamics_constraint = [
+            # based on Equation (6a) of [1]
+            dynamics_constraints = [
                 cp.vstack([self.ubar, self.ybar + self.sigma]) ==
                 cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha]
         
-        return dynamics_constraint
+        return dynamics_constraints
         
-    def define_internal_state_constraint(self) -> List[cp.Constraint]:
+    def define_internal_state_constraints(self) -> List[cp.Constraint]:
         """
-        Define the internal state constraint for the Data-Driven MPC
+        Define the internal state constraints for the Data-Driven MPC
         formulation.
 
-        This constraint ensures predictions align with the internal state of
+        These constraints ensure predictions align with the internal state of
         the system's trajectory. This way, the first `n` input-output
         predictions are constrained to match the past `n` input-output
         measurements of the system, guaranteeing that the predictions consider
         the initial state of the system.
 
-        The constraint is defined according to Equation 3c (Nominal MPC) and
-        Equation 6b (Robust MPC) from the Nominal and Robust MPC formulations
-        in [1].
+        These constraints are defined according to Equations (3c) (Nominal)
+        and (6b) (Robust) from the Nominal and Robust MPC formulations in [1].
 
         Returns:
             List[cp.Constraint]: A list containing the CVXPY internal state
-                constraint for the Data-Driven MPC controller.
+                constraints for the Data-Driven MPC controller.
         
         Note:
             It is essential to update the past `n` input-output measurements
@@ -574,37 +572,36 @@ class DirectDataDrivenMPCController():
         References:
             [1]: See class-level docstring for full reference details.
         """
-        # Define internal state constraint for Nominal and Robust MPC
-        # based on Equation 3c and Equation 6b from [1], respectively
+        # Define internal state constraints for Nominal and Robust MPC
+        # based on Equations (3c) and (6b) of [1], respectively
         ubar_state = self.ubar[:self.n * self.m]  # ubar[-n, -1]
         ybar_state = self.ybar[:self.n * self.p]  # ybar[-n, -1]
-        internal_state_constraint = [
+        internal_state_constraints = [
             cp.vstack([ubar_state, ybar_state]) ==
             cp.vstack([self.u_past, self.y_past])]
         
-        return internal_state_constraint
+        return internal_state_constraints
     
-    def define_terminal_state_constraint(
+    def define_terminal_state_constraints(
         self,
         u_s: np.ndarray,
         y_s: np.ndarray
     ) -> List[cp.Constraint]:
         """
-        Define the terminal state constraint for the Data-Driven MPC
+        Define the terminal state constraints for the Data-Driven MPC
         formulation.
 
-        This constraint aims to stabilize the internal state of the system so
+        These constraints aim to stabilize the internal state of the system so
         it aligns with the steady-state that corresponds to the input-output
         pair (`u_s`, `y_s`) in any minimal realization, specifically the last
         `n` input-output predictions, as considered in [1].
 
-        The constraint is defined according to Equation 3d (Nominal MPC) and
-        Equation 6c (Robust MPC) from the Nominal and Robust MPC formulations
-        in [1].
+        These constraints are defined according to Equations (3d) (Nominal) and
+        (6c) (Robust) from the Nominal and Robust MPC formulations in [1].
 
         Returns:
             List[cp.Constraint]: A list containing the CVXPY terminal state
-                constraint for the Data-Driven MPC controller.
+                constraints for the Data-Driven MPC controller.
         
         References:
             [1]: See class-level docstring for full reference details.
@@ -622,13 +619,13 @@ class DirectDataDrivenMPCController():
         u_sn = np.tile(u_s, (self.n, 1))
         y_sn = np.tile(y_s, (self.n, 1))
         
-        # Define terminal state constraint for Nominal and Robust MPC
-        # based on Equation 3d and Equation 6c from [1], respectively.
-        terminal_constraint = [
+        # Define terminal state constraints for Nominal and Robust MPC
+        # based on Equations (3d) and (6c) of [1], respectively.
+        terminal_constraints = [
             cp.vstack([ubar_terminal, ybar_terminal]) ==
             cp.vstack([u_sn, y_sn])]
         
-        return terminal_constraint
+        return terminal_constraints
 
     def define_slack_variable_constraint(self) -> List[cp.Constraint]:
         """
@@ -641,7 +638,7 @@ class DirectDataDrivenMPCController():
 
         As described in [1], this constraint can be defined in three different
         ways, achieving the same theoretical guarantees:
-        - **Non-Convex**: Defines a non-convex constraint (Equation 6d).
+        - **Non-Convex**: Defines a non-convex constraint (Equation (6d)).
         - **Convex**: Defines a convex constraint using a sufficiently large
             coefficient `c` (Remark 3).
         - **None**: Omits an explicit constraint definition. The slack variable
@@ -664,13 +661,13 @@ class DirectDataDrivenMPCController():
         # on the noise constraint type
         slack_variable_constraint = []
         if (self.slack_var_constraint_type ==
-            SlackVarConstraintTypes.NON_CONVEX):
+            SlackVarConstraintType.NON_CONVEX):
             # Raise NotImplementedError for NON-CONVEX constraint
             raise NotImplementedError(
                 "Robust Data-Driven MPC with a Non-Convex slack variable "
                 "constraint is not currently implemented, since it cannot "
                 "be efficiently solved.")
-        elif self.slack_var_constraint_type == SlackVarConstraintTypes.CONVEX:
+        elif self.slack_var_constraint_type == SlackVarConstraintType.CONVEX:
             # Define slack variable constraint considering
             # a CONVEX constraint based on Remark 3 [1]
             slack_variable_constraint = [cp.norm(sigma_pred, "inf") <=
@@ -688,10 +685,10 @@ class DirectDataDrivenMPCController():
         - **Nominal MPC**: Implements a quadratic stage cost that penalizes
             deviations of the predicted control inputs (`ubar`) and outputs
             (`ybar`) from the desired equilibrium (`u_s`, `y_s`), as described
-            in Equation 3.
+            in Equation (3).
         - **Robust MPC**: In addition to the quadratic stage cost, adds ridge
             regularization terms for `alpha` and `sigma` variables to account
-            for noisy measurements, as described in Equation 6.
+            for noisy measurements, as described in Equation (6).
         
         Note:
             This method initializes the `cost` attribute to define the MPC
@@ -712,7 +709,7 @@ class DirectDataDrivenMPCController():
             cp.quad_form(ybar_pred - np.tile(self.y_s, (self.L, 1)), self.Q))
         
         # Define noise-related cost if controller type is Robust
-        if self.controller_type == DataDrivenMPCType.ROBUST:
+        if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             noise_cost = (
                 self.lamb_alpha * self.eps_max * cp.norm(self.alpha, 2) ** 2 +
                 self.lamb_sigma * cp.norm(self.sigma, 2) ** 2)
@@ -856,8 +853,8 @@ class DirectDataDrivenMPCController():
         `y_past` by appending the current input-output measurements and
         removing the oldest measurements located at the first position. This
         ensures these variables only store the past `n` measurements, as
-        required for the internal state constraint defined by Equation 3c
-        (Nominal MPC) and Equation 6b (Robust MPC) [1].
+        required for the internal state constraints defined by Equations (3c)
+        (Nominal) and (6b) (Robust) of [1].
 
         Args:
             u_current (np.ndarray): The control input for the current

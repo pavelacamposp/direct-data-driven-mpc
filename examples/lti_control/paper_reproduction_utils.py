@@ -1,23 +1,22 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Any
 from enum import Enum
 
 import numpy as np
 from numpy.random import Generator
 import matplotlib.pyplot as plt
 
-from utilities.controller.controller_creation import (
-    DataDrivenMPCParamsDictType, create_data_driven_mpc_controller)
-from utilities.controller.controller_operation import (
-    simulate_data_driven_mpc_control_loop)
-from utilities.visualization.data_visualization import (
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    LTIDataDrivenMPCParamsDictType)
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
+    create_lti_data_driven_mpc_controller)
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    simulate_lti_data_driven_mpc_control_loop)
+from direct_data_driven_mpc.utilities.data_visualization import (
     plot_input_output, create_input_output_figure)
 
-from utilities.model_simulation import LTIModel
-from direct_data_driven_mpc.direct_data_driven_mpc_controller import (
-    DirectDataDrivenMPCController)
-
-from utilities.visualization.plot_styles import (
-    SETPOINT_LINE_PARAMS, LEGEND_PARAMS)
+from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController)
 
 # Define Data-Driven MPC controller schemes
 class DataDrivenMPCScheme(Enum):
@@ -44,17 +43,17 @@ DD_MPC_SCHEME_CONFIG = {
     DataDrivenMPCScheme.TEC: {
         'label': 'TEC',
         'n_mpc_step': 1,
-        'terminal_constraint': True,
+        'terminal_constraints': True,
     },
     DataDrivenMPCScheme.TEC_N_STEP: {
         'label': 'TEC, n-step',
         'n_mpc_step': -1,  # -1 used as a placeholder for 'n' steps
-        'terminal_constraint': True,
+        'terminal_constraints': True,
     },
     DataDrivenMPCScheme.UCON: {
         'label': 'UCON',
         'n_mpc_step': 1,
-        'terminal_constraint': False,
+        'terminal_constraints': False,
     }
 }
 
@@ -116,13 +115,13 @@ def get_equilibrium_state_from_output(
     return x_eq
 
 def create_data_driven_mpc_controllers_reproduction(
-    controller_config: DataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
     data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme]
-) -> List[DirectDataDrivenMPCController]:
+) -> List[LTIDataDrivenMPCController]:
     """
-    Create `DirectDataDrivenMPCController` instances for a specified list of
+    Create `LTIDataDrivenMPCController` instances for a specified list of
     Data-Driven MPC schemes.
     
     This function uses a base Data-Driven MPC controller configuration and
@@ -135,9 +134,10 @@ def create_data_driven_mpc_controllers_reproduction(
         controller schemes presented in the paper example from [1].
 
     Args:
-        controller_config (DataDrivenMPCParamsDictType): A dictionary
-            containing Data-Driven MPC controller configuration parameters
-            used as a base configuration.
+        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
+            containing configuration parameters for a Data-Driven MPC
+            controller designed for Linear Time-Invariant (LTI) systems. Used
+            as a base configuration.
         u_d (np.ndarray): An array of shape `(N, m)` representing a
             persistently exciting input sequence used to generate output data
             from the system. `N` is the trajectory length and `m` is the
@@ -150,9 +150,10 @@ def create_data_driven_mpc_controllers_reproduction(
             Data-Driven MPC schemes based on the paper example from [1].
 
     Returns:
-        List[DirectDataDrivenMPCController]: A list of
-            `DirectDataDrivenMPCController` instances, which represent
-            Data-Driven MPC controllers based on specified configurations.
+        List[LTIDataDrivenMPCController]: A list of
+            `LTIDataDrivenMPCController` instances, which represent
+            Data-Driven MPC controllers designed for Linear Time-Invariant
+            (LTI) systems, based on specified configurations.
 
     References:
         [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
@@ -185,15 +186,15 @@ def create_data_driven_mpc_controllers_reproduction(
             # n-step Data-Driven MPC control
             base_controller_config['n_mpc_step'] = base_controller_config['n']
         
-        # Terminal constraint use in Data-Driven MPC formulation
-        use_terminal_constraint =  scheme_config['terminal_constraint']
+        # Terminal constraints use in Data-Driven MPC formulations
+        use_terminal_constraints =  scheme_config['terminal_constraints']
 
         # Create Data-Driven MPC controller based on scheme config
-        dd_mpc_controller = create_data_driven_mpc_controller(
+        dd_mpc_controller = create_lti_data_driven_mpc_controller(
                 controller_config=base_controller_config,
                 u_d=u_d,
                 y_d=y_d,
-                use_terminal_constraint=use_terminal_constraint)
+                use_terminal_constraints=use_terminal_constraints)
         
         # Store controller
         data_driven_mpc_controllers.append(dd_mpc_controller)
@@ -202,7 +203,7 @@ def create_data_driven_mpc_controllers_reproduction(
 
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
-    data_driven_mpc_controllers: List[DirectDataDrivenMPCController],
+    data_driven_mpc_controllers: List[LTIDataDrivenMPCController],
     n_steps: int,
     np_random: Generator,
     verbose: int,
@@ -213,15 +214,15 @@ def simulate_data_driven_mpc_control_loops_reproduction(
 
     This function extends the simulation of a Data-Driven MPC control loop to
     reproduce examples involving multiple controllers. It simulates several
-    `DirectDataDrivenMPCController` instances independently on the same system
+    `LTIDataDrivenMPCController` instances independently on the same system
     model by saving the system's initial internal state and resetting it to
     this state before each simulation.
 
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        data_driven_mpc_controllers (List[DirectDataDrivenMPCController]): A
-            list of `DirectDataDrivenMPCController` instances representing the
+        data_driven_mpc_controllers (List[LTIDataDrivenMPCController]): A
+            list of `LTIDataDrivenMPCController` instances representing the
             Data-Driven MPC controllers to be simulated.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating
@@ -256,7 +257,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
         system_model.set_state(state=model_initial_state)
 
         # Simulate controller
-        u_sys, y_sys = simulate_data_driven_mpc_control_loop(
+        u_sys, y_sys = simulate_lti_data_driven_mpc_control_loop(
             system_model=system_model,
             data_driven_mpc_controller=controller,
             n_steps=n_steps,
@@ -275,8 +276,10 @@ def plot_input_output_reproduction(
     y_data: List[np.ndarray],
     u_s: np.ndarray,
     y_s: np.ndarray,
-    u_ylimits: Optional[List[Tuple[float, float]]],
-    y_ylimits: Optional[List[Tuple[float, float]]],
+    u_ylimits_list: Optional[List[Tuple[float, float]]],
+    y_ylimits_list: Optional[List[Tuple[float, float]]],
+    setpoints_line_params: dict[str, Any] = {},
+    legend_params: dict[str, Any] = {},
     figsize: Tuple[int, int] =(14, 8),
     dpi: int = 300,
     fontsize: int = 12,
@@ -304,10 +307,20 @@ def plot_input_output_reproduction(
             setpoint values considered for the controller simulations.
         y_s (np.ndarray): An array of shape `(p, 1)` containing the `p` output
             setpoint values considered for the controller simulations.
-        u_ylimits (Optional[List[Tuple[float, float]]]): A list of tuples
-            specifying the Y-axis limits for the input subplots.
-        y_ylimits (Optional[List[Tuple[float, float]]]): A list of tuples
-            specifying the Y-axis limits for the output subplots.
+        u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            input subplot. If `None`, the Y-axis limits will be determined
+            automatically.
+        y_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            output subplot. If `None`, the Y-axis limits will be determined
+            automatically.
+        setpoints_line_params (dict[str, Any]): A dictionary of Matplotlib
+            properties for customizing the lines used to plot the setpoint
+            values (e.g., color, linestyle, linewidth).
+        legend_params (dict[str, Any]): A dictionary of Matplotlib
+            properties for customizing the plot legends (e.g., fontsize,
+            loc, handlelength).
         figsize (Tuple[int, int]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
@@ -337,15 +350,15 @@ def plot_input_output_reproduction(
                           y_s=y_s,
                           inputs_line_params=controller_line_params,
                           outputs_line_params=controller_line_params,
-                          setpoints_line_params=SETPOINT_LINE_PARAMS,
+                          setpoints_line_params=setpoints_line_params,
                           data_label=f" ({scheme_config['label']})",
-                          u_ylimits=u_ylimits,
-                          y_ylimits=y_ylimits,
+                          u_ylimits_list=u_ylimits_list,
+                          y_ylimits_list=y_ylimits_list,
                           axs_u=axs_u,
                           axs_y=axs_y,
                           dpi=dpi,
                           fontsize=fontsize,
-                          legend_params=LEGEND_PARAMS)
+                          legend_params=legend_params)
     
     # Show plot
     plt.show()
