@@ -109,10 +109,10 @@ To run the example scripts, use the following commands:
 
 - **Data-Driven MPC for Nonlinear systems**:
     
-    Run the example script with a `seed` of `0`, a simulation length of `3000` steps, and save the generated animation to a file:
+    Run the example script with a `seed` of `2`, a simulation length of `3000` steps, and save the generated animation to a file:
     
     ```bash
-    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 0 --t_sim 3000 --save_anim
+    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 2 --t_sim 3000 --save_anim
     ```
 
 > [!NOTE]
@@ -163,7 +163,7 @@ Reproduction scripts are provided to validate our implementations by comparing t
 
     To run the script, execute the following command:
     ```bash
-    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 0
+    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 2
     ```
     
 The figures below show the expected output from executing these scripts. The graphs from our results closely resemble those shown in **Fig. 2 of** [[1]](#1) and **Fig. 2 of** [[2]](#2), with minor differences due to randomization.

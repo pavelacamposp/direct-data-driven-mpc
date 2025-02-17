@@ -60,6 +60,13 @@ nonlinear_data_driven_mpc_params:
                          # - false → Standard controller operation. Direct
                          #           control input, without extensions.
 
+  # Tracking cost value threshold
+  # Online input-output data updates are disabled when the tracking cost value
+  # is less than this value. This ensures prediction data is persistently
+  # exciting (Section V of [2]).
+  update_cost_threshold: 1.0e-5  # If set to `null` or 0, input-output data is
+                                 # always updated online.
+
   n_n_mpc_step: true  # Enable n-Step Data-Driven MPC:
                       # - true = n-Step Data-Driven MPC
                       # - false = 1-Step Data-Driven MPC

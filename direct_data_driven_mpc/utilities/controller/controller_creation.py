@@ -159,6 +159,9 @@ def create_nonlinear_data_driven_mpc_controller(
     # Extended Output Representation and Incremental Input
     ext_out_incr_in = controller_config['ext_out_incr_in']
 
+    # Tracking cost value threshold
+    update_cost_threshold = controller_config['update_cost_threshold']
+
     # n-Step Data-Driven MPC Scheme parameters
     # Number of consecutive applications of the optimal input
     n_mpc_step = controller_config['n_mpc_step']
@@ -183,6 +186,7 @@ def create_nonlinear_data_driven_mpc_controller(
         lamb_sigma_s=lamb_sigma_s,
         alpha_reg_type=alpha_reg_type,
         ext_out_incr_in=ext_out_incr_in,
+        update_cost_threshold=update_cost_threshold,
         n_mpc_step=n_mpc_step)
     
     return nonlinear_data_driven_mpc_controller

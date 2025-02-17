@@ -86,6 +86,8 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
     # output representation and input increments, or operates as a standard
     # controller with direct control inputs without system state extensions
 
+    update_cost_threshold: Optional[float]  # Tracking cost value threshold
+
     n_mpc_step: int  # Number of consecutive applications of the optimal input
 
 # Define lists of required Data-Driven controller parameters
@@ -98,7 +100,8 @@ LTI_DD_MPC_FILE_PARAMS = [
 NONLINEAR_DD_MPC_FILE_PARAMS = [
     'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'S_scalar', 'lambda_alpha',
     'lambda_sigma', 'U', 'Us', 'u_range', 'alpha_reg_type', 'lamb_alpha_s',
-    'lamb_sigma_s', 'y_r', 'ext_out_incr_in', 'n_n_mpc_step']
+    'lamb_sigma_s', 'y_r', 'ext_out_incr_in', 'update_cost_threshold',
+    'n_n_mpc_step']
 
 def get_lti_data_driven_mpc_controller_params(
     config_file: str,
@@ -329,6 +332,12 @@ def get_nonlinear_data_driven_mpc_controller_params(
     #             extending its state representation.
     ext_out_incr_in = params['ext_out_incr_in']
     dd_mpc_params['ext_out_incr_in'] = ext_out_incr_in
+
+    # Tracking cost value threshold
+    # Online input-output data updates are disabled when the tracking cost
+    # value is less than this value. This ensures prediction data is
+    # persistently exciting (Section V of [2]).
+    dd_mpc_params['update_cost_threshold'] = params['update_cost_threshold']
     
     # Prediction horizon
     L = params['L']

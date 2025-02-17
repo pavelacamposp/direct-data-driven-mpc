@@ -61,6 +61,9 @@ class NonlinearDataDrivenMPCController():
             output representation and input increments, or operates as a
             standard controller with direct control inputs and without system
             state extensions).
+        update_cost_threshold (float): The tracking cost value threshold.
+            Online input-output data updates are disabled when the tracking
+            cost value is less than this value.
         n_mpc_step (int): The number of consecutive applications of the
             optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
         HLn1_u (np.ndarray): The Hankel matrix constructed from the input data
@@ -155,6 +158,7 @@ class NonlinearDataDrivenMPCController():
         lamb_alpha_s: Optional[float] = None,
         lamb_sigma_s: Optional[float] = None,
         ext_out_incr_in: bool = False,
+        update_cost_threshold: Optional[float] = None,
         n_mpc_step: int = 1
     ):
         """
@@ -206,6 +210,11 @@ class NonlinearDataDrivenMPCController():
                 (u[k] = u[k-1] + du[k-1]). If `False`, the controller operates
                 as a standard controller with direct control inputs and
                 without system state extensions. Defaults to `False`.
+            update_cost_threshold (Optional[float]): The tracking cost value
+                threshold. Online input-output data updates are disabled when
+                the tracking cost value is less than this value. If `None`,
+                input-output data is always updated online. Defaults to
+                `None`.
             n_mpc_step (int): The number of consecutive applications of the
                 optimal input for an n-Step Data-Driven MPC Scheme
                 (multi-step). Defaults to 1.
@@ -283,6 +292,12 @@ class NonlinearDataDrivenMPCController():
         # If False: The controller directly applies control inputs without
         #           extending its state representation.
         self.ext_out_incr_in = ext_out_incr_in
+
+        # Online input-output data updates
+        self.update_cost_threshold = (update_cost_threshold
+                                      if update_cost_threshold is not None
+                                      else 0.0)
+        self.update_data = True
         
         # n-Step Data-Driven MPC Scheme parameters
         self.n_mpc_step = n_mpc_step  # Number of consecutive applications
@@ -467,7 +482,9 @@ class NonlinearDataDrivenMPCController():
 
         This method performs the following tasks:
         1. Constructs Hankel matrices using the latest measured input-output
-           data.
+           data. If the tracking cost value from the previous solution is
+           small enough (less than `update_cost_threshold`), omits this step
+           and the previously defined matrices are used.
         2. Updates the MPC constraints and cost function, and reformulates the
            problem to incorporate the latest system measurements.
            
@@ -477,22 +494,26 @@ class NonlinearDataDrivenMPCController():
            input.
         4. Stores the optimal value of `alpha` if `alpha` is regularized
            with respect to its previous optimal value (see Section V of [2]).
+        5. Toggles online data updates based on the current tracking cost
+           value.
 
         References:
             [2]: See class-level docstring for full reference details.
         """
-        # Update data-driven constants online
-        if self.ext_out_incr_in:
-            # For a controller that uses an extended output representation
-            # and input increments, the input Hankel matrix corresponds to
-            # input increments instead of absolute inputs.
-            # H_{L+n+1}(du)
-            self.HLn1_u = hankel_matrix(self.du, self.L + self.n + 1)
-        else:
-            # H_{L+n+1}(u)
-            self.HLn1_u = hankel_matrix(self.u, self.L + self.n + 1)
-        # H_{L+n+1}(y)
-        self.HLn1_y = hankel_matrix(self.y, self.L + self.n + 1)
+        # Update data-driven constants online if data updates are enabled
+        # (current tracking cost value is not small enough)
+        if self.update_data:
+            if self.ext_out_incr_in:  
+                # For a controller that uses an extended output representation
+                # and input increments, the input Hankel matrix corresponds to
+                # input increments instead of absolute inputs.
+                # H_{L+n+1}(du)
+                self.HLn1_u = hankel_matrix(self.du, self.L + self.n + 1)
+            else:
+                # H_{L+n+1}(u)
+                self.HLn1_u = hankel_matrix(self.u, self.L + self.n + 1)
+            # H_{L+n+1}(y)
+            self.HLn1_y = hankel_matrix(self.y, self.L + self.n + 1)
 
         # Update MPC constraints and cost function,
         # and reformulate the problem
@@ -511,6 +532,12 @@ class NonlinearDataDrivenMPCController():
         # regularization type is `PREVIOUS`
         if self.alpha_reg_type == AlphaRegType.PREVIOUS:
             self.store_previous_alpha_value()
+
+        # Toggle online data updates based on the tracking cost value
+        if self.tracking_cost.value <= self.update_cost_threshold:
+            self.update_data = False
+        else:
+            self.update_data = True
 
     def define_optimization_variables(self) -> None:
         """
@@ -837,9 +864,19 @@ class NonlinearDataDrivenMPCController():
         References:
             [2]: See class-level docstring for full reference details.
         """
+        # Define tracking cost
+        self.tracking_cost = (
+            cp.quad_form(self.ubar - self.u_s_tiled, self.R) +
+            cp.quad_form(self.ybar - self.y_s_tiled, self.Q))
+        
+        if self.ext_out_incr_in:
+            # Add input-related cost if an extended output representation
+            # and input increments are considered for the controller. Refer to
+            # Section V of [2].
+            self.tracking_cost += cp.norm(self.ubar) ** 2
+
         # Define control-related cost
-        control_cost = (cp.quad_form(self.ubar - self.u_s_tiled, self.R) +
-                        cp.quad_form(self.ybar - self.y_s_tiled, self.Q) +
+        control_cost = (self.tracking_cost +
                         cp.quad_form(self.y_s[:self.p] - self.y_r, self.S))
         
         # Define alpha-related cost
@@ -857,15 +894,7 @@ class NonlinearDataDrivenMPCController():
         sigma_cost = self.lamb_sigma * cp.norm(self.sigma) ** 2
         
         # Define cost
-        if self.ext_out_incr_in:
-            # Define input-related cost if an extended output representation
-            # and input increments are considered for the controller. Refer to
-            # Section V of [2].
-            input_cost = cp.norm(self.ubar) ** 2
-
-            self.cost = control_cost + alpha_cost + sigma_cost + input_cost
-        else:
-            self.cost = control_cost + alpha_cost + sigma_cost
+        self.cost = control_cost + alpha_cost + sigma_cost
     
     def define_mpc_problem(self) -> None:
         """
