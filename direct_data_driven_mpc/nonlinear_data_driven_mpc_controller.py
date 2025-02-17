@@ -296,6 +296,7 @@ class NonlinearDataDrivenMPCController():
         self.Us_const_up = self.Us[:, 1:2]
 
         # Define helper constants for MPC constraints definition
+        self.ones_1 = np.ones((1, 1))  # 1
         self.ones_NLn = np.ones((1, self.N - self.L - self.n))  # 1_(N-L-n)^T
         self.ones_Ln1 = np.ones((self.L + self.n + 1, 1))  # 1_(L+n+1)
         self.ones_n1 = np.ones((n + 1, 1))  # 1_(n+1)
@@ -710,7 +711,7 @@ class NonlinearDataDrivenMPCController():
         dynamics_constraints = [
             cp.vstack([self.ubar,
                        self.ybar + self.sigma,
-                       cp.Constant([[1]])]) ==
+                       cp.Constant(self.ones_1)]) ==
             cp.vstack([self.HLn1_u,
                        self.HLn1_y,
                        cp.Constant(self.ones_NLn)
@@ -1236,7 +1237,7 @@ class NonlinearDataDrivenMPCController():
                            cp.Constant(self.ones_NLn)]) @ self.alpha_s ==
                 cp.vstack([cp.kron(self.ones_Ln1, self.u_s),
                            cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
-                           cp.Constant([[1]])]),
+                           cp.Constant(self.ones_1)]),
                 self.y_s[self.p:] >= self.Us_const_low,
                 self.y_s[self.p:] <= self.Us_const_up,
                 self.sigma_s_ubar == 0
