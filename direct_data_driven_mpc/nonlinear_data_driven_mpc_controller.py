@@ -44,11 +44,11 @@ class NonlinearDataDrivenMPCController():
         lamb_alpha (float): The ridge regularization weight for `alpha`.
         lamb_sigma (float): The ridge regularization weight for `sigma`.
         U (np.ndarray): An array of shape (`m`, 2) containing the bounds for
-            the `m` predicted input. Each input must have an associated vector
-            of bounds [min, max].
+            the `m` predicted inputs. Each row specifies the `[min, max]`
+            bounds for a single input.
         Us (np.ndarray): An array of shape (`m`, 2) containing the bounds for
-            the `m` predicted input setpoint. `Us` must be a subset of `U`.
-            Each input must have an associated vector of bounds [min, max].
+            the `m` predicted input setpoints. `Us` must be a subset of `U`.
+            Each row specifies the `[min, max]` bounds for a single input.
         alpha_reg_type (AlphaRegType): The alpha regularization type for
             the Nonlinear Data-Driven MPC formulation.
         lamb_alpha_s (float): The ridge regularization weight for
@@ -190,12 +190,12 @@ class NonlinearDataDrivenMPCController():
             lamb_sigma (float): The ridge regularization weight for
                 `sigma`.
             U (np.ndarray): An array of shape (`m`, 2) containing the bounds
-                for the `m` predicted input. Each input must have an
-                associated vector of bounds [min, max].
+                for the `m` predicted inputs. Each row specifies the
+                `[min, max]` bounds for a single input.
             Us (np.ndarray): An array of shape (`m`, 2) containing the bounds
-                for the `m` predicted input setpoint. `Us` must be a subset of
-                `U`. Each input must have an associated vector of bounds
-                [min, max].
+                for the `m` predicted input setpoints. `Us` must be a subset
+                of `U`. Each row specifies the `[min, max]` bounds for a
+                single input.
             alpha_reg_type (AlphaRegType): The `alpha` regularization type
                 for the Nonlinear Data-Driven MPC formulation.
             lamb_alpha_s (float): The ridge regularization weight for
