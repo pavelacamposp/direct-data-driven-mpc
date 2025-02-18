@@ -1,6 +1,7 @@
 from typing import Tuple
 
 import numpy as np
+from numpy.lib.stride_tricks import as_strided
 
 def hankel_matrix(X: np.ndarray, L: int) -> np.ndarray:
     """
@@ -43,14 +44,14 @@ def hankel_matrix(X: np.ndarray, L: int) -> np.ndarray:
     if N < L:
         raise ValueError("N must be greater than or equal to L.")
     
-    # Initialize the Hankel matrix induced by {x_k}_{k=0}^{N-1}
-    HL = np.zeros((L * n, N - L + 1))
+    X = X.ravel()  # Transform X into a 1-D array
 
-    # Construct Hankel matrix
-    for i in range(N - L + 1):
-        HL[:, i] = X[i: i + L, :].flatten()
-    
-    return HL
+    # Construct Hankel matrix striding on the data array
+    out_shp = L * n, N - L + 1
+    n_row = X.strides[0]  # Move 1-by-1 element in rows
+    n_col = X.strides[0] * n  # Move n-by-n elements in columns
+
+    return as_strided(X, shape=out_shp, strides=(n_row, n_col)).copy()
 
 def evaluate_persistent_excitation(
     X: np.ndarray,
