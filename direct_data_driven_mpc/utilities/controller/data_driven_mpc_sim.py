@@ -1,7 +1,8 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 from numpy.random import Generator
+from tqdm import tqdm
 
 from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.utilities.models.nonlinear_model import (
@@ -77,6 +78,9 @@ def simulate_lti_data_driven_mpc_control_loop(
     w_sys = eps_max_sim * np_random.uniform(-1.0, 1.0, (n_steps, p))
 
     # --- Simulate Data-Driven MPC control system ---
+    # Create progress bar if verbose level is 1
+    progress_bar = tqdm(total=n_steps) if verbose == 1 else None
+
     # Simulate the Data-Driven MPC control system following Algorithm 1 for a
     # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC
     # Scheme, as described in [1].
@@ -120,29 +124,26 @@ def simulate_lti_data_driven_mpc_control_loop(
                 y_current=y_sys[k, :].reshape(-1, 1)
             )
 
+            # Print simulation progress and control information
+            mpc_cost_val = (
+                data_driven_mpc_controller.get_optimal_cost_value())
+            print_mpc_step_info(verbose=verbose,
+                                step=t,
+                                mpc_cost_val=mpc_cost_val,
+                                u_sys_k=u_sys[k, :].flatten(),
+                                u_s=u_s.flatten(),
+                                y_sys_k=y_sys[k, :].flatten(),
+                                y_s=y_s.flatten(),
+                                progress_bar=progress_bar)
+
         # --- Algorithm 1: ---
         # 3) Set t = t + 1 and go back to 1).
         # --- Algorithm 2 (n-step): ---
         # 3) Set t = t + n and go back to 1).
-
-        if verbose > 1:
-            # Get current step MPC cost value
-            mpc_cost_val = (
-                data_driven_mpc_controller.get_optimal_cost_value())
-            # Calculate input and output errors
-            u_error = u_s.flatten() - u_sys[k, :].flatten()
-            y_error = y_s.flatten() - y_sys[k, :].flatten()
-            # Format error arrays for printing
-            formatted_u_error = ', '.join([f'u_{i + 1}e = {error:>6.3f}'
-                                           for i, error
-                                           in enumerate(u_error)])
-            formatted_y_error = ', '.join([f'y_{i + 1}e = {error:>6.3f}'
-                                           for i, error
-                                           in enumerate(y_error)])
-            # Print time step, MPC cost value, and formatted error
-            print(f"    Time step: {t:>4} - MPC cost value: "
-                  f"{mpc_cost_val:>8.4f} - Error: {formatted_u_error}, "
-                  f"{formatted_y_error}")
+    
+    # Close progress bar if previously created
+    if progress_bar is not None:
+        progress_bar.close()
     
     return u_sys, y_sys
 
@@ -208,6 +209,9 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     w_sys = eps_max_sim * np_random.uniform(-1.0, 1.0, (n_steps, p))
 
     # --- Simulate Data-Driven MPC control system ---
+    # Create progress bar if verbose level is 1
+    progress_bar = tqdm(total=n_steps) if verbose == 1 else None
+
     # Simulate the Nonlinear Data-Driven MPC control system
     # as described in Algorithm 1 of [2].
     for t in range(0, n_steps, n_mpc_step):
@@ -271,19 +275,78 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             # necessary for controllers that operate in a standard manner,
             # which use direct control inputs and do not extend the system
             # state.
-
-        if verbose > 1:
-            # Get current step MPC cost value
+        
+            # Print simulation progress and control information
             mpc_cost_val = (
                 data_driven_mpc_controller.get_optimal_cost_value())
-            # Calculate input and output errors
-            y_error = y_r.flatten() - y_sys[k, :].flatten()
-            # Format error arrays for printing
-            formatted_y_error = ', '.join([f'y_{i + 1}e = {error:>6.3f}'
-                                           for i, error
-                                           in enumerate(y_error)])
-            # Print time step, MPC cost value, and formatted error
-            print(f"    Time step: {t:>4} - MPC cost value: "
-                  f"{mpc_cost_val:>8.4f} - Error: {formatted_y_error}")
+            print_mpc_step_info(verbose=verbose,
+                                step=t,
+                                mpc_cost_val=mpc_cost_val,
+                                y_sys_k=y_sys[k, :].flatten(),
+                                y_s=y_r.flatten(),
+                                progress_bar=progress_bar)
     
+    # Close progress bar if previously created
+    if progress_bar is not None:
+        progress_bar.close()
+
     return u_sys, y_sys
+
+def print_mpc_step_info(
+    verbose: int,
+    step: int,
+    mpc_cost_val: float,
+    y_sys_k: np.ndarray,
+    y_s: np.ndarray,
+    u_sys_k: Optional[np.ndarray] = None,
+    u_s: Optional[np.ndarray] = None,
+    progress_bar: Optional[tqdm] = None
+) -> None:
+    """
+    Print MPC step information based on the verbosity level.
+
+    Args:
+        verbose (int): Verbosity level.
+            - `1`: Updates the progress bar with the current step information.
+            - `2`: Prints detailed step information, including input and output
+                errors.
+        step (int): Current time step.
+        mpc_cost_val (float): The current MPC cost value.
+        u_s (Optional[np.ndarray]): The input setpoint array. If `None`, input
+            errors will not be printed. Defaults to `None`.
+        u_sys_k (Optional[np.ndarray]): The input vector for the current time
+            step. If `None`, input errors will not be printed. Defaults to
+            `None`.
+        y_s (np.ndarray): The output setpoint array.
+        y_sys_k (np.ndarray): The output vector for the current time step.
+        progress_bar (Optional[tqdm]): A progress bar displaying simulation
+            progress information.
+    """
+    if verbose == 1 and progress_bar is not None:
+        # Update progress bar
+        progress_bar.set_description(f"    Simulation progress - MPC cost "
+                                     f"value: {mpc_cost_val:>8.4f}")
+        progress_bar.update()
+
+    elif verbose > 1:
+        # Calculate and format output errors
+        y_error = y_s - y_sys_k
+        formatted_y_error = ', '.join([f'y_{i + 1}e = {error:>6.3f}' 
+                                       for i, error
+                                       in enumerate(y_error)])
+        
+        # Calculate and format input errors
+        if u_sys_k is not None and u_s is not None:
+            u_error = u_s - u_sys_k
+            formatted_u_error = ', '.join([f'u_{i + 1}e = {error:>6.3f}'
+                                           for i, error
+                                           in enumerate(u_error)])
+
+            # Construct error message including input errors
+            error_message = f"{formatted_u_error}, {formatted_y_error}"
+        else:
+            # Construct error message without input errors
+            error_message = f"{formatted_y_error}"
+            
+        print(f"    Time step: {step:>4} - MPC cost value: "
+              f"{mpc_cost_val:>8.4f} - Error: " + error_message)

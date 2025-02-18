@@ -349,8 +349,8 @@ def main() -> None:
     # 5. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
-        print(f"Starting {controller_type_str} Data-Driven MPC control "
-              "system simulation")
+        print(f"Simulating {controller_type_str} Data-Driven MPC control "
+              "system")
 
     # Simulate the Data-Driven MPC control system following Algorithm 1 for a
     # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC

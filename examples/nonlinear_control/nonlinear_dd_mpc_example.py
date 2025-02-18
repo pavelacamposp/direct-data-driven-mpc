@@ -310,7 +310,7 @@ def main() -> None:
     # 5. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
-        print("Starting Nonlinear Data-Driven MPC control system simulation")
+        print("Simulating Nonlinear Data-Driven MPC control system")
 
     # Simulate the Data-Driven MPC control system following the
     # Nonlinear Data-Driven MPC Scheme described in Algorithm 1 of [2].

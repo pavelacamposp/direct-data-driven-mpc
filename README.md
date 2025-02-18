@@ -101,18 +101,18 @@ To run the example scripts, use the following commands:
 
 - **Data-Driven MPC for LTI systems**:
     
-    Run the example script with a `seed` of `18`, a simulation length of `400` steps, and save the generated animation to a file:
+    Run the example script with a `seed` of `18`, a simulation length of `400` steps, a verbosity level of `1`, and save the generated animation to a file:
     
     ```bash
-    python examples/lti_control/lti_dd_mpc_example.py --seed 18 --t_sim 400 --save_anim
+    python examples/lti_control/lti_dd_mpc_example.py --seed 18 --t_sim 400 --verbose 1 --save_anim
     ```
 
 - **Data-Driven MPC for Nonlinear systems**:
     
-    Run the example script with a `seed` of `2`, a simulation length of `3000` steps, and save the generated animation to a file:
+    Run the example script with a `seed` of `2`, a simulation length of `3000` steps, a verbosity level of `1`, and save the generated animation to a file:
     
     ```bash
-    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 2 --t_sim 3000 --save_anim
+    python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 2 --t_sim 3000 --verbose 1 --save_anim
     ```
 
 > [!NOTE]
