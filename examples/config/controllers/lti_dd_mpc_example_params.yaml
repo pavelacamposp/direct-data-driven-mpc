@@ -18,8 +18,20 @@ lti_data_driven_mpc_params:
   lambda_sigma: 1000  # Regularization parameter for the slack variable
   lambda_alpha_epsilon_bar: 0.1  # Regularization parameter for alpha
 
+  # Parameters for input bounds and ranges
+  # Note: Each input must have an associated vector of
+  # bounds or ranges [min, max].
+
+  U: null  # Bounds for the predicted input
+           # If set to `null`, no input bounds are considered.
+           # Example (null):
+           #   U: null
+           # Example (with bounds):
+           #   U:
+           #     - [-1, 2]
+           #     - [-2.5, 4.5]
+
   # Range of the persistently exciting input u_d
-  # Note: Each input must have an associated vector of ranges [min, max]
   u_d_range:
     - [-1, 1]
     - [-1, 1]

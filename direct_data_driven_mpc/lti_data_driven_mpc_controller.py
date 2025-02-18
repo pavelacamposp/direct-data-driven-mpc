@@ -52,6 +52,10 @@ class LTIDataDrivenMPCController():
             `alpha`, scaled by `eps_max`.
         lamb_sigma (Optional[float]): The ridge regularization weight for
             `sigma`.
+        U (Optional[np.ndarray]): An array of shape (`m`, 2) containing the
+            bounds for the `m` predicted inputs. Each row specifies the
+            `[min, max]` bounds for a single input. If `None`, no input bounds
+            are applied.
         c (Optional[float]): A constant used to define a Convex constraint for
             the slack variable `sigma` in a Robust MPC formulation.
         slack_var_constraint_type (SlackVarConstraintTypes): The constraint
@@ -110,6 +114,7 @@ class LTIDataDrivenMPCController():
         eps_max: Optional[float] = None,
         lamb_alpha: Optional[float] = None,
         lamb_sigma: Optional[float] = None,
+        U: Optional[np.ndarray] = None,
         c: Optional[float] = None,
         slack_var_constraint_type: SlackVarConstraintType = (
             SlackVarConstraintType.CONVEX),
@@ -147,6 +152,10 @@ class LTIDataDrivenMPCController():
                 for `alpha`. It is scaled by `eps_max`.
             lamb_sigma (Optional[float]): The ridge regularization weight for
                 `sigma`.
+            U (Optional[np.ndarray]): An array of shape (`m`, 2) containing
+                the bounds for the `m` predicted inputs. Each row specifies
+                the `[min, max]` bounds for a single input. If `None`, no
+                input bounds are applied. Defaults to `None`.
             c (Optional[float]): A constant used to define a Convex constraint
                 for the slack variable `sigma` in a Robust MPC formulation.
             slack_var_constraint_type (SlackVarConstraintTypes): The
@@ -201,6 +210,8 @@ class LTIDataDrivenMPCController():
         self.lamb_sigma = lamb_sigma  # Ridge regularization weight for sigma
         # (If large enough, can neglect noise constraints)
 
+        self.U = U  # Bounds for the predicted input
+
         self.c = c  # Convex slack variable constraint:
         # ||sigma||_inf <= c * eps_max
 
@@ -224,6 +235,11 @@ class LTIDataDrivenMPCController():
         # n-Step Data-Driven MPC Scheme parameters
         self.n_mpc_step = n_mpc_step  # Number of consecutive applications
         # of the optimal input
+
+        # Define bounds for the predicted inputs and predicted input setpoints
+        if self.U is not None:
+            self.U_const_low = np.tile(self.U[:, 0:1], (self.L, 1))
+            self.U_const_up = np.tile(self.U[:, 1:2], (self.L, 1))
 
         # Terminal constraints use in Data-Driven MPC formulation
         self.use_terminal_constraints = use_terminal_constraints
@@ -354,8 +370,9 @@ class LTIDataDrivenMPCController():
            formulations of [1].
         2. Defines the optimization variables for the Data-Driven MPC problem.
         3. Defines the constraints for the MPC problem, which include the
-           system dynamics, internal state, terminal state, and, for a Robust
-           MPC controller, the slack variable constraint.
+           system dynamics, internal state, terminal state, and input
+           constraints. For a Robust MPC controller, it also includes the
+           slack variable constraint.
         4. Defines the cost function for the MPC problem.
         5. Formulates the MPC problem as a Quadratic Programming (QP) problem.
         6. Solves the initialized MPC problem to ensure the formulation is
@@ -468,6 +485,8 @@ class LTIDataDrivenMPCController():
             input-output pair (`u_s`, `y_s`) in any minimal realization (last
             `n` input-output predictions, as considered in [1]). Defined by
             Equations (3d) (Nominal) and (6c) (Robust).
+        - **Input**: Constraints the predicted input (`ubar`). Defined by
+            Equation (6c).
         - **Slack Variable**: Bounds a slack variable that accounts
             for noisy online measurements and for noisy data used for
             prediction (used to construct the Hankel matrices). Defined by
@@ -477,8 +496,9 @@ class LTIDataDrivenMPCController():
         Note:
             This method initializes the `dynamics_constraints`,
             `internal_state_constraints`, `terminal_constraints`,
-            `slack_var_constraint`, and `constraints` attributes to define the
-            MPC constraints based on the MPC controller type.
+            `input_constraints`, `slack_var_constraint`, and `constraints`
+            attributes to define the MPC constraints based on the MPC
+            controller type.
         
         References:
             [1]: See class-level docstring for full reference details.
@@ -492,6 +512,11 @@ class LTIDataDrivenMPCController():
             if self.use_terminal_constraints
             else [])
         
+        # Define Input constraints if U is provided
+        self.input_constraints = (self.define_input_constraints()
+                                  if self.U is not None
+                                  else [])
+        
         # Define Slack Variable Constraint if controller type is Robust
         self.slack_var_constraint = (
             self.define_slack_variable_constraint()
@@ -502,6 +527,7 @@ class LTIDataDrivenMPCController():
         self.constraints = (self.dynamics_constraints +
                             self.internal_state_constraints +
                             self.terminal_constraints +
+                            self.input_constraints +
                             self.slack_var_constraint)
 
     def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
@@ -626,6 +652,23 @@ class LTIDataDrivenMPCController():
             cp.vstack([u_sn, y_sn])]
         
         return terminal_constraints
+    
+    def define_input_constraints(self) -> List[cp.Constraint]:
+        """
+        Define the input constraints for the Data-Driven MPC formulation.
+
+        These constraints are defined according to Equation (6c) of [1].
+
+        Returns:
+            List[cp.Constraint]: A list containing the CVXPY input constraints
+                for the Data-Driven MPC controller.
+        """
+        # Define input constraints
+        ubar_pred = self.ubar[self.n * self.m:]  # ubar[0,L-1]
+        input_constraints = [ubar_pred >= self.U_const_low,
+                             ubar_pred <= self.U_const_up]
+                
+        return input_constraints
 
     def define_slack_variable_constraint(self) -> List[cp.Constraint]:
         """

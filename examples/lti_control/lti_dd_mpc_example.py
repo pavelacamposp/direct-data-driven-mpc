@@ -368,6 +368,11 @@ def main() -> None:
     N = dd_mpc_config['N']  # Initial input-output trajectory length
     u_s = dd_mpc_config['u_s']  # Control input setpoint
     y_s = dd_mpc_config['y_s']  # System output setpoint
+    U = dd_mpc_config['U']  # Bounds for the predicted input
+
+    # Construct input bounds tuple list for plotting
+    # if input bounds are specified
+    u_bounds_list = U.tolist() if U is not None else None
 
     # --- Plot control system inputs and outputs ---
     plot_title = f"{controller_type_str} Data-Driven MPC"
@@ -380,24 +385,26 @@ def main() -> None:
                       y_k=y_sys,
                       u_s=u_s,
                       y_s=y_s,
+                      u_bounds_list=u_bounds_list,
                       title=plot_title,
                       **plot_params)
     
     # --- Plot data including initial input-output sequences ---
     # Create data arrays including initial input-output data used for
     # the data-driven characterization of the system
-    U = np.vstack([u_d, u_sys])
-    Y = np.vstack([y_d, y_sys])
+    U_data = np.vstack([u_d, u_sys])
+    Y_data = np.vstack([y_d, y_sys])
 
     # Plot extended input-output data
     if verbose:
         print("Displaying control system inputs and outputs including "
               "initial input-output measurements")
     
-    plot_input_output(u_k=U,
-                      y_k=Y,
+    plot_input_output(u_k=U_data,
+                      y_k=Y_data,
                       u_s=u_s,
                       y_s=y_s,
+                      u_bounds_list=u_bounds_list,
                       initial_steps=N,
                       title=plot_title,
                       **plot_params)
@@ -406,10 +413,11 @@ def main() -> None:
     if verbose:
         print("Displaying animation from extended input-output data")
     
-    anim = plot_input_output_animation(u_k=U,
-                                       y_k=Y,
+    anim = plot_input_output_animation(u_k=U_data,
+                                       y_k=Y_data,
                                        u_s=u_s,
                                        y_s=y_s,
+                                       u_bounds_list=u_bounds_list,
                                        initial_steps=N,
                                        interval=1000.0/anim_fps,
                                        points_per_frame=anim_points_per_frame,

@@ -60,6 +60,9 @@ def create_lti_data_driven_mpc_controller(
     lamb_alpha = controller_config['lamb_alpha']
     # Ridge regularization weight for sigma
     lamb_sigma = controller_config['lamb_sigma']
+
+    U = controller_config['U'] # Bounds for the predicted input
+
     # Convex slack variable constraint constant
     c = controller_config['c']
 
@@ -88,6 +91,7 @@ def create_lti_data_driven_mpc_controller(
         eps_max=eps_max,
         lamb_alpha=lamb_alpha,
         lamb_sigma=lamb_sigma,
+        U=U,
         c=c,
         slack_var_constraint_type=slack_var_constraint_type,
         controller_type=controller_type,

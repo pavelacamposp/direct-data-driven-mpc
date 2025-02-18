@@ -47,6 +47,7 @@ class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
     lamb_sigma: float  # Regularization parameter for sigma
     c: float  # Convex slack variable constraint constant
 
+    U: Optional[np.ndarray]  # Bounds for the predicted input
     u_range: np.ndarray  # Range of the persistently exciting input u
 
     # Slack variable constraint type
@@ -94,7 +95,7 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
 # from configuration files
 LTI_DD_MPC_FILE_PARAMS = [
     'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'epsilon_bar', 'lambda_sigma',
-    'lambda_alpha_epsilon_bar', 'u_d_range', 'slack_var_constraint_type',
+    'lambda_alpha_epsilon_bar', 'U', 'u_d_range', 'slack_var_constraint_type',
     'controller_type', 'u_s', 'y_s', 'n_n_mpc_step']
 
 NONLINEAR_DD_MPC_FILE_PARAMS = [
@@ -194,6 +195,11 @@ def get_lti_data_driven_mpc_controller_params(
     
     # Ridge regularization weight for sigma
     dd_mpc_params['lamb_sigma'] = params['lambda_sigma']
+
+    # Bounds for the predicted input
+    dd_mpc_params['U'] = (np.array(params['U'], dtype=float)
+                          if params['U'] is not None
+                          else None)
 
     # Convex slack variable constraint constant (see Remark 3 of [1])
     dd_mpc_params['c'] = 1.0
