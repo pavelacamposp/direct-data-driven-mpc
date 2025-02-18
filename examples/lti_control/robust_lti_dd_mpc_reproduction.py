@@ -304,13 +304,21 @@ def main() -> None:
     # controller. Here, `n` is the estimated system order from the Data-Driven
     # MPC controller configuration.
     n = dd_mpc_config['n']  # Estimated system order (Data-Driven MPC)
-    u_sys_data, y_sys_data = (
-        simulate_data_driven_mpc_control_loops_reproduction(
-            system_model=system_model,
-            data_driven_mpc_controllers=dd_mpc_controllers,
-            n_steps=n_steps - n,
-            np_random=np_random,
-            verbose=verbose))
+    try:
+        u_sys_data, y_sys_data = (
+            simulate_data_driven_mpc_control_loops_reproduction(
+                system_model=system_model,
+                data_driven_mpc_controllers=dd_mpc_controllers,
+                n_steps=n_steps - n,
+                np_random=np_random,
+                verbose=verbose))
+    except Exception as e:
+        raise ValueError("The Data-Driven MPC scheme without terminal "
+                         "equality constraints (UCON) diverges for the "
+                         f"current seed ({seed}). This is the expected "
+                         "behavior. Please set a different seed using the "
+                         "--seed argument."
+                         ) from e
     
     # Construct input-output data from 0 to `T - 1`
     for i in range(len(dd_mpc_controllers)):
