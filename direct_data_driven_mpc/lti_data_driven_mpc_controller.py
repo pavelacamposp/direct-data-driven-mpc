@@ -169,13 +169,20 @@ class LTIDataDrivenMPCController():
             use_terminal_constraints (bool): If `True`, include terminal
                 equality constraints in the Data-Driven MPC formulation. If
                 `False`, the controller will not enforce these constraints.
+
+        References:
+            [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
+                "Data-Driven Model Predictive Control With Stability and
+                Robustness Guarantees," in IEEE Transactions on Automatic
+                Control, vol. 66, no. 4, pp. 1702-1717, April 2021, doi:
+                10.1109/TAC.2020.3000182.
         """
         # Set controller type
         self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
-        controller_types = [LTIDataDrivenMPCType.NOMINAL,
-                            LTIDataDrivenMPCType.ROBUST]
+        controller_types = {LTIDataDrivenMPCType.NOMINAL,
+                            LTIDataDrivenMPCType.ROBUST}
         if controller_type not in controller_types:
             raise ValueError("Unsupported controller type.")
 
@@ -219,9 +226,9 @@ class LTIDataDrivenMPCController():
         # variable constraint type
 
         # Validate slack variable constraint type
-        slack_var_constraint_types = [SlackVarConstraintType.NON_CONVEX,
+        slack_var_constraint_types = {SlackVarConstraintType.NON_CONVEX,
                                       SlackVarConstraintType.CONVEX,
-                                      SlackVarConstraintType.NONE]
+                                      SlackVarConstraintType.NONE}
         if slack_var_constraint_type not in slack_var_constraint_types:
             raise ValueError("Unsupported slack variable constraint type.")
 
@@ -395,6 +402,8 @@ class LTIDataDrivenMPCController():
         
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
+        self.define_optimization_parameters()
+        self.update_optimization_parameters()
         self.define_mpc_constraints()
         self.define_cost_function()
         self.define_mpc_problem()
@@ -405,20 +414,18 @@ class LTIDataDrivenMPCController():
 
     def update_and_solve_data_driven_mpc(self) -> None:
         """
-        Update the Data-Driven MPC problem constraints and formulation, solve
-        it, and store the optimal control input.
+        Update the Data-Driven MPC optimization parameters, solve the problem,
+        and store the optimal control input.
 
-        This method updates the MPC constraints and reformulates the problem
-        to incorporate the latest `n` input-output measurements of the system.
-        It then solves the MPC problem and stores the resulting optimal
-        control input.
+        This method updates the MPC optimization parameters to incorporate the
+        latest `n` input-output measurements of the system. It then solves the
+        MPC problem and stores the resulting optimal control input.
 
         References:
             [1]: See class-level docstring for full reference details.
         """
-        # Update MPC constraints and reformulate the problem
-        self.define_mpc_constraints()
-        self.define_mpc_problem()
+        # Update MPC optimization parameters
+        self.update_optimization_parameters()
 
         # Solve MPC problem and store the optimal input
         self.solve_mpc_problem()
@@ -462,6 +469,37 @@ class LTIDataDrivenMPCController():
             # sigma(t)
             self.sigma = cp.Variable(((self.L + self.n) * self.p, 1))
     
+    def define_optimization_parameters(self) -> None:
+        """
+        Define MPC optimization parameters that are updated at every step
+        iteration.
+        
+        This method initializes the past inputs (`u_past_param`) and past
+        outputs (`y_past_param`) MPC parameters.
+        
+        These parameters are updated at each MPC iteration. Using CVXPY
+        `Parameter` objects allows efficient updates without the need of
+        reformulating the MPC problem at every step.
+        """
+        # u[t-n, t-1]
+        self.u_past_param = cp.Parameter((self.n * self.m, 1), name="u_past")
+            
+        # y[t-n, t-1]
+        self.y_past_param = cp.Parameter((self.n * self.p, 1), name="y_past")
+
+    def update_optimization_parameters(self) -> None:
+        """
+        Update MPC optimization parameters.
+
+        This method updates MPC parameters with the latest input-output
+        measurement data.
+        """
+        # u[t-n, t-1]
+        self.u_past_param.value = self.u_past
+        
+        # y[t-n, t-1]
+        self.y_past_param.value = self.y_past
+
     def define_mpc_constraints(self) -> None:
         """
         Define the constraints for the Data-Driven MPC formulation based on
@@ -604,7 +642,7 @@ class LTIDataDrivenMPCController():
         ybar_state = self.ybar[:self.n * self.p]  # ybar[-n, -1]
         internal_state_constraints = [
             cp.vstack([ubar_state, ybar_state]) ==
-            cp.vstack([self.u_past, self.y_past])]
+            cp.vstack([self.u_past_param, self.y_past_param])]
         
         return internal_state_constraints
     
@@ -778,7 +816,7 @@ class LTIDataDrivenMPCController():
         objective = cp.Minimize(self.cost)
         self.problem = cp.Problem(objective, self.constraints)
         
-    def solve_mpc_problem(self) -> str:
+    def solve_mpc_problem(self, warm_start: bool = False) -> str:
         """
         Solve the optimization problem for the Data-Driven MPC formulation.
 
@@ -792,7 +830,7 @@ class LTIDataDrivenMPCController():
             It solves the problem and updates the `problem` attribute with the
             solution status.
         """
-        self.problem.solve()
+        self.problem.solve(warm_start=warm_start)
         
         return self.problem.status
     
@@ -843,7 +881,7 @@ class LTIDataDrivenMPCController():
         
         # Store the optimal control input ubar*[0,L-1] if the MPC problem
         # solution had an "optimal" or "optimal_inaccurate" status
-        if self.problem.status in ["optimal", "optimal_inaccurate"]:
+        if self.problem.status in {"optimal", "optimal_inaccurate"}:
             self.optimal_u = ubar_pred.value.flatten()
             return self.optimal_u
         else:
