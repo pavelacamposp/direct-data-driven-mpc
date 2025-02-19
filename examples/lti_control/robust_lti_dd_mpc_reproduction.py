@@ -84,7 +84,7 @@ plot_params_config_path = os.path.join(plot_params_config_dir,
 
 # Simulation parameters
 default_t_sim = 600  # Default simulation length in time steps
-default_seed = 0  # Default seed for the RNG
+default_seed = 4  # Default seed for the RNG
 
 # Paper reproduction parameters (based on the example from Section V of [2])
 y_0 = [0.4, 0.4]  # Initial system output for reproduction
@@ -117,7 +117,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=default_seed,
                         help="Seed for Random Number Generator "
                         "initialization to ensure reproducible results. "
-                        "Defaults to 0.")
+                        "Defaults to 4.")
     # Verbose argument
     parser.add_argument("--verbose", type=int, default=2,
                         choices=[0, 1, 2],
