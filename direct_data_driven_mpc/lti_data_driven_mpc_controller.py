@@ -169,6 +169,13 @@ class LTIDataDrivenMPCController():
             use_terminal_constraints (bool): If `True`, include terminal
                 equality constraints in the Data-Driven MPC formulation. If
                 `False`, the controller will not enforce these constraints.
+
+        References:
+            [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
+                "Data-Driven Model Predictive Control With Stability and
+                Robustness Guarantees," in IEEE Transactions on Automatic
+                Control, vol. 66, no. 4, pp. 1702-1717, April 2021, doi:
+                10.1109/TAC.2020.3000182.
         """
         # Set controller type
         self.controller_type = controller_type  # Nominal or Robust Controller
