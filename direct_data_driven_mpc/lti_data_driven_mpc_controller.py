@@ -174,8 +174,8 @@ class LTIDataDrivenMPCController():
         self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
-        controller_types = [LTIDataDrivenMPCType.NOMINAL,
-                            LTIDataDrivenMPCType.ROBUST]
+        controller_types = {LTIDataDrivenMPCType.NOMINAL,
+                            LTIDataDrivenMPCType.ROBUST}
         if controller_type not in controller_types:
             raise ValueError("Unsupported controller type.")
 
@@ -219,9 +219,9 @@ class LTIDataDrivenMPCController():
         # variable constraint type
 
         # Validate slack variable constraint type
-        slack_var_constraint_types = [SlackVarConstraintType.NON_CONVEX,
+        slack_var_constraint_types = {SlackVarConstraintType.NON_CONVEX,
                                       SlackVarConstraintType.CONVEX,
-                                      SlackVarConstraintType.NONE]
+                                      SlackVarConstraintType.NONE}
         if slack_var_constraint_type not in slack_var_constraint_types:
             raise ValueError("Unsupported slack variable constraint type.")
 
@@ -874,7 +874,7 @@ class LTIDataDrivenMPCController():
         
         # Store the optimal control input ubar*[0,L-1] if the MPC problem
         # solution had an "optimal" or "optimal_inaccurate" status
-        if self.problem.status in ["optimal", "optimal_inaccurate"]:
+        if self.problem.status in {"optimal", "optimal_inaccurate"}:
             self.optimal_u = ubar_pred.value.flatten()
             return self.optimal_u
         else:

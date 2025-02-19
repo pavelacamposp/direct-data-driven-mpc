@@ -1066,7 +1066,7 @@ class NonlinearDataDrivenMPCController():
         
         # Store the optimal control input ubar*[0,L] if the MPC problem
         # solution had an "optimal" or "optimal_inaccurate" status
-        if self.problem.status in ["optimal", "optimal_inaccurate"]:
+        if self.problem.status in {"optimal", "optimal_inaccurate"}:
             if self.ext_out_incr_in:
                 # For a controller that uses an extended output representation
                 # and input increments, the optimal control variables are input
@@ -1393,7 +1393,7 @@ class NonlinearDataDrivenMPCController():
         # Get the robust approximation of alpha_sr_Lin(Dt) from solution
         alpha_sr_Lin_D = None
         if (self.alpha_sr_Lin_Dt_prob.status in
-            ["optimal", "optimal_inaccurate"]):
+            {"optimal", "optimal_inaccurate"}):
             alpha_sr_Lin_D = self.alpha_s.value
         else:
             raise ValueError(
