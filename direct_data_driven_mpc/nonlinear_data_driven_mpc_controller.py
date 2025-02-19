@@ -467,6 +467,13 @@ class NonlinearDataDrivenMPCController():
         
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
+
+        if self.alpha_reg_type == AlphaRegType.APPROXIMATED:
+            # Define the QP problem for computing an approximation of
+            # `alpha_Lin^sr(D_t)` if `alpha` is regularized with respect
+            # to this approximation
+            self.define_alpha_sr_Lin_Dt_prob()
+        
         self.define_optimization_parameters()
         self.update_optimization_parameters()
         self.define_mpc_constraints()
@@ -1318,31 +1325,21 @@ class NonlinearDataDrivenMPCController():
         # Reinitialize Data-Driven MPC controller
         self.initialize_data_driven_mpc()
 
-    def solve_alpha_sr_Lin_Dt(self) -> np.ndarray:
+    def define_alpha_sr_Lin_Dt_prob(self) -> np.ndarray:
         """
-        Solve a Quadratic Programming (QP) problem to compute the
+        Define a Quadratic Programming (QP) problem for computing an
         approximation of `alpha_Lin^sr(D_t)` using the latest input-output
         system measurements for the current iteration. The QP formulation is
         based on Equation (23) of [2].
 
-        Returns:
-            np.ndarray: The computed approximation of `alpha_Lin^sr(D_t)`.
-
-        Raises:
-            ValueError: If the QP solver fails to converge to an optimal
-                solution.
-
         References:
-            [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-                Tracking MPC for Nonlinear Systems—Part II: The Data-Driven
-                Case," in IEEE Transactions on Automatic Control, vol. 67, no.
-                9, pp. 4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+            [2]: See class-level docstring for full reference details.
         """
-        # Constraints
+        # Define constraints
         if self.ext_out_incr_in:
             constraints = [
-                cp.vstack([self.HLn1_u,
-                           self.HLn1_y,
+                cp.vstack([self.HLn1_u_param,
+                           self.HLn1_y_param,
                            cp.Constant(self.ones_NLn)]) @ self.alpha_s ==
                 cp.vstack([cp.kron(self.ones_Ln1, self.u_s),
                            cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
@@ -1353,12 +1350,12 @@ class NonlinearDataDrivenMPCController():
             ]
         else:
             constraints = [
-                cp.vstack([self.HLn1_u,
-                           self.HLn1_y,
+                cp.vstack([self.HLn1_u_param,
+                           self.HLn1_y_param,
                            cp.Constant(self.ones_NLn)]) @ self.alpha_s ==
                 cp.vstack([cp.kron(self.ones_Ln1, self.u_s),
                            cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
-                           cp.Constant([[1]])]),
+                           cp.Constant(self.ones_1)]),
                 self.u_s >= self.Us_const_low,
                 self.u_s <= self.Us_const_up
             ]
@@ -1370,16 +1367,38 @@ class NonlinearDataDrivenMPCController():
             self.lamb_sigma_s * cp.norm(self.sigma_s, 2) ** 2
         )
 
-        # Define and solve the optimization problem
-        prob = cp.Problem(objective, constraints)
-        prob.solve()
+        # Define the optimization problem
+        self.alpha_sr_Lin_Dt_prob = cp.Problem(objective, constraints)
+    
+    def solve_alpha_sr_Lin_Dt(self) -> np.ndarray:
+        """
+        Compute the approximation of `alpha_Lin^sr(D_t)` using the latest
+        input-output system measurements for the current iteration.
 
-        # Get robust approximation of alpha_sr_Lin(Dt)
+        Returns:
+            np.ndarray: The computed approximation of `alpha_Lin^sr(D_t)`.
+
+        Raises:
+            ValueError: If the QP solver fails to converge to an optimal
+                solution.
+
+        Note:
+            This method assumes that the Quadratic Programming (QP) problem
+            for computing the approximation of `alpha_Lin^sr(D_t)`
+            (`alpha_sr_Lin_Dt_prob`) has already been defined.
+        """
+        # Solve the optimization problem
+        self.alpha_sr_Lin_Dt_prob.solve()
+
+        # Get the robust approximation of alpha_sr_Lin(Dt) from solution
         alpha_sr_Lin_D = None
-        if prob.status in ["optimal", "optimal_inaccurate"]:
+        if (self.alpha_sr_Lin_Dt_prob.status in
+            ["optimal", "optimal_inaccurate"]):
             alpha_sr_Lin_D = self.alpha_s.value
         else:
-            raise ValueError("Approximation of alpha_sr_Lin(Dt) did not "
-                             "converge to a solution.")
+            raise ValueError(
+                "Failed to compute a robust approximation of "
+                "`alpha_sr_Lin(D_t)`: The optimization problem did not "
+                "converge to a solution.")
 
         return alpha_sr_Lin_D
