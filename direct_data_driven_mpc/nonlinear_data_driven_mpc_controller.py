@@ -467,6 +467,7 @@ class NonlinearDataDrivenMPCController():
         
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
+        self.define_optimization_parameters()
 
         if self.alpha_reg_type == AlphaRegType.APPROXIMATED:
             # Define the QP problem for computing an approximation of
@@ -474,7 +475,6 @@ class NonlinearDataDrivenMPCController():
             # to this approximation
             self.define_alpha_sr_Lin_Dt_prob()
         
-        self.define_optimization_parameters()
         self.update_optimization_parameters()
         self.define_mpc_constraints()
         self.define_cost_function()
