@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Callable
 
 import numpy as np
 from numpy.random import Generator
@@ -152,7 +152,13 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     data_driven_mpc_controller: NonlinearDataDrivenMPCController,
     n_steps: int,
     np_random: Generator,
-    verbose: int
+    verbose: int,
+    callback: Optional[Callable[[int,
+                                 NonlinearSystem,
+                                 np.ndarray,
+                                 np.ndarray,
+                                 np.ndarray],
+                                None]] = None
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Simulate a Data-Driven MPC control loop applied to a Nonlinear system and
@@ -173,6 +179,10 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             random noise for the system's output.
         verbose (int): The verbosity level: 0 = no output, 1 = minimal output,
             2 = detailed output.
+        callback (Optional[Callable]): A function executed after each control
+            step. It should follow the signature `(step: int, system_model:
+            NonlinearSystem, u_sys_k: np.ndarray, y_sys_k: np.ndarray, y_r:
+            np.ndarray)`.
     
     Returns:
         Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
@@ -275,6 +285,10 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             # necessary for controllers that operate in a standard manner,
             # which use direct control inputs and do not extend the system
             # state.
+
+            # Call callback function after each simulation step if provided
+            if callback:
+                callback(k, system_model, u_sys[k, :], y_sys[k, :], y_r)
         
             # Print simulation progress and control information
             mpc_cost_val = (
