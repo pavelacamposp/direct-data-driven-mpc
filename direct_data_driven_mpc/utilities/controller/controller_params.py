@@ -1,4 +1,4 @@
-from typing import TypedDict, Tuple, Optional
+from typing import TypedDict, Optional, Union, List
 
 import numpy as np
 
@@ -94,12 +94,12 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
 # Define lists of required Data-Driven controller parameters
 # from configuration files
 LTI_DD_MPC_FILE_PARAMS = [
-    'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'epsilon_bar', 'lambda_sigma',
+    'n', 'N', 'L', 'Q_weights', 'R_weights', 'epsilon_bar', 'lambda_sigma',
     'lambda_alpha_epsilon_bar', 'U', 'u_d_range', 'slack_var_constraint_type',
     'controller_type', 'u_s', 'y_s', 'n_n_mpc_step']
 
 NONLINEAR_DD_MPC_FILE_PARAMS = [
-    'n', 'N', 'L', 'Q_scalar', 'R_scalar', 'S_scalar', 'lambda_alpha',
+    'n', 'N', 'L', 'Q_weights', 'R_weights', 'S_weights', 'lambda_alpha',
     'lambda_sigma', 'U', 'Us', 'u_range', 'alpha_reg_type', 'lamb_alpha_s',
     'lamb_sigma_s', 'y_r', 'ext_out_incr_in', 'update_cost_threshold',
     'n_n_mpc_step']
@@ -173,16 +173,28 @@ def get_lti_data_driven_mpc_controller_params(
     # Estimated system order
     n = params['n']
     dd_mpc_params['n'] = n
+
     # Estimated upper bound of the system measurement noise
     eps_max = params['epsilon_bar']
     dd_mpc_params['eps_max'] = eps_max
+
     # Prediction horizon
     L = params['L']
     dd_mpc_params['L'] = L
+
     # Output weighting matrix
-    dd_mpc_params['Q'] = params['Q_scalar'] * np.eye(p * L)
+    dd_mpc_params['Q'] = construct_weighting_matrix(
+        weights_param=params['Q_weights'],
+        n_vars=p,
+        horizon=L,
+        matrix_label='Q')
+    
     # Input weighting matrix
-    dd_mpc_params['R'] = params['R_scalar'] * np.eye(m * L)
+    dd_mpc_params['R'] = construct_weighting_matrix(
+        weights_param=params['R_weights'],
+        n_vars=m,
+        horizon=L,
+        matrix_label='R')
 
     # Define ridge regularization base weight for alpha, preventing
     # division by zero in noise-free conditions
@@ -349,31 +361,56 @@ def get_nonlinear_data_driven_mpc_controller_params(
     L = params['L']
     dd_mpc_params['L'] = L
     
-    # Output and Input weighting matrix based on controller structure
+    # Output and Input weighting matrices based on controller structure
     if ext_out_incr_in:
         # Output weighting matrix
         # Construct this matrix considering the extended output
         # representation: y_ext[k] = [y[k], u[k]]
-        Q_size = (m + p) * (L + n + 1)
-        diag_vals = np.tile(
-            ([params['Q_scalar']] * p +  #  Q_scalar value for outputs
-             [params['R_scalar']] * m),  #  R_scalar value for inputs
-            Q_size // (m + p))
-        dd_mpc_params['Q'] = np.diag(diag_vals)
+
+        # Get Q and R weights as lists
+        Q_weights = get_weights_list_from_param(
+            weights_param=params['Q_weights'], size=p, matrix_label='Q')
+        R_weights = get_weights_list_from_param(
+            weights_param=params['R_weights'], size=m, matrix_label='R')
+        
+        # Construct Q matrix for the extended system
+        extended_weights = Q_weights + R_weights
+        dd_mpc_params['Q'] = construct_weighting_matrix(
+            weights_param=extended_weights,
+            n_vars=(m + p),
+            horizon=(L + n + 1),
+            matrix_label='Q')
         
         # Input weighting matrix
         # This matrix weights input increments (du[k]) and not absolute inputs
         # (u[k]) in this controller structure. It is currently set to an
         # identity matrix, but this may vary depending on the application.
-        dd_mpc_params['R'] = np.eye(m * (L + n + 1))
+        dd_mpc_params['R'] = construct_weighting_matrix(
+            weights_param=1.0,
+            n_vars=m,
+            horizon=(L + n + 1),
+            matrix_label='R')
     else:
         # Output weighting matrix
-        dd_mpc_params['Q'] = params['Q_scalar'] * np.eye(p * (L + n + 1))
+        dd_mpc_params['Q'] = construct_weighting_matrix(
+            weights_param=params['Q_weights'],
+            n_vars=p,
+            horizon=(L + n + 1),
+            matrix_label='Q')
+        
         # Input weighting matrix
-        dd_mpc_params['R'] = params['R_scalar'] * np.eye(m * (L + n + 1))
+        dd_mpc_params['R'] = construct_weighting_matrix(
+            weights_param=params['R_weights'],
+            n_vars=m,
+            horizon=(L + n + 1),
+            matrix_label='R')
 
     # Output setpoint weighting matrix
-    dd_mpc_params['S'] = params['S_scalar'] * np.eye(p)
+    dd_mpc_params['S'] = construct_weighting_matrix(
+        weights_param=params['S_weights'],
+        n_vars=p,
+        horizon=1,
+        matrix_label='S')
     
     # Ridge regularization weight for alpha
     dd_mpc_params['lamb_alpha'] = params['lambda_alpha']
@@ -434,3 +471,84 @@ def get_nonlinear_data_driven_mpc_controller_params(
                 print(f"    {key}: {value}")
 
     return dd_mpc_params
+
+def construct_weighting_matrix(
+    weights_param: Union[float, List[float]],
+    n_vars: int,
+    horizon: int,
+    matrix_label: str = "Weighting"
+) -> np.ndarray:
+    """
+    Construct a block-diagonal weighting matrix for MPC given a scalar or list
+    of weights.
+    
+    Args:
+        weights_param (Union[float, List[float]]): The weights for the matrix.
+            - If scalar, applies the same weight to all variables.
+            - If list, assigns specific weights to each variable. Must have
+              `n_vars` elements.
+        n_vars (int): The number of variables (inputs or outputs).
+        horizon (int): The prediction horizon.
+        matrix_label (str): A label for error messages.
+            Defaults to "Weighting".
+    
+    Returns:
+        np.ndarray: A square block-diagonal square weight matrix of order
+            (`n_vars` * `horizon`).
+    
+    Raises:
+        ValueError: If `weights_param` is not a valid scalar or list with the
+            correct length.
+    """
+    # Validate and define variable weights
+    if isinstance(weights_param, (int, float)):
+        # Weights parameter is a scalar
+        weights = np.full(n_vars, weights_param, dtype=float)
+    elif isinstance(weights_param, list):
+        # Weights parameter is a list
+        if len(weights_param) != n_vars:
+            raise ValueError(f"Invalid {matrix_label} matrix: Expected a list of "
+                             f"length {n_vars}, but got {len(weights_param)}.")
+        weights = np.array(weights_param, dtype=float)
+    else:
+        raise ValueError(f"Invalid {matrix_label} matrix: Expected a scalar or a "
+                         f"list of length {n_vars}, but got type "
+                         f"{type(weights_param).__name__}.")
+    
+
+    # Construct block-diagonal weighting matrix
+    weighting_matrix = np.kron(np.eye(horizon), np.diag(weights))
+
+    return weighting_matrix
+
+def get_weights_list_from_param(
+    weights_param: Union[float, List[float]],
+    size: int,
+    matrix_label: str = "Weighting"
+) -> List[float]:
+    """
+    Construct a list of weigths from a matrix weights parameter.
+    
+    Args:
+        weights_param (Union[float, List[float]]): A weighting parameter.
+            - If scalar, applies the same weight to all variables.
+            - If list, must have `size` elements.
+        size (int): The expected number of elements of the resulting list.
+        matrix_label (str): A label for error messages. Defaults to
+            "Weighting".
+    
+    Returns:
+        List[float]: A list of weights of length `size`.
+    
+    Raises:
+        ValueError: If `weights_param` is not a valid scalar or list with the
+            correct length.
+    """
+    if isinstance(weights_param, (int, float)):
+        # Weights parameter is a scalar, convert to a list
+        return [weights_param] * size
+    elif isinstance(weights_param, list) and len(weights_param) == size:
+        return weights_param
+    else:
+        raise ValueError(f"Invalid {matrix_label} matrix: Expected a scalar "
+                         f"or a list of length {size}.")

@@ -11,8 +11,21 @@ lti_data_driven_mpc_params:
 
   N: 400  # Initial input-output trajectory length
   L: 30  # Prediction horizon
-  Q_scalar: 3  # Scalar multiplier for the output weighting matrix Q
-  R_scalar: 1.0e-4  # Scalar multiplier for the input weighting matrix R
+
+  # Weighting matrices
+  # Each weighting parameter can be either a scalar or a list.
+  #   - Scalar → Applies the same weight to all variables.
+  #   - List → Assigns specific weights to each variable. Must have `n_vars`
+  #            elements, where:
+  #              - Q_weights → `n_vars = p` (number of outputs)
+  #              - R_weights → `n_vars = m` (number of inputs)
+  #
+  # Examples:
+  #   Q_weights: 0.1  # Same weight for all outputs
+  #   Q_weights: [0.1, 2.5, 40]  # Different weights per output
+
+  Q_weights: 3  # Output weighting matrix Q weights
+  R_weights: 1.0e-4  # Input weighting matrix R weights
 
   epsilon_bar: 0.002  # Estimated upper bound of system measurement noise
   lambda_sigma: 1000  # Regularization parameter for the slack variable

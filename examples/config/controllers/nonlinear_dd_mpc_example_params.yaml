@@ -12,9 +12,24 @@ nonlinear_data_driven_mpc_params:
 
   N: 120  # Initial input-output trajectory length
   L: 40  # Prediction horizon
-  Q_scalar: 1  # Scalar multiplier for the output weighting matrix Q
-  R_scalar: 5.0e-2  # Scalar multiplier for the input weighting matrix R
-  S_scalar: 10  # Scalar multiplier for the output setpoint weighting matrix S
+
+  # Weighting matrices
+  # Each weighting parameter can be either a scalar or a list.
+  #   - Scalar → Applies the same weight to all variables.
+  #   - List → Assigns specific weights to each variable. Must have `n_vars`
+  #            elements, where:
+  #              - Q_weights → `n_vars = p` (number of outputs)
+  #              - R_weights → `n_vars = m` (number of inputs)
+  #              - S_weights → `n_vars = p` (number of outputs)
+  #
+  # Example (scalar):
+  #   Q_weights: 0.1  # Same weight for all outputs
+  #   Q_weights: [0.1, 2.5, 40]  # Different weights per output
+
+  Q_weights: 1  # Output weighting matrix Q weights
+  R_weights: 5.0e-2  # Input weighting matrix R weights
+  S_weights: 10  # Output setpoint weighting matrix S weights
+
   lambda_alpha: 3.0e-6  # Regularization parameter for alpha
   lambda_sigma: 1.0e+7  # Regularization parameter for sigma
 
