@@ -247,28 +247,10 @@ def get_lti_data_driven_mpc_controller_params(
 
     # Print Data-Driven MPC controller initialization details
     # based on verbosity level
-    if verbose == 1:
-        print("Data-Driven MPC controller initialized with loaded parameters")
-    if verbose > 1:
-        print("Data-Driven MPC controller initialized with:")
-        for key, value in dd_mpc_params.items():
-            if key in ['Q', 'R']:
-                # Print scalar and shape for large matrices
-                print(f"    {key}: scalar {value[0, 0]} {value.shape}")
-            elif key in ['controller_type', 'slack_var_constraint_type']:
-                # Print name for enum types
-                print(f"    {key}: {value.name}")
-            elif key in ['u_range']:
-                # Format input bounds and ranges
-                formatted_array = ', '.join([f"[{', '.join(map(str, row))}]"
-                                             for row in value])
-                print(f"    {key}: [{formatted_array}]")
-            elif key in ['u_s', 'y_s']:
-                # Format setpoint arrays in a single line
-                formatted_array = ', '.join([f"[{row[0]}]" for row in value])
-                print(f"    {key}: [{formatted_array}]")
-            else:
-                print(f"    {key}: {value}")
+    print_initialization_details(dd_mpc_params=dd_mpc_params,
+                                 cost_horizon=L,
+                                 verbose=verbose,
+                                 controller_label="LTI")
 
     return dd_mpc_params
 
@@ -446,29 +428,10 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     # Print Data-Driven MPC controller initialization details
     # based on verbosity level
-    if verbose == 1:
-        print("Nonlinear Data-Driven MPC controller initialized with loaded "
-              "parameters")
-    if verbose > 1:
-        print("Nonlinear Data-Driven MPC controller initialized with:")
-        for key, value in dd_mpc_params.items():
-            if key in ['Q', 'R', 'S']:
-                # Print scalar and shape for large matrices
-                print(f"    {key}: scalar {value[0, 0]} {value.shape}")
-            elif key in ['alpha_reg_type']:
-                # Print name for enum types
-                print(f"    {key}: {value.name}")
-            elif key in ['u_range', 'U', 'Us']:
-                # Format input bounds and ranges
-                formatted_array = ', '.join([f"[{', '.join(map(str, row))}]"
-                                             for row in value])
-                print(f"    {key}: [{formatted_array}]")
-            elif key in ['y_r']:
-                # Format setpoint arrays in a single line
-                formatted_array = ', '.join([f"[{row[0]}]" for row in value])
-                print(f"    {key}: [{formatted_array}]")
-            else:
-                print(f"    {key}: {value}")
+    print_initialization_details(dd_mpc_params=dd_mpc_params,
+                                 cost_horizon=(L + n + 1),
+                                 verbose=verbose,
+                                 controller_label="Nonlinear")
 
     return dd_mpc_params
 
@@ -552,3 +515,69 @@ def get_weights_list_from_param(
     else:
         raise ValueError(f"Invalid {matrix_label} matrix: Expected a scalar "
                          f"or a list of length {size}.")
+
+def print_initialization_details(
+    dd_mpc_params: LTIDataDrivenMPCParamsDictType,
+    cost_horizon: int,
+    verbose: int,
+    controller_label: str = "LTI",
+) -> None:
+    """
+    Print controller parameter initialization details.
+
+    Args:
+        dd_mpc_params (LTIDataDrivenMPCParamsDictType): A dictionary of
+            configuration parameters for a Data-Driven MPC controller.
+        cost_horizon (int): The total length of the prediction horizon
+            considered in the MPC cost function (`L` for LTI and `L + n + 1`
+            for Nonlinear Data-Driven MPC controllers).
+        verbose (int): The verbosity level: 0 = no output, 1 = minimal
+                output, 2 = detailed output.
+        controller_label (str): The controller label specifying its type
+            (e.g., "LTI", "Nonlinear"). Defaults to "LTI".
+    """
+    if verbose == 1:
+        print(f"{controller_label} Data-Driven MPC controller initialized "
+              "with loaded parameters")
+    if verbose > 1:
+        print(f"{controller_label} Data-Driven MPC controller initialized "
+              "with:")
+        for key, value in dd_mpc_params.items():
+            # Weighting matrices
+            if key in {'Q', 'R', 'S'}:
+                n_vars = (value.shape[0] // cost_horizon
+                          if key != 'S'
+                          else value.shape[0])
+                weights_list = value.diagonal()[:n_vars]
+                # Print weighting parameters and shape
+                print(f"    {key} weights: {weights_list}  "
+                      f"Size: {value.shape}")
+            
+            # Enum types
+            elif key in {'controller_type',
+                         'slack_var_constraint_type',
+                         'alpha_reg_type'}:
+                # Print name for enum types
+                print(f"    {key}: {value.name}")
+            
+            # Input bounds and ranges
+            elif key in {'u_range', 'U', 'Us'}:
+                # Handle None values explicitly
+                if value is None:
+                    print(f"    {key}: {value}")
+                else:
+                    # Format input bounds and ranges
+                    formatted_array = ', '.join([
+                        f"[{', '.join(map(str, row))}]"
+                        for row in value])
+                    print(f"    {key}: [{formatted_array}]")
+
+            # Setpoint arrays
+            elif key in {'u_s', 'y_s', 'y_r'}:
+                # Format setpoint arrays in a single line
+                formatted_array = ', '.join([f"[{row[0]}]" for row in value])
+                print(f"    {key}: [{formatted_array}]")
+
+            # Other parameters (scalar)
+            else:
+                print(f"    {key}: {value}")
