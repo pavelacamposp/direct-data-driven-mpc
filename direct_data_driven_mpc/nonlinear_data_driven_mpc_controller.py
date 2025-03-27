@@ -284,15 +284,6 @@ class NonlinearDataDrivenMPCController():
             # Previous alpha value initialized with 0            
             self.prev_alpha_val = np.zeros((self.N - self.L - self.n, 1))
 
-        # Extended Output Representation and Incremental Input
-        # If True: The controller uses an extended output representation
-        #          (y_ext[k] = [y[k], u[k]]) and updates the control input
-        #          incrementally (u[k] = u[k-1] + du[k-1]). This ensures
-        #          control-affine system dynamics (Section V of [2]).
-        # If False: The controller directly applies control inputs without
-        #           extending its state representation.
-        self.ext_out_incr_in = ext_out_incr_in
-
         # Online input-output data updates
         self.update_cost_threshold = (update_cost_threshold
                                       if update_cost_threshold is not None
