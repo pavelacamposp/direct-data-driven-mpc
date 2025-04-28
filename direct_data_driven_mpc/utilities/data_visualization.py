@@ -1,19 +1,22 @@
-from typing import Tuple, Optional, List, Union, Any
+import math
+import os
+from typing import Any, List, Optional, Tuple, Union
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.animation import FFMpegWriter, FuncAnimation
+from matplotlib.artist import Artist
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure, SubFigure
+from matplotlib.layout_engine import ConstrainedLayoutEngine
+from matplotlib.legend import Legend
+from matplotlib.legend_handler import HandlerPatch
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
-from matplotlib.axes import Axes
-from matplotlib.figure import Figure
-from matplotlib.legend_handler import HandlerPatch
-from matplotlib.legend import Legend
 from matplotlib.transforms import Transform
-
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, FFMpegWriter
 from tqdm import tqdm
-import os
-import math
+
 
 # Define a custom legend handler for the rectangle representing
 # the initial input-output measurement period in plots
@@ -21,39 +24,49 @@ class HandlerInitMeasurementRect(HandlerPatch):
     def create_artists(
         self,
         legend: Legend,
-        orig_handle: Rectangle,
+        orig_handle: Artist,
         xdescent: float,
         ydescent: float,
         width: float,
         height: float,
         fontsize: float,
-        trans: Transform
+        trans: Transform,
     ) -> List[Union[Rectangle, Line2D]]:
+        # Make sure orig_handle is a Rectangle
+        assert isinstance(orig_handle, Rectangle)
+
         # Define the main rectangle
-        rect = Rectangle([xdescent, ydescent],
-                         width,
-                         height,
-                         transform=trans,
-                         color=orig_handle.get_facecolor(),
-                         alpha=orig_handle.get_alpha())
-        
+        rect = Rectangle(
+            (xdescent, ydescent),
+            width,
+            height,
+            transform=trans,
+            color=orig_handle.get_facecolor(),
+            alpha=orig_handle.get_alpha(),
+        )
+
         # Create dashed vertical lines at the sides of the rectangle
-        line1 = Line2D([xdescent, xdescent],
-                       [ydescent, ydescent + height],
-                       color='black',
-                       linestyle=(0, (2, 2)),
-                       linewidth=1)
-        line2 = Line2D([xdescent + width, xdescent + width],
-                       [ydescent, ydescent + height],
-                       color='black',
-                       linestyle=(0, (2, 2)),
-                       linewidth=1)
-        
+        line1 = Line2D(
+            [xdescent, xdescent],
+            [ydescent, ydescent + height],
+            color="black",
+            linestyle=(0, (2, 2)),
+            linewidth=1,
+        )
+        line2 = Line2D(
+            [xdescent + width, xdescent + width],
+            [ydescent, ydescent + height],
+            color="black",
+            linestyle=(0, (2, 2)),
+            linewidth=1,
+        )
+
         # Add transform to the vertical lines
         line1.set_transform(trans)
         line2.set_transform(trans)
-        
+
         return [rect, line1, line2]
+
 
 def plot_input_output(
     u_k: np.ndarray,
@@ -62,10 +75,10 @@ def plot_input_output(
     u_s: Optional[np.ndarray] = None,
     u_bounds_list: Optional[List[Tuple[float, float]]] = None,
     y_bounds_list: Optional[List[Tuple[float, float]]] = None,
-    inputs_line_params: dict[str, Any] = {},
-    outputs_line_params: dict[str, Any] = {},
-    setpoints_line_params: dict[str, Any] = {},
-    bounds_line_params: dict[str, Any] = {},
+    inputs_line_params: dict[str, Any] | None = None,
+    outputs_line_params: dict[str, Any] | None = None,
+    setpoints_line_params: dict[str, Any] | None = None,
+    bounds_line_params: dict[str, Any] | None = None,
     u_setpoint_var_symbol: str = "u^s",
     y_setpoint_var_symbol: str = "y^s",
     initial_steps: Optional[int] = None,
@@ -79,11 +92,11 @@ def plot_input_output(
     u_ylimits_list: Optional[List[Tuple[float, float]]] = None,
     y_ylimits_list: Optional[List[Tuple[float, float]]] = None,
     fontsize: int = 12,
-    legend_params: dict[str, Any] = {},
+    legend_params: dict[str, Any] | None = None,
     data_label: str = "",
     axs_u: Optional[List[Axes]] = None,
     axs_y: Optional[List[Axes]] = None,
-    title: Optional[str] = None
+    title: Optional[str] = None,
 ) -> None:
     """
     Plot input-output data with setpoints in a Matplotlib figure.
@@ -133,19 +146,19 @@ def plot_input_output(
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
             output data sequences. Defaults to `None`.
-        inputs_line_params (dict[str, Any]): A dictionary of Matplotlib
+        inputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the input data
             series (e.g., color, linestyle, linewidth). If not provided,
             Matplotlib's default line properties will be used.
-        outputs_line_params (dict[str, Any]): A dictionary of Matplotlib
+        outputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the output data
             series (e.g., color, linestyle, linewidth). If not provided,
             Matplotlib's default line properties will be used.
-        setpoints_line_params (dict[str, Any]): A dictionary of Matplotlib
-            properties for customizing the lines used to plot the setpoint
-            values (e.g., color, linestyle, linewidth). If not provided,
-            Matplotlib's default line properties will be used.
-        bounds_line_params (dict[str, Any]): A dictionary of Matplotlib
+        setpoints_line_params (dict[str, Any] | None): A dictionary of
+            Matplotlib properties for customizing the lines used to plot the
+            setpoint values (e.g., color, linestyle, linewidth). If not
+            provided, Matplotlib's default line properties will be used.
+        bounds_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the bounds of
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
@@ -182,9 +195,10 @@ def plot_input_output(
             output subplot. If `None`, the Y-axis limits will be determined
             automatically. Defaults to `None`.
         fontsize (int): The fontsize for labels and axes ticks.
-        legend_params (dict[str, Any]): A dictionary of Matplotlib
+        legend_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the plot legends (e.g., fontsize,
-            loc, handlelength).
+            loc, handlelength). If not provided, Matplotlib's default legend
+            properties will be used.
         data_label (str): The label for the current data sequences.
         axs_u (Optional[List[Axes]]): List of external axes for input plots.
             Defaults to `None`.
@@ -194,7 +208,7 @@ def plot_input_output(
             only if the figure is created internally (i.e., `axs_u` and
             `axs_y` are not provided). If `None`, no title will be displayed.
             Defaults to `None`.
-    
+
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
             the lengths of `u_bounds_list`, `y_bounds_list`, `u_ylimits_list`,
@@ -202,55 +216,71 @@ def plot_input_output(
     """
     # Check input-output data dimensions
     if not (u_k.shape[0] == y_k.shape[0]):
-        raise ValueError("Dimension mismatch. The number of time steps for "
-                         f"u_k ({u_k.shape[0]}) and y_k ({y_k.shape[0]}) "
-                         "must match.")
+        raise ValueError(
+            "Dimension mismatch. The number of time steps for `u_k` "
+            f"({u_k.shape[0]}) and `y_k` ({y_k.shape[0]}) must match."
+        )
     if y_k.shape[1] != y_s.shape[0]:
-        raise ValueError("Dimension mismatch. The number of outputs from y_k "
-                         f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must "
-                         "match.")
+        raise ValueError(
+            "Dimension mismatch. The number of outputs from `y_k` "
+            f"({y_k.shape[1]}) and `y_s` ({y_s.shape[0]}) must match."
+        )
     # If input setpoint is passed, verify input data dimension match
     if u_s is not None:
         if u_k.shape[1] != u_s.shape[0]:
-            raise ValueError("Dimension mismatch. The number of outputs from "
-                             f"u_k ({u_k.shape[1]}) and u_s ({u_s.shape[0]}) "
-                             "must match.")
-    
+            raise ValueError(
+                "Dimension mismatch. The number of outputs from `u_k` "
+                f"({u_k.shape[1]}) and `u_s` ({u_s.shape[0]}) must match."
+            )
+
     # Retrieve number of input and output data sequences
     m = u_k.shape[1]  # Number of inputs
     p = y_k.shape[1]  # Number of outputs
 
     # Error handling for bounds list lengths
     if u_bounds_list and len(u_bounds_list) != m:
-        raise ValueError(f"The length of `u_bounds_list` ("
-                         f"{len(u_bounds_list)}) does not match the number "
-                         f"of input subplots ({m}).")
+        raise ValueError(
+            f"The length of `u_bounds_list` ({len(u_bounds_list)}) does not "
+            f"match the number of input subplots ({m})."
+        )
     if y_bounds_list and len(y_bounds_list) != p:
-        raise ValueError(f"The length of `y_bounds_list` ("
-                         f"{len(y_bounds_list)}) does not match the number "
-                         f"of output subplots ({p}).")
+        raise ValueError(
+            f"The length of `y_bounds_list` ({len(y_bounds_list)}) does not "
+            f"match the number of output subplots ({p})."
+        )
 
     # Error handling for y-limit lengths
     if u_ylimits_list and len(u_ylimits_list) != m:
-        raise ValueError(f"The length of `u_ylimits_list` ("
-                         f"{len(u_ylimits_list)}) does not match the number "
-                         f"of input subplots ({m}).")
+        raise ValueError(
+            f"The length of `u_ylimits_list` ({len(u_ylimits_list)}) does not "
+            f"match the number of input subplots ({m})."
+        )
     if y_ylimits_list and len(y_ylimits_list) != p:
-        raise ValueError(f"The length of `y_ylimits_list` ("
-                         f"{len(y_ylimits_list)}) does not match the number "
-                         f"of output subplots ({p}).")
-    
+        raise ValueError(
+            f"The length of `y_ylimits_list` ({len(y_ylimits_list)}) does not "
+            f"match the number of output subplots ({p})."
+        )
+
+    # Initialize Matplotlib params if not provided
+    inputs_line_params = init_dict_if_none(inputs_line_params)
+    outputs_line_params = init_dict_if_none(outputs_line_params)
+    setpoints_line_params = init_dict_if_none(setpoints_line_params)
+    bounds_line_params = init_dict_if_none(bounds_line_params)
+    legend_params = init_dict_if_none(legend_params)
+
     # Create figure if lists of Axes are not provided
     is_ext_fig = axs_u is not None and axs_y is not None  # External figure
+
+    fig: Figure | SubFigure
+
     if not is_ext_fig:
         # Create figure and subplots
-        fig, axs_u, axs_y = create_input_output_figure(m=m,
-                                                       p=p,
-                                                       figsize=figsize,
-                                                       dpi=dpi,
-                                                       fontsize=fontsize,
-                                                       title=title)
+        fig, axs_u, axs_y = create_input_output_figure(
+            m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title
+        )
     else:
+        assert axs_u is not None  # Prevent mypy [index] error
+
         # Use figure from the provided axes
         fig = axs_u[0].figure
 
@@ -258,74 +288,92 @@ def plot_input_output(
     for i in range(m):
         # Get input setpoint if provided
         u_setpoint = u_s[i, :] if u_s is not None else None
+
         # Define plot index based on the number of input plots
         plot_index = -1 if m == 1 else i
+
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
+
         # Get plot Y-axis limit if provided
         u_plot_ylimit = u_ylimits_list[i] if u_ylimits_list else None
+
+        # Prevent mypy [index] error
+        assert axs_u is not None
+
         # Plot data
-        plot_data(axis=axs_u[i],
-                  data=u_k[:, i],
-                  setpoint=u_setpoint,
-                  index=plot_index,
-                  data_line_params=inputs_line_params,
-                  bounds_line_params=bounds_line_params,
-                  setpoint_line_params=setpoints_line_params,
-                  var_symbol="u",
-                  setpoint_var_symbol=u_setpoint_var_symbol,
-                  var_label="Input",
-                  data_label=data_label,
-                  initial_text=initial_excitation_text,
-                  control_text=control_text,
-                  display_initial_text=display_initial_text,
-                  display_control_text=display_control_text,
-                  fontsize=fontsize,
-                  legend_params=legend_params,
-                  fig=fig,
-                  bounds=u_bounds,
-                  initial_steps=initial_steps,
-                  plot_ylimits=u_plot_ylimit)
-    
+        plot_data(
+            axis=axs_u[i],
+            data=u_k[:, i],
+            setpoint=u_setpoint,
+            index=plot_index,
+            data_line_params=inputs_line_params,
+            bounds_line_params=bounds_line_params,
+            setpoint_line_params=setpoints_line_params,
+            var_symbol="u",
+            setpoint_var_symbol=u_setpoint_var_symbol,
+            var_label="Input",
+            data_label=data_label,
+            initial_text=initial_excitation_text,
+            control_text=control_text,
+            display_initial_text=display_initial_text,
+            display_control_text=display_control_text,
+            fontsize=fontsize,
+            legend_params=legend_params,
+            fig=fig,
+            bounds=u_bounds,
+            initial_steps=initial_steps,
+            plot_ylimits=u_plot_ylimit,
+        )
+
     # Plot output data
     for j in range(p):
         # Define plot index based on the number of output plots
         plot_index = -1 if p == 1 else j
+
         # Get output bounds if provided
         y_bounds = y_bounds_list[i] if y_bounds_list else None
+
         # Get plot Y-axis limit if provided
         y_plot_ylimits = y_ylimits_list[j] if y_ylimits_list else None
+
+        # Prevent mypy [index] error
+        assert axs_y is not None
+
         # Plot data
-        plot_data(axis=axs_y[j],
-                  data=y_k[:, j],
-                  setpoint=y_s[j, :],
-                  index=plot_index,
-                  data_line_params=outputs_line_params,
-                  bounds_line_params=bounds_line_params,
-                  setpoint_line_params=setpoints_line_params,
-                  var_symbol="y",
-                  setpoint_var_symbol=y_setpoint_var_symbol,
-                  var_label="Output",
-                  data_label=data_label,
-                  initial_text=initial_measurement_text,
-                  control_text=control_text,
-                  display_initial_text=display_initial_text,
-                  display_control_text=display_control_text,
-                  fontsize=fontsize,
-                  legend_params=legend_params,
-                  fig=fig,
-                  bounds=y_bounds,
-                  initial_steps=initial_steps,
-                  plot_ylimits=y_plot_ylimits)
-                
+        plot_data(
+            axis=axs_y[j],
+            data=y_k[:, j],
+            setpoint=y_s[j, :],
+            index=plot_index,
+            data_line_params=outputs_line_params,
+            bounds_line_params=bounds_line_params,
+            setpoint_line_params=setpoints_line_params,
+            var_symbol="y",
+            setpoint_var_symbol=y_setpoint_var_symbol,
+            var_label="Output",
+            data_label=data_label,
+            initial_text=initial_measurement_text,
+            control_text=control_text,
+            display_initial_text=display_initial_text,
+            display_control_text=display_control_text,
+            fontsize=fontsize,
+            legend_params=legend_params,
+            fig=fig,
+            bounds=y_bounds,
+            initial_steps=initial_steps,
+            plot_ylimits=y_plot_ylimits,
+        )
+
     # Show the plot if the figure was created internally
     if not is_ext_fig:
         plt.show()
 
+
 def plot_data(
     axis: Axes,
     data: np.ndarray,
-    setpoint: Optional[float],
+    setpoint: Optional[np.ndarray],
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -340,10 +388,10 @@ def plot_data(
     display_control_text: bool,
     fontsize: int,
     legend_params: dict[str, Any],
-    fig: Figure,
+    fig: Figure | SubFigure,
     bounds: Optional[Tuple[float, float]] = None,
     initial_steps: Optional[int] = None,
-    plot_ylimits: Optional[Tuple[float, float]] = None
+    plot_ylimits: Optional[Tuple[float, float]] = None,
 ) -> None:
     """
     Plot a data series with setpoints in a specified axis. Optionally,
@@ -391,7 +439,8 @@ def plot_data(
         legend_params (dict[str, Any]): A dictionary of Matplotlib properties
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength).
-        fig (Figure): The Matplotlib figure object containing the axis.
+        fig (Figure | SubFigure): The Matplotlib figure or subfigure that
+            contains the axis.
         bounds (Optional[Tuple[float, float]]): A tuple (lower_bound,
             upper_bound) specifying the bounds of the data to be plotted. If
             provided, horizontal lines representing these bounds will be
@@ -408,82 +457,97 @@ def plot_data(
     T = data.shape[0]  # Data length
 
     # Construct index label string based on index value
-    index_str = f'_{index + 1}' if index != -1 else ''
+    index_str = f"_{index + 1}" if index != -1 else ""
 
     # Plot data series
-    axis.plot(range(0, T),
-              data,
-              **data_line_params,
-              label=f'${var_symbol}{index_str}${data_label}')
-    
+    axis.plot(
+        range(0, T),
+        data,
+        **data_line_params,
+        label=f"${var_symbol}{index_str}${data_label}",
+    )
+
     # Plot setpoint if provided
-    setpoint_label = f'${setpoint_var_symbol}{index_str}$'
+    setpoint_label = f"${setpoint_var_symbol}{index_str}$"
     if setpoint is not None:
-        axis.plot(range(0, T),
-                  np.full(T, setpoint),
-                  **setpoint_line_params,
-                  label=setpoint_label)
-    
+        axis.plot(
+            range(0, T),
+            np.full(T, setpoint),
+            **setpoint_line_params,
+            label=setpoint_label,
+        )
+
     # Plot bounds if provided
     if bounds is not None:
         lower_bound, upper_bound = bounds
         bounds_label = "Constraints"
         # Plot lower bound line
-        axis.axhline(y=lower_bound,
-                     **bounds_line_params,
-                     label=bounds_label)
+        axis.axhline(y=lower_bound, **bounds_line_params, label=bounds_label)
         # Plot upper bound line
-        axis.axhline(y=upper_bound,
-                     **bounds_line_params)
-    
+        axis.axhline(y=upper_bound, **bounds_line_params)
+
     # Highlight initial input-output data measurement period if provided
     if initial_steps:
         # Highlight period with a grayed rectangle
-        axis.axvspan(0, initial_steps, color='gray', alpha=0.1)
+        axis.axvspan(0, initial_steps, color="gray", alpha=0.1)
         # Add a vertical line at the right side of the rectangle
-        axis.axvline(x=initial_steps, color='black',
-                            linestyle=(0, (5, 5)), linewidth=1)
-        
+        axis.axvline(
+            x=initial_steps, color="black", linestyle=(0, (5, 5)), linewidth=1
+        )
+
         # Display initial measurement text if enabled
         if display_initial_text:
             # Get y-axis limits
             y_min, y_max = axis.get_ylim()
             # Place label at the center of the highlighted area
             u_init_text = axis.text(
-                initial_steps / 2, (y_min + y_max) / 2,
-                initial_text, fontsize=fontsize - 1,
-                ha='center', va='center', color='black',
-                bbox=dict(facecolor='white', edgecolor='black'))
+                initial_steps / 2,
+                (y_min + y_max) / 2,
+                initial_text,
+                fontsize=fontsize - 1,
+                ha="center",
+                va="center",
+                color="black",
+                bbox={"facecolor": "white", "edgecolor": "black"},
+            )
             # Get initial text bounding box width
             init_text_width = get_text_width_in_data(
-                text_object=u_init_text, axis=axis, fig=fig)
+                text_object=u_init_text, axis=axis, fig=fig
+            )
             # Hide text box if it overflows the plot area
             if initial_steps < init_text_width:
                 u_init_text.set_visible(False)
-        
+
         # Display Data-Driven MPC control text if enabled
         if display_control_text:
             # Get y-axis limits
             y_min, y_max = axis.get_ylim()
             # Place label at the center of the remaining area
             u_control_text = axis.text(
-                (T + initial_steps) / 2, (y_min + y_max) / 2,
-                control_text, fontsize=fontsize - 1,
-                ha='center', va='center', color='black',
-                bbox=dict(facecolor='white', edgecolor='black'))
+                (T + initial_steps) / 2,
+                (y_min + y_max) / 2,
+                control_text,
+                fontsize=fontsize - 1,
+                ha="center",
+                va="center",
+                color="black",
+                bbox={"facecolor": "white", "edgecolor": "black"},
+            )
             # Get control text bounding box width
             control_text_width = get_text_width_in_data(
-                text_object=u_control_text, axis=axis, fig=fig)
+                text_object=u_control_text, axis=axis, fig=fig
+            )
             # Hide text box if it overflows the plot area
             if (T - initial_steps) < control_text_width:
                 u_control_text.set_visible(False)
-    
+
     # Format labels, legend and ticks
-    axis.set_xlabel('Time step $k$', fontsize=fontsize)
-    axis.set_ylabel(f'{var_label} ${var_symbol}{index_str}$',
-                    fontsize=fontsize)
+    axis.set_xlabel("Time step $k$", fontsize=fontsize)
+    axis.set_ylabel(
+        f"{var_label} ${var_symbol}{index_str}$", fontsize=fontsize
+    )
     axis.legend(**legend_params)
-    axis.tick_params(axis='both', labelsize=fontsize)
+    axis.tick_params(axis="both", labelsize=fontsize)
 
     # Remove duplicate labels from legend (required for external figures
     # that plot multiple data sequences on the same plot to avoid label
@@ -491,17 +555,18 @@ def plot_data(
     end_labels_list = [setpoint_label]
     if bounds is not None:
         end_labels_list.append(bounds_label)
-    
-    filter_and_reorder_legend(axis=axis,
-                              legend_params=legend_params,
-                              end_labels_list=end_labels_list)
-    
+
+    filter_and_reorder_legend(
+        axis=axis, legend_params=legend_params, end_labels_list=end_labels_list
+    )
+
     # Set x-limits
-    axis.set_xlim([0, T - 1])
+    axis.set_xlim((0, T - 1))
 
     # Set y-limits if provided
     if plot_ylimits:
         axis.set_ylim(plot_ylimits)
+
 
 def plot_input_output_animation(
     u_k: np.ndarray,
@@ -510,10 +575,10 @@ def plot_input_output_animation(
     u_s: Optional[np.ndarray] = None,
     u_bounds_list: Optional[List[Tuple[float, float]]] = None,
     y_bounds_list: Optional[List[Tuple[float, float]]] = None,
-    inputs_line_params: dict[str, Any] = {},
-    outputs_line_params: dict[str, Any] = {},
-    setpoints_line_params: dict[str, Any] = {},
-    bounds_line_params: dict[str, Any] = {},
+    inputs_line_params: dict[str, Any] | None = None,
+    outputs_line_params: dict[str, Any] | None = None,
+    setpoints_line_params: dict[str, Any] | None = None,
+    bounds_line_params: dict[str, Any] | None = None,
     u_setpoint_var_symbol: str = "u^s",
     y_setpoint_var_symbol: str = "y^s",
     initial_steps: Optional[int] = None,
@@ -529,8 +594,8 @@ def plot_input_output_animation(
     interval: float = 20.0,
     points_per_frame: int = 1,
     fontsize: int = 12,
-    legend_params: dict[str, Any] = {},
-    title: Optional[str] = None
+    legend_params: dict[str, Any] | None = None,
+    title: Optional[str] = None,
 ) -> FuncAnimation:
     """
     Create a Matplotlib animation showing the progression of input-output data
@@ -556,7 +621,7 @@ def plot_input_output_animation(
     initial measurement and the subsequent MPC control periods, but only if
     there is enough space to prevent them from overlapping with other plot
     elements.
-    
+
     Args:
         u_k (np.ndarray): An array containing control input data of shape (T,
             m), where `m` is the number of inputs and `T` is the number of
@@ -581,16 +646,19 @@ def plot_input_output_animation(
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
             output data sequences. Defaults to `None`.
-        inputs_line_params (dict[str, Any]): A dictionary of Matplotlib
+        inputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the input data
-            series (e.g., color, linestyle, linewidth).
-        outputs_line_params (dict[str, Any]): A dictionary of Matplotlib
+            series (e.g., color, linestyle, linewidth). If not provided,
+            Matplotlib's default line properties will be used.
+        outputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the output data
-            series (e.g., color, linestyle, linewidth).
-        setpoints_line_params (dict[str, Any]): A dictionary of Matplotlib
-            properties for customizing the lines used to plot the setpoint
-            values (e.g., color, linestyle, linewidth).
-        bounds_line_params (dict[str, Any]): A dictionary of Matplotlib
+            series (e.g., color, linestyle, linewidth). If not provided,
+            Matplotlib's default line properties will be used.
+        setpoints_line_params (dict[str, Any] | None): A dictionary of
+            Matplotlib properties for customizing the lines used to plot the
+            setpoint values (e.g., color, linestyle, linewidth). If not
+            provided, Matplotlib's default line properties will be used.
+        bounds_line_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the lines used to plot the bounds of
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
@@ -632,12 +700,13 @@ def plot_input_output_animation(
             to display all the data, resulting in faster data transitions.
             Defaults to 1.
         fontsize (int): The fontsize for labels and axes ticks.
-        legend_params (dict[str, Any]): A dictionary of Matplotlib properties
-            for customizing the plot legend (e.g., fontsize, loc,
-            handlelength).
+        legend_params (dict[str, Any] | None): A dictionary of Matplotlib
+            properties for customizing the plot legend (e.g., fontsize, loc,
+            handlelength). If not provided, Matplotlib's default legend
+            properties will be used.
         title (Optional[str]): The title for the created plot figure. If
             `None`, no title will be displayed. Defaults to `None`.
-    
+
     Returns:
         FuncAnimation: A Matplotlib `FuncAnimation` object that animates the
             progression of input-output data over time.
@@ -649,20 +718,23 @@ def plot_input_output_animation(
     """
     # Check input-output data dimensions
     if not (u_k.shape[0] == y_k.shape[0]):
-        raise ValueError("Dimension mismatch. The number of time steps for "
-                         f"u_k ({u_k.shape[0]}) and y_k ({y_k.shape[0]}) "
-                         "must match.")
+        raise ValueError(
+            "Dimension mismatch. The number of time steps for `u_k` "
+            f"({u_k.shape[0]}) and y_k ({y_k.shape[0]}) must match."
+        )
     if y_k.shape[1] != y_s.shape[0]:
-        raise ValueError("Dimension mismatch. The number of outputs from y_k "
-                         f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must "
-                         "match.")
+        raise ValueError(
+            "Dimension mismatch. The number of outputs from `y_k` "
+            f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must match."
+        )
     # If input setpoint is passed, verify input data dimension match
     if u_s is not None:
         if u_k.shape[1] != u_s.shape[0]:
-            raise ValueError("Dimension mismatch. The number of outputs from "
-                             f"u_k ({u_k.shape[1]}) and u_s ({u_s.shape[0]}) "
-                             "must match.")
-    
+            raise ValueError(
+                "Dimension mismatch. The number of outputs from `u_k` "
+                f"({u_k.shape[1]}) and u_s ({u_s.shape[0]}) must match."
+            )
+
     # Retrieve number of input and output data sequences and their length
     m = u_k.shape[1]  # Number of inputs
     p = y_k.shape[1]  # Number of outputs
@@ -670,17 +742,27 @@ def plot_input_output_animation(
 
     # Error handling for bounds list lengths
     if u_bounds_list and len(u_bounds_list) != m:
-        raise ValueError(f"The length of `u_bounds_list` ("
-                         f"{len(u_bounds_list)}) does not match the number "
-                         f"of input subplots ({m}).")
+        raise ValueError(
+            f"The length of `u_bounds_list` ({len(u_bounds_list)}) does not "
+            f"match the number of input subplots ({m})."
+        )
     if y_bounds_list and len(y_bounds_list) != p:
-        raise ValueError(f"The length of `y_bounds_list` ("
-                         f"{len(y_bounds_list)}) does not match the number "
-                         f"of output subplots ({p}).")
+        raise ValueError(
+            f"The length of `y_bounds_list` ({len(y_bounds_list)}) does not "
+            f"match the number of output subplots ({p})."
+        )
+
+    # Initialize Matplotlib params if not provided
+    inputs_line_params = init_dict_if_none(inputs_line_params)
+    outputs_line_params = init_dict_if_none(outputs_line_params)
+    setpoints_line_params = init_dict_if_none(setpoints_line_params)
+    bounds_line_params = init_dict_if_none(bounds_line_params)
+    legend_params = init_dict_if_none(legend_params)
 
     # Create figure and subplots
     fig, axs_u, axs_y = create_input_output_figure(
-        m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title)
+        m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title
+    )
 
     # Define input-output line lists
     u_lines: List[Line2D] = []
@@ -701,7 +783,7 @@ def plot_input_output_animation(
     # Define y-axis center
     u_y_axis_centers: List[float] = []
     y_y_axis_centers: List[float] = []
-        
+
     # Initialize input plot elements
     for i in range(m):
         # Get input setpoint if provided
@@ -710,82 +792,89 @@ def plot_input_output_animation(
         plot_index = -1 if m == 1 else i
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
-        initialize_data_animation(axis=axs_u[i],
-                                  data=u_k[:, i],
-                                  setpoint=u_setpoint,
-                                  index=plot_index,
-                                  data_line_params=inputs_line_params,
-                                  bounds_line_params=bounds_line_params,
-                                  setpoint_line_params=setpoints_line_params,
-                                  var_symbol="u",
-                                  setpoint_var_symbol=u_setpoint_var_symbol,
-                                  var_label="Input",
-                                  initial_text=initial_excitation_text,
-                                  control_text=control_text,
-                                  fontsize=fontsize,
-                                  legend_params=legend_params,
-                                  lines=u_lines,
-                                  rects=u_rects,
-                                  right_rect_lines=u_right_rect_lines,
-                                  left_rect_lines=u_left_rect_lines,
-                                  init_texts=u_init_texts,
-                                  control_texts=u_control_texts,
-                                  y_axis_centers=u_y_axis_centers,
-                                  bounds=u_bounds,
-                                  initial_steps=initial_steps,
-                                  initial_steps_label=initial_steps_label,
-                                  continuous_updates=continuous_updates,
-                                  legend_loc='upper right')
-    
+        initialize_data_animation(
+            axis=axs_u[i],
+            data=u_k[:, i],
+            setpoint=u_setpoint,
+            index=plot_index,
+            data_line_params=inputs_line_params,
+            bounds_line_params=bounds_line_params,
+            setpoint_line_params=setpoints_line_params,
+            var_symbol="u",
+            setpoint_var_symbol=u_setpoint_var_symbol,
+            var_label="Input",
+            initial_text=initial_excitation_text,
+            control_text=control_text,
+            fontsize=fontsize,
+            legend_params=legend_params,
+            lines=u_lines,
+            rects=u_rects,
+            right_rect_lines=u_right_rect_lines,
+            left_rect_lines=u_left_rect_lines,
+            init_texts=u_init_texts,
+            control_texts=u_control_texts,
+            y_axis_centers=u_y_axis_centers,
+            bounds=u_bounds,
+            initial_steps=initial_steps,
+            initial_steps_label=initial_steps_label,
+            continuous_updates=continuous_updates,
+            legend_loc="upper right",
+        )
+
     # Initialize output plot elements
     for j in range(p):
         # Define plot index based on the number of output plots
         plot_index = -1 if p == 1 else j
         # Get output bounds if provided
         y_bounds = y_bounds_list[i] if y_bounds_list else None
-        initialize_data_animation(axis=axs_y[j],
-                                  data=y_k[:, j],
-                                  setpoint=y_s[j, :],
-                                  index=plot_index,
-                                  data_line_params=outputs_line_params,
-                                  bounds_line_params=bounds_line_params,
-                                  setpoint_line_params=setpoints_line_params,
-                                  var_symbol="y",
-                                  setpoint_var_symbol=y_setpoint_var_symbol,
-                                  var_label="Output",
-                                  initial_text=initial_measurement_text,
-                                  control_text=control_text,
-                                  fontsize=fontsize,
-                                  legend_params=legend_params,
-                                  lines=y_lines,
-                                  rects=y_rects,
-                                  right_rect_lines=y_right_rect_lines,
-                                  left_rect_lines=y_left_rect_lines,
-                                  init_texts=y_init_texts,
-                                  control_texts=y_control_texts,
-                                  y_axis_centers=y_y_axis_centers,
-                                  bounds=y_bounds,
-                                  initial_steps=initial_steps,
-                                  initial_steps_label=initial_steps_label,
-                                  continuous_updates=continuous_updates,
-                                  legend_loc='lower right')
-    
+        initialize_data_animation(
+            axis=axs_y[j],
+            data=y_k[:, j],
+            setpoint=y_s[j, :],
+            index=plot_index,
+            data_line_params=outputs_line_params,
+            bounds_line_params=bounds_line_params,
+            setpoint_line_params=setpoints_line_params,
+            var_symbol="y",
+            setpoint_var_symbol=y_setpoint_var_symbol,
+            var_label="Output",
+            initial_text=initial_measurement_text,
+            control_text=control_text,
+            fontsize=fontsize,
+            legend_params=legend_params,
+            lines=y_lines,
+            rects=y_rects,
+            right_rect_lines=y_right_rect_lines,
+            left_rect_lines=y_left_rect_lines,
+            init_texts=y_init_texts,
+            control_texts=y_control_texts,
+            y_axis_centers=y_y_axis_centers,
+            bounds=y_bounds,
+            initial_steps=initial_steps,
+            initial_steps_label=initial_steps_label,
+            continuous_updates=continuous_updates,
+            legend_loc="lower right",
+        )
+
     # Get initial text bounding box width
     init_text_width_input = get_text_width_in_data(
-        text_object=u_init_texts[0], axis=axs_u[0], fig=fig)
+        text_object=u_init_texts[0], axis=axs_u[0], fig=fig
+    )
     init_text_width_output = get_text_width_in_data(
-        text_object=y_init_texts[0], axis=axs_y[0], fig=fig)
-    
+        text_object=y_init_texts[0], axis=axs_y[0], fig=fig
+    )
+
     # Calculate maximum text width between input and
     # output labels to show them at the same time
     init_text_width = max(init_text_width_input, init_text_width_output)
-    
+
     # Get control text bounding box width
     control_text_width = get_text_width_in_data(
-        text_object=u_control_texts[0], axis=axs_u[0], fig=fig)
+        text_object=u_control_texts[0], axis=axs_u[0], fig=fig
+    )
 
     # Animation update function
-    def update(frame):
+    def update(frame: int) -> list[Any]:
         # Calculate the current index based on the number of points per frame,
         # ensuring it does not exceed the last valid data index
         current_index = min(frame * points_per_frame, T - 1)
@@ -794,68 +883,86 @@ def plot_input_output_animation(
         for i in range(m):
             # Get lower boundary line of the initial measurement region
             # if continuous updates are enabled
-            u_left_rect_line = (u_left_rect_lines[i]
-                                if continuous_updates else None)
-            update_data_animation(index=current_index,
-                                  data=u_k[:current_index + 1, i],
-                                  data_length=T,
-                                  points_per_frame=points_per_frame,
-                                  initial_steps=initial_steps,
-                                  continuous_updates=continuous_updates,
-                                  line=u_lines[i],
-                                  rect=u_rects[i],
-                                  y_axis_center=u_y_axis_centers[i],
-                                  right_rect_line=u_right_rect_lines[i],
-                                  left_rect_line=u_left_rect_line,
-                                  init_text_obj=u_init_texts[i],
-                                  control_text_obj=u_control_texts[i],
-                                  display_initial_text=display_initial_text,
-                                  display_control_text=display_control_text,
-                                  init_text_width=init_text_width,
-                                  control_text_width=control_text_width)
-        
+            u_left_rect_line = (
+                u_left_rect_lines[i] if continuous_updates else None
+            )
+            update_data_animation(
+                index=current_index,
+                data=u_k[: current_index + 1, i],
+                data_length=T,
+                points_per_frame=points_per_frame,
+                initial_steps=initial_steps,
+                continuous_updates=continuous_updates,
+                line=u_lines[i],
+                rect=u_rects[i],
+                y_axis_center=u_y_axis_centers[i],
+                right_rect_line=u_right_rect_lines[i],
+                left_rect_line=u_left_rect_line,
+                init_text_obj=u_init_texts[i],
+                control_text_obj=u_control_texts[i],
+                display_initial_text=display_initial_text,
+                display_control_text=display_control_text,
+                init_text_width=init_text_width,
+                control_text_width=control_text_width,
+            )
+
         # Update output plot data
         for j in range(p):
             # Get lower boundary line of the initial measurement region
             # if continuous updates are enabled
-            y_left_rect_line = (y_left_rect_lines[j]
-                                if continuous_updates else None)
-            update_data_animation(index=current_index,
-                                  data=y_k[:current_index + 1, j],
-                                  data_length=T,
-                                  points_per_frame=points_per_frame,
-                                  initial_steps=initial_steps,
-                                  continuous_updates=continuous_updates,
-                                  line=y_lines[j],
-                                  rect=y_rects[j],
-                                  y_axis_center=y_y_axis_centers[j],
-                                  right_rect_line=y_right_rect_lines[j],
-                                  left_rect_line=y_left_rect_line,
-                                  init_text_obj=y_init_texts[j],
-                                  control_text_obj=y_control_texts[j],
-                                  display_initial_text=display_initial_text,
-                                  display_control_text=display_control_text,
-                                  init_text_width=init_text_width,
-                                  control_text_width=control_text_width)
+            y_left_rect_line = (
+                y_left_rect_lines[j] if continuous_updates else None
+            )
+            update_data_animation(
+                index=current_index,
+                data=y_k[: current_index + 1, j],
+                data_length=T,
+                points_per_frame=points_per_frame,
+                initial_steps=initial_steps,
+                continuous_updates=continuous_updates,
+                line=y_lines[j],
+                rect=y_rects[j],
+                y_axis_center=y_y_axis_centers[j],
+                right_rect_line=y_right_rect_lines[j],
+                left_rect_line=y_left_rect_line,
+                init_text_obj=y_init_texts[j],
+                control_text_obj=y_control_texts[j],
+                display_initial_text=display_initial_text,
+                display_control_text=display_control_text,
+                init_text_width=init_text_width,
+                control_text_width=control_text_width,
+            )
 
-        return (u_lines + y_lines + u_rects + u_right_rect_lines +
-                u_left_rect_lines + u_init_texts + u_control_texts + y_rects +
-                y_init_texts + y_control_texts + y_right_rect_lines +
-                y_left_rect_lines)
+        return (
+            u_lines
+            + y_lines
+            + u_rects
+            + u_right_rect_lines
+            + u_left_rect_lines
+            + u_init_texts
+            + u_control_texts
+            + y_rects
+            + y_init_texts
+            + y_control_texts
+            + y_right_rect_lines
+            + y_left_rect_lines
+        )
 
     # Calculate the number of animation frames
-    n_frames = math.ceil((T - 1) / points_per_frame)  + 1
+    n_frames = math.ceil((T - 1) / points_per_frame) + 1
 
     # Create animation
     animation = FuncAnimation(
-        fig, update, frames=n_frames, interval=interval, blit=True)
+        fig, update, frames=n_frames, interval=interval, blit=True
+    )
 
     return animation
+
 
 def initialize_data_animation(
     axis: Axes,
     data: np.ndarray,
-    setpoint: Optional[float],
+    setpoint: Optional[np.ndarray],
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -878,7 +985,7 @@ def initialize_data_animation(
     initial_steps: Optional[int] = None,
     initial_steps_label: Optional[str] = None,
     continuous_updates: bool = False,
-    legend_loc: str = 'best'
+    legend_loc: str = "best",
 ) -> None:
     """
     Initialize plot elements for a data series animation with setpoints.
@@ -957,7 +1064,7 @@ def initialize_data_animation(
             input-output measurement updates. Defaults to `False`.
         legend_loc (str): The location of the legend on the plot. Corresponds
             to Matplotlib's `loc` parameter for legends. Defaults to 'best'.
-    
+
     Note:
         This function updates the `lines`, `rects`, `right_rect_lines`,
         `left_rect_lines` `init_texts`, and `control_texts` with the
@@ -967,32 +1074,33 @@ def initialize_data_animation(
     T = data.shape[0]  # Data length
 
     # Construct index label string based on index value
-    index_str = f'_{index + 1}' if index != -1 else ''
+    index_str = f"_{index + 1}" if index != -1 else ""
 
     # Initialize plot lines
-    lines.append(axis.plot([], [],
-                           **data_line_params,
-                           label=f'${var_symbol}{index_str}$')[0])
-    
+    lines.append(
+        axis.plot(
+            [], [], **data_line_params, label=f"${var_symbol}{index_str}$"
+        )[0]
+    )
+
     # Plot bounds if provided
     if bounds is not None:
         lower_bound, upper_bound = bounds
         bounds_label = "Constraints"
         # Plot lower bound line
-        axis.axhline(y=lower_bound,
-                     **bounds_line_params,
-                     label=bounds_label)
+        axis.axhline(y=lower_bound, **bounds_line_params, label=bounds_label)
         # Plot upper bound line
-        axis.axhline(y=upper_bound,
-                     **bounds_line_params)
-    
+        axis.axhline(y=upper_bound, **bounds_line_params)
+
     # Plot setpoint
-    setpoint_label = f'${setpoint_var_symbol}{index_str}$'
+    setpoint_label = f"${setpoint_var_symbol}{index_str}$"
     if setpoint is not None:
-        axis.plot(range(0, T),
-                  np.full(T, setpoint),
-                  **setpoint_line_params,
-                  label=setpoint_label)
+        axis.plot(
+            range(0, T),
+            np.full(T, setpoint),
+            **setpoint_line_params,
+            label=setpoint_label,
+        )
 
     # Define axis limits
     # Get minimum and maximum Y-axis values from data and setpoint
@@ -1000,55 +1108,78 @@ def initialize_data_animation(
         u_lim_min, u_lim_max = get_padded_limits(data, setpoint)
     else:
         u_lim_min, u_lim_max = get_padded_limits(data)
-    
+
     # Compare minimum and maximum values with bounds, if provided
     if bounds is not None:
         u_lim_min, u_lim_max = get_padded_limits(
-            np.array([u_lim_min, u_lim_max]), bounds)
-    
+            np.array([u_lim_min, u_lim_max]), np.array(bounds)
+        )
+
     # Set axis limits
-    axis.set_xlim([0, T - 1])
+    axis.set_xlim((0, T - 1))
     axis.set_ylim(u_lim_min, u_lim_max)
     y_axis_centers.append((u_lim_min + u_lim_max) / 2)
 
     # Highlight initial input-output data measurement period if provided
     if initial_steps:
         # Initialize initial measurement rectangle
-        rect = axis.axvspan(0, 0, color='gray', alpha=0.1)
+        rect = axis.axvspan(0, 0, color="gray", alpha=0.1)
         rects.append(rect)
-       
+
         # Initialize initial measurement rectangle boundary lines
-        right_rect_lines.append(axis.axvline(
-            x=0, color='black', linestyle=(0, (5, 5)), linewidth=1))
+        right_rect_lines.append(
+            axis.axvline(
+                x=0, color="black", linestyle=(0, (5, 5)), linewidth=1
+            )
+        )
 
         if continuous_updates:
             # Add left boundary line to show continuous updates, if enabled
-            left_rect_lines.append(axis.axvline(
-                x=0, color='black', linestyle=(0, (5, 5)), linewidth=1))
+            left_rect_lines.append(
+                axis.axvline(
+                    x=0, color="black", linestyle=(0, (5, 5)), linewidth=1
+                )
+            )
 
         # Get y axis center
-        y_axis_center = (y_axis_centers[index]
-                         if index != -1 else y_axis_centers[0])
+        y_axis_center = (
+            y_axis_centers[index] if index != -1 else y_axis_centers[0]
+        )
 
         # Initialize initial measurement text
-        init_texts.append(axis.text(
-            initial_steps / 2, y_axis_center,
-            initial_text, fontsize=fontsize - 1, ha='center',
-            va='center', color='black', bbox=dict(facecolor='white',
-                                                    edgecolor='black')))
+        init_texts.append(
+            axis.text(
+                initial_steps / 2,
+                y_axis_center,
+                initial_text,
+                fontsize=fontsize - 1,
+                ha="center",
+                va="center",
+                color="black",
+                bbox={"facecolor": "white", "edgecolor": "black"},
+            )
+        )
 
         # Initialize control text
-        control_texts.append(axis.text(
-            (T + initial_steps) / 2, y_axis_center,
-            control_text, fontsize=fontsize - 1, ha='center',
-            va='center', color='black', bbox=dict(facecolor='white',
-                                                    edgecolor='black')))
-        
+        control_texts.append(
+            axis.text(
+                (T + initial_steps) / 2,
+                y_axis_center,
+                control_text,
+                fontsize=fontsize - 1,
+                ha="center",
+                va="center",
+                color="black",
+                bbox={"facecolor": "white", "edgecolor": "black"},
+            )
+        )
+
     # Format labels and ticks
-    axis.set_xlabel('Time step $k$', fontsize=fontsize)
-    axis.set_ylabel(f'{var_label} ${var_symbol}{index_str}$',
-                    fontsize=fontsize)
-    axis.tick_params(axis='both', labelsize=fontsize)
+    axis.set_xlabel("Time step $k$", fontsize=fontsize)
+    axis.set_ylabel(
+        f"{var_label} ${var_symbol}{index_str}$", fontsize=fontsize
+    )
+    axis.tick_params(axis="both", labelsize=fontsize)
 
     # Format legend:
     # Collect all legend handles and labels
@@ -1064,15 +1195,15 @@ def initialize_data_animation(
         custom_handlers = {Rectangle: HandlerInitMeasurementRect()}
 
     # Create a mapping of labels to handles for labels repositioning
-    labels_map = dict(zip(labels, handles))
-    
+    labels_map = dict(zip(labels, handles, strict=False))
+
     # Reposition labels to move bound and setpoint labels to the last
     end_labels_list = [setpoint_label]
     if bounds is not None:
         end_labels_list.append(bounds_label)
     if initial_steps_label:
         end_labels_list.append(initial_steps_label)
-    
+
     for last_label in end_labels_list:
         if last_label in labels_map:
             # Move the last label to the end
@@ -1080,11 +1211,14 @@ def initialize_data_animation(
             labels_map[last_label] = last_handle
 
     # Format legend
-    axis.legend(handles=labels_map.values(),
-                labels=labels_map.keys(),
-                handler_map=custom_handlers,
-                **legend_params,
-                loc=legend_loc)
+    axis.legend(
+        handles=labels_map.values(),
+        labels=labels_map.keys(),
+        handler_map=custom_handlers,
+        **legend_params,
+        loc=legend_loc,
+    )
+
 
 def update_data_animation(
     index: int,
@@ -1103,7 +1237,7 @@ def update_data_animation(
     display_initial_text: bool,
     display_control_text: bool,
     init_text_width: float,
-    control_text_width: float
+    control_text_width: float,
 ) -> None:
     """
     Update the plot elements in a data series animation with setpoints.
@@ -1150,26 +1284,31 @@ def update_data_animation(
             in data coordinates.
     """
     # Update plot line data
-    line.set_data(range(0, index + 1), data[:index + 1])
-    
+    line.set_data(range(0, index + 1), data[: index + 1])
+
     # Determine if an update is needed. Always update for continuous updates
-    needs_update = (index <= initial_steps + points_per_frame or
-                    continuous_updates)
-    
+    if initial_steps:
+        needs_update = (
+            index <= initial_steps + points_per_frame or continuous_updates
+        )
+    else:
+        needs_update = False
+
     # Update initial measurement rectangle and texts
     if initial_steps and needs_update:
         # Calculate measurement period limit index
-        lim_index = (min(index, initial_steps)
-                     if not continuous_updates else index)
-        
+        lim_index = (
+            min(index, initial_steps) if not continuous_updates else index
+        )
+
         # Update rectangle width
         rect_width = min(lim_index, initial_steps)
         rect.set_width(rect_width)
-        
+
         # Update rectangle position
         left_index = max(lim_index - initial_steps, 0)
         rect.set_xy((left_index, 0))
-        
+
         # Update rectangle boundary line positions
         right_rect_line.set_xdata([lim_index])
 
@@ -1179,7 +1318,7 @@ def update_data_animation(
 
             # Toggle visibility based on its index
             left_rect_line.set_visible(left_index != 0)
-        
+
         # Hide initial measurement and control texts
         init_text_obj.set_visible(False)
         control_text_obj.set_visible(False)
@@ -1188,18 +1327,19 @@ def update_data_animation(
         if display_initial_text and index >= init_text_width:
             init_text_obj.set_position((lim_index / 2, y_axis_center))
             init_text_obj.set_visible(True)
-        
+
         # Show control text if possible
         if display_control_text and index >= initial_steps:
             if (data_length - initial_steps) >= control_text_width:
                 control_text_obj.set_visible(True)
+
 
 def save_animation(
     animation: FuncAnimation,
     total_frames: int,
     fps: int,
     bitrate: int,
-    file_path: str
+    file_path: str,
 ) -> None:
     """
     Save a Matplotlib animation using an ffmpeg writer with progress bar
@@ -1215,27 +1355,28 @@ def save_animation(
         total_frames (int): The total number of frames in the animation.
         fps (int): The frames per second of saved video.
         bitrate (int): The bitrate of saved video.
-        file_path (str): The path (including directory and file name) where 
+        file_path (str): The path (including directory and file name) where
             the animation will be saved.
     """
     # Ensure the directory exists
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
     # Set up the ffmpeg writer
-    writer = FFMpegWriter(fps=fps,
-                          metadata=dict(artist='Me'),
-                          bitrate=bitrate)
-    
+    writer = FFMpegWriter(fps=fps, metadata={"artist": "Me"}, bitrate=bitrate)
+
     # Save animation while displaying a progress bar
     with tqdm(total=total_frames, desc="Saving animation") as pbar:
-        animation.save(file_path,
-                       writer=writer,
-                       progress_callback=lambda i, n: pbar.update(1))
+        animation.save(
+            file_path,
+            writer=writer,
+            progress_callback=lambda i, n: pbar.update(1),
+        )
+
 
 def get_padded_limits(
     X: np.ndarray,
     X_s: Optional[np.ndarray] = None,
-    pad_percentage: float = 0.05
+    pad_percentage: float = 0.05,
 ) -> Tuple[float, float]:
     """
     Get the minimum and maximum limits from two data sequences extended by
@@ -1249,7 +1390,7 @@ def get_padded_limits(
             to be used as padding. Defaults to 0.05.
 
     Returns:
-        Tuple[float, float]: A tuple containing padded minimum and maximum 
+        Tuple[float, float]: A tuple containing padded minimum and maximum
             limits for the combined data from `X` and `X_s`.
     """
     # Get minimum and maximum limits from data sequences
@@ -1268,10 +1409,9 @@ def get_padded_limits(
 
     return (X_lim_min, X_lim_max)
 
+
 def get_text_width_in_data(
-    text_object: Text,
-    axis: Axes,
-    fig: Figure
+    text_object: Text, axis: Axes, fig: Figure | SubFigure
 ) -> float:
     """
     Calculate the bounding box width of a text object in data coordinates.
@@ -1279,26 +1419,30 @@ def get_text_width_in_data(
     Args:
         text_object (Text): A Matplotlib text object.
         axis (Axes): The axis on which the text object is displayed.
-        fig (Figure): The Matplotlib figure object containing the axis.
+        fig (Figure | SubFigure): The Matplotlib figure or subfigure that
+            contains the axis.
 
     Returns:
         float: The width of the text object's bounding box in data
             coordinates.
     """
     # Get the bounding box of the text object in pixel coordinates
-    text_box = text_object.get_window_extent(
-        renderer=fig.canvas.get_renderer())
+    render = fig.canvas.get_renderer()  # type: ignore[attr-defined]
+    text_box = text_object.get_window_extent(renderer=render)
+
     # Convert the bounding box from pixel coordinates to data coordinates
     text_box_data = axis.transData.inverted().transform(text_box)
+
     # Calculate the width of the bounding box in data coordinates
     text_box_width = text_box_data[1][0] - text_box_data[0][0]
-    
+
     return text_box_width
+
 
 def filter_and_reorder_legend(
     axis: Axes,
     legend_params: dict[str, Any],
-    end_labels_list: Optional[List[str]] = None
+    end_labels_list: Optional[List[str]] = None,
 ) -> None:
     """
     Remove duplicate entries from the legend of a Matplotlib axis. Optionally,
@@ -1325,7 +1469,7 @@ def filter_and_reorder_legend(
 
     # Get labels and handles from axis without duplicates
     handles, labels = axis.get_legend_handles_labels()
-    unique_labels = dict(zip(labels, handles))
+    unique_labels = dict(zip(labels, handles, strict=False))
 
     # Reorder labels if `last_label_list` is provided
     for last_label in end_labels_list:
@@ -1336,13 +1480,14 @@ def filter_and_reorder_legend(
     # Update the legend with the unique handles and labels
     axis.legend(unique_labels.values(), unique_labels.keys(), **legend_params)
 
+
 def create_input_output_figure(
     m: int,
     p: int,
     figsize: Tuple[float, float],
     dpi: int,
     fontsize: int,
-    title: Optional[str] = None
+    title: Optional[str] = None,
 ) -> Tuple[Figure, List[Axes], List[Axes]]:
     """
     Create a Matplotlib figure with two rows of subplots: one for control
@@ -1362,7 +1507,7 @@ def create_input_output_figure(
         fontsize (int): The fontsize for suptitles.
         title (Optional[str]): The title for the overall figure. If `None`,
             no title will be added. Defaults to `None`.
-    
+
     Returns:
         Tuple: A tuple containing:
             - Figure: The created Matplotlib figure.
@@ -1370,27 +1515,31 @@ def create_input_output_figure(
             - List[Axes]: A list of axes for system outputs subplots.
     """
     # Create figure
-    fig = plt.figure(
-        num=title, layout='constrained', figsize=figsize, dpi=dpi)
-    
-    # Modify constrained layout padding
-    fig.get_layout_engine().set(w_pad=0.1, h_pad=0.1, wspace=0.05, hspace=0)
+    fig = plt.figure(num=title, layout="constrained", figsize=figsize, dpi=dpi)
+
+    # Modify constrained layout padding, preventing mypy [call-arg] error
+    layout_engine = fig.get_layout_engine()
+    if isinstance(layout_engine, ConstrainedLayoutEngine):
+        layout_engine.set(w_pad=0.1, h_pad=0.1, wspace=0.05, hspace=0)
+
+    # assert layout_engine is ConstrainedLayoutEngine
+    # layout_engine.set(w_pad=0.1, h_pad=0.1, wspace=0.05, hspace=0)
 
     # Set overall figure title if provided
     if title:
-        fig.suptitle(title, fontsize=fontsize + 3, fontweight='bold')
-    
+        fig.suptitle(title, fontsize=fontsize + 3, fontweight="bold")
+
     # Create subfigures for input and output data plots
     subfigs = fig.subfigures(2, 1)
 
     # Add titles for input and output subfigures
-    subfigs[0].suptitle('Control Inputs',
-                        fontsize=fontsize + 2,
-                        fontweight='bold')
-    subfigs[1].suptitle('System Outputs',
-                        fontsize=fontsize + 2,
-                        fontweight='bold')
-    
+    subfigs[0].suptitle(
+        "Control Inputs", fontsize=fontsize + 2, fontweight="bold"
+    )
+    subfigs[1].suptitle(
+        "System Outputs", fontsize=fontsize + 2, fontweight="bold"
+    )
+
     # Create subplots
     axs_u = subfigs[0].subplots(1, m)
     axs_y = subfigs[1].subplots(1, p)
@@ -1402,3 +1551,7 @@ def create_input_output_figure(
         axs_y = [axs_y]
 
     return fig, axs_u, axs_y
+
+
+def init_dict_if_none(d: dict[Any, Any] | None) -> dict[Any, Any]:
+    return {} if d is None else d

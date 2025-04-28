@@ -1,11 +1,15 @@
-import numpy as np
 import math
 from functools import partial
 
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params)
+import numpy as np
+
 from direct_data_driven_mpc.utilities.models.nonlinear_model import (
-    NonlinearSystem)
+    NonlinearSystem,
+)
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params,
+)
+
 
 def cstr_dynamics(
     x: np.ndarray,
@@ -16,7 +20,7 @@ def cstr_dynamics(
     M: float,
     xf: float,
     xc: float,
-    alpha: float
+    alpha: float,
 ) -> np.ndarray:
     """
     Compute the dynamics of a Continuous Stirred Tank Reactor (CSTR) system
@@ -36,7 +40,7 @@ def cstr_dynamics(
     Returns:
         np.ndarray: An array containing the updated states (`x1_new`,
             `x2_new`).
-    
+
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
             Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
@@ -50,17 +54,18 @@ def cstr_dynamics(
 
     # Compute CSTR dynamics preventing division by zero
     if x2 != 0:
-        x1_new = x1 + Ts * ((1 - x1) / theta -
-                            (k * x1 * math.exp(-M / x2)))
-        x2_new = x2 + Ts * ((xf - x2) / theta +
-                            (k * x1 * math.exp(-M / x2)) -
-                            alpha * u * (x2 - xc))
+        x1_new = x1 + Ts * ((1 - x1) / theta - (k * x1 * math.exp(-M / x2)))
+        x2_new = x2 + Ts * (
+            (xf - x2) / theta
+            + (k * x1 * math.exp(-M / x2))
+            - alpha * u * (x2 - xc)
+        )
     else:
         x1_new = x1 + Ts * (1 - x1) / theta
-        x2_new = x2 + Ts * ((xf - x2) / theta -
-                            alpha * u * (x2 - xc))
-        
+        x2_new = x2 + Ts * ((xf - x2) / theta - alpha * u * (x2 - xc))
+
     return np.array([x1_new, x2_new])
+
 
 def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
     """
@@ -74,7 +79,7 @@ def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
 
     Returns:
         np.ndarray: An array containing the system output (`x2`).
-    
+
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
             Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
@@ -83,10 +88,9 @@ def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
     """
     return x[[1]]  # Output is the concentration x2
 
+
 def create_nonlinear_cstr_system(
-    cstr_model_config_path: str,
-    cstr_model_key_value: str,
-    verbose: int
+    cstr_model_config_path: str, cstr_model_key_value: str, verbose: int
 ) -> NonlinearSystem:
     """
     Create a `NonlinearSystem` instance representing a nonlinear Continuous
@@ -116,13 +120,16 @@ def create_nonlinear_cstr_system(
             4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     # Load model parameters from config file
-    params = load_yaml_config_params(config_file=cstr_model_config_path,
-                                     key=cstr_model_key_value)
-    
+    params = load_yaml_config_params(
+        config_file=cstr_model_config_path, key=cstr_model_key_value
+    )
+
     if verbose > 1:
-        print(f"    Model parameters loaded from {cstr_model_config_path} "
-              f"with key '{cstr_model_key_value}'")
-        
+        print(
+            f"    Model parameters loaded from {cstr_model_config_path} "
+            f"with key '{cstr_model_key_value}'"
+        )
+
     # Retrieve model parameters
     Ts = params["Ts"]
     theta = params["theta"]
@@ -135,25 +142,21 @@ def create_nonlinear_cstr_system(
     eps_max = params["eps_max"]  # Upper bound of the system measurement noise
 
     # Define CSTR system dynamics function
-    cstr_dynamics_pre_bound = partial(cstr_dynamics,
-                                      Ts=Ts,
-                                      theta=theta,
-                                      k=k,
-                                      M=M,
-                                      xf=xf,
-                                      xc=xc,
-                                      alpha=alpha)
-    
+    cstr_dynamics_pre_bound = partial(
+        cstr_dynamics, Ts=Ts, theta=theta, k=k, M=M, xf=xf, xc=xc, alpha=alpha
+    )
+
     # Initialize CSTR nonlinear system
     n = 2  # Number of states
     m = 1  # Number of inputs
     p = 1  # Number of outputs
-    cstr_system = NonlinearSystem(f=cstr_dynamics_pre_bound,
-                                  h=cstr_output,
-                                  n=n,
-                                  m=m,
-                                  p=p,
-                                  eps_max=eps_max)
-    
-    return cstr_system
+    cstr_system = NonlinearSystem(
+        f=cstr_dynamics_pre_bound,
+        h=cstr_output,
+        n=n,
+        m=m,
+        p=p,
+        eps_max=eps_max,
+    )
 
+    return cstr_system

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def observability_matrix(A: np.ndarray, C: np.ndarray) -> np.ndarray:
     """
     Calculate the observability matrix for a state-space system defined by
@@ -12,7 +13,7 @@ def observability_matrix(A: np.ndarray, C: np.ndarray) -> np.ndarray:
     Args:
         A (np.ndarray): The state matrix of the system.
         C (np.ndarray): The output matrix of the system.
-    
+
     Returns:
         np.ndarray: The observability matrix of the system.
     """
@@ -20,15 +21,12 @@ def observability_matrix(A: np.ndarray, C: np.ndarray) -> np.ndarray:
     n = A.shape[0]  # Number of states
 
     Ot = np.vstack([C @ np.linalg.matrix_power(A, i) for i in range(n)])
-    
+
     return Ot
 
+
 def toeplitz_input_output_matrix(
-    A: np.ndarray,
-    B: np.ndarray,
-    C: np.ndarray,
-    D: np.ndarray,
-    t: int
+    A: np.ndarray, B: np.ndarray, C: np.ndarray, D: np.ndarray, t: int
 ) -> np.ndarray:
     """
     Construct a Toeplitz matrix that maps inputs to outputs for a state-space
@@ -42,18 +40,18 @@ def toeplitz_input_output_matrix(
     Tt = [[D   0   0],
           [CB  D   0],
           [CAB CB  D]]
-    
+
     Args:
         A (np.ndarray): The state matrix of the system.
         B (np.ndarray): The input matrix of the system.
         C (np.ndarray): The output matrix of the system.
         D (np.ndarray): The feedforward matrix of the system.
         t (int): The number of time steps for the Toeplitz matrix extension.
-    
+
     Returns:
         np.ndarray: The Toeplitz input-output matrix of the system over t
             steps.
-            
+
     Examples:
         >>> import numpy as np
         >>> A = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
@@ -84,19 +82,17 @@ def toeplitz_input_output_matrix(
     for i in range(t):
         for j in range(t):
             if i == j:
-                Tt[i * p: (i + 1) * p,
-                   j * m: (j + 1) * m] = D
+                Tt[i * p : (i + 1) * p, j * m : (j + 1) * m] = D
             elif j < i:
-                Tt[i * p: (i + 1) * p,
-                   j * m: (j + 1) * m] = C @ A_pows[i - j - 1] @ B
-    
+                Tt[i * p : (i + 1) * p, j * m : (j + 1) * m] = (
+                    C @ A_pows[i - j - 1] @ B
+                )
+
     return Tt
 
+
 def estimate_initial_state(
-    Ot: np.ndarray,
-    Tt: np.ndarray,
-    U: np.ndarray,
-    Y: np.ndarray
+    Ot: np.ndarray, Tt: np.ndarray, U: np.ndarray, Y: np.ndarray
 ) -> np.ndarray:
     """
     Estimate the initial state of an observable system based on its
@@ -109,35 +105,42 @@ def estimate_initial_state(
             `t` steps.
         U (np.ndarray): The vector of inputs over the past `t` time steps.
         Y (np.ndarray): The vector of outputs over the past `t` time steps.
-    
+
     Returns:
         np.ndarray: The estimated initial state.
-    
+
     Raises:
         ValueError: If there is a dimension mismatch between the inputs.
     """
     # Check correct matrix dimensions
     if Ot.shape[0] != Y.shape[0]:
-        raise ValueError(f"Dimension mismatch: Ot has {Ot.shape[0]} rows but "
-                         f"Y has {Y.shape[0]} rows.")
+        raise ValueError(
+            f"Dimension mismatch: `Ot` has {Ot.shape[0]} rows but `Y` has "
+            f"{Y.shape[0]} rows."
+        )
     if Tt.shape[0] != Y.shape[0]:
-        raise ValueError(f"Dimension mismatch: Tt has {Tt.shape[0]} rows but "
-                         f"Y has {Y.shape[0]} rows.")
+        raise ValueError(
+            f"Dimension mismatch: `Tt` has {Tt.shape[0]} rows but `Y` has "
+            f"{Y.shape[0]} rows."
+        )
     if Tt.shape[1] != U.shape[0]:
-        raise ValueError(f"Dimension mismatch: Tt has {Tt.shape[1]} columns "
-                         f"but U has {U.shape[0]} rows.")
-    
+        raise ValueError(
+            f"Dimension mismatch: `Tt` has {Tt.shape[1]} columns but `U` has "
+            f"{U.shape[0]} rows."
+        )
+
     # Estimate initial state based on input-output data
     initial_x = np.linalg.pinv(Ot) @ (Y - Tt @ U)
 
     return initial_x
+
 
 def calculate_equilibrium_output_from_input(
     A: np.ndarray,
     B: np.ndarray,
     C: np.ndarray,
     D: np.ndarray,
-    u_eq: np.ndarray
+    u_eq: np.ndarray,
 ) -> np.ndarray:
     """
     Calculate the equilibrium output `y_eq` corresponding to an input `u_eq`
@@ -168,12 +171,13 @@ def calculate_equilibrium_output_from_input(
 
     return y_eq
 
+
 def calculate_equilibrium_input_from_output(
     A: np.ndarray,
     B: np.ndarray,
     C: np.ndarray,
     D: np.ndarray,
-    y_eq: np.ndarray
+    y_eq: np.ndarray,
 ) -> np.ndarray:
     """
     Calculate the equilibrium input `u_eq` corresponding to an output `y_eq`
@@ -189,7 +193,7 @@ def calculate_equilibrium_input_from_output(
         B (np.ndarray): The input matrix of the system.
         C (np.ndarray): The output matrix of the system.
         D (np.ndarray): The feedforward matrix of the system.
-        y_s (np.ndarray): An output vector of the system.
+        y_eq (np.ndarray): An output vector of the system.
 
     Returns:
         np.ndarray: The equilibrium input `u_eq` corresponding to the output

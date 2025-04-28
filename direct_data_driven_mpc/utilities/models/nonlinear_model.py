@@ -1,5 +1,7 @@
 from typing import Callable
+
 import numpy as np
+
 
 class NonlinearSystem:
     """
@@ -20,6 +22,7 @@ class NonlinearSystem:
         eps_max (float): The upper bound of the system measurement noise.
         x (np.ndarray): The internal state vector of the system.
     """
+
     def __init__(
         self,
         f: Callable[[np.ndarray, np.ndarray], np.ndarray],
@@ -27,7 +30,8 @@ class NonlinearSystem:
         n: int,
         m: int,
         p: int,
-        eps_max: float = 0.0):
+        eps_max: float = 0.0,
+    ):
         """
         Initialize a Nonlinear Dynamical system with a dynamics function `f`
         and an output function `h`.
@@ -71,7 +75,7 @@ class NonlinearSystem:
         Returns:
             np.ndarray: The output vector `y` of shape `(p,)` at the current
                 time step, where `p` is the number of outputs.
-        
+
         Note:
             This method updates the `x` attribute, which represents the
             internal state vector of the system, after simulation.
@@ -80,15 +84,10 @@ class NonlinearSystem:
         y = self.h(self.x, u) + w
         # Update state based on the dynamics function
         self.x = self.f(self.x, u)
-        
+
         return y
 
-    def simulate(
-        self,
-        U: np.ndarray,
-        W: np.ndarray,
-        steps: int
-    ) -> np.ndarray:
+    def simulate(self, U: np.ndarray, W: np.ndarray, steps: int) -> np.ndarray:
         """
         Simulate the Nonlinear system over multiple time steps.
 
@@ -113,5 +112,5 @@ class NonlinearSystem:
 
         for k in range(steps):
             Y[k, :] = self.simulate_step(U[k, :], W[k, :])
-        
+
         return Y

@@ -67,7 +67,7 @@ Follow these steps to create a virtual environment and install this package:
    ```bash
    git clone https://github.com/pavelacamposp/direct_data_driven_mpc.git
    ```
-2. Navigate to the project directory: 
+2. Navigate to the project directory:
    ```bash
    cd direct_data_driven_mpc
    ```
@@ -100,17 +100,17 @@ The example scripts [`lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_ex
 To run the example scripts, use the following commands:
 
 - **Data-Driven MPC for LTI systems**:
-    
+
     Run the example script with a `seed` of `18`, a simulation length of `400` steps, a verbosity level of `1`, and save the generated animation to a file:
-    
+
     ```bash
     python examples/lti_control/lti_dd_mpc_example.py --seed 18 --t_sim 400 --verbose 1 --save_anim
     ```
 
 - **Data-Driven MPC for Nonlinear systems**:
-    
+
     Run the example script with a `seed` of `0`, a simulation length of `3000` steps, a verbosity level of `1`, and save the generated animation to a file:
-    
+
     ```bash
     python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 0 --t_sim 3000 --verbose 1 --save_anim
     ```
@@ -165,7 +165,7 @@ Reproduction scripts are provided to validate our implementations by comparing t
     ```bash
     python examples/nonlinear_control/nonlinear_dd_mpc_example.py --seed 0
     ```
-    
+
 The figures below show the expected output from executing these scripts. The graphs from our results closely resemble those shown in **Fig. 2 of** [[1]](#1) and **Fig. 2 of** [[2]](#2), with minor differences due to randomization.
 
 |LTI Data-Driven MPC|Nonlinear Data-Driven MPC|

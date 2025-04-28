@@ -1,18 +1,23 @@
 import numpy as np
 
 from direct_data_driven_mpc.utilities.initial_state_estimation import (
-    observability_matrix, toeplitz_input_output_matrix,
-    estimate_initial_state, calculate_equilibrium_output_from_input,
-    calculate_equilibrium_input_from_output)
+    calculate_equilibrium_input_from_output,
+    calculate_equilibrium_output_from_input,
+    estimate_initial_state,
+    observability_matrix,
+    toeplitz_input_output_matrix,
+)
 from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params)
+    load_yaml_config_params,
+)
+
 
 class LTIModel:
     """
     A class representing a Linear Time-Invariant (LTI) system in state-space
     form.
 
-    The system is defined by its state-space matrices `A`, `B`, `C`, `D`, and 
+    The system is defined by its state-space matrices `A`, `B`, `C`, `D`, and
     can simulate its behavior and perform tasks such as estimating initial
     states and calculating equilibrium points.
 
@@ -29,13 +34,15 @@ class LTIModel:
         Ot (np.ndarray): The observability matrix of the system.
         Tt (np.ndarray): The Toeplitz input-output matrix of the system.
     """
+
     def __init__(
         self,
         A: np.ndarray,
         B: np.ndarray,
         C: np.ndarray,
         D: np.ndarray,
-        eps_max: float = 0.0):
+        eps_max: float = 0.0,
+    ):
         """
         Initialize a Linear Time-Invariant (LTI) system with state-space
         matrices `A`, `B`, `C`, `D`.
@@ -65,9 +72,9 @@ class LTIModel:
         # for initial state estimation
         self.Ot = observability_matrix(A=self.A, C=self.C)
         self.Tt = toeplitz_input_output_matrix(
-            A=self.A, B=self.B, C=self.C, D=self.D, t=self.n)
+            A=self.A, B=self.B, C=self.C, D=self.D, t=self.n
+        )
 
-    
     def simulate_step(self, u: np.ndarray, w: np.ndarray) -> np.ndarray:
         """
         Simulate a single time step of the LTI system with a given input `u`
@@ -95,15 +102,10 @@ class LTIModel:
         y = self.C @ self.x + self.D @ u + w
         # Update the internal system state
         self.x = self.A @ self.x + self.B @ u
-        
+
         return y
 
-    def simulate(
-        self,
-        U: np.ndarray,
-        W: np.ndarray,
-        steps: int
-    ) -> np.ndarray:
+    def simulate(self, U: np.ndarray, W: np.ndarray, steps: int) -> np.ndarray:
         """
         Simulate the LTI system over multiple time steps.
 
@@ -128,18 +130,16 @@ class LTIModel:
 
         for k in range(steps):
             Y[k, :] = self.simulate_step(U[k, :], W[k, :])
-        
+
         return Y
-    
+
     def get_initial_state_from_trajectory(
-        self,
-        U: np.ndarray,
-        Y: np.ndarray
+        self, U: np.ndarray, Y: np.ndarray
     ) -> np.ndarray:
         """
         Estimate the initial state of the system corresponding to an
         input-output trajectory.
-         
+
         This method uses a least squares observer with the Toeplitz
         input-output and observability matrices of the system to estimate its
         initial state from the input (`U`) and output (`Y`) trajectory.
@@ -149,7 +149,7 @@ class LTIModel:
                 the order of the system.
             Y (np.ndarray): An outputs vector of shape `(n, )`, where `n` is
                 the order of the system.
-    
+
         Returns:
             np.ndarray: A vector of shape `(n, )` representing the estimated
                 initial state of the system .
@@ -158,12 +158,11 @@ class LTIModel:
             ValueError: If `U` or `Y` are not shaped `(n, )`.
         """
         x_0 = estimate_initial_state(Ot=self.Ot, Tt=self.Tt, U=U, Y=Y)
-        
+
         return x_0
-    
+
     def get_equilibrium_output_from_input(
-        self,
-        u_eq: np.ndarray
+        self, u_eq: np.ndarray
     ) -> np.ndarray:
         """
         Calculate the equilibrium output `y_eq` corresponding to an input
@@ -183,13 +182,13 @@ class LTIModel:
                 of the system.
         """
         y_eq = calculate_equilibrium_output_from_input(
-            A=self.A, B=self.B, C=self.C, D=self.D, u_eq=u_eq)
-        
+            A=self.A, B=self.B, C=self.C, D=self.D, u_eq=u_eq
+        )
+
         return y_eq
-    
+
     def get_equilibrium_input_from_output(
-        self,
-        y_eq: np.ndarray
+        self, y_eq: np.ndarray
     ) -> np.ndarray:
         """
         Calculate the equilibrium input `u_eq` corresponding to an output
@@ -209,16 +208,17 @@ class LTIModel:
                 the system.
         """
         u_eq = calculate_equilibrium_input_from_output(
-            A=self.A, B=self.B, C=self.C, D=self.D, y_eq=y_eq)
-        
+            A=self.A, B=self.B, C=self.C, D=self.D, y_eq=y_eq
+        )
+
         return u_eq
-    
+
     def set_state(self, state: np.ndarray) -> None:
         """
         Set a new state for the system.
 
         Args:
-            state (np.ndarray): A vector of shape `(n, )` representing the 
+            state (np.ndarray): A vector of shape `(n, )` representing the
                 new system state, where `n` is the order of the system.
 
         Raises:
@@ -227,9 +227,11 @@ class LTIModel:
         """
         # Validate state dimensions
         if state.shape != self.x.shape:
-            raise ValueError("Incorrect dimensions. Expected state shape "
-                             f"{self.x.shape}, but got {state.shape}")
-        
+            raise ValueError(
+                "Incorrect dimensions. Expected state shape "
+                f"{self.x.shape}, but got {state.shape}"
+            )
+
         # Update system state
         self.x = state
 
@@ -243,11 +245,12 @@ class LTIModel:
         """
         self.eps_max = eps_max
 
+
 class LTISystemModel(LTIModel):
     """
     A class for a Linear Time-Invariant (LTI) system in state-space form based
     on a specified YAML configuration file.
-    
+
     Attributes:
         A (np.ndarray): System state matrix.
         B (np.ndarray): Input matrix.
@@ -256,16 +259,15 @@ class LTISystemModel(LTIModel):
         eps_max (float): Upper bound of the system measurement noise.
         verbose (int): The verbosity level: 0 = no output, 1 = minimal output,
             2 = detailed output.
-    
+
     Note:
         This class dynamically loads the model parameters from a YAML
         configuration file.
     """
+
     def __init__(
-        self,
-        config_file: str,
-        model_key_value: str = None,
-        verbose: int = 0):
+        self, config_file: str, model_key_value: str, verbose: int = 0
+    ):
         """
         Initialize a Linear Time-Invariant (LTI) system model by loading
         parameters from a YAML config file.
@@ -276,7 +278,7 @@ class LTISystemModel(LTIModel):
                 parameters in the config file.
             verbose (int): The verbosity level: 0 = no output, 1 = minimal
                 output, 2 = detailed output.
-        
+
         Raises:
             FileNotFoundError: If the YAML configuration file is not found.
             ValueError: If `model_key_value` or the required matrices (A, B,
@@ -284,27 +286,35 @@ class LTISystemModel(LTIModel):
                 dimensions of the required matrices are incorrect.
         """
         self.verbose = verbose
-        
+
         # Load model parameters from config file
-        params = load_yaml_config_params(config_file=config_file,
-                                         key=model_key_value)
-        
+        params = load_yaml_config_params(
+            config_file=config_file, key=model_key_value
+        )
+
         if self.verbose > 1:
-            print(f"    Model parameters loaded from {config_file} with key "
-                  f"'{model_key_value}'")
+            print(
+                f"    Model parameters loaded from {config_file} with key "
+                f"'{model_key_value}'"
+            )
 
         # Validate that required matrix keys are present
-        if ('A' not in params or 'B' not in params or
-            'C' not in params or 'D' not in params):
-            raise ValueError("Missing required matrices (A, B, C, or D) in "
-                             "the config file.")
+        if (
+            "A" not in params
+            or "B" not in params
+            or "C" not in params
+            or "D" not in params
+        ):
+            raise ValueError(
+                "Missing required matrices (A, B, C, or D) in the config file."
+            )
 
         # Extract the system matrices from the loaded parameters
-        A = np.array(params['A'], dtype=float)
-        B = np.array(params['B'], dtype=float)
-        C = np.array(params['C'], dtype=float)
-        D = np.array(params['D'], dtype=float)
-        eps_max = params.get('eps_max', 0)  # Default to 0 if not specified
+        A = np.array(params["A"], dtype=float)
+        B = np.array(params["B"], dtype=float)
+        C = np.array(params["C"], dtype=float)
+        D = np.array(params["D"], dtype=float)
+        eps_max = params.get("eps_max", 0)  # Default to 0 if not specified
 
         # Validate matrix dimensions
         if A.shape[0] != A.shape[1]:
@@ -315,14 +325,16 @@ class LTISystemModel(LTIModel):
             raise ValueError("Matrix C's column count must match A's.")
         if D.shape[0] != C.shape[0]:
             raise ValueError("Matrix D's row count must match C's.")
-        
+
         # Initialize the base LTIModel class with the loaded parameters
         super().__init__(A=A, B=B, C=C, D=D, eps_max=eps_max)
-        
+
         # Print system initialization details based on verbosity level
         if verbose == 1:
             print("System model initialized with loaded parameters")
         if self.verbose > 1:
-            print(f"System model initialized with:")
-            print(f"    A: {A.shape}, B: {B.shape}, C: {C.shape}, D: "
-                  f"{D.shape}, eps_max: {eps_max}")
+            print("System model initialized with:")
+            print(
+                f"    A: {A.shape}, B: {B.shape}, C: {C.shape}, D: "
+                f"{D.shape}, eps_max: {eps_max}"
+            )

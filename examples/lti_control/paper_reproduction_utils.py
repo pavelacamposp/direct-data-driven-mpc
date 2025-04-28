@@ -1,22 +1,30 @@
-from typing import List, Tuple, Optional, Any
+from dataclasses import dataclass
 from enum import Enum
+from typing import Any, List, Optional, Tuple
 
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random import Generator
-import matplotlib.pyplot as plt
 
-from direct_data_driven_mpc.utilities.controller.controller_params import (
-    LTIDataDrivenMPCParamsDictType)
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
-    create_lti_data_driven_mpc_controller)
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
-    simulate_lti_data_driven_mpc_control_loop)
-from direct_data_driven_mpc.utilities.data_visualization import (
-    plot_input_output, create_input_output_figure)
-
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
-    LTIDataDrivenMPCController)
+    LTIDataDrivenMPCController,
+)
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
+    create_lti_data_driven_mpc_controller,
+)
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    LTIDataDrivenMPCParamsDictType,
+)
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    simulate_lti_data_driven_mpc_control_loop,
+)
+from direct_data_driven_mpc.utilities.data_visualization import (
+    create_input_output_figure,
+    init_dict_if_none,
+    plot_input_output,
+)
+from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+
 
 # Define Data-Driven MPC controller schemes
 class DataDrivenMPCScheme(Enum):
@@ -31,6 +39,7 @@ class DataDrivenMPCScheme(Enum):
             vol. 66, no. 4, pp. 1702-1717, April 2021,
             doi: 10.1109/TAC.2020.3000182.
     """
+
     # 1-step Data-Driven MPC scheme with terminal equality constraints
     TEC = 0
     # n-step Data-Driven MPC scheme with terminal equality constraints
@@ -38,47 +47,55 @@ class DataDrivenMPCScheme(Enum):
     # 1-step Data-Driven MPC scheme without terminal equality constraints
     UCON = 2
 
+
+@dataclass(frozen=True)
+class DDMPCSchemeConfig:
+    label: str
+    n_mpc_step: int
+    terminal_constraints: bool
+
+
 # Define Data-Driven MPC scheme configurations
 DD_MPC_SCHEME_CONFIG = {
-    DataDrivenMPCScheme.TEC: {
-        'label': 'TEC',
-        'n_mpc_step': 1,
-        'terminal_constraints': True,
-    },
-    DataDrivenMPCScheme.TEC_N_STEP: {
-        'label': 'TEC, n-step',
-        'n_mpc_step': -1,  # -1 used as a placeholder for 'n' steps
-        'terminal_constraints': True,
-    },
-    DataDrivenMPCScheme.UCON: {
-        'label': 'UCON',
-        'n_mpc_step': 1,
-        'terminal_constraints': False,
-    }
+    DataDrivenMPCScheme.TEC: DDMPCSchemeConfig(
+        label="TEC",
+        n_mpc_step=1,
+        terminal_constraints=True,
+    ),
+    DataDrivenMPCScheme.TEC_N_STEP: DDMPCSchemeConfig(
+        label="TEC, n-step",
+        n_mpc_step=-1,  # -1 used as a placeholder for 'n' steps
+        terminal_constraints=True,
+    ),
+    DataDrivenMPCScheme.UCON: DDMPCSchemeConfig(
+        label="UCON",
+        n_mpc_step=1,
+        terminal_constraints=False,
+    ),
 }
 
 # Define Matplotlib line parameters for Data-Driven MPC schemes
 DD_MPC_SCHEME_LINE_PARAMS = {
     DataDrivenMPCScheme.TEC: {
-        'color': 'blue',
-        'linestyle': 'solid',
-        'linewidth': 2
+        "color": "blue",
+        "linestyle": "solid",
+        "linewidth": 2,
     },
     DataDrivenMPCScheme.TEC_N_STEP: {
-        'color': 'lime',
-        'linestyle': (0, (5, 5)),
-        'linewidth': 2
+        "color": "lime",
+        "linestyle": (0, (5, 5)),
+        "linewidth": 2,
     },
     DataDrivenMPCScheme.UCON: {
-        'color': 'black',
-        'linestyle': ':',
-        'linewidth': 2
-    }
+        "color": "black",
+        "linestyle": ":",
+        "linewidth": 2,
+    },
 }
 
+
 def get_equilibrium_state_from_output(
-    system_model: LTIModel,
-    y_eq: np.ndarray
+    system_model: LTIModel, y_eq: np.ndarray
 ) -> np.ndarray:
     """
     Estimate the equilibrium state of a system corresponding to a specified
@@ -108,22 +125,23 @@ def get_equilibrium_state_from_output(
     # Construct equilibrium input-output trajectory for a minimal realization
     U_eq = np.tile(u_eq, n)
     Y_eq = np.tile(y_eq, n)
-    
+
     # Estimate the initial state from the input-output trajectory
     x_eq = system_model.get_initial_state_from_trajectory(U=U_eq, Y=Y_eq)
-    
+
     return x_eq
+
 
 def create_data_driven_mpc_controllers_reproduction(
     controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
-    data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme]
+    data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme],
 ) -> List[LTIDataDrivenMPCController]:
     """
     Create `LTIDataDrivenMPCController` instances for a specified list of
     Data-Driven MPC schemes.
-    
+
     This function uses a base Data-Driven MPC controller configuration and
     initial input-output data from a system. Each controller's configuration
     is modified according to the parameters defined in its corresponding
@@ -163,14 +181,15 @@ def create_data_driven_mpc_controllers_reproduction(
             doi: 10.1109/TAC.2020.3000182.
     """
     data_driven_mpc_controllers = []
-    
+
     # Create Data-Driven MPC controllers for each scheme
     for dd_mpc_scheme in data_driven_mpc_controller_schemes:
         # Validate Data-Driven MPC scheme configuration
         if dd_mpc_scheme not in DD_MPC_SCHEME_CONFIG:
-            raise ValueError(f"Configuration for scheme {dd_mpc_scheme} "
-                             "not found.")
-        
+            raise ValueError(
+                f"Configuration for scheme {dd_mpc_scheme} not found."
+            )
+
         # Created a copy from the base controller configuration
         base_controller_config = controller_config.copy()
 
@@ -179,27 +198,29 @@ def create_data_driven_mpc_controllers_reproduction(
 
         # Update controller's configuration based on its scheme configuration
         # n-Step Data-Driven MPC parameter
-        if scheme_config['n_mpc_step'] == 1:
+        if scheme_config.n_mpc_step == 1:
             # 1-step Data-Driven MPC control
-            base_controller_config['n_mpc_step'] = 1
+            base_controller_config["n_mpc_step"] = 1
         else:
             # n-step Data-Driven MPC control
-            base_controller_config['n_mpc_step'] = base_controller_config['n']
-        
+            base_controller_config["n_mpc_step"] = base_controller_config["n"]
+
         # Terminal constraints use in Data-Driven MPC formulations
-        use_terminal_constraints =  scheme_config['terminal_constraints']
+        use_terminal_constraints = scheme_config.terminal_constraints
 
         # Create Data-Driven MPC controller based on scheme config
         dd_mpc_controller = create_lti_data_driven_mpc_controller(
-                controller_config=base_controller_config,
-                u_d=u_d,
-                y_d=y_d,
-                use_terminal_constraints=use_terminal_constraints)
-        
+            controller_config=base_controller_config,
+            u_d=u_d,
+            y_d=y_d,
+            use_terminal_constraints=use_terminal_constraints,
+        )
+
         # Store controller
         data_driven_mpc_controllers.append(dd_mpc_controller)
-    
+
     return data_driven_mpc_controllers
+
 
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
@@ -229,7 +250,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
             random noise for the system's output.
         verbose (int): The verbosity level: 0 = no output, 1 = minimal output,
             2 = detailed output.
-    
+
     Returns:
         Tuple[List[np.ndarray], List[np.ndarray]]: A tuple containing:
             - A list of arrays, each of shape `(n_steps, m)`, representing the
@@ -252,7 +273,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
     for i, controller in enumerate(data_driven_mpc_controllers):
         if verbose:
             print(f"Simulating controller {i + 1}/{n_controllers}")
-        
+
         # Reset system internal state
         system_model.set_state(state=model_initial_state)
 
@@ -262,13 +283,15 @@ def simulate_data_driven_mpc_control_loops_reproduction(
             data_driven_mpc_controller=controller,
             n_steps=n_steps,
             np_random=np_random,
-            verbose=verbose)
-    
+            verbose=verbose,
+        )
+
         # Store input-output data
         u_sys_data.append(u_sys)
         y_sys_data.append(y_sys)
 
     return u_sys_data, y_sys_data
+
 
 def plot_input_output_reproduction(
     data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme],
@@ -278,12 +301,12 @@ def plot_input_output_reproduction(
     y_s: np.ndarray,
     u_ylimits_list: Optional[List[Tuple[float, float]]],
     y_ylimits_list: Optional[List[Tuple[float, float]]],
-    setpoints_line_params: dict[str, Any] = {},
-    legend_params: dict[str, Any] = {},
-    figsize: Tuple[int, int] =(14, 8),
+    setpoints_line_params: dict[str, Any] | None = None,
+    legend_params: dict[str, Any] | None = None,
+    figsize: Tuple[int, int] = (14, 8),
     dpi: int = 300,
     fontsize: int = 12,
-    title: Optional[str] = None
+    title: Optional[str] = None,
 ) -> None:
     """
     Plot input-output data with setpoints from multiple Data-Driven MPC
@@ -315,12 +338,14 @@ def plot_input_output_reproduction(
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot. If `None`, the Y-axis limits will be determined
             automatically.
-        setpoints_line_params (dict[str, Any]): A dictionary of Matplotlib
-            properties for customizing the lines used to plot the setpoint
-            values (e.g., color, linestyle, linewidth).
-        legend_params (dict[str, Any]): A dictionary of Matplotlib
+        setpoints_line_params (dict[str, Any] | None): A dictionary of
+            Matplotlib properties for customizing the lines used to plot the
+            setpoint values (e.g., color, linestyle, linewidth). If not
+            provided, Matplotlib's default line properties will be used.
+        legend_params (dict[str, Any] | None): A dictionary of Matplotlib
             properties for customizing the plot legends (e.g., fontsize,
-            loc, handlelength).
+            loc, handlelength). If not provided, Matplotlib's default legend
+            properties will be used.
         figsize (Tuple[int, int]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
@@ -331,9 +356,14 @@ def plot_input_output_reproduction(
     m = u_data[0].shape[1]  # Number of inputs
     p = y_data[0].shape[1]  # Number of outputs
 
+    # Initialize Matplotlib params if not provided
+    setpoints_line_params = init_dict_if_none(setpoints_line_params)
+    legend_params = init_dict_if_none(legend_params)
+
     # Create example figure subplots
     _, axs_u, axs_y = create_input_output_figure(
-        m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title)
+        m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title
+    )
 
     # Plot data iterating through each controller scheme
     for i, dd_mpc_scheme in enumerate(data_driven_mpc_controller_schemes):
@@ -344,21 +374,23 @@ def plot_input_output_reproduction(
         controller_line_params = DD_MPC_SCHEME_LINE_PARAMS[dd_mpc_scheme]
 
         # Plot input-output data for scheme
-        plot_input_output(u_k=u_data[i],
-                          y_k=y_data[i],
-                          u_s=u_s,
-                          y_s=y_s,
-                          inputs_line_params=controller_line_params,
-                          outputs_line_params=controller_line_params,
-                          setpoints_line_params=setpoints_line_params,
-                          data_label=f" ({scheme_config['label']})",
-                          u_ylimits_list=u_ylimits_list,
-                          y_ylimits_list=y_ylimits_list,
-                          axs_u=axs_u,
-                          axs_y=axs_y,
-                          dpi=dpi,
-                          fontsize=fontsize,
-                          legend_params=legend_params)
-    
+        plot_input_output(
+            u_k=u_data[i],
+            y_k=y_data[i],
+            u_s=u_s,
+            y_s=y_s,
+            inputs_line_params=controller_line_params,
+            outputs_line_params=controller_line_params,
+            setpoints_line_params=setpoints_line_params,
+            data_label=f" ({scheme_config.label})",
+            u_ylimits_list=u_ylimits_list,
+            y_ylimits_list=y_ylimits_list,
+            axs_u=axs_u,
+            axs_y=axs_y,
+            dpi=dpi,
+            fontsize=fontsize,
+            legend_params=legend_params,
+        )
+
     # Show plot
     plt.show()
