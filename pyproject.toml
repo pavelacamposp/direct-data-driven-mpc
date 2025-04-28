@@ -17,7 +17,7 @@ dependencies = [
   "cvxpy",
   "tqdm",
   "PyYAML",
-  "PyQt5",
+  "PyQt6",
 ]
 license = "MIT"
 license-files = ["LICENSE"]
