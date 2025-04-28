@@ -36,3 +36,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://github.com/pavelacamposp/direct_data_driven_mpc"
+
+[project.optional-dependencies]
+dev = [
+  "pre-commit",
+  "mypy",
+]
