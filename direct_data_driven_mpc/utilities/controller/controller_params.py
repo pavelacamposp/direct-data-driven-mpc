@@ -38,7 +38,7 @@ AlphaRegTypesMap = {
 
 
 # Define dictionary type hints for Data-Driven MPC controller parameters
-class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
+class LTIDataDrivenMPCParams(TypedDict, total=False):
     n: int  # Estimated system order
 
     N: int  # Initial input-output trajectory length
@@ -64,7 +64,7 @@ class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
     y_s: np.ndarray  # System output setpoint
 
 
-class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
+class NonlinearDataDrivenMPCParams(TypedDict, total=False):
     n: int  # Estimated system order
 
     N: int  # Initial input-output trajectory length
@@ -97,9 +97,7 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
     n_mpc_step: int  # Number of consecutive applications of the optimal input
 
 
-DataDrivenMPCParamsType = (
-    LTIDataDrivenMPCParamsDictType | NonlinearDataDrivenMPCParamsDictType
-)
+DataDrivenMPCParams = LTIDataDrivenMPCParams | NonlinearDataDrivenMPCParams
 
 
 # Define lists of required Data-Driven controller parameters
@@ -150,7 +148,7 @@ def get_lti_data_driven_mpc_controller_params(
     m: int,
     p: int,
     verbose: int = 0,
-) -> LTIDataDrivenMPCParamsDictType:
+) -> LTIDataDrivenMPCParams:
     """
     Load and initialize parameters for a Data-Driven MPC controller designed
     for Linear Time-Invariant (LTI) systems from a YAML configuration file.
@@ -170,9 +168,9 @@ def get_lti_data_driven_mpc_controller_params(
                 output, 2 = detailed output.
 
     Returns:
-        LTIDataDrivenMPCParamsDictType: A dictionary of configuration
-            parameters for a Data-Driven MPC controller designed for Linear
-            Time-Invariant (LTI) systems.
+        LTIDataDrivenMPCParams: A dictionary of configuration parameters for a
+            Data-Driven MPC controller designed for Linear Time-Invariant (LTI)
+            systems.
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
@@ -206,7 +204,7 @@ def get_lti_data_driven_mpc_controller_params(
             )
 
     # Initialize Data-Driven MPC controller parameter dict
-    dd_mpc_params: LTIDataDrivenMPCParamsDictType = {}
+    dd_mpc_params: LTIDataDrivenMPCParams = {}
 
     # --- Define initial Input-Output data generation parameters ---
     # Persistently exciting input range
@@ -312,7 +310,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
     m: int,
     p: int,
     verbose: int = 0,
-) -> NonlinearDataDrivenMPCParamsDictType:
+) -> NonlinearDataDrivenMPCParams:
     """
     Load and initialize parameters for a Data-Driven MPC controller designed
     for Nonlinear systems from a YAML configuration file.
@@ -332,9 +330,8 @@ def get_nonlinear_data_driven_mpc_controller_params(
                 output, 2 = detailed output.
 
     Returns:
-        NonlinearDataDrivenMPCParamsDictType: A dictionary of configuration
-            parameters for a Data-Driven MPC controller designed for Nonlinear
-            systems.
+        NonlinearDataDrivenMPCParams: A dictionary of configuration parameters
+            for a Data-Driven MPC controller designed for Nonlinear systems.
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
@@ -367,7 +364,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
             )
 
     # Initialize Data-Driven MPC controller parameter dict
-    dd_mpc_params: NonlinearDataDrivenMPCParamsDictType = {}
+    dd_mpc_params: NonlinearDataDrivenMPCParams = {}
 
     # --- Define initial Input-Output data generation parameters ---
     # Persistently exciting input range
@@ -591,7 +588,7 @@ def get_weights_list_from_param(
 
 
 def print_initialization_details(
-    dd_mpc_params: DataDrivenMPCParamsType,
+    dd_mpc_params: DataDrivenMPCParams,
     cost_horizon: int,
     verbose: int,
     controller_label: str = "LTI",
@@ -600,7 +597,7 @@ def print_initialization_details(
     Print controller parameter initialization details.
 
     Args:
-        dd_mpc_params (DataDrivenMPCParamsType): A dictionary of configuration
+        dd_mpc_params (DataDrivenMPCParams): A dictionary of configuration
             parameters for a Data-Driven MPC controller.
         cost_horizon (int): The total length of the prediction horizon
             considered in the MPC cost function (`L` for LTI and `L + n + 1`

@@ -7,13 +7,13 @@ from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     NonlinearDataDrivenMPCController,
 )
 from direct_data_driven_mpc.utilities.controller.controller_params import (
-    LTIDataDrivenMPCParamsDictType,
-    NonlinearDataDrivenMPCParamsDictType,
+    LTIDataDrivenMPCParams,
+    NonlinearDataDrivenMPCParams,
 )
 
 
 def create_lti_data_driven_mpc_controller(
-    controller_config: LTIDataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParams,
     u_d: np.ndarray,
     y_d: np.ndarray,
     use_terminal_constraints: bool = True,
@@ -24,9 +24,9 @@ def create_lti_data_driven_mpc_controller(
     trajectory data measured from a system.
 
     Args:
-        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
-            containing configuration parameters for a Data-Driven MPC
-            controller designed for Linear Time-Invariant (LTI) systems.
+        controller_config (LTIDataDrivenMPCParams): A dictionary containing
+            configuration parameters for a Data-Driven MPC controller designed
+            for Linear Time-Invariant (LTI) systems.
         u_d (np.ndarray): An array of shape `(N, m)` representing a
             persistently exciting input sequence used to generate output data
             from the system. `N` is the trajectory length and `m` is the
@@ -105,7 +105,7 @@ def create_lti_data_driven_mpc_controller(
 
 
 def create_nonlinear_data_driven_mpc_controller(
-    controller_config: NonlinearDataDrivenMPCParamsDictType,
+    controller_config: NonlinearDataDrivenMPCParams,
     u: np.ndarray,
     y: np.ndarray,
 ) -> NonlinearDataDrivenMPCController:
@@ -115,7 +115,7 @@ def create_nonlinear_data_driven_mpc_controller(
     trajectory data measured from a system.
 
     Args:
-        controller_config (NonlinearDataDrivenMPCParamsDictType): A dictionary
+        controller_config (NonlinearDataDrivenMPCParams): A dictionary
             containing configuration parameters for a Data-Driven MPC
             controller designed for Nonlinear systems.
         u (np.ndarray): An array of shape `(N, m)` representing a
