@@ -43,7 +43,7 @@ A **direct data-driven controller** maps measured input-output data from an unkn
 
 ## Requirements
 This package requires the following:
-- **Python** (>=3.8, <3.13). Python 3.13 is not fully supported, as some dependencies have not been compiled for this version yet. We recommend using Python 3.8 to 3.12.
+- **Python** (>=3.10, <3.13). Python 3.13 is not fully supported, as some dependencies have not been compiled for this version yet. We recommend using Python 3.10 to 3.12.
 - **FFmpeg**: Required for saving animations (e.g., GIF or MP4).
     - **On Windows**: You can download FFmpeg from [the official FFmpeg website](https://ffmpeg.org/download.html). Ensure it's correctly added to your system's `PATH`.
     - **On Unix**: You can install it using your package manager. For Debian/Ubuntu:

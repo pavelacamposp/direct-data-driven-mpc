@@ -1,0 +1,45 @@
+---
+name: CI Workflow
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  ci_workflow:
+    runs-on: ubuntu-latest
+    container: python:3.12-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --default-timeout=60 --retries=5 -r requirements-ci.txt
+
+      - name: Install project package in editable mode
+        run: |
+          pip install -e .
+
+      - name: Lint with ruff
+        run: ruff check --output-format=github --line-length 79
+
+      - name: Run mypy
+        run: |
+          mypy \
+          --install-types \
+          --non-interactive \
+          --ignore-missing-imports \
+          --disallow-untyped-defs \
+          .
+
+      - name: YAML Lint
+        run: yamllint --strict .
+
+      - name: Run tests with coverage
+        run: |
+          coverage run -m pytest --maxfail=2 --disable-warnings
+          coverage report
