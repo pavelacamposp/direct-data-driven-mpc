@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List, Optional
 
 import cvxpy as cp
 import numpy as np
@@ -81,7 +80,7 @@ class NonlinearDataDrivenMPCController:
         u_s (cp.Variable): The predicted equilibrium input variable.
         y_s (cp.Variable): The predicted equilibrium output variable.
         sigma (cp.Variable): The optimization variable for `sigma`.
-        sigma_ubar (Optional[Vstack]): A CVXPY `Vstack` object that stacks the
+        sigma_ubar (Vstack | None): A CVXPY `Vstack` object that stacks the
             `sigma` values corresponding to the input. Defined only if the
             controller uses an extended output representation.
         u_s_tiled (Vstack): A CVXPY `Vstack` object that stacks the predicted
@@ -89,26 +88,26 @@ class NonlinearDataDrivenMPCController:
         y_s_tiled (Vstack): A CVXPY `Vstack` object that stacks the predicted
             output setpoint variables for use in the cost function
             formulation.
-        alpha_s (Optional[cp.Variable]): The optimization variable for
-            `alpha_s`. Defined only if `alpha` is regularized with respect to
-            an approximation of `alpha_Lin^sr(D_t)`.
-        sigma_s (Optional[cp.Variable]): The optimization variable for
-            `sigma_s`. Defined only if `alpha` is regularized with respect to
-            an approximation of `alpha_Lin^sr(D_t)`.
-        sigma_s_ubar (Optional[Vstack]): A CVXPY `Vstack` object that stacks
-            the `sigma_s` values corresponding to the input. Defined only if
-            the controller uses an extended output representation and if
-            `alpha` is regularized with respect to an approximation of
+        alpha_s (cp.Variable | None): The optimization variable for `alpha_s`.
+            Defined only if `alpha` is regularized with respect to an
+            approximation of `alpha_Lin^sr(D_t)`.
+        sigma_s (cp.Variable | None): The optimization variable for `sigma_s`.
+            Defined only if `alpha` is regularized with respect to an
+            approximation of `alpha_Lin^sr(D_t)`.
+        sigma_s_ubar (Vstack | None): A CVXPY `Vstack` object that stacks the
+            `sigma_s` values corresponding to the input. Defined only if the
+            controller uses an extended output representation and if `alpha` is
+            regularized with respect to an approximation of
             `alpha_Lin^sr(D_t)`.
-        dynamics_constraint (List[cp.Constraint]): The system dynamics
+        dynamics_constraint (list[cp.Constraint]): The system dynamics
             constraints for a Data-Driven MPC formulation.
-        internal_state_constraint (List[cp.Constraint]): The internal state
+        internal_state_constraint (list[cp.Constraint]): The internal state
             constraints for a Data-Driven MPC formulation.
-        terminal_constraint (List[cp.Constraint]): The terminal state
+        terminal_constraint (list[cp.Constraint]): The terminal state
             constraints for a Data-Driven MPC formulation.
-        input_constraints (List[cp.Constraint]): The input constraints for a
+        input_constraints (list[cp.Constraint]): The input constraints for a
             Data-Driven MPC formulation.
-        constraints (List[cp.Constraint]): The combined constraints for the
+        constraints (list[cp.Constraint]): The combined constraints for the
             Data-Driven MPC formulation.
         cost (cp.Expression): The cost function for the Data-Driven MPC
             formulation.
@@ -116,12 +115,12 @@ class NonlinearDataDrivenMPCController:
             Data-Driven MPC.
         optimal_u (np.ndarray): The optimal control input derived from the
             Data-Driven MPC solution.
-        optimal_du (Optional[np.ndarray]): The optimal control input
-            increments derived from the Data-Driven MPC solution. Defined only
-            for controllers with an extended output representation and input
+        optimal_du (np.ndarray | None): The optimal control input increments
+            derived from the Data-Driven MPC solution. Defined only for
+            controllers with an extended output representation and input
             increments.
-        prev_alpha_val (Optional[np.ndarray]): The previous value of `alpha`
-            used for when `alpha` is regularized with respect to the previous
+        prev_alpha_val (np.ndarray | None): The previous value of `alpha` used
+            for when `alpha` is regularized with respect to the previous
             optimal `alpha` value. Defined only if `alpha` is regularized with
             respect to its previous optimal alpha value.
         ones_NLn (np.ndarray): A vector of ones of shape (1, N - L - n).
@@ -160,10 +159,10 @@ class NonlinearDataDrivenMPCController:
         U: np.ndarray,
         Us: np.ndarray,
         alpha_reg_type: AlphaRegType = AlphaRegType.ZERO,
-        lamb_alpha_s: Optional[float] = None,
-        lamb_sigma_s: Optional[float] = None,
+        lamb_alpha_s: float | None = None,
+        lamb_sigma_s: float | None = None,
         ext_out_incr_in: bool = False,
-        update_cost_threshold: Optional[float] = None,
+        update_cost_threshold: float | None = None,
         n_mpc_step: int = 1,
     ):
         """
@@ -215,7 +214,7 @@ class NonlinearDataDrivenMPCController:
                 (u[k] = u[k-1] + du[k-1]). If `False`, the controller operates
                 as a standard controller with direct control inputs and
                 without system state extensions. Defaults to `False`.
-            update_cost_threshold (Optional[float]): The tracking cost value
+            update_cost_threshold (float | None): The tracking cost value
                 threshold. Online input-output data updates are disabled when
                 the tracking cost value is less than this value. If `None`,
                 input-output data is always updated online. Defaults to
@@ -844,7 +843,7 @@ class NonlinearDataDrivenMPCController:
             + self.input_constraints
         )
 
-    def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
+    def define_system_dynamic_constraints(self) -> list[cp.Constraint]:
         """
         Define the system dynamic constraints for the Data-Driven MPC
         formulation.
@@ -857,7 +856,7 @@ class NonlinearDataDrivenMPCController:
         These constraints are defined according to Equation (22b) of [2].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY system dynamic
+            list[cp.Constraint]: A list containing the CVXPY system dynamic
                 constraints for the Data-Driven MPC controller, corresponding
                 to the specified MPC controller type.
 
@@ -880,7 +879,7 @@ class NonlinearDataDrivenMPCController:
 
         return dynamics_constraints
 
-    def define_internal_state_constraints(self) -> List[cp.Constraint]:
+    def define_internal_state_constraints(self) -> list[cp.Constraint]:
         """
         Define the internal state constraints for the Data-Driven MPC
         formulation.
@@ -894,7 +893,7 @@ class NonlinearDataDrivenMPCController:
         These constraints are defined according to Equation (22c) of [2].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY internal state
+            list[cp.Constraint]: A list containing the CVXPY internal state
                 constraints for the Data-Driven MPC controller.
 
         Note:
@@ -917,7 +916,7 @@ class NonlinearDataDrivenMPCController:
 
         return internal_state_constraints
 
-    def define_terminal_state_constraints(self) -> List[cp.Constraint]:
+    def define_terminal_state_constraints(self) -> list[cp.Constraint]:
         """
         Define the terminal state constraints for the Data-Driven MPC
         formulation.
@@ -931,7 +930,7 @@ class NonlinearDataDrivenMPCController:
         These constraints are defined according to Equation (22d) of [2].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY terminal state
+            list[cp.Constraint]: A list containing the CVXPY terminal state
                 constraints for the Data-Driven MPC controller.
 
         References:
@@ -951,14 +950,14 @@ class NonlinearDataDrivenMPCController:
 
         return terminal_constraints
 
-    def define_input_constraints(self) -> List[cp.Constraint]:
+    def define_input_constraints(self) -> list[cp.Constraint]:
         """
         Define the input constraints for the Data-Driven MPC formulation.
 
         These constraints are defined according to Equation (22e) of [2].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY input constraints
+            list[cp.Constraint]: A list containing the CVXPY input constraints
                 for the Data-Driven MPC controller.
         """
         # Define input constraints
@@ -1193,7 +1192,7 @@ class NonlinearDataDrivenMPCController:
         # mypy [assignment] is ignored since `alpha.value` could only be `None`
         # if `alpha` were a sparse matrix, which is not the case in our system
 
-    def get_du_value_at_step(self, n_step: int = 0) -> Optional[np.ndarray]:
+    def get_du_value_at_step(self, n_step: int = 0) -> np.ndarray | None:
         """
         Get the optimal control input increment (`du`) from the MPC solution
         corresponding to a specified time step in the prediction horizon
@@ -1204,7 +1203,7 @@ class NonlinearDataDrivenMPCController:
                 retrieve. It must be within the range [0, L].
 
         Returns:
-            Optional[np.ndarray]: An array containing the optimal control
+            np.ndarray | None: An array containing the optimal control
                 input increment for the specified prediction time step if the
                 controller uses an extended output representation and input
                 increments. Otherwise, returns `None`.
@@ -1222,7 +1221,7 @@ class NonlinearDataDrivenMPCController:
         self,
         u_current: np.ndarray,
         y_current: np.ndarray,
-        du_current: Optional[np.ndarray] = None,
+        du_current: np.ndarray | None = None,
     ) -> None:
         """
         Store an input-output measurement pair for the current time step in

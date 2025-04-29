@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Tuple
+from typing import Callable
 
 import numpy as np
 from numpy.random import Generator
@@ -22,7 +22,7 @@ def simulate_lti_data_driven_mpc_control_loop(
     n_steps: int,
     np_random: Generator,
     verbose: int,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Simulate a Data-Driven MPC control loop applied to a Linear Time-Invariant
     (LTI) system and return the resulting input-output data sequences.
@@ -44,7 +44,7 @@ def simulate_lti_data_driven_mpc_control_loop(
             2 = detailed output.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
+        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
             - An array of shape `(n_steps, m)` representing the optimal control
                 inputs applied to the system, where `m` is the number of
                 control inputs.
@@ -161,12 +161,11 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     n_steps: int,
     np_random: Generator,
     verbose: int,
-    callback: Optional[
-        Callable[
-            [int, NonlinearSystem, np.ndarray, np.ndarray, np.ndarray], None
-        ]
-    ] = None,
-) -> Tuple[np.ndarray, np.ndarray]:
+    callback: Callable[
+        [int, NonlinearSystem, np.ndarray, np.ndarray, np.ndarray], None
+    ]
+    | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Simulate a Data-Driven MPC control loop applied to a Nonlinear system and
     return the resulting input-output data sequences.
@@ -186,13 +185,13 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             random noise for the system's output.
         verbose (int): The verbosity level: 0 = no output, 1 = minimal output,
             2 = detailed output.
-        callback (Optional[Callable]): A function executed after each control
+        callback (Callable | None): A function executed after each control
             step. It should follow the signature `(step: int, system_model:
             NonlinearSystem, u_sys_k: np.ndarray, y_sys_k: np.ndarray, y_r:
             np.ndarray)`.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
+        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
             - An array of shape `(n_steps, m)` representing the optimal control
                 inputs applied to the system, where `m` is the number of
                 control inputs.
@@ -326,9 +325,9 @@ def print_mpc_step_info(
     mpc_cost_val: float,
     y_sys_k: np.ndarray,
     y_s: np.ndarray,
-    u_sys_k: Optional[np.ndarray] = None,
-    u_s: Optional[np.ndarray] = None,
-    progress_bar: Optional[tqdm] = None,
+    u_sys_k: np.ndarray | None = None,
+    u_s: np.ndarray | None = None,
+    progress_bar: tqdm | None = None,
 ) -> None:
     """
     Print MPC step information based on the verbosity level.
@@ -340,14 +339,14 @@ def print_mpc_step_info(
                 errors.
         step (int): Current time step.
         mpc_cost_val (float): The current MPC cost value.
-        u_s (Optional[np.ndarray]): The input setpoint array. If `None`, input
+        u_s (np.ndarray | None): The input setpoint array. If `None`, input
             errors will not be printed. Defaults to `None`.
-        u_sys_k (Optional[np.ndarray]): The input vector for the current time
+        u_sys_k (np.ndarray | None): The input vector for the current time
             step. If `None`, input errors will not be printed. Defaults to
             `None`.
         y_s (np.ndarray): The output setpoint array.
         y_sys_k (np.ndarray): The output vector for the current time step.
-        progress_bar (Optional[tqdm]): A progress bar displaying simulation
+        progress_bar (tqdm | None): A progress bar displaying simulation
             progress information.
     """
     if verbose == 1 and progress_bar is not None:

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 
@@ -57,7 +55,7 @@ def hankel_matrix(X: np.ndarray, L: int) -> np.ndarray:
 
 def evaluate_persistent_excitation(
     X: np.ndarray, order: int
-) -> Tuple[int, bool]:
+) -> tuple[int, bool]:
     """
     Evaluate whether a data sequence `X` is persistently exciting of a given
     order based on the rank of its Hankel matrix. The matrix `X` consists of a
@@ -72,7 +70,7 @@ def evaluate_persistent_excitation(
         order (int): The order of persistent excitation to evaluate.
 
     Returns:
-        Tuple[int, bool]: A tuple containing the rank of the Hankel matrix and
+        tuple[int, bool]: A tuple containing the rank of the Hankel matrix and
             a boolean indicating whether `X` is persistently exciting of the
             given order.
     """

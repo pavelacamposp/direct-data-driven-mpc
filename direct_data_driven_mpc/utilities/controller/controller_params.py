@@ -1,4 +1,4 @@
-from typing import List, Optional, TypedDict, Union
+from typing import TypedDict
 
 import numpy as np
 
@@ -51,7 +51,7 @@ class LTIDataDrivenMPCParamsDictType(TypedDict, total=False):
     lamb_sigma: float  # Regularization parameter for sigma
     c: float  # Convex slack variable constraint constant
 
-    U: Optional[np.ndarray]  # Bounds for the predicted input
+    U: np.ndarray | None  # Bounds for the predicted input
     u_range: np.ndarray  # Range of the persistently exciting input u
 
     # Slack variable constraint type
@@ -83,8 +83,8 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
 
     alpha_reg_type: AlphaRegType  # Alpha regularization type
 
-    lamb_alpha_s: Optional[float]  #  Regularization parameter for alpha_s
-    lamb_sigma_s: Optional[float]  #  Regularization parameter for sigma_s
+    lamb_alpha_s: float | None  #  Regularization parameter for alpha_s
+    lamb_sigma_s: float | None  #  Regularization parameter for sigma_s
 
     y_r: np.ndarray  # System output setpoint
 
@@ -92,7 +92,7 @@ class NonlinearDataDrivenMPCParamsDictType(TypedDict, total=False):
     # output representation and input increments, or operates as a standard
     # controller with direct control inputs without system state extensions
 
-    update_cost_threshold: Optional[float]  # Tracking cost value threshold
+    update_cost_threshold: float | None  # Tracking cost value threshold
 
     n_mpc_step: int  # Number of consecutive applications of the optimal input
 
@@ -501,7 +501,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
 
 def construct_weighting_matrix(
-    weights_param: Union[float, List[float]],
+    weights_param: float | list[float],
     n_vars: int,
     horizon: int,
     matrix_label: str = "Weighting",
@@ -511,7 +511,7 @@ def construct_weighting_matrix(
     of weights.
 
     Args:
-        weights_param (Union[float, List[float]]): The weights for the matrix.
+        weights_param (float | list[float]): The weights for the matrix.
             - If scalar, applies the same weight to all variables.
             - If list, assigns specific weights to each variable. Must have
               `n_vars` elements.
@@ -556,15 +556,15 @@ def construct_weighting_matrix(
 
 
 def get_weights_list_from_param(
-    weights_param: Union[float, List[float]],
+    weights_param: float | list[float],
     size: int,
     matrix_label: str = "Weighting",
-) -> List[float]:
+) -> list[float]:
     """
     Construct a list of weights from a matrix weights parameter.
 
     Args:
-        weights_param (Union[float, List[float]]): A weighting parameter.
+        weights_param (float | list[float]): A weighting parameter.
             - If scalar, applies the same weight to all variables.
             - If list, must have `size` elements.
         size (int): The expected number of elements of the resulting list.
@@ -572,7 +572,7 @@ def get_weights_list_from_param(
             "Weighting".
 
     Returns:
-        List[float]: A list of weights of length `size`.
+        list[float]: A list of weights of length `size`.
 
     Raises:
         ValueError: If `weights_param` is not a valid scalar or list with the
