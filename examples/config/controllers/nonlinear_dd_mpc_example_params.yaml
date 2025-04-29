@@ -1,3 +1,4 @@
+---
 # Nonlinear Data-Driven MPC Parameters
 # Based on the Nonlinear Data-Driven MPC implementation example for the
 # control of a nonlinear continuous stirred tank reactor (CSTR) from Section V
@@ -36,7 +37,7 @@ nonlinear_data_driven_mpc_params:
   # Parameters for input bounds and ranges
   # Note: Each input must have an associated vector of
   # bounds or ranges [min, max].
-  
+
   # Bounds for the predicted input
   U:
     - [0.1, 2]
@@ -49,39 +50,37 @@ nonlinear_data_driven_mpc_params:
   u_range:
     - [0.1, 1]
 
-  alpha_reg_type: 1  # Alpha regularization type:
-                     # - 0 = Approximated → Regularized w.r.t. an approximation
-                     #                      of alpha_Lin^sr(D_t) (Remark 1 of
-                     #                      [2]).
-                     # - 1 = Previous → Regularized w.r.t. a previous optimal
-                     #                  alpha value to encourage stationary
-                     #                  behavior (Section V of [2]).
-                     # - 2 = Zero → Regularized w.r.t. zero.
-  
+  # Alpha regularization type:
+  # - 0 = Approximated → Regularized w.r.t. an approximation of
+  #                      alpha_Lin^sr(D_t) (Remark 1 of [2]).
+  # - 1 = Previous → Regularized w.r.t. a previous optimal alpha value to
+  #                  encourage stationary behavior (Section V of [2]).
+  # - 2 = Zero → Regularized w.r.t. zero.
+  alpha_reg_type: 1
+
   # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
   lamb_alpha_s: null  #  Regularization parameter for alpha_s (optional)
   lamb_sigma_s: null  #  Regularization parameter for sigma_s (optional)
-  
+
   y_r: [0.6519]  # System output setpoint
 
-  ext_out_incr_in: true  # Enables the following controller structure:
-                         # - true → Controller uses an extended output
-                         #          representation (y_ext[k] = [y[k], u[k]])
-                         #          and input increments where the control
-                         #          input is updated incrementally as:
-                         #          u[k] = u[k-1] + du[k-1].
-                         #          This ensures control-affine system
-                         #          dynamics (Section V of [2]).
-                         # - false → Standard controller operation. Direct
-                         #           control input, without extensions.
+  # Control system structure (Extendended Output and Input Increments):
+  # - true → Controller uses an extended output representation
+  #          (y_ext[k] = [y[k], u[k]]) and input increments where the control
+  #          input is updated incrementally as: u[k] = u[k-1] + du[k-1].
+  # - false → Standard controller operation. Direct control input, without
+  #           extensions.
+  ext_out_incr_in: true
 
   # Tracking cost value threshold
   # Online input-output data updates are disabled when the tracking cost value
   # is less than this value. This ensures prediction data is persistently
   # exciting (Section V of [2]).
-  update_cost_threshold: 1.0e-5  # If set to `null` or 0, input-output data is
-                                 # always updated online.
+  #
+  # If set to `null` or 0, input-output data is always updated online.
+  update_cost_threshold: 1.0e-5
 
-  n_n_mpc_step: true  # Enable n-Step Data-Driven MPC:
-                      # - true = n-Step Data-Driven MPC
-                      # - false = 1-Step Data-Driven MPC
+  # Enable n-Step Data-Driven MPC:
+  # - true = n-Step Data-Driven MPC
+  # - false = 1-Step Data-Driven MPC
+  n_n_mpc_step: true

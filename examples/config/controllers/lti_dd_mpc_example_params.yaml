@@ -1,3 +1,4 @@
+---
 # LTI Data-Driven MPC Parameters
 # Based on the Data-Driven MPC implementation example for the control of a
 # linearized four-tank system from Section V of the paper:
@@ -35,38 +36,38 @@ lti_data_driven_mpc_params:
   # Note: Each input must have an associated vector of
   # bounds or ranges [min, max].
 
-  U: null  # Bounds for the predicted input
-           # If set to `null`, no input bounds are considered.
-           # Example (null):
-           #   U: null
-           # Example (with bounds):
-           #   U:
-           #     - [-1, 2]
-           #     - [-2.5, 4.5]
+  # Bounds for the predicted input
+  # If set to `null`, no input constraints are applied.
+  # Example (null):
+  #   U: null
+  # Example (with bounds):
+  #   U:
+  #     - [-1, 2]
+  #     - [-2.5, 4.5]
+  U: null
 
   # Range of the persistently exciting input u_d
   u_d_range:
     - [-1, 1]
     - [-1, 1]
 
-  slack_var_constraint_type: 0  # Slack variable constraint type:
-                                # - 0 = None → Omit explicit constraint. The
-                                #              slack variable constraint is
-                                #              implicitly satisfied (Remark 3
-                                #              of [1]).
-                                # - 1 = Convex → Convex slack variable
-                                #                constraint (Remark 3 of [1]).
-                                # - 2 = Non-Convex → Non-Convex slack variable
-                                #                    constraint (Equation (6d)
-                                #                    of [1]).
+  # Slack variable constraint type:
+  # - 0 = None → Omit explicit constraint. The slack variable constraint is
+  #              implicitly satisfied (Remark 3 of [1]).
+  # - 1 = Convex → Convex slack variable constraint (Remark 3 of [1]).
+  # - 2 = Non-Convex → Non-Convex slack variable constraint (Equation (6d) of
+  #                    [1]).
+  slack_var_constraint_type: 0
 
-  controller_type: 1  # Data-Driven MPC controller type:
-                      # - 0 → Nominal Data-Driven MPC
-                      # - 1 → Robust Data-Driven MPC
+  # Data-Driven MPC controller type:
+  # - 0 → Nominal Data-Driven MPC
+  # - 1 → Robust Data-Driven MPC
+  controller_type: 1
 
   u_s: [1, 1]  # Control input setpoint
   y_s: [0.65, 0.77]  # System output setpoint
 
-  n_n_mpc_step: true  # Enable n-Step Data-Driven MPC:
-                      # - true = n-Step Data-Driven MPC
-                      # - false = 1-Step Data-Driven MPC
+  # Enable n-Step Data-Driven MPC:
+  # - true = n-Step Data-Driven MPC
+  # - false = 1-Step Data-Driven MPC
+  n_n_mpc_step: true

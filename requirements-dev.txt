@@ -1,0 +1,8 @@
+numpy
+matplotlib>=3.9.0
+cvxpy
+tqdm
+PyYAML
+PyQt6
+pre-commit
+mypy

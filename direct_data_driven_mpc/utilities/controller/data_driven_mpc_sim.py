@@ -1,24 +1,27 @@
-from typing import Tuple, Optional, Callable
+from typing import Callable, Optional, Tuple
 
 import numpy as np
 from numpy.random import Generator
 from tqdm import tqdm
 
+from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+    LTIDataDrivenMPCController,
+)
+from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
+    NonlinearDataDrivenMPCController,
+)
 from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.utilities.models.nonlinear_model import (
-    NonlinearSystem)
+    NonlinearSystem,
+)
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
-    LTIDataDrivenMPCController)
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
-    NonlinearDataDrivenMPCController)
 
 def simulate_lti_data_driven_mpc_control_loop(
     system_model: LTIModel,
     data_driven_mpc_controller: LTIDataDrivenMPCController,
     n_steps: int,
     np_random: Generator,
-    verbose: int
+    verbose: int,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Simulate a Data-Driven MPC control loop applied to a Linear Time-Invariant
@@ -27,7 +30,7 @@ def simulate_lti_data_driven_mpc_control_loop(
     This function simulates the closed-loop operation of a Data-Driven MPC
     controller designed for LTI systems, following the Data-Driven MPC schemes
     described in Algorithm 1 (Nominal) and Algorithm 2 (Robust) of [1].
-    
+
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
@@ -39,7 +42,7 @@ def simulate_lti_data_driven_mpc_control_loop(
             random noise for the system's output.
         verbose (int): The verbosity level: 0 = no output, 1 = minimal output,
             2 = detailed output.
-    
+
     Returns:
         Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
             - An array of shape `(n_steps, m)` representing the optimal control
@@ -98,19 +101,22 @@ def simulate_lti_data_driven_mpc_control_loop(
             # 2) Apply the input ut = ubar*[0](t).
             # --- Algorithm 2 (n-step): ---
             # 2) Apply the input sequence u[t, t+n-1] = ubar*[0, n-1](t)
-            #    over the next `n` time steps. 
+            #    over the next `n` time steps.
 
             # Update control input
             n_step = k - t  # Time step `n`. Results 0 for n_mpc_step = 1
             optimal_u_step_n = (
                 data_driven_mpc_controller.get_optimal_control_input_at_step(
-                    n_step=n_step))
+                    n_step=n_step
+                )
+            )
             u_sys[k, :] = optimal_u_step_n
-            
+
             # --- Simulate system with optimal control input ---
-            y_sys[k, :] = system_model.simulate_step(u=u_sys[k, :],
-                                                     w=w_sys[k, :])
-            
+            y_sys[k, :] = system_model.simulate_step(
+                u=u_sys[k, :], w=w_sys[k, :]
+            )
+
             # --- Algorithm 1 and Algorithm 2 (n-step): ---
             # 1) At time `t`, take the past `n` measurements u[t-n, t-1],
             #    y[t-n, t-1] and solve Data-Driven MPC.
@@ -121,31 +127,33 @@ def simulate_lti_data_driven_mpc_control_loop(
             # Update past input-output measurements
             data_driven_mpc_controller.store_input_output_measurement(
                 u_current=u_sys[k, :].reshape(-1, 1),
-                y_current=y_sys[k, :].reshape(-1, 1)
+                y_current=y_sys[k, :].reshape(-1, 1),
             )
 
             # Print simulation progress and control information
-            mpc_cost_val = (
-                data_driven_mpc_controller.get_optimal_cost_value())
-            print_mpc_step_info(verbose=verbose,
-                                step=t,
-                                mpc_cost_val=mpc_cost_val,
-                                u_sys_k=u_sys[k, :].flatten(),
-                                u_s=u_s.flatten(),
-                                y_sys_k=y_sys[k, :].flatten(),
-                                y_s=y_s.flatten(),
-                                progress_bar=progress_bar)
+            mpc_cost_val = data_driven_mpc_controller.get_optimal_cost_value()
+            print_mpc_step_info(
+                verbose=verbose,
+                step=t,
+                mpc_cost_val=mpc_cost_val,
+                u_sys_k=u_sys[k, :].flatten(),
+                u_s=u_s.flatten(),
+                y_sys_k=y_sys[k, :].flatten(),
+                y_s=y_s.flatten(),
+                progress_bar=progress_bar,
+            )
 
         # --- Algorithm 1: ---
         # 3) Set t = t + 1 and go back to 1).
         # --- Algorithm 2 (n-step): ---
         # 3) Set t = t + n and go back to 1).
-    
+
     # Close progress bar if previously created
     if progress_bar is not None:
         progress_bar.close()
-    
+
     return u_sys, y_sys
+
 
 def simulate_nonlinear_data_driven_mpc_control_loop(
     system_model: NonlinearSystem,
@@ -153,12 +161,11 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     n_steps: int,
     np_random: Generator,
     verbose: int,
-    callback: Optional[Callable[[int,
-                                 NonlinearSystem,
-                                 np.ndarray,
-                                 np.ndarray,
-                                 np.ndarray],
-                                None]] = None
+    callback: Optional[
+        Callable[
+            [int, NonlinearSystem, np.ndarray, np.ndarray, np.ndarray], None
+        ]
+    ] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Simulate a Data-Driven MPC control loop applied to a Nonlinear system and
@@ -167,7 +174,7 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     This function simulates the closed-loop operation of a Data-Driven MPC
     controller designed for Nonlinear systems, following the Nonlinear
     Data-Driven MPC scheme described in Algorithm 1 of [2].
-    
+
     Args:
         system_model (NonlinearSystem): A `NonlinearSystem` instance
             representing a Nonlinear system.
@@ -183,7 +190,7 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             step. It should follow the signature `(step: int, system_model:
             NonlinearSystem, u_sys_k: np.ndarray, y_sys_k: np.ndarray, y_r:
             np.ndarray)`.
-    
+
     Returns:
         Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
             - An array of shape `(n_steps, m)` representing the optimal control
@@ -259,13 +266,16 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             n_step = k - t  # Time step `n`. Results 0 for n_mpc_step = 1
             optimal_u_step_n = (
                 data_driven_mpc_controller.get_optimal_control_input_at_step(
-                    n_step=n_step))
+                    n_step=n_step
+                )
+            )
             u_sys[k, :] = optimal_u_step_n
-            
+
             # --- Simulate system with optimal control input ---
-            y_sys[k, :] = system_model.simulate_step(u=u_sys[k, :],
-                                                     w=w_sys[k, :])
-            
+            y_sys[k, :] = system_model.simulate_step(
+                u=u_sys[k, :], w=w_sys[k, :]
+            )
+
             # --- Algorithm 1: ---
             # Update input-output measurements online after each iteration.
             #
@@ -274,11 +284,13 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
 
             # Update input-output measurements online
             du_current = data_driven_mpc_controller.get_du_value_at_step(
-                n_step=n_step)
+                n_step=n_step
+            )
             data_driven_mpc_controller.store_input_output_measurement(
                 u_current=u_sys[k, :],
                 y_current=y_sys[k, :],
-                du_current=du_current)
+                du_current=du_current,
+            )
             # Note: Input increment updates are required for controllers that
             # use an extended output representation and input increments
             # (as the controller presented in Section V of [2]). This is not
@@ -289,22 +301,24 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             # Call callback function after each simulation step if provided
             if callback:
                 callback(k, system_model, u_sys[k, :], y_sys[k, :], y_r)
-        
+
             # Print simulation progress and control information
-            mpc_cost_val = (
-                data_driven_mpc_controller.get_optimal_cost_value())
-            print_mpc_step_info(verbose=verbose,
-                                step=t,
-                                mpc_cost_val=mpc_cost_val,
-                                y_sys_k=y_sys[k, :].flatten(),
-                                y_s=y_r.flatten(),
-                                progress_bar=progress_bar)
-    
+            mpc_cost_val = data_driven_mpc_controller.get_optimal_cost_value()
+            print_mpc_step_info(
+                verbose=verbose,
+                step=t,
+                mpc_cost_val=mpc_cost_val,
+                y_sys_k=y_sys[k, :].flatten(),
+                y_s=y_r.flatten(),
+                progress_bar=progress_bar,
+            )
+
     # Close progress bar if previously created
     if progress_bar is not None:
         progress_bar.close()
 
     return u_sys, y_sys
+
 
 def print_mpc_step_info(
     verbose: int,
@@ -314,7 +328,7 @@ def print_mpc_step_info(
     y_s: np.ndarray,
     u_sys_k: Optional[np.ndarray] = None,
     u_s: Optional[np.ndarray] = None,
-    progress_bar: Optional[tqdm] = None
+    progress_bar: Optional[tqdm] = None,
 ) -> None:
     """
     Print MPC step information based on the verbosity level.
@@ -338,29 +352,35 @@ def print_mpc_step_info(
     """
     if verbose == 1 and progress_bar is not None:
         # Update progress bar
-        progress_bar.set_description(f"    Simulation progress - MPC cost "
-                                     f"value: {mpc_cost_val:>8.4f}")
+        progress_bar.set_description(
+            f"    Simulation progress - MPC cost value: {mpc_cost_val:>8.4f}"
+        )
         progress_bar.update()
 
     elif verbose > 1:
         # Calculate and format output errors
         y_error = y_s - y_sys_k
-        formatted_y_error = ', '.join([f'y_{i + 1}e = {error:>6.3f}' 
-                                       for i, error
-                                       in enumerate(y_error)])
-        
+        formatted_y_error = ", ".join(
+            [f"y_{i + 1}e = {error:>6.3f}" for i, error in enumerate(y_error)]
+        )
+
         # Calculate and format input errors
         if u_sys_k is not None and u_s is not None:
             u_error = u_s - u_sys_k
-            formatted_u_error = ', '.join([f'u_{i + 1}e = {error:>6.3f}'
-                                           for i, error
-                                           in enumerate(u_error)])
+            formatted_u_error = ", ".join(
+                [
+                    f"u_{i + 1}e = {error:>6.3f}"
+                    for i, error in enumerate(u_error)
+                ]
+            )
 
             # Construct error message including input errors
             error_message = f"{formatted_u_error}, {formatted_y_error}"
         else:
             # Construct error message without input errors
             error_message = f"{formatted_y_error}"
-            
-        print(f"    Time step: {step:>4} - MPC cost value: "
-              f"{mpc_cost_val:>8.4f} - Error: " + error_message)
+
+        print(
+            f"    Time step: {step:>4} - MPC cost value: "
+            f"{mpc_cost_val:>8.4f} - Error: " + error_message
+        )

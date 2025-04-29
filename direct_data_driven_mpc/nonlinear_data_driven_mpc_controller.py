@@ -1,11 +1,14 @@
-from typing import List, Optional
 from enum import Enum
+from typing import List, Optional
 
-import numpy as np
 import cvxpy as cp
+import numpy as np
 
 from direct_data_driven_mpc.utilities.hankel_matrix import (
-    hankel_matrix, evaluate_persistent_excitation)
+    evaluate_persistent_excitation,
+    hankel_matrix,
+)
+
 
 # Define the regularization types of `alpha`, considering
 # with respect to what variable it is regularized
@@ -19,7 +22,8 @@ class AlphaRegType(Enum):
     # Alpha regularized w.r.t. zero.
     ZERO = 2
 
-class NonlinearDataDrivenMPCController():
+
+class NonlinearDataDrivenMPCController:
     """
     A class that implements a Data-Driven Model Predictive Control (MPC)
     controller for Nonlinear systems. The implementation is based on research
@@ -138,6 +142,7 @@ class NonlinearDataDrivenMPCController():
             in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
             4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
+
     def __init__(
         self,
         n: int,
@@ -159,7 +164,7 @@ class NonlinearDataDrivenMPCController():
         lamb_sigma_s: Optional[float] = None,
         ext_out_incr_in: bool = False,
         update_cost_threshold: Optional[float] = None,
-        n_mpc_step: int = 1
+        n_mpc_step: int = 1,
     ):
         """
         Initialize a Direct Nonlinear Data-Driven MPC with specified system
@@ -170,7 +175,7 @@ class NonlinearDataDrivenMPCController():
             The input data `u` used to excite the system to get the initial
             output data must be persistently exciting of order (L + n + 1), as
             defined in the Data-Driven MPC formulation in [2].
-        
+
         Args:
             n (int): The estimated order of the system.
             m (int): The number of control inputs.
@@ -245,7 +250,7 @@ class NonlinearDataDrivenMPCController():
             # Incremental Input trajectory data
             # du[k] = u[k+1] - u[k]
             du_last = np.zeros((self.m))
-            self.du = np.vstack([u[1:,:] - u[:-1,:], [du_last]])
+            self.du = np.vstack([u[1:, :] - u[:-1, :], [du_last]])
         # Output trajectory data
         if self.ext_out_incr_in:
             # Extended Output trajectory data
@@ -262,7 +267,7 @@ class NonlinearDataDrivenMPCController():
         self.S = S  # Output setpoint weighting matrix
 
         self.y_r = y_r  # System output setpoint
-        
+
         self.lamb_alpha = lamb_alpha  # Ridge regularization weight for alpha
         self.lamb_sigma = lamb_sigma  # Ridge regularization weight for sigma
 
@@ -281,15 +286,15 @@ class NonlinearDataDrivenMPCController():
             # Ridge regularization weight for sigma_s
             self.lamb_sigma_s = lamb_sigma_s
         elif alpha_reg_type == AlphaRegType.PREVIOUS:
-            # Previous alpha value initialized with 0            
+            # Previous alpha value initialized with 0
             self.prev_alpha_val = np.zeros((self.N - self.L - self.n, 1))
 
         # Online input-output data updates
-        self.update_cost_threshold = (update_cost_threshold
-                                      if update_cost_threshold is not None
-                                      else 0.0)
+        self.update_cost_threshold = (
+            update_cost_threshold if update_cost_threshold is not None else 0.0
+        )
         self.update_data = True
-        
+
         # n-Step Data-Driven MPC Scheme parameters
         self.n_mpc_step = n_mpc_step  # Number of consecutive applications
         # of the optimal input
@@ -317,7 +322,7 @@ class NonlinearDataDrivenMPCController():
 
         # Initialize Data-Driven MPC controller
         self.initialize_data_driven_mpc()
-    
+
     def evaluate_input_persistent_excitation(self) -> None:
         """
         Evaluate whether the input data is persistently exciting of order
@@ -328,12 +333,12 @@ class NonlinearDataDrivenMPCController():
         evaluates the rank of the Hankel matrix induced by the input sequence
         to determine if the input sequence is persistently exciting of order
         (L + n + 1), as described in Definition 1 [2].
-        
+
         Raises:
             ValueError: If the length of the elements in the data sequence
                 does not match the number of inputs of the system, or if the
                 input data is not persistently exciting of order (L + n + 1).
-        
+
         References:
             [2]: See class-level docstring for full reference details.
         """
@@ -343,22 +348,25 @@ class NonlinearDataDrivenMPCController():
         # Check if the number of inputs matches the expected
         # number of inputs of the system
         if u_n != self.m:
-            raise ValueError("The length of the elements of the data "
-                             f"sequence ({u_n}) should match the number of "
-                             f"inputs of the system ({self.m}).")
+            raise ValueError(
+                f"The length of the elements of the data sequence ({u_n}) "
+                f"should match the number of inputs of the system ({self.m})."
+            )
 
         # Evaluate if input data is persistently exciting of order (L + n + 1)
         # based on the rank of its induced Hankel matrix
         expected_order = self.L + self.n + 1
         in_hankel_rank, in_pers_exc = evaluate_persistent_excitation(
-            X=self.u, order=expected_order)
-        
+            X=self.u, order=expected_order
+        )
+
         if not in_pers_exc:
             raise ValueError(
                 "Initial input trajectory data is not persistently exciting "
                 "of order (L + n + 1). The rank of its induced Hankel matrix "
                 f"({in_hankel_rank}) does not match the expected rank ("
-                f"{u_n * expected_order}).")
+                f"{u_n * expected_order})."
+            )
 
     def check_prediction_horizon_length(self) -> None:
         """
@@ -373,10 +381,11 @@ class NonlinearDataDrivenMPCController():
             [2]: See class-level docstring for full reference details.
         """
         if self.L < self.n:
-            raise ValueError("The prediction horizon (`L`) must be "
-                             "greater than or equal to the estimated "
-                             "system order `n`.")
-        
+            raise ValueError(
+                "The prediction horizon (`L`) must be greater than or equal "
+                "to the estimated system order `n`."
+            )
+
     def check_weighting_matrices_dimensions(self) -> None:
         """
         Check if the dimensions of the output (`Q`), input (`R`), and setpoint
@@ -390,30 +399,41 @@ class NonlinearDataDrivenMPCController():
         if self.ext_out_incr_in:
             expected_output_shape = (
                 (self.m + self.p) * (self.L + self.n + 1),
-                (self.m + self.p) * (self.L + self.n + 1))
+                (self.m + self.p) * (self.L + self.n + 1),
+            )
         else:
             expected_output_shape = (
                 self.p * (self.L + self.n + 1),
-                self.p * (self.L + self.n + 1))
+                self.p * (self.L + self.n + 1),
+            )
         expected_input_shape = (
             self.m * (self.L + self.n + 1),
-            self.m * (self.L + self.n + 1))
+            self.m * (self.L + self.n + 1),
+        )
         expected_setpoint_shape = (self.p, self.p)
 
         if self.Q.shape != expected_output_shape:
             if self.ext_out_incr_in:
-                raise ValueError("Output weighting square matrix Q should be "
-                                 "of order ((m + p) * (L + n + 1))")
+                raise ValueError(
+                    "Output weighting square matrix Q should be of order "
+                    "((m + p) * (L + n + 1))."
+                )
             else:
-                raise ValueError("Output weighting square matrix Q should be "
-                                 "of order (p * (L + n + 1))")
+                raise ValueError(
+                    "Output weighting square matrix Q should be of order "
+                    "(p * (L + n + 1))."
+                )
         if self.R.shape != expected_input_shape:
-            raise ValueError("Input weighting square matrix R should be "
-                             "of order (m * (L + n + 1))")
+            raise ValueError(
+                "Input weighting square matrix R should be of order "
+                "(m * (L + n + 1))."
+            )
         if self.S.shape != expected_setpoint_shape:
-            raise ValueError("Output setpoint weighting square matrix S "
-                             "should be of order (p)")
-        
+            raise ValueError(
+                "Output setpoint weighting square matrix S should be of "
+                "order (p)."
+            )
+
     def initialize_data_driven_mpc(self) -> None:
         """
         Initialize the Data-Driven MPC controller.
@@ -455,7 +475,7 @@ class NonlinearDataDrivenMPCController():
             self.HLn1_u = hankel_matrix(self.u, self.L + self.n + 1)
         # H_{L+n+1}(y)
         self.HLn1_y = hankel_matrix(self.y, self.L + self.n + 1)
-        
+
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
         self.define_optimization_parameters()
@@ -465,7 +485,7 @@ class NonlinearDataDrivenMPCController():
             # `alpha_Lin^sr(D_t)` if `alpha` is regularized with respect
             # to this approximation
             self.define_alpha_sr_Lin_Dt_prob()
-        
+
         self.update_optimization_parameters()
         self.define_mpc_constraints()
         self.define_cost_function()
@@ -475,7 +495,9 @@ class NonlinearDataDrivenMPCController():
         self.solve_mpc_problem()
         self.get_optimal_control_input()
 
-    def update_and_solve_data_driven_mpc(self, warm_start: bool = False) -> None:
+    def update_and_solve_data_driven_mpc(
+        self, warm_start: bool = False
+    ) -> None:
         """
         Update the Data-Driven MPC optimization parameters, solve the problem,
         and store the optimal control input.
@@ -489,7 +511,7 @@ class NonlinearDataDrivenMPCController():
            input-output measurements. Additionally, it updates the value of
            `alpha_Lin^sr(D_t)` if `alpha` is not regularized with respect to
            zero.
-           
+
            Note: The value of `alpha_Lin^sr(D_t)` is computed during the
            optimization parameter update.
         3. Solves the MPC problem and stores the resulting optimal control
@@ -505,7 +527,7 @@ class NonlinearDataDrivenMPCController():
         # Update data-driven constants online if data updates are enabled
         # (current tracking cost value is not small enough)
         if self.update_data:
-            if self.ext_out_incr_in:  
+            if self.ext_out_incr_in:
                 # For a controller that uses an extended output representation
                 # and input increments, the input Hankel matrix corresponds to
                 # input increments instead of absolute inputs.
@@ -544,7 +566,7 @@ class NonlinearDataDrivenMPCController():
 
         This method defines data-driven MPC optimization variables as
         described in the Nonlinear Data-Driven MPC formulation in [2].
-        
+
         Note:
             This method initializes attributes that define the MPC
             optimization variables for the controller. Additional attributes
@@ -561,10 +583,11 @@ class NonlinearDataDrivenMPCController():
         # sigma(t)
         if self.ext_out_incr_in:
             self.sigma = cp.Variable(
-                ((self.L + self.n + 1) * (self.m + self.p), 1))
+                ((self.L + self.n + 1) * (self.m + self.p), 1)
+            )
         else:
             self.sigma = cp.Variable(((self.L + self.n + 1) * self.p, 1))
-        
+
         # ubar[-n, L](t)
         self.ubar = cp.Variable(((self.L + self.n + 1) * self.m, 1))
         # For a controller that uses an extended output representation and
@@ -574,7 +597,8 @@ class NonlinearDataDrivenMPCController():
         # ybar[-n, L](t)
         if self.ext_out_incr_in:
             self.ybar = cp.Variable(
-                ((self.L + self.n + 1) * (self.m + self.p), 1))
+                ((self.L + self.n + 1) * (self.m + self.p), 1)
+            )
         else:
             self.ybar = cp.Variable(((self.L + self.n + 1) * self.p, 1))
 
@@ -591,56 +615,65 @@ class NonlinearDataDrivenMPCController():
 
         # Internal state constraints: Get initial `n` input-output predictions
         # ubar[-n, -1]
-        self.ubar_state = self.ubar[:self.n * self.m]
+        self.ubar_state = self.ubar[: self.n * self.m]
 
         # ybar[-n, -1]
         if self.ext_out_incr_in:
-            self.ybar_state = self.ybar[:self.n * (self.m + self.p)]
+            self.ybar_state = self.ybar[: self.n * (self.m + self.p)]
         else:
-            self.ybar_state = self.ybar[:self.n * self.p]
+            self.ybar_state = self.ybar[: self.n * self.p]
 
         # Terminal state constraints:
         # Get terminal segments of input-output predictions
         # ubar[L-n, L]
-        self.ubar_terminal = self.ubar[self.L * self.m:]
-        
+        self.ubar_terminal = self.ubar[self.L * self.m :]
+
         # ybar[L-n, L]
         if self.ext_out_incr_in:
-            self.ybar_terminal = self.ybar[-(self.n + 1) * (self.m + self.p):]
+            self.ybar_terminal = self.ybar[-(self.n + 1) * (self.m + self.p) :]
         else:
-            self.ybar_terminal = self.ybar[self.L * self.p:]
+            self.ybar_terminal = self.ybar[self.L * self.p :]
 
         # Input constraints:
         # Get absolute input variable indices (u[k])
+        self.ubar_pred: cp.Expression
         if self.ext_out_incr_in:
             # Get `ubar` predicted input considering the extended output
             # representation: ybar_ext = [ybar, ubar]
-            start_indices = np.arange(self.n * (self.m + self.p) + self.p,
-                                      self.ybar.shape[0], self.p + self.m)
-            slices = [self.ybar[start:start + self.m]
-                      for start in start_indices]
+            start_indices = np.arange(
+                self.n * (self.m + self.p) + self.p,
+                self.ybar.shape[0],
+                self.p + self.m,
+            )
+            slices = [
+                self.ybar[start : start + self.m] for start in start_indices
+            ]
             self.ubar_pred = cp.vstack(slices)  # ubar[0,L] excluding output
         else:
-            self.ubar_pred = self.ubar[self.n * self.m:]  # ubar[0,L]
-        
+            self.ubar_pred = self.ubar[self.n * self.m :]  # ubar[0,L]
+
         # sigma_ubar: The sigma values corresponding to the input when using a
         # controller with an extended output representation (ybar_ext =
         # [ybar, ubar]). Used to constrain the input sigma values to 0, since
         # the sigma values should only affect the output and not the input.
         if self.ext_out_incr_in:
             start_indices = np.arange(
-                self.p, self.sigma.shape[0], self.p + self.m)
-            slices = [self.sigma[start:start + self.m]
-                      for start in start_indices]
+                self.p, self.sigma.shape[0], self.p + self.m
+            )
+            slices = [
+                self.sigma[start : start + self.m] for start in start_indices
+            ]
             self.sigma_ubar = cp.vstack(slices)
 
         # Cost function related variables:
         # Define predicted input-output setpoint variable arrays
         # by repetition for cost function
         self.u_s_tiled = cp.vstack(
-            [self.u_s for _ in range(self.L + self.n + 1)])
+            [self.u_s for _ in range(self.L + self.n + 1)]
+        )
         self.y_s_tiled = cp.vstack(
-            [self.y_s for _ in range(self.L + self.n + 1)])
+            [self.y_s for _ in range(self.L + self.n + 1)]
+        )
 
         # Define optimization variables for computing the approximation of
         # alpha_Lin^sr(D_t) by solving Equation (23) of [2] if the alpha
@@ -653,7 +686,8 @@ class NonlinearDataDrivenMPCController():
             # sigma_s
             if self.ext_out_incr_in:
                 self.sigma_s = cp.Variable(
-                    ((self.L + self.n + 1) * (self.m + self.p), 1))
+                    ((self.L + self.n + 1) * (self.m + self.p), 1)
+                )
             else:
                 self.sigma_s = cp.Variable(((self.L + self.n + 1) * self.p, 1))
 
@@ -661,71 +695,78 @@ class NonlinearDataDrivenMPCController():
             # Refer to sigma_ubar definition.
             if self.ext_out_incr_in:
                 start_indices = np.arange(
-                    self.p, self.sigma_s.shape[0], self.p + self.m)
-                slices = [self.sigma_s[start:start + self.m]
-                          for start in start_indices]
+                    self.p, self.sigma_s.shape[0], self.p + self.m
+                )
+                slices = [
+                    self.sigma_s[start : start + self.m]
+                    for start in start_indices
+                ]
                 self.sigma_s_ubar = cp.vstack(slices)
-    
+
     def define_optimization_parameters(self) -> None:
         """
         Define MPC optimization parameters that are updated at every step
         iteration.
-        
+
         This method initializes the following MPC parameters:
-        
+
         - Hankel matrices: `HLn1_u_param` and `HLn1_y_param`.
         - Past inputs and outputs: `u_past_param` and `y_past_param`.
         - Past input increments: `du_past_param` (if applicable).
         - Computed value of `alpha_Lin^sr(D_t)`: `alpha_sr_Lin_D_param` (if
           `alpha` is not regularized with respect to zero).
-        
+
         These parameters are updated at each MPC iteration. Using CVXPY
         `Parameter` objects allows efficient updates without the need of
         reformulating the MPC problem at every step.
         """
         # H_{L+n+1}(u) - H_{L+n+1}(du)
         self.HLn1_u_param = cp.Parameter(self.HLn1_u.shape, name="HLn1_u")
-        
+
         # H_{L+n+1}(y)
         self.HLn1_y_param = cp.Parameter(self.HLn1_y.shape, name="HLn1_y")
-        
+
         # u[t-n, t-1]
         self.u_past_param = cp.Parameter((self.n * self.m, 1), name="u_past")
-        
+
         # du[t-n, t-1]
         if self.ext_out_incr_in:
             self.du_past_param = cp.Parameter(
-                (self.n * self.m, 1), name="du_past")
-            
+                (self.n * self.m, 1), name="du_past"
+            )
+
         # y[t-n, t-1]
         if self.ext_out_incr_in:
             self.y_past_param = cp.Parameter(
-                (self.n * (self.m + self.p), 1), name="y_past")
+                (self.n * (self.m + self.p), 1), name="y_past"
+            )
         else:
             self.y_past_param = cp.Parameter(
-                (self.n * self.p, 1), name="y_past")
-        
+                (self.n * self.p, 1), name="y_past"
+            )
+
         # alpha_sr_Lin_D
         if self.alpha_reg_type != AlphaRegType.ZERO:
             self.alpha_sr_Lin_D_param = cp.Parameter(
-                (self.N - self.L - self.n, 1), name="alpha_sr_Lin_D")
-    
+                (self.N - self.L - self.n, 1), name="alpha_sr_Lin_D"
+            )
+
     def update_optimization_parameters(self) -> None:
         """
         Update MPC optimization parameters.
 
         This method updates the MPC optimization parameters using the most
         recent input-output measurement data.
-        
+
         Additionally, it updates the computed `alpha_Lin^sr(D_t)` value based
         on the alpha regularization type:
-        
+
         - `alpha_reg_type == AlphaRegType.APPROXIMATED`: Computes
           `alpha_Lin^sr(D_t)` solving Equation (23) of [2] and updates its
           value.
         - `alpha_reg_type == AlphaRegType.PREVIOUS`: Updates
           `alpha_Lin^sr(D_t)` with the previous optimal value of `alpha`.
-        
+
         References:
             [2]: See class-level docstring for full reference details.
         """
@@ -738,15 +779,15 @@ class NonlinearDataDrivenMPCController():
             self.HLn1_y_param.value = self.HLn1_y
 
         # y[t-n, t-1]
-        self.y_past_param.value = self.y[-self.n:].reshape(-1, 1)
+        self.y_past_param.value = self.y[-self.n :].reshape(-1, 1)
 
         if self.ext_out_incr_in:
             # du[t-n, t-1]
-            self.du_past_param.value = self.du[-self.n:].reshape(-1, 1)
+            self.du_past_param.value = self.du[-self.n :].reshape(-1, 1)
         else:
             # u[t-n, t-1]
-            self.u_past_param.value = self.u[-self.n:].reshape(-1, 1)
-        
+            self.u_past_param.value = self.u[-self.n :].reshape(-1, 1)
+
         # alpha_sr_Lin_D
         if self.alpha_reg_type == AlphaRegType.APPROXIMATED:
             self.alpha_sr_Lin_D_param.value = self.solve_alpha_sr_Lin_Dt()
@@ -776,13 +817,13 @@ class NonlinearDataDrivenMPCController():
         - **Input**: Constraints both the input equilibrium (predicted input
             setpoint `u_s`) and the input trajectory (`ubar`). Defined by
             Equation (22e).
-        
+
         Note:
             This method initializes the `dynamics_constraints`,
             `internal_state_constraints`, `terminal_constraints`,
             `input_constraints`, and `constraints` attributes to define the
             MPC constraints based on the MPC controller type.
-        
+
         References:
             [2]: See class-level docstring for full reference details.
         """
@@ -790,15 +831,18 @@ class NonlinearDataDrivenMPCController():
         # Terminal State, and Input Constraints
         self.dynamics_constraints = self.define_system_dynamic_constraints()
         self.internal_state_constraints = (
-            self.define_internal_state_constraints())
+            self.define_internal_state_constraints()
+        )
         self.terminal_constraints = self.define_terminal_state_constraints()
         self.input_constraints = self.define_input_constraints()
-            
+
         # Combine constraints
-        self.constraints = (self.dynamics_constraints +
-                            self.internal_state_constraints +
-                            self.terminal_constraints +
-                            self.input_constraints)
+        self.constraints = (
+            self.dynamics_constraints
+            + self.internal_state_constraints
+            + self.terminal_constraints
+            + self.input_constraints
+        )
 
     def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
         """
@@ -816,22 +860,26 @@ class NonlinearDataDrivenMPCController():
             List[cp.Constraint]: A list containing the CVXPY system dynamic
                 constraints for the Data-Driven MPC controller, corresponding
                 to the specified MPC controller type.
-        
+
         References:
             [2]: See class-level docstring for full reference details.
         """
         dynamics_constraints = [
-            cp.vstack([self.ubar,
-                       self.ybar + self.sigma,
-                       cp.Constant(self.ones_1)]) ==
-            cp.vstack([self.HLn1_u_param,
-                       self.HLn1_y_param,
-                       cp.Constant(self.ones_NLn)
-                       ]) @ self.alpha
+            cp.vstack(
+                [self.ubar, self.ybar + self.sigma, cp.Constant(self.ones_1)]
+            )
+            == cp.vstack(
+                [
+                    self.HLn1_u_param,
+                    self.HLn1_y_param,
+                    cp.Constant(self.ones_NLn),
+                ]
+            )
+            @ self.alpha
         ]
-        
+
         return dynamics_constraints
-        
+
     def define_internal_state_constraints(self) -> List[cp.Constraint]:
         """
         Define the internal state constraints for the Data-Driven MPC
@@ -848,25 +896,27 @@ class NonlinearDataDrivenMPCController():
         Returns:
             List[cp.Constraint]: A list containing the CVXPY internal state
                 constraints for the Data-Driven MPC controller.
-        
+
         Note:
             It is essential to update the system's input-output measurements,
             `u`, `y`, and `du`, at each MPC iteration.
-        
+
         References:
             [2]: See class-level docstring for full reference details.
         """
         if self.ext_out_incr_in:
             internal_state_constraints = [
-                cp.vstack([self.ubar_state, self.ybar_state]) ==
-                cp.vstack([self.du_past_param, self.y_past_param])]
+                cp.vstack([self.ubar_state, self.ybar_state])
+                == cp.vstack([self.du_past_param, self.y_past_param])
+            ]
         else:
             internal_state_constraints = [
-                cp.vstack([self.ubar_state, self.ybar_state]) ==
-                cp.vstack([self.u_past_param, self.y_past_param])]
-        
+                cp.vstack([self.ubar_state, self.ybar_state])
+                == cp.vstack([self.u_past_param, self.y_past_param])
+            ]
+
         return internal_state_constraints
-    
+
     def define_terminal_state_constraints(self) -> List[cp.Constraint]:
         """
         Define the terminal state constraints for the Data-Driven MPC
@@ -883,18 +933,22 @@ class NonlinearDataDrivenMPCController():
         Returns:
             List[cp.Constraint]: A list containing the CVXPY terminal state
                 constraints for the Data-Driven MPC controller.
-        
+
         References:
             [2]: See class-level docstring for full reference details.
-        """                
+        """
         # Define terminal state constraints for Nominal and Robust MPC
         # based on Equation (3d) and Equation (6c) of [2], respectively.
         terminal_constraints = [
-            cp.vstack([self.ubar_terminal, self.ybar_terminal]) ==
-            cp.vstack([cp.kron(self.ones_n1, self.u_s),
-                       cp.kron(self.ones_n1, self.y_s)])
+            cp.vstack([self.ubar_terminal, self.ybar_terminal])
+            == cp.vstack(
+                [
+                    cp.kron(self.ones_n1, self.u_s),
+                    cp.kron(self.ones_n1, self.y_s),
+                ]
+            )
         ]
-        
+
         return terminal_constraints
 
     def define_input_constraints(self) -> List[cp.Constraint]:
@@ -911,21 +965,25 @@ class NonlinearDataDrivenMPCController():
         if self.ext_out_incr_in:
             # Input constraints considering the extended output setpoint
             # y_s_ext = [y_s, u_s]
-            input_constraints = [self.ubar_pred >= self.U_const_low,
-                                 self.ubar_pred <= self.U_const_up,
-                                 self.y_s[self.p:] >= self.Us_const_low,
-                                 self.y_s[self.p:] <= self.Us_const_up,
-                                 self.sigma_ubar == 0]
+            input_constraints = [
+                self.ubar_pred >= self.U_const_low,
+                self.ubar_pred <= self.U_const_up,
+                self.y_s[self.p :] >= self.Us_const_low,
+                self.y_s[self.p :] <= self.Us_const_up,
+                self.sigma_ubar == 0,
+            ]
             # For a controller that uses an extended output representation,
             # the sigma values corresponding to the input (sigma_ubar) are
             # constrained to 0, since the sigma values should only affect the
             # output and not the input.
         else:
-            input_constraints = [self.ubar_pred >= self.U_const_low,
-                                 self.ubar_pred <= self.U_const_up,
-                                 self.u_s >= self.Us_const_low,
-                                 self.u_s <= self.Us_const_up]
-                
+            input_constraints = [
+                self.ubar_pred >= self.U_const_low,
+                self.ubar_pred <= self.U_const_up,
+                self.u_s >= self.Us_const_low,
+                self.u_s <= self.Us_const_up,
+            ]
+
         return input_constraints
 
     def define_cost_function(self) -> None:
@@ -945,10 +1003,10 @@ class NonlinearDataDrivenMPCController():
             [2]: See class-level docstring for full reference details.
         """
         # Define tracking cost
-        self.tracking_cost = (
-            cp.quad_form(self.ubar - self.u_s_tiled, self.R) +
-            cp.quad_form(self.ybar - self.y_s_tiled, self.Q))
-        
+        self.tracking_cost = cp.quad_form(
+            self.ubar - self.u_s_tiled, self.R
+        ) + cp.quad_form(self.ybar - self.y_s_tiled, self.Q)
+
         if self.ext_out_incr_in:
             # Add input-related cost if an extended output representation
             # and input increments are considered for the controller. Refer to
@@ -956,24 +1014,25 @@ class NonlinearDataDrivenMPCController():
             self.tracking_cost += cp.norm(self.ubar) ** 2
 
         # Define control-related cost
-        control_cost = (self.tracking_cost +
-                        cp.quad_form(self.y_s[:self.p] - self.y_r, self.S))
-        
+        control_cost = self.tracking_cost + cp.quad_form(
+            self.y_s[: self.p] - self.y_r, self.S
+        )
+
         # Define alpha-related cost
         if self.alpha_reg_type == AlphaRegType.ZERO:
             alpha_cost = self.lamb_alpha * cp.norm(self.alpha, 2) ** 2
         else:
             alpha_cost = (
-                self.lamb_alpha *
-                cp.norm(self.alpha - self.alpha_sr_Lin_D_param, 2) ** 2
+                self.lamb_alpha
+                * cp.norm(self.alpha - self.alpha_sr_Lin_D_param, 2) ** 2
             )
 
         # Define sigma-related cost
         sigma_cost = self.lamb_sigma * cp.norm(self.sigma) ** 2
-        
+
         # Define cost
         self.cost = control_cost + alpha_cost + sigma_cost
-    
+
     def define_mpc_problem(self) -> None:
         """
         Define the optimization problem for the Data-Driven MPC formulation.
@@ -988,7 +1047,7 @@ class NonlinearDataDrivenMPCController():
         # Define QP problem
         objective = cp.Minimize(self.cost)
         self.problem = cp.Problem(objective, self.constraints)
-        
+
     def solve_mpc_problem(self, warm_start: bool = False) -> str:
         """
         Solve the optimization problem for the Data-Driven MPC formulation.
@@ -1004,9 +1063,9 @@ class NonlinearDataDrivenMPCController():
             solution status.
         """
         self.problem.solve(warm_start=warm_start)
-        
+
         return self.problem.status
-    
+
     def get_problem_solve_status(self) -> str:
         """
         Get the solve status of the optimization problem of the Data-Driven MPC
@@ -1029,7 +1088,7 @@ class NonlinearDataDrivenMPCController():
                 problem.
         """
         return self.problem.value
-    
+
     def get_optimal_control_input(self) -> np.ndarray:
         """
         Retrieve and store either the optimal control input or the optimal
@@ -1040,7 +1099,7 @@ class NonlinearDataDrivenMPCController():
                 to L. If the controller uses an extended output representation
                 and input increments, returns the predicted optimal control
                 input increments instead.
-        
+
         Raises:
             ValueError: If the MPC problem solution status was not "optimal"
                 or "optimal_inaccurate".
@@ -1053,11 +1112,13 @@ class NonlinearDataDrivenMPCController():
             extended output representation and input increments.
         """
         # Get optimal control input prediction value
-        ubar_pred_val = self.ubar[self.n * self.m:].value
-        
+        ubar_pred_val = self.ubar[self.n * self.m :].value
+
         # Store the optimal control input ubar*[0,L] if the MPC problem
         # solution had an "optimal" or "optimal_inaccurate" status
         if self.problem.status in {"optimal", "optimal_inaccurate"}:
+            assert ubar_pred_val is not None  # Prevent mypy [union-attr] error
+
             if self.ext_out_incr_in:
                 # For a controller that uses an extended output representation
                 # and input increments, the optimal control variables are input
@@ -1069,11 +1130,8 @@ class NonlinearDataDrivenMPCController():
                 return self.optimal_u
         else:
             raise ValueError("MPC problem was not solved optimally.")
-    
-    def get_optimal_control_input_at_step(
-        self,
-        n_step: int = 0
-    ) -> np.ndarray:
+
+    def get_optimal_control_input_at_step(self, n_step: int = 0) -> np.ndarray:
         """
         Get the optimal control input (`u`) from the MPC solution
         corresponding to a specified time step in the prediction horizon
@@ -1082,7 +1140,7 @@ class NonlinearDataDrivenMPCController():
         Args:
             n_step (int): The time step of the optimal control input to
                 retrieve. It must be within the range [0, L].
-        
+
         Returns:
             np.ndarray: An array containing the optimal control input for the
                 specified prediction time step.
@@ -1102,8 +1160,9 @@ class NonlinearDataDrivenMPCController():
         if not 0 <= n_step <= self.L:
             raise ValueError(
                 f"The specified prediction time step ({n_step}) is out of "
-                f"range. It should be within [0, {self.L}].")
-        
+                f"range. It should be within [0, {self.L}]."
+            )
+
         if self.ext_out_incr_in:
             # For a controller that uses an extended output representation and
             # input increments, the optimal value computed in the current
@@ -1116,20 +1175,24 @@ class NonlinearDataDrivenMPCController():
             # u[k] = u[k-1] + du[k-1]
             u_k1 = self.u[-1:]
             du_k1 = self.du[-1:]
-            optimal_u_step_n = (u_k1 + du_k1)
+            optimal_u_step_n = u_k1 + du_k1
         else:
-            optimal_u_step_n = self.optimal_u[n_step * self.m:
-                                              (n_step + 1) * self.m]
-        
+            optimal_u_step_n = self.optimal_u[
+                n_step * self.m : (n_step + 1) * self.m
+            ]
+
         return optimal_u_step_n
-    
+
     def store_previous_alpha_value(self) -> None:
         """
         Store the previous optimal value of `alpha` for regularization in
         subsequent MPC iterations.
         """
-        self.prev_alpha_val = self.alpha.value
-    
+        self.prev_alpha_val = self.alpha.value  #  type: ignore[assignment]
+        # Note:
+        # mypy [assignment] is ignored since `alpha.value` could only be `None`
+        # if `alpha` were a sparse matrix, which is not the case in our system
+
     def get_du_value_at_step(self, n_step: int = 0) -> Optional[np.ndarray]:
         """
         Get the optimal control input increment (`du`) from the MPC solution
@@ -1139,7 +1202,7 @@ class NonlinearDataDrivenMPCController():
         Args:
             n_step (int): The time step of the optimal control input to
                 retrieve. It must be within the range [0, L].
-        
+
         Returns:
             Optional[np.ndarray]: An array containing the optimal control
                 input increment for the specified prediction time step if the
@@ -1151,15 +1214,15 @@ class NonlinearDataDrivenMPCController():
             optimal control input increments from the MPC solution.
         """
         if self.ext_out_incr_in:
-            return self.optimal_du[n_step * self.m: (n_step + 1) * self.m]
+            return self.optimal_du[n_step * self.m : (n_step + 1) * self.m]
         else:
             return None
-    
+
     def store_input_output_measurement(
         self,
         u_current: np.ndarray,
         y_current: np.ndarray,
-        du_current: Optional[np.ndarray] = None
+        du_current: Optional[np.ndarray] = None,
     ) -> None:
         """
         Store an input-output measurement pair for the current time step in
@@ -1167,7 +1230,7 @@ class NonlinearDataDrivenMPCController():
         output representation and input increments, the input increment
         corresponding to the current input measurement is also stored.
 
-        This method updates the input-output storage variables `u`, `y` and 
+        This method updates the input-output storage variables `u`, `y` and
         `du` by shifting the arrays and replacing the oldest measurements with
         the current ones.
 
@@ -1181,11 +1244,11 @@ class NonlinearDataDrivenMPCController():
             du_current (np.ndarray): The control input increment (du[k] =
                 u[k+1] - u[k]) for the current time step, expected to match
                 the dimensions of prior inputs.
-    
+
         Raises:
             ValueError: If `u_current`, `y_current`, or `du_current` do not
                 match the expected dimensions.
-        
+
         Note:
             This method updates the `u`, `y`, and `du` arrays.
 
@@ -1195,27 +1258,32 @@ class NonlinearDataDrivenMPCController():
         # Check measurement dimensions
         expected_u0_dim = (self.m,)
         expected_y0_dim = (self.p,)
-        if (u_current.shape != expected_u0_dim or
-            y_current.shape != expected_y0_dim):
+        if (
+            u_current.shape != expected_u0_dim
+            or y_current.shape != expected_y0_dim
+        ):
             raise ValueError(
-                f"Incorrect dimensions. Expected dimensions are "
+                "Incorrect dimensions. Expected dimensions are "
                 f"{expected_u0_dim} for u_current and {expected_y0_dim} for "
-                f"y_current, but got {u_current.shape} and "
-                f"{y_current.shape} instead.")
-        
+                f"y_current, but got {u_current.shape} and {y_current.shape} "
+                "instead."
+            )
+
         if self.ext_out_incr_in:
             if du_current is None:
                 raise ValueError(
                     "A valid `du_current` value is required for a controller "
                     "that uses an extended output representation and input "
-                    "increments.")
+                    "increments."
+                )
 
             if du_current.shape != expected_u0_dim:
                 raise ValueError(
-                    f"Incorrect dimensions for du_current. Expected "
+                    "Incorrect dimensions for `du_current`. Expected "
                     f"dimensions are {expected_u0_dim}, but got "
-                    f"{du_current.shape} instead.")
-        
+                    f"{du_current.shape} instead."
+                )
+
         # Shift and update control inputs
         self.u[:-1] = self.u[1:]
         self.u[-1:] = u_current
@@ -1224,17 +1292,17 @@ class NonlinearDataDrivenMPCController():
         if self.ext_out_incr_in:
             self.du[:-1] = self.du[1:]
             self.du[-1:] = du_current
-        
+
         # Shift and update outputs
         self.y[:-1] = self.y[1:]
         if self.ext_out_incr_in:
             # Update output considering the extended output
             # representation (y_ext[k] = [y[k], u[k]])
-            self.y[-1:,:self.p] = y_current  # Store system output
-            self.y[-1:,self.p:] = u_current  # Store control input
+            self.y[-1:, : self.p] = y_current  # Store system output
+            self.y[-1:, self.p :] = u_current  # Store control input
         else:
             self.y[-1:] = y_current
-        
+
     def set_input_output_data(
         self,
         u: np.ndarray,
@@ -1253,7 +1321,7 @@ class NonlinearDataDrivenMPCController():
             y (np.ndarray): An array containing the current measured system
                 output. Expected to have a shape of (N, p) where 'N' is the
                 trajectory length and 'p' is the dimension of the output.
-        
+
         Raises:
             ValueError: If `u` or `y` do not have correct dimensions.
 
@@ -1267,26 +1335,28 @@ class NonlinearDataDrivenMPCController():
 
         if u.shape != expected_u_dim:
             raise ValueError(
-                f"Incorrect dimensions. u must be shaped as "
-                f"{expected_u_dim}. Got {u.shape}. instead")
+                f"Incorrect dimensions. `u` must have shape {expected_u_dim}, "
+                f"but got {u.shape} instead."
+            )
         if y.shape != expected_y_dim:
             raise ValueError(
-                f"Incorrect dimensions. y must be shaped as "
-                f"{expected_y_dim}. Got {y.shape} instead.")
+                f"Incorrect dimensions. `y` must have shape {expected_y_dim}, "
+                f"but got {y.shape} instead."
+            )
 
         # Update input-output trajectory data
         self.u = u.copy()  # Input trajectory data
         if self.ext_out_incr_in:
             # Incremental Input trajectory data
             du_last = np.zeros((self.m))
-            self.du = np.vstack([u[1:,:] - u[:-1,:], [du_last]])
+            self.du = np.vstack([u[1:, :] - u[:-1, :], [du_last]])
         # Output trajectory data
         if self.ext_out_incr_in:
             # Extended Output trajectory data
             self.y = np.hstack([y, u])
         else:
             self.y = y.copy()
-    
+
     def set_output_setpoint(self, y_r: np.ndarray) -> None:
         """
         Set the system output setpoint of the Data-Driven MPC controller.
@@ -1297,26 +1367,28 @@ class NonlinearDataDrivenMPCController():
 
         Args:
             y_r (np.ndarray): The setpoint for system outputs.
-        
+
         Raises:
             ValueError: If `y_r` does not have the expected dimensions.
-            
+
         Note:
             This method sets the values of the `y_r` attribute with the
             provided new setpoint.
         """
         # Validate input types and dimensions
         if y_r.shape != self.y_r.shape:
-            raise ValueError(f"Incorrect dimensions. y_r must have shape "
-                             f"{self.y_s.shape}, got {y_r.shape}")
-    
+            raise ValueError(
+                "Incorrect dimensions. `y_r` must have shape "
+                f"{self.y_s.shape}, but got {y_r.shape} instead."
+            )
+
         # Update Output setpoint
         self.y_r = y_r
 
         # Reinitialize Data-Driven MPC controller
         self.initialize_data_driven_mpc()
 
-    def define_alpha_sr_Lin_Dt_prob(self) -> np.ndarray:
+    def define_alpha_sr_Lin_Dt_prob(self) -> None:
         """
         Define a Quadratic Programming (QP) problem for computing an
         approximation of `alpha_Lin^sr(D_t)` using the latest input-output
@@ -1329,38 +1401,56 @@ class NonlinearDataDrivenMPCController():
         # Define constraints
         if self.ext_out_incr_in:
             constraints = [
-                cp.vstack([self.HLn1_u_param,
-                           self.HLn1_y_param,
-                           cp.Constant(self.ones_NLn)]) @ self.alpha_s ==
-                cp.vstack([cp.kron(self.ones_Ln1, self.u_s),
-                           cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
-                           cp.Constant(self.ones_1)]),
-                self.y_s[self.p:] >= self.Us_const_low,
-                self.y_s[self.p:] <= self.Us_const_up,
-                self.sigma_s_ubar == 0
+                cp.vstack(
+                    [
+                        self.HLn1_u_param,
+                        self.HLn1_y_param,
+                        cp.Constant(self.ones_NLn),
+                    ]
+                )
+                @ self.alpha_s
+                == cp.vstack(
+                    [
+                        cp.kron(self.ones_Ln1, self.u_s),
+                        cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
+                        cp.Constant(self.ones_1),
+                    ]
+                ),
+                self.y_s[self.p :] >= self.Us_const_low,
+                self.y_s[self.p :] <= self.Us_const_up,
+                self.sigma_s_ubar == 0,
             ]
         else:
             constraints = [
-                cp.vstack([self.HLn1_u_param,
-                           self.HLn1_y_param,
-                           cp.Constant(self.ones_NLn)]) @ self.alpha_s ==
-                cp.vstack([cp.kron(self.ones_Ln1, self.u_s),
-                           cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
-                           cp.Constant(self.ones_1)]),
+                cp.vstack(
+                    [
+                        self.HLn1_u_param,
+                        self.HLn1_y_param,
+                        cp.Constant(self.ones_NLn),
+                    ]
+                )
+                @ self.alpha_s
+                == cp.vstack(
+                    [
+                        cp.kron(self.ones_Ln1, self.u_s),
+                        cp.kron(self.ones_Ln1, self.y_s) + self.sigma_s,
+                        cp.Constant(self.ones_1),
+                    ]
+                ),
                 self.u_s >= self.Us_const_low,
-                self.u_s <= self.Us_const_up
+                self.u_s <= self.Us_const_up,
             ]
 
         # Define objective
         objective = cp.Minimize(
-            cp.quad_form(self.y_s[:self.p] - self.y_r, self.S) +
-            self.lamb_alpha_s * cp.norm(self.alpha_s, 2) ** 2 +
-            self.lamb_sigma_s * cp.norm(self.sigma_s, 2) ** 2
+            cp.quad_form(self.y_s[: self.p] - self.y_r, self.S)
+            + self.lamb_alpha_s * cp.norm(self.alpha_s, 2) ** 2
+            + self.lamb_sigma_s * cp.norm(self.sigma_s, 2) ** 2
         )
 
         # Define the optimization problem
         self.alpha_sr_Lin_Dt_prob = cp.Problem(objective, constraints)
-    
+
     def solve_alpha_sr_Lin_Dt(self) -> np.ndarray:
         """
         Compute the approximation of `alpha_Lin^sr(D_t)` using the latest
@@ -1383,13 +1473,18 @@ class NonlinearDataDrivenMPCController():
 
         # Get the robust approximation of alpha_sr_Lin(Dt) from solution
         alpha_sr_Lin_D = None
-        if (self.alpha_sr_Lin_Dt_prob.status in
-            {"optimal", "optimal_inaccurate"}):
+        if self.alpha_sr_Lin_Dt_prob.status in {
+            "optimal",
+            "optimal_inaccurate",
+        }:
             alpha_sr_Lin_D = self.alpha_s.value
         else:
             raise ValueError(
                 "Failed to compute a robust approximation of "
                 "`alpha_sr_Lin(D_t)`: The optimization problem did not "
-                "converge to a solution.")
+                "converge to a solution."
+            )
+
+        assert alpha_sr_Lin_D is not None  # Prevent mypy [return-value] error
 
         return alpha_sr_Lin_D

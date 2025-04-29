@@ -1,16 +1,20 @@
-from typing import List, Optional
 from enum import Enum
+from typing import List, Optional
 
-import numpy as np
 import cvxpy as cp
+import numpy as np
 
 from direct_data_driven_mpc.utilities.hankel_matrix import (
-    hankel_matrix, evaluate_persistent_excitation)
+    evaluate_persistent_excitation,
+    hankel_matrix,
+)
+
 
 # Define Direct Data-Driven MPC Controller Types
 class LTIDataDrivenMPCType(Enum):
     NOMINAL = 0  # Nominal Data-Driven MPC
     ROBUST = 1  # Robust Data-Driven MPC
+
 
 # Define Slack Variable Constraint Types for Robust Data-Driven MPC
 class SlackVarConstraintType(Enum):
@@ -22,7 +26,8 @@ class SlackVarConstraintType(Enum):
     # constraint is implicitly satisfied
     NONE = 2
 
-class LTIDataDrivenMPCController():
+
+class LTIDataDrivenMPCController:
     """
     A class that implements a Data-Driven Model Predictive Control (MPC)
     controller for Linear Time-Invariant (LTI) systems. This controller can be
@@ -99,6 +104,7 @@ class LTIDataDrivenMPCController():
             vol. 66, no. 4, pp. 1702-1717, April 2021,
             doi: 10.1109/TAC.2020.3000182.
     """
+
     def __init__(
         self,
         n: int,
@@ -117,11 +123,11 @@ class LTIDataDrivenMPCController():
         U: Optional[np.ndarray] = None,
         c: Optional[float] = None,
         slack_var_constraint_type: SlackVarConstraintType = (
-            SlackVarConstraintType.CONVEX),
-        controller_type: LTIDataDrivenMPCType = (
-            LTIDataDrivenMPCType.NOMINAL),
+            SlackVarConstraintType.CONVEX
+        ),
+        controller_type: LTIDataDrivenMPCType = (LTIDataDrivenMPCType.NOMINAL),
         n_mpc_step: int = 1,
-        use_terminal_constraints: bool = True
+        use_terminal_constraints: bool = True,
     ):
         """
         Initialize a Direct LTI Data-Driven MPC with specified system model
@@ -132,7 +138,7 @@ class LTIDataDrivenMPCController():
             The input data `u_d` used to excite the system to get the initial
             output data must be persistently exciting of order (L + 2 * n), as
             defined in the Data-Driven MPC formulations in [1].
-        
+
         Args:
             n (int): The estimated order of the system.
             m (int): The number of control inputs.
@@ -181,8 +187,10 @@ class LTIDataDrivenMPCController():
         self.controller_type = controller_type  # Nominal or Robust Controller
 
         # Validate controller type
-        controller_types = {LTIDataDrivenMPCType.NOMINAL,
-                            LTIDataDrivenMPCType.ROBUST}
+        controller_types = {
+            LTIDataDrivenMPCType.NOMINAL,
+            LTIDataDrivenMPCType.ROBUST,
+        }
         if controller_type not in controller_types:
             raise ValueError("Unsupported controller type.")
 
@@ -199,8 +207,8 @@ class LTIDataDrivenMPCController():
         # Initialize storage variables for past `n` input-output measurements
         # (used for the internal state constraints that ensure predictions
         # align with the internal state of the system's trajectory)
-        self.u_past = u_d[-n:,:].reshape(-1, 1)  # u[t-n, t-1]
-        self.y_past = y_d[-n:,:].reshape(-1, 1)  # y[t-n, t-1]
+        self.u_past: np.ndarray = u_d[-n:, :].reshape(-1, 1)  # u[t-n, t-1]
+        self.y_past: np.ndarray = y_d[-n:, :].reshape(-1, 1)  # y[t-n, t-1]
 
         # Define Data-Driven MPC parameters
         self.L = L  # Prediction horizon
@@ -209,7 +217,7 @@ class LTIDataDrivenMPCController():
 
         self.u_s = u_s  # Control input setpoint
         self.y_s = y_s  # System output setpoint
-        
+
         self.eps_max = eps_max  # Upper limit of bounded measurement noise
         self.lamb_alpha = lamb_alpha  # Ridge regularization base weight for
         # alpha. It is scaled by `eps_max`.
@@ -226,19 +234,23 @@ class LTIDataDrivenMPCController():
         # variable constraint type
 
         # Validate slack variable constraint type
-        slack_var_constraint_types = {SlackVarConstraintType.NON_CONVEX,
-                                      SlackVarConstraintType.CONVEX,
-                                      SlackVarConstraintType.NONE}
+        slack_var_constraint_types = {
+            SlackVarConstraintType.NON_CONVEX,
+            SlackVarConstraintType.CONVEX,
+            SlackVarConstraintType.NONE,
+        }
         if slack_var_constraint_type not in slack_var_constraint_types:
             raise ValueError("Unsupported slack variable constraint type.")
 
         # Ensure correct parameter definition for Robust MPC controller
         if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if None in (eps_max, lamb_alpha, lamb_sigma, c):
-                raise ValueError("All robust MPC parameters (eps_max, "
-                                 "lamb_alpha, lamb_sigma, c) must be "
-                                 "provided for a 'ROBUST' controller.")
-        
+                raise ValueError(
+                    "All robust MPC parameters (`eps_max`, `lamb_alpha`, "
+                    "`lamb_sigma`, `c`) must be provided for a 'ROBUST' "
+                    "controller."
+                )
+
         # n-Step Data-Driven MPC Scheme parameters
         self.n_mpc_step = n_mpc_step  # Number of consecutive applications
         # of the optimal input
@@ -261,7 +273,7 @@ class LTIDataDrivenMPCController():
 
         # Initialize Data-Driven MPC controller
         self.initialize_data_driven_mpc()
-    
+
     def evaluate_input_persistent_excitation(self) -> None:
         """
         Evaluate whether the input data is persistently exciting of order
@@ -274,12 +286,12 @@ class LTIDataDrivenMPCController():
         of the Hankel matrix induced by the input sequence to determine if the
         input sequence is persistently exciting, as described in Definition 1
         [1].
-        
+
         Raises:
             ValueError: If the length of the elements in the data sequence
                 does not match the number of inputs of the system, or if the
                 input data is not persistently exciting of order (L + 2 * n).
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
@@ -289,9 +301,10 @@ class LTIDataDrivenMPCController():
         # Check if the number of inputs matches the expected
         # number of inputs of the system
         if u_d_n != self.m:
-            raise ValueError("The length of the elements of the data "
-                             f"sequence ({u_d_n}) should match the number of "
-                             f"inputs of the system ({self.m}).")
+            raise ValueError(
+                f"The length of the elements of the data sequence ({u_d_n}) "
+                f"should match the number of inputs of the system ({self.m})."
+            )
 
         # Compute the minimum required length of the input sequence
         # based on Remark 1 of [1]
@@ -303,20 +316,23 @@ class LTIDataDrivenMPCController():
                 "Initial input trajectory data is not persistently exciting "
                 "of order (L + 2 * n). It does not satisfy the inequality: "
                 "N - L - 2 * n + 1 ≥ m * (L + 2 * n). The required minimum N "
-                f"is {N_min}, but got {self.N}.")
+                f"is {N_min}, but got {self.N}."
+            )
 
         # Evaluate if input data is persistently exciting of order (L + 2 * n)
         # based on the rank of its induced Hankel matrix
         expected_order = self.L + 2 * self.n
         in_hankel_rank, in_pers_exc = evaluate_persistent_excitation(
-            X=self.u_d, order=expected_order)
-        
+            X=self.u_d, order=expected_order
+        )
+
         if not in_pers_exc:
             raise ValueError(
                 "Initial input trajectory data is not persistently exciting "
                 "of order (L + 2 * n). The rank of its induced Hankel matrix "
                 f"({in_hankel_rank}) does not match the expected rank ("
-                f"{u_d_n * expected_order}).")
+                f"{u_d_n * expected_order})."
+            )
 
     def check_prediction_horizon_length(self) -> None:
         """
@@ -327,7 +343,7 @@ class LTIDataDrivenMPCController():
         greater than or equal to two times the estimated system order `n`.
 
         These restrictions are defined by Assumption 3, for the Nominal MPC
-        scheme, and Assumption 4, for the Robust one, as decribed in [1].
+        scheme, and Assumption 4, for the Robust one, as described in [1].
 
         Raises:
             ValueError: If the prediction horizon `L` is less than the
@@ -338,15 +354,17 @@ class LTIDataDrivenMPCController():
         """
         if self.controller_type == LTIDataDrivenMPCType.NOMINAL:
             if self.L < self.n:
-                raise ValueError("The prediction horizon (`L`) must be "
-                                 "greater than or equal to the estimated "
-                                 "system order `n`.")
+                raise ValueError(
+                    "The prediction horizon (`L`) must be greater than or "
+                    "equal to the estimated system order `n`."
+                )
         elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
             if self.L < 2 * self.n:
-                raise ValueError("The prediction horizon (`L`) must be "
-                                 "greater than or equal to two times the "
-                                 "estimated system order `n`.")
-        
+                raise ValueError(
+                    "The prediction horizon (`L`) must be greater than or "
+                    "equal to two times the estimated system order `n`."
+                )
+
     def check_weighting_matrices_dimensions(self) -> None:
         """
         Check if the dimensions of the output and input weighting matrices, Q
@@ -359,12 +377,14 @@ class LTIDataDrivenMPCController():
         expected_input_shape = (self.m * self.L, self.m * self.L)
 
         if self.Q.shape != expected_output_shape:
-            raise ValueError("Output weighting square matrix Q should be "
-                             "of order (p * L)")
+            raise ValueError(
+                "Output weighting square matrix Q should be of order (p * L)."
+            )
         if self.R.shape != expected_input_shape:
-            raise ValueError("Input weighting square matrix R should be "
-                             "of order (m * L)")
-        
+            raise ValueError(
+                "Input weighting square matrix R should be of order (m * L)."
+            )
+
     def initialize_data_driven_mpc(self) -> None:
         """
         Initialize the Data-Driven MPC controller.
@@ -399,7 +419,7 @@ class LTIDataDrivenMPCController():
         # (3b) (Nominal) and (6a) (Robust) of [1].
         self.HLn_ud = hankel_matrix(self.u_d, self.L + self.n)  # H_{L+n}(u^d)
         self.HLn_yd = hankel_matrix(self.y_d, self.L + self.n)  # H_{L+n}(y^d)
-        
+
         # Define the Data-Driven MPC problem
         self.define_optimization_variables()
         self.define_optimization_parameters()
@@ -445,7 +465,7 @@ class LTIDataDrivenMPCController():
         - **Robust MPC**: In addition to the optimization variables defined
             for a Nominal MPC formulation, defines the `sigma` variable to
             account for noisy measurements, as described in Equation (6).
-        
+
         Note:
             This method initializes the `alpha`, `ubar`, `ybar`, and `sigma`
             attributes to define the MPC optimization variables based on the
@@ -464,26 +484,26 @@ class LTIDataDrivenMPCController():
         # The time indices of the predicted input and output start at k = −n,
         # since the last `n` inputs and outputs are used to invoke a unique
         # initial state at time `t`, as described in Definition 3 of [1].
-        
+
         if self.controller_type == LTIDataDrivenMPCType.ROBUST:
             # sigma(t)
             self.sigma = cp.Variable(((self.L + self.n) * self.p, 1))
-    
+
     def define_optimization_parameters(self) -> None:
         """
         Define MPC optimization parameters that are updated at every step
         iteration.
-        
+
         This method initializes the past inputs (`u_past_param`) and past
         outputs (`y_past_param`) MPC parameters.
-        
+
         These parameters are updated at each MPC iteration. Using CVXPY
         `Parameter` objects allows efficient updates without the need of
         reformulating the MPC problem at every step.
         """
         # u[t-n, t-1]
         self.u_past_param = cp.Parameter((self.n * self.m, 1), name="u_past")
-            
+
         # y[t-n, t-1]
         self.y_past_param = cp.Parameter((self.n * self.p, 1), name="y_past")
 
@@ -496,7 +516,7 @@ class LTIDataDrivenMPCController():
         """
         # u[t-n, t-1]
         self.u_past_param.value = self.u_past
-        
+
         # y[t-n, t-1]
         self.y_past_param.value = self.y_past
 
@@ -530,43 +550,48 @@ class LTIDataDrivenMPCController():
             prediction (used to construct the Hankel matrices). Defined by
             Equation (6d), for a Non-Convex constraint, and Remark 3, for a
             Convex constraint and an implicit alternative.
-        
+
         Note:
             This method initializes the `dynamics_constraints`,
             `internal_state_constraints`, `terminal_constraints`,
             `input_constraints`, `slack_var_constraint`, and `constraints`
             attributes to define the MPC constraints based on the MPC
             controller type.
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
         # Define System Dynamic, Internal State and Terminal State Constraints
         self.dynamics_constraints = self.define_system_dynamic_constraints()
         self.internal_state_constraints = (
-            self.define_internal_state_constraints())
+            self.define_internal_state_constraints()
+        )
         self.terminal_constraints = (
             self.define_terminal_state_constraints(u_s=self.u_s, y_s=self.y_s)
             if self.use_terminal_constraints
-            else [])
-        
+            else []
+        )
+
         # Define Input constraints if U is provided
-        self.input_constraints = (self.define_input_constraints()
-                                  if self.U is not None
-                                  else [])
-        
+        self.input_constraints = (
+            self.define_input_constraints() if self.U is not None else []
+        )
+
         # Define Slack Variable Constraint if controller type is Robust
         self.slack_var_constraint = (
             self.define_slack_variable_constraint()
             if self.controller_type == LTIDataDrivenMPCType.ROBUST
-            else [])
-            
+            else []
+        )
+
         # Combine constraints
-        self.constraints = (self.dynamics_constraints +
-                            self.internal_state_constraints +
-                            self.terminal_constraints +
-                            self.input_constraints +
-                            self.slack_var_constraint)
+        self.constraints = (
+            self.dynamics_constraints
+            + self.internal_state_constraints
+            + self.terminal_constraints
+            + self.input_constraints
+            + self.slack_var_constraint
+        )
 
     def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
         """
@@ -582,7 +607,7 @@ class LTIDataDrivenMPCController():
         account for noisy online measurements and for noisy data used for
         prediction (used to construct the Hankel matrices).
 
-        Theese constraints are defined according to the following equations
+        These constraints are defined according to the following equations
         from the Nominal and Robust MPC formulations in [1]:
         - Nominal MPC: Equation (3b).
         - Robust MPC: Equation (6a).
@@ -591,7 +616,7 @@ class LTIDataDrivenMPCController():
             List[cp.Constraint]: A list containing the CVXPY system dynamic
                 constraints for the Data-Driven MPC controller, corresponding
                 to the specified MPC controller type.
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
@@ -599,18 +624,20 @@ class LTIDataDrivenMPCController():
             # Define system dynamic constraints for Nominal MPC
             # based on Equation (3b) of [1]
             dynamics_constraints = [
-                cp.vstack([self.ubar, self.ybar]) ==
-                cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha]
+                cp.vstack([self.ubar, self.ybar])
+                == cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha
+            ]
         elif self.controller_type == LTIDataDrivenMPCType.ROBUST:
             # Define system dynamic constraints for Robust MPC
             # including a slack variable to account for noise,
             # based on Equation (6a) of [1]
             dynamics_constraints = [
-                cp.vstack([self.ubar, self.ybar + self.sigma]) ==
-                cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha]
-        
+                cp.vstack([self.ubar, self.ybar + self.sigma])
+                == cp.vstack([self.HLn_ud, self.HLn_yd]) @ self.alpha
+            ]
+
         return dynamics_constraints
-        
+
     def define_internal_state_constraints(self) -> List[cp.Constraint]:
         """
         Define the internal state constraints for the Data-Driven MPC
@@ -628,28 +655,27 @@ class LTIDataDrivenMPCController():
         Returns:
             List[cp.Constraint]: A list containing the CVXPY internal state
                 constraints for the Data-Driven MPC controller.
-        
+
         Note:
             It is essential to update the past `n` input-output measurements
             of the system, `u_past` and `y_past`, at each MPC iteration.
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
         # Define internal state constraints for Nominal and Robust MPC
         # based on Equations (3c) and (6b) of [1], respectively
-        ubar_state = self.ubar[:self.n * self.m]  # ubar[-n, -1]
-        ybar_state = self.ybar[:self.n * self.p]  # ybar[-n, -1]
+        ubar_state = self.ubar[: self.n * self.m]  # ubar[-n, -1]
+        ybar_state = self.ybar[: self.n * self.p]  # ybar[-n, -1]
         internal_state_constraints = [
-            cp.vstack([ubar_state, ybar_state]) ==
-            cp.vstack([self.u_past_param, self.y_past_param])]
-        
+            cp.vstack([ubar_state, ybar_state])
+            == cp.vstack([self.u_past_param, self.y_past_param])
+        ]
+
         return internal_state_constraints
-    
+
     def define_terminal_state_constraints(
-        self,
-        u_s: np.ndarray,
-        y_s: np.ndarray
+        self, u_s: np.ndarray, y_s: np.ndarray
     ) -> List[cp.Constraint]:
         """
         Define the terminal state constraints for the Data-Driven MPC
@@ -666,31 +692,30 @@ class LTIDataDrivenMPCController():
         Returns:
             List[cp.Constraint]: A list containing the CVXPY terminal state
                 constraints for the Data-Driven MPC controller.
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
         # Get terminal segments of input-output predictions
         # ubar[L-n, L-1]
-        ubar_terminal = self.ubar[self.L * self.m :
-                                  (self.L + self.n) * self.m]
+        ubar_terminal = self.ubar[self.L * self.m : (self.L + self.n) * self.m]
         # ybar[L-n, L-1]
-        ybar_terminal = self.ybar[self.L * self.p :
-                                  (self.L + self.n) * self.p]
-        
+        ybar_terminal = self.ybar[self.L * self.p : (self.L + self.n) * self.p]
+
         # Replicate steady-state vectors to match minimum realization
         # dimensions for constraint comparison
         u_sn = np.tile(u_s, (self.n, 1))
         y_sn = np.tile(y_s, (self.n, 1))
-        
+
         # Define terminal state constraints for Nominal and Robust MPC
         # based on Equations (3d) and (6c) of [1], respectively.
         terminal_constraints = [
-            cp.vstack([ubar_terminal, ybar_terminal]) ==
-            cp.vstack([u_sn, y_sn])]
-        
+            cp.vstack([ubar_terminal, ybar_terminal])
+            == cp.vstack([u_sn, y_sn])
+        ]
+
         return terminal_constraints
-    
+
     def define_input_constraints(self) -> List[cp.Constraint]:
         """
         Define the input constraints for the Data-Driven MPC formulation.
@@ -702,10 +727,12 @@ class LTIDataDrivenMPCController():
                 for the Data-Driven MPC controller.
         """
         # Define input constraints
-        ubar_pred = self.ubar[self.n * self.m:]  # ubar[0,L-1]
-        input_constraints = [ubar_pred >= self.U_const_low,
-                             ubar_pred <= self.U_const_up]
-                
+        ubar_pred = self.ubar[self.n * self.m :]  # ubar[0,L-1]
+        input_constraints = [
+            ubar_pred >= self.U_const_low,
+            ubar_pred <= self.U_const_up,
+        ]
+
         return input_constraints
 
     def define_slack_variable_constraint(self) -> List[cp.Constraint]:
@@ -731,29 +758,33 @@ class LTIDataDrivenMPCController():
                 constraint for the Robust Data-Driven MPC controller,
                 corresponding to the specified slack variable constraint type.
                 The list is empty if the `NONE` constraint type is selected.
-        
+
         References:
             [1]: See class-level docstring for full reference details.
         """
         # Get prediction segments of sigma variable
-        sigma_pred = self.sigma[self.n * self.p:]  # sigma[0,L-1]
+        sigma_pred = self.sigma[self.n * self.p :]  # sigma[0,L-1]
 
         # Define slack variable constraint for Robust MPC based
         # on the noise constraint type
         slack_variable_constraint = []
-        if (self.slack_var_constraint_type ==
-            SlackVarConstraintType.NON_CONVEX):
+        if self.slack_var_constraint_type == SlackVarConstraintType.NON_CONVEX:
             # Raise NotImplementedError for NON-CONVEX constraint
             raise NotImplementedError(
                 "Robust Data-Driven MPC with a Non-Convex slack variable "
                 "constraint is not currently implemented, since it cannot "
-                "be efficiently solved.")
+                "be efficiently solved."
+            )
         elif self.slack_var_constraint_type == SlackVarConstraintType.CONVEX:
+            # Prevent mypy [operator] error
+            assert self.c is not None and self.eps_max is not None
+
             # Define slack variable constraint considering
             # a CONVEX constraint based on Remark 3 [1]
-            slack_variable_constraint = [cp.norm(sigma_pred, "inf") <=
-                                         self.c * self.eps_max]
-                
+            slack_variable_constraint = [
+                cp.norm(sigma_pred, "inf") <= self.c * self.eps_max
+            ]
+
         return slack_variable_constraint
 
     def define_cost_function(self) -> None:
@@ -770,7 +801,7 @@ class LTIDataDrivenMPCController():
         - **Robust MPC**: In addition to the quadratic stage cost, adds ridge
             regularization terms for `alpha` and `sigma` variables to account
             for noisy measurements, as described in Equation (6).
-        
+
         Note:
             This method initializes the `cost` attribute to define the MPC
             cost function based on the MPC controller type.
@@ -780,27 +811,35 @@ class LTIDataDrivenMPCController():
         """
         # Get segments of input-output predictions from time step 0 to (L - 1)
         # ubar[0,L-1]
-        ubar_pred = self.ubar[self.n * self.m: (self.L + self.n) * self.m]
+        ubar_pred = self.ubar[self.n * self.m : (self.L + self.n) * self.m]
         # ybar[0,L-1]
-        ybar_pred = self.ybar[self.n * self.p: (self.L + self.n) * self.p]
+        ybar_pred = self.ybar[self.n * self.p : (self.L + self.n) * self.p]
 
         # Define control-related cost
-        control_cost = (
-            cp.quad_form(ubar_pred - np.tile(self.u_s, (self.L, 1)), self.R) +
-            cp.quad_form(ybar_pred - np.tile(self.y_s, (self.L, 1)), self.Q))
-        
+        control_cost = cp.quad_form(
+            ubar_pred - np.tile(self.u_s, (self.L, 1)), self.R
+        ) + cp.quad_form(ybar_pred - np.tile(self.y_s, (self.L, 1)), self.Q)
+
         # Define noise-related cost if controller type is Robust
         if self.controller_type == LTIDataDrivenMPCType.ROBUST:
+            # Prevent mypy [operator] error
+            assert (
+                self.lamb_alpha is not None
+                and self.eps_max is not None
+                and self.lamb_sigma is not None
+            )
+
             noise_cost = (
-                self.lamb_alpha * self.eps_max * cp.norm(self.alpha, 2) ** 2 +
-                self.lamb_sigma * cp.norm(self.sigma, 2) ** 2)
-        
+                self.lamb_alpha * self.eps_max * cp.norm(self.alpha, 2) ** 2
+                + self.lamb_sigma * cp.norm(self.sigma, 2) ** 2
+            )
+
             # Define MPC cost function for a Robust MPC controller
             self.cost = control_cost + noise_cost
         else:
             # Define MPC cost function for a Nominal MPC controller
             self.cost = control_cost
-    
+
     def define_mpc_problem(self) -> None:
         """
         Define the optimization problem for the Data-Driven MPC formulation.
@@ -815,7 +854,7 @@ class LTIDataDrivenMPCController():
         # Define QP problem
         objective = cp.Minimize(self.cost)
         self.problem = cp.Problem(objective, self.constraints)
-        
+
     def solve_mpc_problem(self, warm_start: bool = False) -> str:
         """
         Solve the optimization problem for the Data-Driven MPC formulation.
@@ -831,9 +870,9 @@ class LTIDataDrivenMPCController():
             solution status.
         """
         self.problem.solve(warm_start=warm_start)
-        
+
         return self.problem.status
-    
+
     def get_problem_solve_status(self) -> str:
         """
         Get the solve status of the optimization problem of the Data-Driven MPC
@@ -856,7 +895,7 @@ class LTIDataDrivenMPCController():
                 problem.
         """
         return self.problem.value
-    
+
     def get_optimal_control_input(self) -> np.ndarray:
         """
         Retrieve and store the optimal control input from the MPC solution.
@@ -864,7 +903,7 @@ class LTIDataDrivenMPCController():
         Returns:
             np.ndarray: The predicted optimal control input from time step 0
                 to (L - 1).
-        
+
         Raises:
             ValueError: If the MPC problem solution status was not "optimal"
                 or "optimal_inaccurate".
@@ -876,21 +915,20 @@ class LTIDataDrivenMPCController():
         """
         # Get segment of the input prediction from time step 0 to (L - 1)
         # ubar[0,L-1]
-        ubar_pred = self.ubar[self.n * self.m:
-                              (self.L + self.n) * self.m]
-        
+        ubar_pred = self.ubar[self.n * self.m : (self.L + self.n) * self.m]
+
         # Store the optimal control input ubar*[0,L-1] if the MPC problem
         # solution had an "optimal" or "optimal_inaccurate" status
         if self.problem.status in {"optimal", "optimal_inaccurate"}:
+            # Prevent mypy [union-attr] error
+            assert ubar_pred.value is not None
+
             self.optimal_u = ubar_pred.value.flatten()
             return self.optimal_u
         else:
             raise ValueError("MPC problem was not solved optimally.")
-    
-    def get_optimal_control_input_at_step(
-        self,
-        n_step: int = 0
-    ) -> np.ndarray:
+
+    def get_optimal_control_input_at_step(self, n_step: int = 0) -> np.ndarray:
         """
         Get the optimal control input from the MPC solution corresponding
         to a specified time step in the prediction horizon [0, L-1].
@@ -898,7 +936,7 @@ class LTIDataDrivenMPCController():
         Args:
             n_step (int): The time step of the optimal control input to
                 retrieve. It must be within the range [0, L-1].
-        
+
         Returns:
             np.ndarray: An array containing the optimal control input for the
                 specified prediction time step.
@@ -914,13 +952,15 @@ class LTIDataDrivenMPCController():
         if not 0 <= n_step < self.L:
             raise ValueError(
                 f"The specified prediction time step ({n_step}) is out of "
-                f"range. It should be within [0, {self.L - 1}].")
-        
-        optimal_u_step_n = self.optimal_u[n_step * self.m:
-                                          (n_step + 1) * self.m]
-        
+                f"range. It should be within [0, {self.L - 1}]."
+            )
+
+        optimal_u_step_n = self.optimal_u[
+            n_step * self.m : (n_step + 1) * self.m
+        ]
+
         return optimal_u_step_n
-    
+
     def store_input_output_measurement(
         self,
         u_current: np.ndarray,
@@ -930,7 +970,7 @@ class LTIDataDrivenMPCController():
         Store an input-output measurement pair for the current time step in
         the input-output storage variables.
 
-        This method updates the input-output storage variables `u_past` and 
+        This method updates the input-output storage variables `u_past` and
         `y_past` by appending the current input-output measurements and
         removing the oldest measurements located at the first position. This
         ensures these variables only store the past `n` measurements, as
@@ -944,11 +984,11 @@ class LTIDataDrivenMPCController():
                 time step, expected to match the dimensions of prior outputs.
                 This output should correspond to the system's response to
                 `u_current`, as both represent a trajectory of the system.
-    
+
         Raises:
             ValueError: If `u_current` or `y_current` do not match the
                 expected dimensions.
-        
+
         Note:
             This method modifies the `u_past` and `y_past` arrays directly to
             ensure that only the most recent `n` measurements are retained.
@@ -959,21 +999,24 @@ class LTIDataDrivenMPCController():
         # Check measurement dimensions
         expected_u0_dim = (self.m, 1)
         expected_y0_dim = (self.p, 1)
-        if (u_current.shape != expected_u0_dim or
-            y_current.shape != expected_y0_dim):
+        if (
+            u_current.shape != expected_u0_dim
+            or y_current.shape != expected_y0_dim
+        ):
             raise ValueError(
-                f"Incorrect dimensions. Expected dimensions are "
+                "Incorrect dimensions. Expected dimensions are "
                 f"{expected_u0_dim} for u_current and {expected_y0_dim} for "
-                f"y_current, but got {u_current.shape} and "
-                f"{y_current.shape} instead.")
-        
+                f"y_current, but got {u_current.shape} and {y_current.shape} "
+                "instead."
+            )
+
         # Shift input-output storage arrays to discard the oldest
         # measurements and append the new ones
         # u[t-n, t-1]
-        self.u_past = np.vstack([self.u_past[self.m:], u_current])
+        self.u_past = np.vstack([self.u_past[self.m :], u_current])
         # y[t-n, t-1]
-        self.y_past = np.vstack([self.y_past[self.p:], y_current])
-        
+        self.y_past = np.vstack([self.y_past[self.p :], y_current])
+
     def set_past_input_output_data(
         self,
         u_past: np.ndarray,
@@ -995,7 +1038,7 @@ class LTIDataDrivenMPCController():
                 outputs. Expected to have a shape of (n * p, 1) where 'n' is
                 the estimated system order and 'p' is the dimension of the
                 output.
-        
+
         Raises:
             ValueError: If `u_past` or `y_past` do not have correct
                 dimensions.
@@ -1009,23 +1052,23 @@ class LTIDataDrivenMPCController():
         expected_y_dim = (self.n * self.p, 1)
         if u_past.shape != expected_u_dim:
             raise ValueError(
-                f"Incorrect dimensions. u_past must be shaped as "
-                f"{expected_u_dim}. Got {u_past.shape}. instead")
+                "Incorrect dimensions. `u_past` must have shape "
+                f"{expected_u_dim}, but got {u_past.shape} instead."
+            )
         if y_past.shape != expected_y_dim:
             raise ValueError(
-                f"Incorrect dimensions. y_past must be shaped as "
-                f"{expected_y_dim}. Got {y_past.shape} instead.")
+                "Incorrect dimensions. `y_past` must have shape "
+                f"{expected_y_dim}, but got {y_past.shape} instead."
+            )
 
         # Update past input-output data
         # u[t-n, t-1]
         self.u_past = u_past
         # y[t-n, t-1]
         self.y_past = y_past
-    
+
     def set_input_output_setpoints(
-        self,
-        u_s: np.ndarray,
-        y_s: np.ndarray
+        self, u_s: np.ndarray, y_s: np.ndarray
     ) -> None:
         """
         Set the control and system setpoints of the Data-Driven MPC controller.
@@ -1037,23 +1080,27 @@ class LTIDataDrivenMPCController():
         Args:
             u_s (np.ndarray): The setpoint for control inputs.
             y_s (np.ndarray): The setpoint for system outputs.
-        
+
         Raises:
             ValueError: If `u_s` or `y_s` do not have the expected
                 dimensions.
-            
+
         Note:
             This method sets the values of the `u_s` and `y_s` attributes with
             the provided new setpoints.
         """
         # Validate input types and dimensions
         if u_s.shape != self.u_s.shape:
-            raise ValueError(f"Incorrect dimensions. u_s must have shape "
-                             f"{self.u_s.shape}, got {u_s.shape}")
+            raise ValueError(
+                "Incorrect dimensions. `u_s` must have shape "
+                f"{self.u_s.shape}, but got {u_s.shape} instead."
+            )
         if y_s.shape != self.y_s.shape:  # Replace with actual expected shape
-            raise ValueError(f"Incorrect dimensions. y_s must have shape "
-                             f"{self.y_s.shape}, got {y_s.shape}")
-    
+            raise ValueError(
+                "Incorrect dimensions. `y_s` must have shape "
+                f"{self.y_s.shape}, but got {y_s.shape} instead."
+            )
+
         # Update Input-Output setpoint pairs
         self.u_s = u_s
         self.y_s = y_s

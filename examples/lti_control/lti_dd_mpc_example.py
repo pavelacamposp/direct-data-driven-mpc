@@ -27,57 +27,68 @@ References:
 """
 
 import argparse
-
-import numpy as np
-import matplotlib.pyplot as plt
-import os
 import math
+import os
+from typing import Any
 
-from direct_data_driven_mpc.utilities.controller.controller_params import (
-    get_lti_data_driven_mpc_controller_params)
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
-    create_lti_data_driven_mpc_controller)
-from direct_data_driven_mpc.utilities.controller.initial_data_generation import (
-    randomize_initial_system_state, generate_initial_input_output_data)
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
-    simulate_lti_data_driven_mpc_control_loop)
-
-from direct_data_driven_mpc.utilities.data_visualization import (
-    plot_input_output, plot_input_output_animation, save_animation)
-
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params)
+import matplotlib.pyplot as plt
+import numpy as np
 
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
-    LTIDataDrivenMPCType, SlackVarConstraintType)
-
+    LTIDataDrivenMPCType,
+    SlackVarConstraintType,
+)
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
+    create_lti_data_driven_mpc_controller,
+)
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    get_lti_data_driven_mpc_controller_params,
+)
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    simulate_lti_data_driven_mpc_control_loop,
+)
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
+    generate_initial_input_output_data,
+    randomize_initial_system_state,
+)
+from direct_data_driven_mpc.utilities.data_visualization import (
+    plot_input_output,
+    plot_input_output_animation,
+    save_animation,
+)
 from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
+from direct_data_driven_mpc.utilities.yaml_config_loading import (
+    load_yaml_config_params,
+)
 
 # Directory paths
 dirname = os.path.dirname
 project_dir = dirname(dirname(dirname(__file__)))
-examples_dir = os.path.join(project_dir, 'examples')
-models_config_dir = os.path.join(examples_dir, 'config', 'models')
-controller_config_dir = os.path.join(examples_dir, 'config', 'controllers')
-plot_params_config_dir = os.path.join(examples_dir, 'config', 'plots')
-default_animation_dir = os.path.join(project_dir, 'animation_outputs')
+examples_dir = os.path.join(project_dir, "examples")
+models_config_dir = os.path.join(examples_dir, "config", "models")
+controller_config_dir = os.path.join(examples_dir, "config", "controllers")
+plot_params_config_dir = os.path.join(examples_dir, "config", "plots")
+default_animation_dir = os.path.join(project_dir, "animation_outputs")
 
 # Model configuration file
-default_model_config_file = 'four_tank_system_params.yaml'
-default_model_config_path = os.path.join(models_config_dir,
-                                         default_model_config_file)
-default_model_key_value = 'four_tank_system'
+default_model_config_file = "four_tank_system_params.yaml"
+default_model_config_path = os.path.join(
+    models_config_dir, default_model_config_file
+)
+default_model_key_value = "four_tank_system"
 
 # Data-Driven MPC controller configuration file
-default_controller_config_file = 'lti_dd_mpc_example_params.yaml'
-default_controller_config_path = os.path.join(controller_config_dir,
-                                              default_controller_config_file)
-default_controller_key_value = 'lti_data_driven_mpc_params'
+default_controller_config_file = "lti_dd_mpc_example_params.yaml"
+default_controller_config_path = os.path.join(
+    controller_config_dir, default_controller_config_file
+)
+default_controller_key_value = "lti_data_driven_mpc_params"
 
 # Plot parameters configuration file
-plot_params_config_file = 'plot_params.yaml'
-plot_params_config_path = os.path.join(plot_params_config_dir,
-                                       plot_params_config_file)
+plot_params_config_file = "plot_params.yaml"
+plot_params_config_path = os.path.join(
+    plot_params_config_dir, plot_params_config_file
+)
 
 # Animation default parameters
 default_anim_name = "data-driven_mpc_sim.gif"
@@ -94,104 +105,162 @@ controller_type_mapping = {
 slack_var_constraint_type_mapping = {
     "NonConvex": SlackVarConstraintType.NON_CONVEX,
     "Convex": SlackVarConstraintType.CONVEX,
-    "None": SlackVarConstraintType.NONE
+    "None": SlackVarConstraintType.NONE,
 }
 default_t_sim = 400  # Default simulation length in time steps
 
-# Define function to retrieve plot parameters from configuration file
-def get_plot_params(config_path):
-    line_params = load_yaml_config_params(
-        config_file=config_path, key='line_params')
-    legend_params = load_yaml_config_params(
-        config_file=config_path, key='legend_params')
-    figure_params = load_yaml_config_params(
-        config_file=config_path, key='figure_params')
 
-    return {'inputs_line_params': line_params['input'],
-            'outputs_line_params': line_params['output'],
-            'setpoints_line_params': line_params['setpoint'],
-            'bounds_line_params': line_params['bounds'],
-            'legend_params': legend_params,
-            **figure_params}
+# Define function to retrieve plot parameters from configuration file
+def get_plot_params(config_path: str) -> dict[str, Any]:
+    line_params: dict[str, Any] = load_yaml_config_params(
+        config_file=config_path, key="line_params"
+    )
+    legend_params: dict[str, Any] = load_yaml_config_params(
+        config_file=config_path, key="legend_params"
+    )
+    figure_params: dict[str, Any] = load_yaml_config_params(
+        config_file=config_path, key="figure_params"
+    )
+
+    return {
+        "inputs_line_params": line_params["input"],
+        "outputs_line_params": line_params["output"],
+        "setpoints_line_params": line_params["setpoint"],
+        "bounds_line_params": line_params["bounds"],
+        "legend_params": legend_params,
+        **figure_params,
+    }
+
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Direct Data-Driven MPC "
-                                     "Controller Example")
+    parser = argparse.ArgumentParser(
+        description="Direct Data-Driven MPC Controller Example"
+    )
     # Model configuration file arguments
-    parser.add_argument("--model_config_path", type=str,
-                        default=default_model_config_path,
-                        help="The path to the YAML configuration file "
-                        "containing the model parameters.")
-    parser.add_argument("--model_key_value", type=str,
-                        default=default_model_key_value,
-                        help="The key to access the model parameters in the "
-                        "configuration file.")
+    parser.add_argument(
+        "--model_config_path",
+        type=str,
+        default=default_model_config_path,
+        help="The path to the YAML configuration file "
+        "containing the model parameters.",
+    )
+    parser.add_argument(
+        "--model_key_value",
+        type=str,
+        default=default_model_key_value,
+        help="The key to access the model parameters in the "
+        "configuration file.",
+    )
     # Data-Driven MPC controller configuration file arguments
-    parser.add_argument("--controller_config_path", type=str,
-                        default=default_controller_config_path,
-                        help="The path to the YAML configuration file "
-                        "containing the Data-Driven MPC controller "
-                        "parameters.")
-    parser.add_argument("--controller_key_value", type=str,
-                        default=default_controller_key_value,
-                        help="The key to access the Data-Driven MPC "
-                        "controller parameters in the configuration file.")
+    parser.add_argument(
+        "--controller_config_path",
+        type=str,
+        default=default_controller_config_path,
+        help="The path to the YAML configuration file "
+        "containing the Data-Driven MPC controller "
+        "parameters.",
+    )
+    parser.add_argument(
+        "--controller_key_value",
+        type=str,
+        default=default_controller_key_value,
+        help="The key to access the Data-Driven MPC "
+        "controller parameters in the configuration file.",
+    )
     # Data-Driven MPC controller arguments
-    parser.add_argument("--n_mpc_step", type=int,
-                        default=None,
-                        help="The number of consecutive applications of the "
-                        "optimal input for an n-Step Data-Driven MPC Scheme.")
-    parser.add_argument("--controller_type", type=str,
-                        default=None,
-                        choices=["Nominal", "Robust"],
-                        help="The Data-Driven MPC Controller type.")
-    parser.add_argument("--slack_var_const_type", type=str,
-                        default=None,
-                        choices=["None", "Convex", "NonConvex"],
-                        help="The constraint type for the slack variable "
-                        "`sigma` in a Robust Data-Driven MPC formulation.")
-    parser.add_argument("--t_sim", type=int, default=default_t_sim,
-                        help="The simulation length in time steps.")
-    parser.add_argument("--seed", type=int, default=None,
-                        help="Seed for Random Number Generator "
-                        "initialization to ensure reproducible results. "
-                        "Defaults to `None`.")
+    parser.add_argument(
+        "--n_mpc_step",
+        type=int,
+        default=None,
+        help="The number of consecutive applications of the "
+        "optimal input for an n-Step Data-Driven MPC Scheme.",
+    )
+    parser.add_argument(
+        "--controller_type",
+        type=str,
+        default=None,
+        choices=["Nominal", "Robust"],
+        help="The Data-Driven MPC Controller type.",
+    )
+    parser.add_argument(
+        "--slack_var_const_type",
+        type=str,
+        default=None,
+        choices=["None", "Convex", "NonConvex"],
+        help="The constraint type for the slack variable "
+        "`sigma` in a Robust Data-Driven MPC formulation.",
+    )
+    parser.add_argument(
+        "--t_sim",
+        type=int,
+        default=default_t_sim,
+        help="The simulation length in time steps.",
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Seed for Random Number Generator "
+        "initialization to ensure reproducible results. "
+        "Defaults to `None`.",
+    )
     # Animation video output arguments
-    parser.add_argument("--save_anim", action='store_true', default=False,
-                        help="If passed, save the generated animation to a "
-                        "file using ffmpeg. The file format is specified by "
-                        "the `anim_path` argument value.")
-    parser.add_argument("--anim_path", type=str,
-                        default=default_anim_path,
-                        help="The saving path for the generated animation "
-                        "file. Includes the file name and its extension "
-                        "(e.g., 'data-driven_mpc_sim.gif' or "
-                        "'data-driven_mpc_sim.mp4'). Defaults to "
-                        "'animation_outputs/data-driven_mpc_sim.gif'")
-    parser.add_argument("--anim_fps", type=float,
-                        default=default_anim_fps,
-                        help="The frames per second value for the saved "
-                        "video. Defaults to 50.")
-    parser.add_argument("--anim_bitrate", type=int,
-                        default=default_anim_bitrate,
-                        help="The bitrate value for the saved video "
-                        "(relevant for video formats like .mp4). Defaults to "
-                        "4500.")
-    parser.add_argument("--anim_points_per_frame", type=int,
-                        default=default_anim_points_per_frame,
-                        help="The number of data points shown per animation "
-                        "frame. Increasing this value reduces the number of "
-                        "animation frames required to display all the data. "
-                        "Defaults to 5 points per frame.")
+    parser.add_argument(
+        "--save_anim",
+        action="store_true",
+        default=False,
+        help="If passed, save the generated animation to a "
+        "file using ffmpeg. The file format is specified by "
+        "the `anim_path` argument value.",
+    )
+    parser.add_argument(
+        "--anim_path",
+        type=str,
+        default=default_anim_path,
+        help="The saving path for the generated animation "
+        "file. Includes the file name and its extension "
+        "(e.g., 'data-driven_mpc_sim.gif' or "
+        "'data-driven_mpc_sim.mp4'). Defaults to "
+        "'animation_outputs/data-driven_mpc_sim.gif'",
+    )
+    parser.add_argument(
+        "--anim_fps",
+        type=float,
+        default=default_anim_fps,
+        help="The frames per second value for the saved "
+        "video. Defaults to 50.",
+    )
+    parser.add_argument(
+        "--anim_bitrate",
+        type=int,
+        default=default_anim_bitrate,
+        help="The bitrate value for the saved video "
+        "(relevant for video formats like .mp4). Defaults to "
+        "4500.",
+    )
+    parser.add_argument(
+        "--anim_points_per_frame",
+        type=int,
+        default=default_anim_points_per_frame,
+        help="The number of data points shown per animation "
+        "frame. Increasing this value reduces the number of "
+        "animation frames required to display all the data. "
+        "Defaults to 5 points per frame.",
+    )
     # Verbose argument
-    parser.add_argument("--verbose", type=int, default=2,
-                        choices=[0, 1, 2],
-                        help="The verbosity level: 0 = no output, 1 = "
-                        "minimal output, 2 = detailed output.")
-    
+    parser.add_argument(
+        "--verbose",
+        type=int,
+        default=2,
+        choices=[0, 1, 2],
+        help="The verbosity level: 0 = no output, 1 = "
+        "minimal output, 2 = detailed output.",
+    )
+
     # TODO: Add arguments
-    
+
     return parser.parse_args()
+
 
 def main() -> None:
     # --- Parse arguments ---
@@ -204,7 +273,7 @@ def main() -> None:
     # Data-Driven MPC controller parameters
     controller_config_path = args.controller_config_path
     controller_key_value = args.controller_key_value
-    
+
     # Data-Driven MPC controller arguments
     n_mpc_step = args.n_mpc_step
     controller_type_arg = args.controller_type
@@ -232,14 +301,18 @@ def main() -> None:
     if verbose:
         print("Loading system parameters from configuration file")
 
-    system_model = LTISystemModel(config_file=model_config_path,
-                                  model_key_value=model_key_value,
-                                  verbose=verbose)
+    system_model = LTISystemModel(
+        config_file=model_config_path,
+        model_key_value=model_key_value,
+        verbose=verbose,
+    )
 
     # --- Define Data-Driven MPC Controller Parameters ---
     if verbose:
-        print("Loading Data-Driven MPC controller parameters from "
-              "configuration file")
+        print(
+            "Loading Data-Driven MPC controller parameters from "
+            "configuration file"
+        )
 
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs
@@ -249,42 +322,54 @@ def main() -> None:
         controller_key_value=controller_key_value,
         m=m,
         p=p,
-        verbose=verbose)
-    
+        verbose=verbose,
+    )
+
     # Override controller parameters with parsed arguments
-    if (n_mpc_step is not None or controller_type_arg is not None
-        or slack_var_const_type_arg is not None):
+    if (
+        n_mpc_step is not None
+        or controller_type_arg is not None
+        or slack_var_const_type_arg is not None
+    ):
         if verbose:
             print("Overriding Data-Driven MPC controller parameters")
-    
+
     # Override the number of consecutive applications of the
     # optimal input (n-Step Data-Driven MPC Scheme (multi-step))
     # with parsed argument if passed
     if n_mpc_step is not None:
-        dd_mpc_config['n_mpc_step'] = n_mpc_step
+        dd_mpc_config["n_mpc_step"] = n_mpc_step
 
         if verbose > 1:
-            print("    n-Step Data-Driven MPC scheme parameter "
-                  f"(`n_mpc_step`) set to: {n_mpc_step}")
-    
+            print(
+                "    n-Step Data-Driven MPC scheme parameter (`n_mpc_step`) "
+                f"set to: {n_mpc_step}"
+            )
+
     # Override the Controller type with parsed argument if passed
     if controller_type_arg is not None:
-        dd_mpc_config['controller_type'] = controller_type_mapping[
-            controller_type_arg]
-        
+        dd_mpc_config["controller_type"] = controller_type_mapping[
+            controller_type_arg
+        ]
+
         if verbose > 1:
-            print("    Data-Driven MPC controller type set to: "
-                  f"{dd_mpc_config['controller_type'].name}")
-    
+            print(
+                "    Data-Driven MPC controller type set to: "
+                f"{dd_mpc_config['controller_type'].name}"
+            )
+
     # Override the slack variable constraint type
     # with parsed argument if passed
     if slack_var_const_type_arg is not None:
-        dd_mpc_config['slack_var_constraint_type'] = (
-            slack_var_constraint_type_mapping[slack_var_const_type_arg])
-        
+        dd_mpc_config["slack_var_constraint_type"] = (
+            slack_var_constraint_type_mapping[slack_var_const_type_arg]
+        )
+
         if verbose > 1:
-            print("    Slack variable constraint type set to: "
-                  f"{dd_mpc_config['slack_var_constraint_type'].name}")
+            print(
+                "    Slack variable constraint type set to: "
+                f"{dd_mpc_config['slack_var_constraint_type'].name}"
+            )
 
     # --- Define Control Simulation parameters ---
     n_steps = t_sim + 1  # Number of simulation steps
@@ -302,14 +387,16 @@ def main() -> None:
     # 2. Randomize Initial System State (Simulation)
     # ==============================================
     if verbose:
-        print(f"Randomizing initial system state")
+        print("Randomizing initial system state")
 
     # Randomize the initial internal state of the system to ensure
     # the model starts in a plausible random state
-    x_0 = randomize_initial_system_state(system_model=system_model,
-                                         controller_config=dd_mpc_config,
-                                         np_random=np_random)
-    
+    x_0 = randomize_initial_system_state(
+        system_model=system_model,
+        controller_config=dd_mpc_config,
+        np_random=np_random,
+    )
+
     # Set system state to the estimated plausible random initial state
     system_model.set_state(state=x_0)
 
@@ -327,30 +414,34 @@ def main() -> None:
     u_d, y_d = generate_initial_input_output_data(
         system_model=system_model,
         controller_config=dd_mpc_config,
-        np_random=np_random)
-    
+        np_random=np_random,
+    )
+
     if verbose > 1:
-        print(f"    Input data shape: {u_d.shape}, Output data shape: "
-              f"{y_d.shape}")
+        print(
+            f"    Input data shape: {u_d.shape}, Output data shape: "
+            f"{y_d.shape}"
+        )
 
     # ===============================================
     # 4. Data-Driven MPC Controller Instance Creation
     # ===============================================
-    controller_type_str = dd_mpc_config['controller_type'].name.capitalize()
+    controller_type_str = dd_mpc_config["controller_type"].name.capitalize()
     if verbose:
-        print(f"Initializing {controller_type_str} Data-Driven MPC "
-              "controller")
+        print(f"Initializing {controller_type_str} Data-Driven MPC controller")
 
     # Create a Direct Data-Driven MPC controller
     dd_mpc_controller = create_lti_data_driven_mpc_controller(
-        controller_config=dd_mpc_config, u_d=u_d, y_d=y_d)
+        controller_config=dd_mpc_config, u_d=u_d, y_d=y_d
+    )
 
     # ===============================
     # 5. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
-        print(f"Simulating {controller_type_str} Data-Driven MPC control "
-              "system")
+        print(
+            f"Simulating {controller_type_str} Data-Driven MPC control system"
+        )
 
     # Simulate the Data-Driven MPC control system following Algorithm 1 for a
     # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC
@@ -360,15 +451,16 @@ def main() -> None:
         data_driven_mpc_controller=dd_mpc_controller,
         n_steps=n_steps,
         np_random=np_random,
-        verbose=verbose)
+        verbose=verbose,
+    )
 
     # =====================================================
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
-    N = dd_mpc_config['N']  # Initial input-output trajectory length
-    u_s = dd_mpc_config['u_s']  # Control input setpoint
-    y_s = dd_mpc_config['y_s']  # System output setpoint
-    U = dd_mpc_config['U']  # Bounds for the predicted input
+    N = dd_mpc_config["N"]  # Initial input-output trajectory length
+    u_s = dd_mpc_config["u_s"]  # Control input setpoint
+    y_s = dd_mpc_config["y_s"]  # System output setpoint
+    U = dd_mpc_config["U"]  # Bounds for the predicted input
 
     # Construct input bounds tuple list for plotting
     # if input bounds are specified
@@ -377,18 +469,20 @@ def main() -> None:
     # --- Plot control system inputs and outputs ---
     plot_title = f"{controller_type_str} Data-Driven MPC"
     plot_params = get_plot_params(config_path=plot_params_config_path)
-    
+
     if verbose:
         print("Displaying control system inputs and outputs plot")
-    
-    plot_input_output(u_k=u_sys,
-                      y_k=y_sys,
-                      u_s=u_s,
-                      y_s=y_s,
-                      u_bounds_list=u_bounds_list,
-                      title=plot_title,
-                      **plot_params)
-    
+
+    plot_input_output(
+        u_k=u_sys,
+        y_k=y_sys,
+        u_s=u_s,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        title=plot_title,
+        **plot_params,
+    )
+
     # --- Plot data including initial input-output sequences ---
     # Create data arrays including initial input-output data used for
     # the data-driven characterization of the system
@@ -397,34 +491,40 @@ def main() -> None:
 
     # Plot extended input-output data
     if verbose:
-        print("Displaying control system inputs and outputs including "
-              "initial input-output measurements")
-    
-    plot_input_output(u_k=U_data,
-                      y_k=Y_data,
-                      u_s=u_s,
-                      y_s=y_s,
-                      u_bounds_list=u_bounds_list,
-                      initial_steps=N,
-                      title=plot_title,
-                      **plot_params)
+        print(
+            "Displaying control system inputs and outputs including initial "
+            "input-output measurements"
+        )
+
+    plot_input_output(
+        u_k=U_data,
+        y_k=Y_data,
+        u_s=u_s,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        initial_steps=N,
+        title=plot_title,
+        **plot_params,
+    )
 
     # --- Animate extended input-output data ---
     if verbose:
         print("Displaying animation from extended input-output data")
-    
-    anim = plot_input_output_animation(u_k=U_data,
-                                       y_k=Y_data,
-                                       u_s=u_s,
-                                       y_s=y_s,
-                                       u_bounds_list=u_bounds_list,
-                                       initial_steps=N,
-                                       interval=1000.0/anim_fps,
-                                       points_per_frame=anim_points_per_frame,
-                                       title=plot_title,
-                                       **plot_params)
+
+    anim = plot_input_output_animation(
+        u_k=U_data,
+        y_k=Y_data,
+        u_s=u_s,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        initial_steps=N,
+        interval=1000.0 / anim_fps,
+        points_per_frame=anim_points_per_frame,
+        title=plot_title,
+        **plot_params,
+    )
     plt.show()  # Show animation
-    
+
     if save_anim:
         # Calculate the number of total animation frames
         data_length = N + n_steps
@@ -434,23 +534,27 @@ def main() -> None:
             print("Saving extended input-output animation to file")
             if verbose > 1:
                 print(f"    Saving animation to: {anim_path}")
-                print(f"    Animation FPS: {anim_fps}, Bitrate: "
-                      f"{anim_bitrate} (video only), Data Length: "
-                      f"{data_length}, Points per Frame: "
-                      f"{anim_points_per_frame}, Total Frames: {anim_frames}")
-        
+                print(
+                    f"    Animation FPS: {anim_fps}, Bitrate: {anim_bitrate} "
+                    f"(video only), Data Length: {data_length}, Points per "
+                    f"Frame: {anim_points_per_frame}, Total Frames: "
+                    f"{anim_frames}"
+                )
+
         # Save input-output animation as an MP4 video
-        save_animation(animation=anim,
-                       total_frames=anim_frames,
-                       fps=anim_fps,
-                       bitrate=anim_bitrate,
-                       file_path=anim_path)
-        
+        save_animation(
+            animation=anim,
+            total_frames=anim_frames,
+            fps=anim_fps,
+            bitrate=anim_bitrate,
+            file_path=anim_path,
+        )
+
         if verbose:
             print("Animation file saved successfully")
 
     plt.close()  # Close figures
 
+
 if __name__ == "__main__":
     main()
-    
