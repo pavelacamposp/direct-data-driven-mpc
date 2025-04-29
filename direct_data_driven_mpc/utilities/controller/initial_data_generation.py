@@ -1,5 +1,3 @@
-from typing import Tuple, Union
-
 import numpy as np
 from numpy.random import Generator
 
@@ -88,10 +86,10 @@ def randomize_initial_system_state(
 
 
 def generate_initial_input_output_data(
-    system_model: Union[LTIModel, NonlinearSystem],
+    system_model: LTIModel | NonlinearSystem,
     controller_config: DataDrivenMPCParamsType,
     np_random: Generator,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Generate input-output trajectory data from a system using Data-Driven MPC
     controller parameters.
@@ -104,9 +102,9 @@ def generate_initial_input_output_data(
     for system characterization in a Data-Driven MPC formulation.
 
     Args:
-        system_model (Union[LTIModel, NonlinearSystem]): An instance of
-            `LTIModel` representing a Linear Time-Invariant (LTI) system or
-            `NonlinearSystem` representing a Nonlinear system.
+        system_model (LTIModel | NonlinearSystem): An instance of `LTIModel`,
+            representing a Linear Time-Invariant (LTI) system, or
+            `NonlinearSystem`, representing a Nonlinear system.
         controller_config (DataDrivenMPCParamsType): A dictionary containing
             parameters for a Data-Driven MPC controller designed for Linear
             Time-Invariant (LTI) or Nonlinear systems. Includes the initial
@@ -117,7 +115,7 @@ def generate_initial_input_output_data(
             output.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays: a
+        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays: a
             persistently exciting input (`u_d`) and the system's output
             response (`y_d`). The input array has shape `(N, m)` and the
             output array has shape `(N, p)`, where `N` is the trajectory
@@ -157,7 +155,7 @@ def simulate_n_input_output_measurements(
     system_model: LTIModel,
     controller_config: LTIDataDrivenMPCParamsDictType,
     np_random: Generator,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Simulate a control input setpoint applied to a system over `n` (the
     estimated system order) time steps and return the resulting input-output
@@ -187,7 +185,7 @@ def simulate_n_input_output_measurements(
             random noise for the system's output.
 
     Returns:
-        Tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
+        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
             - An array of shape `(n, m)` representing the constant input
                 setpoint applied to the system over `n` time steps, where `n`
                 is the system order and `m` is the number of control inputs.

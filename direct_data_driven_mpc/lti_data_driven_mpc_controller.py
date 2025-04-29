@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import List, Optional
 
 import cvxpy as cp
 import numpy as np
@@ -51,17 +50,17 @@ class LTIDataDrivenMPCController:
         R (np.ndarray): The input weighting matrix for the MPC formulation.
         u_s (np.ndarray): The setpoint for control inputs.
         y_s (np.ndarray): The setpoint for system outputs.
-        eps_max (Optional[float]): The estimated upper bound of the system
+        eps_max (float | None): The estimated upper bound of the system
             measurement noise.
-        lamb_alpha (Optional[float]): The ridge regularization base weight for
+        lamb_alpha (float | None]): The ridge regularization base weight for
             `alpha`, scaled by `eps_max`.
-        lamb_sigma (Optional[float]): The ridge regularization weight for
+        lamb_sigma (float | None]): The ridge regularization weight for
             `sigma`.
-        U (Optional[np.ndarray]): An array of shape (`m`, 2) containing the
+        U (np.ndarray | None): An array of shape (`m`, 2) containing the
             bounds for the `m` predicted inputs. Each row specifies the
             `[min, max]` bounds for a single input. If `None`, no input bounds
             are applied.
-        c (Optional[float]): A constant used to define a Convex constraint for
+        c (float | None): A constant used to define a Convex constraint for
             the slack variable `sigma` in a Robust MPC formulation.
         slack_var_constraint_type (SlackVarConstraintTypes): The constraint
             type for the slack variable `sigma` in a Robust MPC formulation.
@@ -78,17 +77,17 @@ class LTIDataDrivenMPCController:
             input-output trajectory characterization of the system.
         ubar (cp.Variable): The predicted control input variable.
         ybar (cp.Variable): The predicted system output variable.
-        sigma (Optional[cp.Variable]): The slack variable to account for noisy
+        sigma (cp.Variable | None): The slack variable to account for noisy
             measurements in a Robust Data-Driven MPC.
-        dynamics_constraints (List[cp.Constraint]): The system dynamics
+        dynamics_constraints (list[cp.Constraint]): The system dynamics
             constraints for a Data-Driven MPC formulation.
-        internal_state_constraints (List[cp.Constraint]): The internal state
+        internal_state_constraints (list[cp.Constraint]): The internal state
             constraints for a Data-Driven MPC formulation.
-        terminal_constraints (List[cp.Constraint]): The terminal state
+        terminal_constraints (list[cp.Constraint]): The terminal state
             constraints for a Data-Driven MPC formulation.
-        slack_var_constraint (List[cp.Constraint]): The slack variable
+        slack_var_constraint (list[cp.Constraint]): The slack variable
             constraints for a Robust Data-Driven MPC formulation.
-        constraints (List[cp.Constraint]): The combined constraints for the
+        constraints (list[cp.Constraint]): The combined constraints for the
             Data-Driven MPC formulation.
         cost (cp.Expression): The cost function for the Data-Driven MPC
             formulation.
@@ -117,11 +116,11 @@ class LTIDataDrivenMPCController:
         R: np.ndarray,
         u_s: np.ndarray,
         y_s: np.ndarray,
-        eps_max: Optional[float] = None,
-        lamb_alpha: Optional[float] = None,
-        lamb_sigma: Optional[float] = None,
-        U: Optional[np.ndarray] = None,
-        c: Optional[float] = None,
+        eps_max: float | None = None,
+        lamb_alpha: float | None = None,
+        lamb_sigma: float | None = None,
+        U: np.ndarray | None = None,
+        c: float | None = None,
         slack_var_constraint_type: SlackVarConstraintType = (
             SlackVarConstraintType.CONVEX
         ),
@@ -152,17 +151,17 @@ class LTIDataDrivenMPCController:
                 formulation.
             u_s (np.ndarray): The setpoint for control inputs.
             y_s (np.ndarray): The setpoint for system outputs.
-            eps_max (Optional[float]): The estimated upper bound of the system
+            eps_max (float | None): The estimated upper bound of the system
                 measurement noise.
-            lamb_alpha (Optional[float]): The ridge regularization base weight
+            lamb_alpha (float | None): The ridge regularization base weight
                 for `alpha`. It is scaled by `eps_max`.
-            lamb_sigma (Optional[float]): The ridge regularization weight for
+            lamb_sigma (float | None): The ridge regularization weight for
                 `sigma`.
-            U (Optional[np.ndarray]): An array of shape (`m`, 2) containing
+            U (np.ndarray | None): An array of shape (`m`, 2) containing
                 the bounds for the `m` predicted inputs. Each row specifies
                 the `[min, max]` bounds for a single input. If `None`, no
                 input bounds are applied. Defaults to `None`.
-            c (Optional[float]): A constant used to define a Convex constraint
+            c (float | None): A constant used to define a Convex constraint
                 for the slack variable `sigma` in a Robust MPC formulation.
             slack_var_constraint_type (SlackVarConstraintTypes): The
                 constraint type for the slack variable `sigma` in a Robust MPC
@@ -593,7 +592,7 @@ class LTIDataDrivenMPCController:
             + self.slack_var_constraint
         )
 
-    def define_system_dynamic_constraints(self) -> List[cp.Constraint]:
+    def define_system_dynamic_constraints(self) -> list[cp.Constraint]:
         """
         Define the system dynamic constraints for the Data-Driven MPC
         formulation corresponding to the specified MPC controller type.
@@ -613,7 +612,7 @@ class LTIDataDrivenMPCController:
         - Robust MPC: Equation (6a).
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY system dynamic
+            list[cp.Constraint]: A list containing the CVXPY system dynamic
                 constraints for the Data-Driven MPC controller, corresponding
                 to the specified MPC controller type.
 
@@ -638,7 +637,7 @@ class LTIDataDrivenMPCController:
 
         return dynamics_constraints
 
-    def define_internal_state_constraints(self) -> List[cp.Constraint]:
+    def define_internal_state_constraints(self) -> list[cp.Constraint]:
         """
         Define the internal state constraints for the Data-Driven MPC
         formulation.
@@ -653,7 +652,7 @@ class LTIDataDrivenMPCController:
         and (6b) (Robust) from the Nominal and Robust MPC formulations in [1].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY internal state
+            list[cp.Constraint]: A list containing the CVXPY internal state
                 constraints for the Data-Driven MPC controller.
 
         Note:
@@ -676,7 +675,7 @@ class LTIDataDrivenMPCController:
 
     def define_terminal_state_constraints(
         self, u_s: np.ndarray, y_s: np.ndarray
-    ) -> List[cp.Constraint]:
+    ) -> list[cp.Constraint]:
         """
         Define the terminal state constraints for the Data-Driven MPC
         formulation.
@@ -690,7 +689,7 @@ class LTIDataDrivenMPCController:
         (6c) (Robust) from the Nominal and Robust MPC formulations in [1].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY terminal state
+            list[cp.Constraint]: A list containing the CVXPY terminal state
                 constraints for the Data-Driven MPC controller.
 
         References:
@@ -716,14 +715,14 @@ class LTIDataDrivenMPCController:
 
         return terminal_constraints
 
-    def define_input_constraints(self) -> List[cp.Constraint]:
+    def define_input_constraints(self) -> list[cp.Constraint]:
         """
         Define the input constraints for the Data-Driven MPC formulation.
 
         These constraints are defined according to Equation (6c) of [1].
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY input constraints
+            list[cp.Constraint]: A list containing the CVXPY input constraints
                 for the Data-Driven MPC controller.
         """
         # Define input constraints
@@ -735,7 +734,7 @@ class LTIDataDrivenMPCController:
 
         return input_constraints
 
-    def define_slack_variable_constraint(self) -> List[cp.Constraint]:
+    def define_slack_variable_constraint(self) -> list[cp.Constraint]:
         """
         Define the slack variable constraint for a Robust Data-Driven MPC
         formulation based on the specified slack variable constraint type.
@@ -754,7 +753,7 @@ class LTIDataDrivenMPCController:
             (Remark 3).
 
         Returns:
-            List[cp.Constraint]: A list containing the CVXPY slack variable
+            list[cp.Constraint]: A list containing the CVXPY slack variable
                 constraint for the Robust Data-Driven MPC controller,
                 corresponding to the specified slack variable constraint type.
                 The list is empty if the `NONE` constraint type is selected.

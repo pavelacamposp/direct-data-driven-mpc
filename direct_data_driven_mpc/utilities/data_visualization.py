@@ -1,6 +1,6 @@
 import math
 import os
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,7 +31,7 @@ class HandlerInitMeasurementRect(HandlerPatch):
         height: float,
         fontsize: float,
         trans: Transform,
-    ) -> List[Union[Rectangle, Line2D]]:
+    ) -> list[Rectangle | Line2D]:
         # Make sure orig_handle is a Rectangle
         assert isinstance(orig_handle, Rectangle)
 
@@ -72,31 +72,31 @@ def plot_input_output(
     u_k: np.ndarray,
     y_k: np.ndarray,
     y_s: np.ndarray,
-    u_s: Optional[np.ndarray] = None,
-    u_bounds_list: Optional[List[Tuple[float, float]]] = None,
-    y_bounds_list: Optional[List[Tuple[float, float]]] = None,
+    u_s: np.ndarray | None = None,
+    u_bounds_list: list[tuple[float, float]] | None = None,
+    y_bounds_list: list[tuple[float, float]] | None = None,
     inputs_line_params: dict[str, Any] | None = None,
     outputs_line_params: dict[str, Any] | None = None,
     setpoints_line_params: dict[str, Any] | None = None,
     bounds_line_params: dict[str, Any] | None = None,
     u_setpoint_var_symbol: str = "u^s",
     y_setpoint_var_symbol: str = "y^s",
-    initial_steps: Optional[int] = None,
+    initial_steps: int | None = None,
     initial_excitation_text: str = "Init. Excitation",
     initial_measurement_text: str = "Init. Measurement",
     control_text: str = "Data-Driven MPC",
     display_initial_text: bool = True,
     display_control_text: bool = True,
-    figsize: Tuple[float, float] = (12.0, 8.0),
+    figsize: tuple[float, float] = (12.0, 8.0),
     dpi: int = 300,
-    u_ylimits_list: Optional[List[Tuple[float, float]]] = None,
-    y_ylimits_list: Optional[List[Tuple[float, float]]] = None,
+    u_ylimits_list: list[tuple[float, float]] | None = None,
+    y_ylimits_list: list[tuple[float, float]] | None = None,
     fontsize: int = 12,
     legend_params: dict[str, Any] | None = None,
     data_label: str = "",
-    axs_u: Optional[List[Axes]] = None,
-    axs_y: Optional[List[Axes]] = None,
-    title: Optional[str] = None,
+    axs_u: list[Axes] | None = None,
+    axs_y: list[Axes] | None = None,
+    title: str | None = None,
 ) -> None:
     """
     Plot input-output data with setpoints in a Matplotlib figure.
@@ -129,18 +129,18 @@ def plot_input_output(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (Optional[np.ndarray]): An array of shape (m, 1) containing `m`
-            input setpoint values. If `None`, input setpoint lines will not
-            be plotted. Defaults to `None`.
+        u_s (np.ndarray | None): An array of shape (m, 1) containing `m` input
+            setpoint values. If `None`, input setpoint lines will not be
+            plotted. Defaults to `None`.
         y_s (np.ndarray): An array of shape (p, 1) containing `p` output
             setpoint values.
-        u_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
             input data sequences. Defaults to `None`.
-        y_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        y_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each output data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
@@ -166,7 +166,7 @@ def plot_input_output(
             input setpoint data series (e.g., "u^s").
         y_setpoint_var_symbol (str): The variable symbol used to label the
             output setpoint data series (e.g., "y^s").
-        initial_steps (Optional[int]): The number of initial time steps during
+        initial_steps (int | None): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
@@ -183,14 +183,14 @@ def plot_input_output(
             label on the plot. Default is True.
         display_control_text (bool): Whether to display the `control_text`
             label on the plot. Default is True.
-        figsize (Tuple[float, float]): The (width, height) dimensions of the
+        figsize (tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
-        u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        u_ylimits_list (list[tuple[float, float]] | None): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             input subplot. If `None`, the Y-axis limits will be determined
             automatically. Defaults to `None`.
-        y_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        y_ylimits_list (list[tuple[float, float]] | None): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot. If `None`, the Y-axis limits will be determined
             automatically. Defaults to `None`.
@@ -200,14 +200,14 @@ def plot_input_output(
             loc, handlelength). If not provided, Matplotlib's default legend
             properties will be used.
         data_label (str): The label for the current data sequences.
-        axs_u (Optional[List[Axes]]): List of external axes for input plots.
+        axs_u (list[Axes] | None): A list of external axes for input plots.
             Defaults to `None`.
-        axs_y (Optional[List[Axes]]): List of external axes for output plots.
+        axs_y (list[Axes] | None): A list of external axes for output plots.
             Defaults to `None`.
-        title (Optional[str]): The title for the created plot figure. Set
-            only if the figure is created internally (i.e., `axs_u` and
-            `axs_y` are not provided). If `None`, no title will be displayed.
-            Defaults to `None`.
+        title (str | None): The title for the created plot figure. Set only if
+            the figure is created internally (i.e., `axs_u` and `axs_y` are not
+            provided). If `None`, no title will be displayed. Defaults to
+            `None`.
 
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
@@ -373,7 +373,7 @@ def plot_input_output(
 def plot_data(
     axis: Axes,
     data: np.ndarray,
-    setpoint: Optional[np.ndarray],
+    setpoint: np.ndarray | None,
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -389,9 +389,9 @@ def plot_data(
     fontsize: int,
     legend_params: dict[str, Any],
     fig: Figure | SubFigure,
-    bounds: Optional[Tuple[float, float]] = None,
-    initial_steps: Optional[int] = None,
-    plot_ylimits: Optional[Tuple[float, float]] = None,
+    bounds: tuple[float, float] | None = None,
+    initial_steps: int | None = None,
+    plot_ylimits: tuple[float, float] | None = None,
 ) -> None:
     """
     Plot a data series with setpoints in a specified axis. Optionally,
@@ -406,7 +406,7 @@ def plot_data(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (Optional[float]): The setpoint value for the data. If
+        setpoint (float | None): The setpoint value for the data. If
             `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
@@ -441,15 +441,15 @@ def plot_data(
             handlelength).
         fig (Figure | SubFigure): The Matplotlib figure or subfigure that
             contains the axis.
-        bounds (Optional[Tuple[float, float]]): A tuple (lower_bound,
+        bounds (tuple[float, float] | None): A tuple (lower_bound,
             upper_bound) specifying the bounds of the data to be plotted. If
             provided, horizontal lines representing these bounds will be
             plotted. Defaults to `None`.
-        initial_steps (Optional[int]): The number of initial time steps during
+        initial_steps (int | None): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
             measurement period in the plot. Defaults to `None`.
-        plot_ylimits (Optional[Tuple[float, float]]): A tuple (lower_limit,
+        plot_ylimits (tuple[float, float] | None): A tuple (lower_limit,
             upper_limit) specifying the Y-axis limits for the plot. If `None`,
             the Y-axis limits will be determined automatically. Defaults to
             `None`.
@@ -572,30 +572,30 @@ def plot_input_output_animation(
     u_k: np.ndarray,
     y_k: np.ndarray,
     y_s: np.ndarray,
-    u_s: Optional[np.ndarray] = None,
-    u_bounds_list: Optional[List[Tuple[float, float]]] = None,
-    y_bounds_list: Optional[List[Tuple[float, float]]] = None,
+    u_s: np.ndarray | None = None,
+    u_bounds_list: list[tuple[float, float]] | None = None,
+    y_bounds_list: list[tuple[float, float]] | None = None,
     inputs_line_params: dict[str, Any] | None = None,
     outputs_line_params: dict[str, Any] | None = None,
     setpoints_line_params: dict[str, Any] | None = None,
     bounds_line_params: dict[str, Any] | None = None,
     u_setpoint_var_symbol: str = "u^s",
     y_setpoint_var_symbol: str = "y^s",
-    initial_steps: Optional[int] = None,
-    initial_steps_label: Optional[str] = None,
+    initial_steps: int | None = None,
+    initial_steps_label: str | None = None,
     continuous_updates: bool = False,
     initial_excitation_text: str = "Init. Excitation",
     initial_measurement_text: str = "Init. Measurement",
     control_text: str = "Data-Driven MPC",
     display_initial_text: bool = True,
     display_control_text: bool = True,
-    figsize: Tuple[float, float] = (12.0, 8.0),
+    figsize: tuple[float, float] = (12.0, 8.0),
     dpi: int = 300,
     interval: float = 20.0,
     points_per_frame: int = 1,
     fontsize: int = 12,
     legend_params: dict[str, Any] | None = None,
-    title: Optional[str] = None,
+    title: str | None = None,
 ) -> FuncAnimation:
     """
     Create a Matplotlib animation showing the progression of input-output data
@@ -629,18 +629,18 @@ def plot_input_output_animation(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (Optional[np.ndarray]): An array of shape (m, 1) containing `m`
-            input setpoint values. If `None`, input setpoint lines will not
-            be plotted. Defaults to `None`.
+        u_s (np.ndarray | None): An array of shape (m, 1) containing `m` input
+            setpoint values. If `None`, input setpoint lines will not be
+            plotted. Defaults to `None`.
         y_s (np.ndarray): An array of shape (p, 1) containing `p` output
             setpoint values.
-        u_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
             will be plotted. The number of tuples must match the number of
             input data sequences. Defaults to `None`.
-        y_bounds_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        y_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each output data
             sequence. If provided, horizontal lines representing these bounds
             will be plotted in each subplot. If `None`, no horizontal lines
@@ -666,12 +666,12 @@ def plot_input_output_animation(
             input setpoint data series (e.g., "u^s").
         y_setpoint_var_symbol (str): The variable symbol used to label the
             output setpoint data series (e.g., "y^s").
-        initial_steps (Optional[int]): The number of initial time steps during
+        initial_steps (int | None): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
             will be applied. Defaults to `None`.
-        initial_steps_label (Optional[str]): Label text to use for the legend
+        initial_steps_label (str | None): Label text to use for the legend
             entry representing the initial input-output measurement highlight
             in the plot. If `None`, this element will not appear in the
             legend. Defaults to `None`.
@@ -690,7 +690,7 @@ def plot_input_output_animation(
             label on the plot. Default is True.
         display_control_text (bool): Whether to display the `control_text`
             label on the plot. Default is True.
-        figsize (Tuple[float, float]): The (width, height) dimensions of the
+        figsize (tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         interval (float): The time between frames in milliseconds. Defaults
@@ -704,8 +704,8 @@ def plot_input_output_animation(
             properties for customizing the plot legend (e.g., fontsize, loc,
             handlelength). If not provided, Matplotlib's default legend
             properties will be used.
-        title (Optional[str]): The title for the created plot figure. If
-            `None`, no title will be displayed. Defaults to `None`.
+        title (str | None): The title for the created plot figure. If `None`,
+            no title will be displayed. Defaults to `None`.
 
     Returns:
         FuncAnimation: A Matplotlib `FuncAnimation` object that animates the
@@ -765,24 +765,24 @@ def plot_input_output_animation(
     )
 
     # Define input-output line lists
-    u_lines: List[Line2D] = []
-    y_lines: List[Line2D] = []
+    u_lines: list[Line2D] = []
+    y_lines: list[Line2D] = []
 
     # Define initial measurement rectangles and texts lists
-    u_rects: List[Rectangle] = []
-    u_right_rect_lines: List[Line2D] = []
-    u_left_rect_lines: List[Line2D] = []
-    u_init_texts: List[Text] = []
-    u_control_texts: List[Text] = []
-    y_rects: List[Rectangle] = []
-    y_right_rect_lines: List[Line2D] = []
-    y_left_rect_lines: List[Line2D] = []
-    y_init_texts: List[Text] = []
-    y_control_texts: List[Text] = []
+    u_rects: list[Rectangle] = []
+    u_right_rect_lines: list[Line2D] = []
+    u_left_rect_lines: list[Line2D] = []
+    u_init_texts: list[Text] = []
+    u_control_texts: list[Text] = []
+    y_rects: list[Rectangle] = []
+    y_right_rect_lines: list[Line2D] = []
+    y_left_rect_lines: list[Line2D] = []
+    y_init_texts: list[Text] = []
+    y_control_texts: list[Text] = []
 
     # Define y-axis center
-    u_y_axis_centers: List[float] = []
-    y_y_axis_centers: List[float] = []
+    u_y_axis_centers: list[float] = []
+    y_y_axis_centers: list[float] = []
 
     # Initialize input plot elements
     for i in range(m):
@@ -962,7 +962,7 @@ def plot_input_output_animation(
 def initialize_data_animation(
     axis: Axes,
     data: np.ndarray,
-    setpoint: Optional[np.ndarray],
+    setpoint: np.ndarray | None,
     index: int,
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
@@ -974,16 +974,16 @@ def initialize_data_animation(
     control_text: str,
     fontsize: int,
     legend_params: dict[str, Any],
-    lines: List[Line2D],
-    rects: List[Rectangle],
-    right_rect_lines: List[Line2D],
-    left_rect_lines: List[Line2D],
-    init_texts: List[Text],
-    control_texts: List[Text],
-    y_axis_centers: List[float],
-    bounds: Optional[Tuple[float, float]] = None,
-    initial_steps: Optional[int] = None,
-    initial_steps_label: Optional[str] = None,
+    lines: list[Line2D],
+    rects: list[Rectangle],
+    right_rect_lines: list[Line2D],
+    left_rect_lines: list[Line2D],
+    init_texts: list[Text],
+    control_texts: list[Text],
+    y_axis_centers: list[float],
+    bounds: tuple[float, float] | None = None,
+    initial_steps: int | None = None,
+    initial_steps_label: str | None = None,
     continuous_updates: bool = False,
     legend_loc: str = "best",
 ) -> None:
@@ -1001,8 +1001,8 @@ def initialize_data_animation(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (Optional[float]): The setpoint value for the data. If
-            `None`, a setpoint line will not be plotted.
+        setpoint (float | None): The setpoint value for the data. If `None`, a
+            setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
             labels.
@@ -1030,32 +1030,32 @@ def initialize_data_animation(
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength). If the 'loc' key is present in the dictionary, it
             overrides the `legend_loc` value.
-        lines (List[Line2D]): The list where the initialized plot lines will
+        lines (list[Line2D]): The list where the initialized plot lines will
             be stored.
-        rects (List[Rectangle]): The list where the initialized rectangles
+        rects (list[Rectangle]): The list where the initialized rectangles
             representing the initial measurement region will be stored.
-        right_rect_lines (List[Line2D]): The list where the initialized
+        right_rect_lines (list[Line2D]): The list where the initialized
             vertical lines representing the upper boundary of the initial
             measurement region will be stored.
-        left_rect_lines (List[Line2D]): The list where the initialized
+        left_rect_lines (list[Line2D]): The list where the initialized
             vertical lines representing the lower boundary of the initial
             measurement region will be stored.
-        init_texts (List[Text]): The list where the initialized initial
+        init_texts (list[Text]): The list where the initialized initial
             measurement label texts will be stored.
-        control_texts (List[Text]): The list where the initialized control
+        control_texts (list[Text]): The list where the initialized control
             label texts will be stored.
-        y_axis_centers (List[float]): The list where the y-axis center from
+        y_axis_centers (list[float]): The list where the y-axis center from
             the adjusted axis will be stored.
-        bounds (Optional[Tuple[float, float]]): A tuple (lower_bound,
-            upper_bound) specifying the bounds of the data to be plotted. If
-            provided, horizontal lines representing these bounds will be
-            plotted. Defaults to `None`.
-        initial_steps (Optional[int]): The number of initial time steps during
+        bounds (tuple[float, float] | None): A tuple (lower_bound, upper_bound)
+            specifying the bounds of the data to be plotted. If provided,
+            horizontal lines representing these bounds will be plotted.
+            Defaults to `None`.
+        initial_steps (int | None): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
             measurement period in the plot. If `None`, no special highlighting
             will be applied. Defaults to `None`.
-        initial_steps_label (Optional[str]): Label text to use for the legend
+        initial_steps_label (str | None): Label text to use for the legend
             entry representing the initial input-output measurement highlight
             in the plot. If `None`, this element will not appear in the
             legend. Defaults to `None`.
@@ -1225,13 +1225,13 @@ def update_data_animation(
     data: np.ndarray,
     data_length: int,
     points_per_frame: int,
-    initial_steps: Optional[int],
+    initial_steps: int | None,
     continuous_updates: bool,
     line: Line2D,
     rect: Rectangle,
     y_axis_center: float,
     right_rect_line: Line2D,
-    left_rect_line: Optional[Line2D],
+    left_rect_line: Line2D | None,
     init_text_obj: Text,
     control_text_obj: Text,
     display_initial_text: bool,
@@ -1255,7 +1255,7 @@ def update_data_animation(
         data_length (int): The length of the `data` array.
         points_per_frame (int): The number of data points shown per animation
             frame.
-        initial_steps (Optional[int]): The number of initial time steps during
+        initial_steps (int| None): The number of initial time steps during
             which input-output measurements were taken for the data-driven
             characterization of the system. This highlights the initial
             measurement period in the plot.
@@ -1268,8 +1268,8 @@ def update_data_animation(
         y_axis_center (float): The y-axis center of the plot axis.
         right_rect_line (Line2D): The line object representing the upper
             boundary of the initial measurement region.
-        left_rect_line (Optional[Line2D]): The line object representing the
-            lower boundary of the initial measurement region.
+        left_rect_line (Line2D | None]): The line object representing the lower
+            boundary of the initial measurement region.
         init_text_obj (Text): The text object containing the initial
             measurement period label.
         control_text_obj (Text): The text object containing the control period
@@ -1375,22 +1375,22 @@ def save_animation(
 
 def get_padded_limits(
     X: np.ndarray,
-    X_s: Optional[np.ndarray] = None,
+    X_s: np.ndarray | None = None,
     pad_percentage: float = 0.05,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """
     Get the minimum and maximum limits from two data sequences extended by
     a specified percentage of the combined data range.
 
     Args:
         X (np.ndarray): First data array.
-        X_s (Optional[np.ndarray], optional): Second data array. If `None`,
-            only `X` is considered. Defaults to `None`.
-        pad_percentage (float, optional): The percentage of the data range
-            to be used as padding. Defaults to 0.05.
+        X_s (np.ndarray | None): Second data array. If `None`, only `X` is
+            considered. Defaults to `None`.
+        pad_percentage (float): The percentage of the data range to be used
+            as padding. Defaults to 0.05.
 
     Returns:
-        Tuple[float, float]: A tuple containing padded minimum and maximum
+        tuple[float, float]: A tuple containing padded minimum and maximum
             limits for the combined data from `X` and `X_s`.
     """
     # Get minimum and maximum limits from data sequences
@@ -1442,7 +1442,7 @@ def get_text_width_in_data(
 def filter_and_reorder_legend(
     axis: Axes,
     legend_params: dict[str, Any],
-    end_labels_list: Optional[List[str]] = None,
+    end_labels_list: list[str] | None = None,
 ) -> None:
     """
     Remove duplicate entries from the legend of a Matplotlib axis. Optionally,
@@ -1457,11 +1457,11 @@ def filter_and_reorder_legend(
         legend_params (dict[str, Any]): A dictionary of Matplotlib properties
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength).
-        end_labels_list (Optional[List[str]]): A list of labels to move to
-            the end of the legend. Labels are moved in the order provided,
-            with the last label in the list becoming the final legend entry.
-            If not provided, the legend labels will not be reordered. Defaults
-            to `None`.
+        end_labels_list (list[str] | None): A list of labels to move to the end
+            of the legend. Labels are moved in the order provided, with the
+            last label in the list becoming the final legend entry. If not
+            provided, the legend labels will not be reordered. Defaults to
+            `None`.
     """
     # Initialize `last_labels_list` if not provided
     if end_labels_list is None:
@@ -1484,11 +1484,11 @@ def filter_and_reorder_legend(
 def create_input_output_figure(
     m: int,
     p: int,
-    figsize: Tuple[float, float],
+    figsize: tuple[float, float],
     dpi: int,
     fontsize: int,
-    title: Optional[str] = None,
-) -> Tuple[Figure, List[Axes], List[Axes]]:
+    title: str | None = None,
+) -> tuple[Figure, list[Axes], list[Axes]]:
     """
     Create a Matplotlib figure with two rows of subplots: one for control
     inputs and one for system outputs, and return the created figure and
@@ -1501,18 +1501,18 @@ def create_input_output_figure(
     Args:
         m (int): The number of control inputs (subplots in the first row).
         p (int): The number of system outputs (subplots in the second row).
-        figsize (Tuple[float, float]): The (width, height) dimensions of the
+        figsize (tuple[float, float]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         fontsize (int): The fontsize for suptitles.
-        title (Optional[str]): The title for the overall figure. If `None`,
-            no title will be added. Defaults to `None`.
+        title (str | None): The title for the overall figure. If `None`, no
+            title will be added. Defaults to `None`.
 
     Returns:
-        Tuple: A tuple containing:
+        tuple: A tuple containing:
             - Figure: The created Matplotlib figure.
-            - List[Axes]: A list of axes for control inputs subplots.
-            - List[Axes]: A list of axes for system outputs subplots.
+            - list[Axes]: A list of axes for control inputs subplots.
+            - list[Axes]: A list of axes for system outputs subplots.
     """
     # Create figure
     fig = plt.figure(num=title, layout="constrained", figsize=figsize, dpi=dpi)

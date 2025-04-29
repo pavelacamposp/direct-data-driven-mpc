@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, List, Optional, Tuple
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -136,8 +136,8 @@ def create_data_driven_mpc_controllers_reproduction(
     controller_config: LTIDataDrivenMPCParamsDictType,
     u_d: np.ndarray,
     y_d: np.ndarray,
-    data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme],
-) -> List[LTIDataDrivenMPCController]:
+    data_driven_mpc_controller_schemes: list[DataDrivenMPCScheme],
+) -> list[LTIDataDrivenMPCController]:
     """
     Create `LTIDataDrivenMPCController` instances for a specified list of
     Data-Driven MPC schemes.
@@ -163,12 +163,12 @@ def create_data_driven_mpc_controllers_reproduction(
         y_d (np.ndarray): An array of shape `(N, p)` representing the system's
             output response to `u_d`. `N` is the trajectory length and `p` is
             the number of system outputs.
-        data_driven_mpc_controller_schemes (List[DataDrivenMPCScheme]): A list
+        data_driven_mpc_controller_schemes (list[DataDrivenMPCScheme]): A list
             of `DataDrivenMPCScheme` objects, which represent Robust
             Data-Driven MPC schemes based on the paper example from [1].
 
     Returns:
-        List[LTIDataDrivenMPCController]: A list of
+        list[LTIDataDrivenMPCController]: A list of
             `LTIDataDrivenMPCController` instances, which represent
             Data-Driven MPC controllers designed for Linear Time-Invariant
             (LTI) systems, based on specified configurations.
@@ -224,11 +224,11 @@ def create_data_driven_mpc_controllers_reproduction(
 
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
-    data_driven_mpc_controllers: List[LTIDataDrivenMPCController],
+    data_driven_mpc_controllers: list[LTIDataDrivenMPCController],
     n_steps: int,
     np_random: Generator,
     verbose: int,
-) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
     """
     Simulate multiple Data-Driven MPC control loops applied to a system and
     return the resulting input-output data sequences for each controller.
@@ -242,7 +242,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        data_driven_mpc_controllers (List[LTIDataDrivenMPCController]): A
+        data_driven_mpc_controllers (list[LTIDataDrivenMPCController]): A
             list of `LTIDataDrivenMPCController` instances representing the
             Data-Driven MPC controllers to be simulated.
         n_steps (int): The number of time steps for the simulation.
@@ -252,7 +252,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
             2 = detailed output.
 
     Returns:
-        Tuple[List[np.ndarray], List[np.ndarray]]: A tuple containing:
+        tuple[list[np.ndarray], list[np.ndarray]]: A tuple containing:
             - A list of arrays, each of shape `(n_steps, m)`, representing the
                 optimal control inputs applied to the system for each
                 controller, where `m` is the number of control inputs.
@@ -294,19 +294,19 @@ def simulate_data_driven_mpc_control_loops_reproduction(
 
 
 def plot_input_output_reproduction(
-    data_driven_mpc_controller_schemes: List[DataDrivenMPCScheme],
-    u_data: List[np.ndarray],
-    y_data: List[np.ndarray],
+    data_driven_mpc_controller_schemes: list[DataDrivenMPCScheme],
+    u_data: list[np.ndarray],
+    y_data: list[np.ndarray],
     u_s: np.ndarray,
     y_s: np.ndarray,
-    u_ylimits_list: Optional[List[Tuple[float, float]]],
-    y_ylimits_list: Optional[List[Tuple[float, float]]],
+    u_ylimits_list: list[tuple[float, float]] | None,
+    y_ylimits_list: list[tuple[float, float]] | None,
     setpoints_line_params: dict[str, Any] | None = None,
     legend_params: dict[str, Any] | None = None,
-    figsize: Tuple[int, int] = (14, 8),
+    figsize: tuple[int, int] = (14, 8),
     dpi: int = 300,
     fontsize: int = 12,
-    title: Optional[str] = None,
+    title: str | None = None,
 ) -> None:
     """
     Plot input-output data with setpoints from multiple Data-Driven MPC
@@ -319,22 +319,22 @@ def plot_input_output_reproduction(
     for each controller scheme.
 
     Args:
-        data_driven_mpc_controller_schemes (List[DataDrivenMPCScheme]): A list
+        data_driven_mpc_controller_schemes (list[DataDrivenMPCScheme]): A list
             of `DataDrivenMPCScheme` objects representing Robust Data-Driven
             MPC schemes.
-        u_data (List[np.ndarray]): A list of arrays containing control input
+        u_data (list[np.ndarray]): A list of arrays containing control input
             data from each controller scheme simulation.
-        y_data (List[np.ndarray]): A list of arrays containing system output
+        y_data (list[np.ndarray]): A list of arrays containing system output
             data from each controller scheme simulation.
         u_s (np.ndarray): An array of shape `(m, 1)` containing the `m` input
             setpoint values considered for the controller simulations.
         y_s (np.ndarray): An array of shape `(p, 1)` containing the `p` output
             setpoint values considered for the controller simulations.
-        u_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        u_ylimits_list (list[tuple[float, float]] | None): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             input subplot. If `None`, the Y-axis limits will be determined
             automatically.
-        y_ylimits_list (Optional[List[Tuple[float, float]]]): A list of tuples
+        y_ylimits_list (list[tuple[float, float]] | None): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot. If `None`, the Y-axis limits will be determined
             automatically.
@@ -346,11 +346,11 @@ def plot_input_output_reproduction(
             properties for customizing the plot legends (e.g., fontsize,
             loc, handlelength). If not provided, Matplotlib's default legend
             properties will be used.
-        figsize (Tuple[int, int]): The (width, height) dimensions of the
+        figsize (tuple[int, int]): The (width, height) dimensions of the
             created Matplotlib figure.
         dpi (int): The DPI resolution of the figure.
         fontsize (int): The fontsize for labels, legends and axes ticks.
-        title (Optional[str]): The title for the created plot figure.
+        title (str | None): The title for the created plot figure.
     """
     # Retrieve number of input and output data sequences and their length
     m = u_data[0].shape[1]  # Number of inputs
