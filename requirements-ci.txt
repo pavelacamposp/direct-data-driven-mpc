@@ -1,0 +1,10 @@
+numpy==2.2.5
+matplotlib==3.10.1
+cvxpy==1.6.5
+tqdm==4.67.1
+PyYAML==6.0.2
+ruff==0.11.7
+mypy==1.15.0
+yamllint==1.37.0
+pytest==8.3.5
+coverage==7.8.0
