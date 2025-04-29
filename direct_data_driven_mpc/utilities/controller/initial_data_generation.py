@@ -2,8 +2,8 @@ import numpy as np
 from numpy.random import Generator
 
 from direct_data_driven_mpc.utilities.controller.controller_params import (
-    DataDrivenMPCParamsType,
-    LTIDataDrivenMPCParamsDictType,
+    DataDrivenMPCParams,
+    LTIDataDrivenMPCParams,
 )
 from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 from direct_data_driven_mpc.utilities.models.nonlinear_model import (
@@ -13,7 +13,7 @@ from direct_data_driven_mpc.utilities.models.nonlinear_model import (
 
 def randomize_initial_system_state(
     system_model: LTIModel,
-    controller_config: LTIDataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParams,
     np_random: Generator,
 ) -> np.ndarray:
     """
@@ -34,10 +34,10 @@ def randomize_initial_system_state(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
-            containing parameters for a Data-Driven MPC controller designed
-            for Linear Time-Invariant (LTI) systems, including the range of
-            the persistently exciting input (`u_range`).
+        controller_config (LTIDataDrivenMPCParams): A dictionary containing
+            parameters for a Data-Driven MPC controller designed for Linear
+            Time-Invariant (LTI) systems, including the range of the
+            persistently exciting input (`u_range`).
         np_random (Generator): A Numpy random number generator for generating
             the random initial system state, persistently exciting input, and
             system output noise.
@@ -87,7 +87,7 @@ def randomize_initial_system_state(
 
 def generate_initial_input_output_data(
     system_model: LTIModel | NonlinearSystem,
-    controller_config: DataDrivenMPCParamsType,
+    controller_config: DataDrivenMPCParams,
     np_random: Generator,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
@@ -105,7 +105,7 @@ def generate_initial_input_output_data(
         system_model (LTIModel | NonlinearSystem): An instance of `LTIModel`,
             representing a Linear Time-Invariant (LTI) system, or
             `NonlinearSystem`, representing a Nonlinear system.
-        controller_config (DataDrivenMPCParamsType): A dictionary containing
+        controller_config (DataDrivenMPCParams): A dictionary containing
             parameters for a Data-Driven MPC controller designed for Linear
             Time-Invariant (LTI) or Nonlinear systems. Includes the initial
             input-output trajectory length (`N`) and the range of the
@@ -153,7 +153,7 @@ def generate_initial_input_output_data(
 
 def simulate_n_input_output_measurements(
     system_model: LTIModel,
-    controller_config: LTIDataDrivenMPCParamsDictType,
+    controller_config: LTIDataDrivenMPCParams,
     np_random: Generator,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
@@ -177,10 +177,10 @@ def simulate_n_input_output_measurements(
     Args:
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
-        controller_config (LTIDataDrivenMPCParamsDictType): A dictionary
-            containing parameters for a Data-Driven MPC controller designed
-            for Linear Time-Invariant (LTI) systems, including the estimated
-            system order (`n`) and the control input setpoint (`u_s`).
+        controller_config (LTIDataDrivenMPCParams): A dictionary containing
+            parameters for a Data-Driven MPC controller designed for Linear
+            Time-Invariant (LTI) systems, including the estimated system order
+            (`n`) and the control input setpoint (`u_s`).
         np_random (Generator): A Numpy random number generator for generating
             random noise for the system's output.
 
