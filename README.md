@@ -102,6 +102,7 @@ Follow these steps to create a virtual environment and install this package:
     > This will install tools like `pre-commit` and `mypy`. To enable automatic checks before each commit using `pre-commit` hooks, run:
     > ```bash
     > pre-commit install
+    > ```
 
 ## Usage
 The example scripts [`lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_example.py) and [`nonlinear_dd_mpc_example.py`](examples/nonlinear_control/nonlinear_dd_mpc_example.py)demonstrate the setup, simulation, and data visualization of the Data-Driven MPC controllers applied to LTI and Nonlinear systems, respectively.
