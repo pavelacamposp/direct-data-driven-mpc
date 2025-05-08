@@ -294,7 +294,7 @@ def get_lti_data_driven_mpc_controller_params(
 
     # Print Data-Driven MPC controller initialization details
     # based on verbosity level
-    print_initialization_details(
+    print_parameter_loading_details(
         dd_mpc_params=dd_mpc_params,
         cost_horizon=L,
         verbose=verbose,
@@ -487,7 +487,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     # Print Data-Driven MPC controller initialization details
     # based on verbosity level
-    print_initialization_details(
+    print_parameter_loading_details(
         dd_mpc_params=dd_mpc_params,
         cost_horizon=(L + n + 1),
         verbose=verbose,
@@ -587,14 +587,14 @@ def get_weights_list_from_param(
         )
 
 
-def print_initialization_details(
+def print_parameter_loading_details(
     dd_mpc_params: DataDrivenMPCParams,
     cost_horizon: int,
     verbose: int,
     controller_label: str = "LTI",
 ) -> None:
     """
-    Print controller parameter initialization details.
+    Print controller parameter loading details.
 
     Args:
         dd_mpc_params (DataDrivenMPCParams): A dictionary of configuration
@@ -609,12 +609,11 @@ def print_initialization_details(
     """
     if verbose == 1:
         print(
-            f"{controller_label} Data-Driven MPC controller initialized "
-            "with loaded parameters"
+            f"Loaded {controller_label} Data-Driven MPC controller parameters"
         )
     if verbose > 1:
         print(
-            f"{controller_label} Data-Driven MPC controller initialized with:"
+            f"Loaded {controller_label} Data-Driven MPC controller parameters:"
         )
         for key, value in dd_mpc_params.items():
             # Weighting matrices
