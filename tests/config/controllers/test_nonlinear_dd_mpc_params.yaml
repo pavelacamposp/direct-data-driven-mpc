@@ -1,0 +1,23 @@
+---
+test_nonlinear_dd_mpc_params:
+  n: 4
+  N: 50
+  L: 10
+  Q_weights: 1
+  R_weights: 1
+  S_weights: 10
+  lambda_alpha: 10.0
+  lambda_sigma: 1.0e7
+  U:
+    - [-10.0, 10.0]
+  Us:
+    - [-9.9, 9.9]
+  u_range:
+    - [-1.0, 1.0]
+  alpha_reg_type: 0
+  lamb_alpha_s: 1e-2
+  lamb_sigma_s: 1.0e7
+  y_r: [3.0]
+  ext_out_incr_in: true
+  update_cost_threshold: null
+  n_n_mpc_step: true
