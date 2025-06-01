@@ -62,7 +62,8 @@ def evaluate_persistent_excitation(
     sequence of `N` elements, each of length `n`.
 
     This is determined by checking if the rank of the Hankel matrix
-    constructed from `X` is equal to the expected rank `n * order`.
+    constructed from `X` is greater than or equal to the expected rank
+    `n * order`.
 
     Args:
         X (np.ndarray): Input data matrix of shape (N, n), where N is the
@@ -81,7 +82,7 @@ def evaluate_persistent_excitation(
     # Calculate the Hankel matrix order
     rank_H_order = np.linalg.matrix_rank(H_order)
 
-    # Evaluate the persistently exiting nature of X
-    pers_exciting = rank_H_order == n * (order)
+    # Check if X is persistently exciting of the given order
+    pers_exciting = rank_H_order >= n * order
 
     return rank_H_order, pers_exciting
