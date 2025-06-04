@@ -75,7 +75,7 @@ def test_lti_dd_mpc_integration(
     # Define system model
     system_model = LTISystemModel(
         config_file=TEST_LTI_MODEL_PATH,
-        model_key_value=TEST_MODEL_KEY,
+        model_key=TEST_MODEL_KEY,
         verbose=verbose,
     )
 
@@ -84,7 +84,7 @@ def test_lti_dd_mpc_integration(
     p = system_model.p  # Number of outputs
     dd_mpc_config = get_lti_data_driven_mpc_controller_params(
         config_file=TEST_LTI_DD_MPC_CONFIG_PATH,
-        controller_key_value=TEST_LTI_DD_MPC_PARAMS_KEY,
+        controller_key=TEST_LTI_DD_MPC_PARAMS_KEY,
         m=m,
         p=p,
         verbose=verbose,

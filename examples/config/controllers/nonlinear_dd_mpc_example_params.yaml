@@ -59,8 +59,8 @@ nonlinear_data_driven_mpc_params:
   alpha_reg_type: 1
 
   # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
-  lamb_alpha_s: null  #  Regularization parameter for alpha_s (optional)
-  lamb_sigma_s: null  #  Regularization parameter for sigma_s (optional)
+  lambda_alpha_s: null  #  Regularization parameter for alpha_s (optional)
+  lambda_sigma_s: null  #  Regularization parameter for sigma_s (optional)
 
   y_r: [0.6519]  # System output setpoint
 

@@ -35,8 +35,8 @@ def test_dd_mpc_controller_yaml_config() -> dict[str, Any]:
         "y_r": [0.0],
         "n_n_mpc_step": True,
         "alpha_reg_type": 0,
-        "lamb_alpha_s": 0.01,
-        "lamb_sigma_s": 0.01,
+        "lambda_alpha_s": 0.01,
+        "lambda_sigma_s": 0.01,
         "ext_out_incr_in": False,
         "update_cost_threshold": 0.0,
     }

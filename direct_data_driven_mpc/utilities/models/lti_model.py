@@ -265,37 +265,35 @@ class LTISystemModel(LTIModel):
         configuration file.
     """
 
-    def __init__(
-        self, config_file: str, model_key_value: str, verbose: int = 0
-    ):
+    def __init__(self, config_file: str, model_key: str, verbose: int = 0):
         """
         Initialize a Linear Time-Invariant (LTI) system model by loading
         parameters from a YAML config file.
 
         Args:
             config_file (str): The path to the YAML configuration file.
-            model_key_value (str): The key to access the specific model
-                parameters in the config file.
+            model_key (str): The key to access the specific model parameters in
+                the config file.
             verbose (int): The verbosity level: 0 = no output, 1 = minimal
                 output, 2 = detailed output.
 
         Raises:
             FileNotFoundError: If the YAML configuration file is not found.
-            ValueError: If `model_key_value` or the required matrices (A, B,
-                C, or D) are missing in the configuration file, or if the
-                dimensions of the required matrices are incorrect.
+            ValueError: If `model_key` or the required matrices (A, B, C, or D)
+                are missing in the configuration file, or if the dimensions of
+                the required matrices are incorrect.
         """
         self.verbose = verbose
 
         # Load model parameters from config file
         params = load_yaml_config_params(
-            config_file=config_file, key=model_key_value
+            config_file=config_file, key=model_key
         )
 
         if self.verbose > 1:
             print(
                 f"    Model parameters loaded from {config_file} with key "
-                f"'{model_key_value}'"
+                f"'{model_key}'"
             )
 
         # Validate that required matrix keys are present

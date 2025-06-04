@@ -75,14 +75,14 @@ default_model_config_file = "four_tank_system_params.yaml"
 default_model_config_path = os.path.join(
     models_config_dir, default_model_config_file
 )
-default_model_key_value = "four_tank_system"
+default_model_key = "four_tank_system"
 
 # Data-Driven MPC controller configuration file
 default_controller_config_file = "lti_dd_mpc_example_params.yaml"
 default_controller_config_path = os.path.join(
     controller_config_dir, default_controller_config_file
 )
-default_controller_key_value = "lti_data_driven_mpc_params"
+default_controller_key = "lti_data_driven_mpc_params"
 
 # Plot parameters configuration file
 plot_params_config_file = "plot_params.yaml"
@@ -145,9 +145,9 @@ def parse_args() -> argparse.Namespace:
         "containing the model parameters.",
     )
     parser.add_argument(
-        "--model_key_value",
+        "--model_key",
         type=str,
-        default=default_model_key_value,
+        default=default_model_key,
         help="The key to access the model parameters in the "
         "configuration file.",
     )
@@ -161,9 +161,9 @@ def parse_args() -> argparse.Namespace:
         "parameters.",
     )
     parser.add_argument(
-        "--controller_key_value",
+        "--controller_key",
         type=str,
-        default=default_controller_key_value,
+        default=default_controller_key,
         help="The key to access the Data-Driven MPC "
         "controller parameters in the configuration file.",
     )
@@ -268,11 +268,11 @@ def main() -> None:
 
     # Model parameters
     model_config_path = args.model_config_path
-    model_key_value = args.model_key_value
+    model_key = args.model_key
 
     # Data-Driven MPC controller parameters
     controller_config_path = args.controller_config_path
-    controller_key_value = args.controller_key_value
+    controller_key = args.controller_key
 
     # Data-Driven MPC controller arguments
     n_mpc_step = args.n_mpc_step
@@ -303,7 +303,7 @@ def main() -> None:
 
     system_model = LTISystemModel(
         config_file=model_config_path,
-        model_key_value=model_key_value,
+        model_key=model_key,
         verbose=verbose,
     )
 
@@ -319,7 +319,7 @@ def main() -> None:
     p = system_model.p  # Number of outputs
     dd_mpc_config = get_lti_data_driven_mpc_controller_params(
         config_file=controller_config_path,
-        controller_key_value=controller_key_value,
+        controller_key=controller_key,
         m=m,
         p=p,
         verbose=verbose,

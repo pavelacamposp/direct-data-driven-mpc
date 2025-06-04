@@ -90,7 +90,7 @@ def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
 
 
 def create_nonlinear_cstr_system(
-    cstr_model_config_path: str, cstr_model_key_value: str, verbose: int
+    cstr_model_config_path: str, cstr_model_key: str, verbose: int
 ) -> NonlinearSystem:
     """
     Create a `NonlinearSystem` instance representing a nonlinear Continuous
@@ -104,7 +104,7 @@ def create_nonlinear_cstr_system(
     Args:
         cstr_model_config_path (str): The path to the YAML configuration file
             containing the CSTR system parameters.
-        cstr_model_key_value (str): The key corresponding to the CSTR system
+        cstr_model_key (str): The key corresponding to the CSTR system
             parameters to be retrieved from the configuration file.
         verbose (int): The verbosity level. If greater than 1, prints parameter
             loading details.
@@ -121,13 +121,13 @@ def create_nonlinear_cstr_system(
     """
     # Load model parameters from config file
     params = load_yaml_config_params(
-        config_file=cstr_model_config_path, key=cstr_model_key_value
+        config_file=cstr_model_config_path, key=cstr_model_key
     )
 
     if verbose > 1:
         print(
             f"    Model parameters loaded from {cstr_model_config_path} "
-            f"with key '{cstr_model_key_value}'"
+            f"with key '{cstr_model_key}'"
         )
 
     # Retrieve model parameters

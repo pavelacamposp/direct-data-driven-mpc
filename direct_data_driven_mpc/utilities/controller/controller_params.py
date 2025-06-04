@@ -132,8 +132,8 @@ NONLINEAR_DD_MPC_FILE_PARAMS = [
     "Us",
     "u_range",
     "alpha_reg_type",
-    "lamb_alpha_s",
-    "lamb_sigma_s",
+    "lambda_alpha_s",
+    "lambda_sigma_s",
     "y_r",
     "ext_out_incr_in",
     "update_cost_threshold",
@@ -143,7 +143,7 @@ NONLINEAR_DD_MPC_FILE_PARAMS = [
 
 def get_lti_data_driven_mpc_controller_params(
     config_file: str,
-    controller_key_value: str,
+    controller_key: str,
     m: int,
     p: int,
     verbose: int = 0,
@@ -159,7 +159,7 @@ def get_lti_data_driven_mpc_controller_params(
 
     Args:
         config_file (str): The path to the YAML configuration file.
-        controller_key_value (str): The key to access the specific controller
+        controller_key (str): The key to access the specific controller
             parameters in the config file.
         m (int): The number of control inputs.
         p (int): The number of system outputs.
@@ -173,8 +173,8 @@ def get_lti_data_driven_mpc_controller_params(
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
-        ValueError: If `controller_key_value` or if required Data-Driven
-            controller parameters are missing in the configuration file.
+        ValueError: If `controller_key` or if required Data-Driven controller
+            parameters are missing in the configuration file.
 
     References:
         [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
@@ -185,13 +185,13 @@ def get_lti_data_driven_mpc_controller_params(
     """
     # Load controller parameters from config file
     params = load_yaml_config_params(
-        config_file=config_file, key=controller_key_value
+        config_file=config_file, key=controller_key
     )
 
     if verbose > 1:
         print(
             "    Data-Driven MPC controller parameters loaded from "
-            f"{config_file} with key '{controller_key_value}'"
+            f"{config_file} with key '{controller_key}'"
         )
 
     # Validate that required parameter keys are present
@@ -305,7 +305,7 @@ def get_lti_data_driven_mpc_controller_params(
 
 def get_nonlinear_data_driven_mpc_controller_params(
     config_file: str,
-    controller_key_value: str,
+    controller_key: str,
     m: int,
     p: int,
     verbose: int = 0,
@@ -321,7 +321,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     Args:
         config_file (str): The path to the YAML configuration file.
-        controller_key_value (str): The key to access the specific controller
+        controller_key (str): The key to access the specific controller
             parameters in the config file.
         m (int): The number of control inputs.
         p (int): The number of system outputs.
@@ -334,8 +334,8 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
-        ValueError: If `controller_key_value` or if required Data-Driven
-            controller parameters are missing in the configuration file.
+        ValueError: If `controller_key` or if required Data-Driven controller
+            parameters are missing in the configuration file.
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
@@ -345,13 +345,13 @@ def get_nonlinear_data_driven_mpc_controller_params(
     """
     # Load controller parameters from config file
     params = load_yaml_config_params(
-        config_file=config_file, key=controller_key_value
+        config_file=config_file, key=controller_key
     )
 
     if verbose > 1:
         print(
             "    Data-Driven MPC controller parameters loaded from "
-            f"{config_file} with key '{controller_key_value}'"
+            f"{config_file} with key '{controller_key}'"
         )
 
     # Validate that required parameter keys are present
@@ -469,9 +469,9 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
     # Ridge regularization weight for alpha_s
-    dd_mpc_params["lamb_alpha_s"] = params["lamb_alpha_s"]
+    dd_mpc_params["lamb_alpha_s"] = params["lambda_alpha_s"]
     # Ridge regularization weight for sigma_s
-    dd_mpc_params["lamb_sigma_s"] = params["lamb_sigma_s"]
+    dd_mpc_params["lamb_sigma_s"] = params["lambda_sigma_s"]
 
     # System Output setpoint
     y_r = params["y_r"]

@@ -64,14 +64,14 @@ cstr_model_config_file = "nonlinear_cstr_system_params.yaml"
 cstr_model_config_path = os.path.join(
     models_config_dir, cstr_model_config_file
 )
-cstr_model_key_value = "cstr_system"
+cstr_model_key = "cstr_system"
 
 # Data-Driven MPC controller configuration file
 default_controller_config_file = "nonlinear_dd_mpc_example_params.yaml"
 default_controller_config_path = os.path.join(
     controller_config_dir, default_controller_config_file
 )
-default_controller_key_value = "nonlinear_data_driven_mpc_params"
+default_controller_key = "nonlinear_data_driven_mpc_params"
 
 # Plot parameters configuration file
 plot_params_config_file = "plot_params.yaml"
@@ -136,9 +136,9 @@ def parse_args() -> argparse.Namespace:
         "parameters.",
     )
     parser.add_argument(
-        "--controller_key_value",
+        "--controller_key",
         type=str,
-        default=default_controller_key_value,
+        default=default_controller_key,
         help="The key to access the Data-Driven MPC "
         "controller parameters in the configuration file.",
     )
@@ -236,7 +236,7 @@ def main() -> None:
 
     # Data-Driven MPC controller parameters
     controller_config_path = args.controller_config_path
-    controller_key_value = args.controller_key_value
+    controller_key = args.controller_key
 
     # Data-Driven MPC controller arguments
     n_mpc_step = args.n_mpc_step
@@ -266,7 +266,7 @@ def main() -> None:
 
     system_model = create_nonlinear_cstr_system(
         cstr_model_config_path=cstr_model_config_path,
-        cstr_model_key_value=cstr_model_key_value,
+        cstr_model_key=cstr_model_key,
         verbose=verbose,
     )
 
@@ -285,7 +285,7 @@ def main() -> None:
     p = system_model.p  # Number of outputs
     dd_mpc_config = get_nonlinear_data_driven_mpc_controller_params(
         config_file=controller_config_path,
-        controller_key_value=controller_key_value,
+        controller_key=controller_key,
         m=m,
         p=p,
         verbose=verbose,
