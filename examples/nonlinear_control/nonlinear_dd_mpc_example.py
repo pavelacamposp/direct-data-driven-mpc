@@ -393,7 +393,10 @@ def main() -> None:
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
     N = dd_mpc_config["N"]  # Initial input-output trajectory length
-    y_r = dd_mpc_config["y_r"]  # System output setpoint
+
+    # System output setpoint
+    y_r_data = np.tile(dd_mpc_config["y_r"].T, (n_steps, 1))
+
     U = dd_mpc_config["U"]  # Bounds for the predicted input
 
     # Construct input bounds tuple list for plotting
@@ -411,7 +414,7 @@ def main() -> None:
     plot_input_output(
         u_k=u_sys,
         y_k=y_sys,
-        y_s=y_r,
+        y_s=y_r_data,
         u_bounds_list=u_bounds_list,
         y_setpoint_var_symbol=y_setpoint_var_symbol,
         title=plot_title,
@@ -422,6 +425,7 @@ def main() -> None:
     # Construct data arrays including initial input-output data
     U_data = np.vstack([u, u_sys])
     Y_data = np.vstack([y, y_sys])
+    Y_r_data = np.tile(dd_mpc_config["y_r"].T, (N + n_steps, 1))
 
     # Plot extended input-output data
     if verbose:
@@ -433,7 +437,7 @@ def main() -> None:
     plot_input_output(
         u_k=U_data,
         y_k=Y_data,
-        y_s=y_r,
+        y_s=Y_r_data,
         u_bounds_list=u_bounds_list,
         y_setpoint_var_symbol=y_setpoint_var_symbol,
         title=plot_title,
@@ -456,7 +460,7 @@ def main() -> None:
     plot_input_output(
         u_k=U_data,
         y_k=Y_data,
-        y_s=y_r,
+        y_s=Y_r_data,
         u_bounds_list=u_bounds_list,
         y_setpoint_var_symbol=y_setpoint_var_symbol,
         u_ylimits_list=u_ylimits_list,
@@ -472,7 +476,7 @@ def main() -> None:
     anim = plot_input_output_animation(
         u_k=U_data,
         y_k=Y_data,
-        y_s=y_r,
+        y_s=Y_r_data,
         u_bounds_list=u_bounds_list,
         y_setpoint_var_symbol=y_setpoint_var_symbol,
         initial_steps=N,

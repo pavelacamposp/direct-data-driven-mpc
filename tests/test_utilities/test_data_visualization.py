@@ -134,7 +134,7 @@ def test_plot_data(plot_bounds: bool, highlight_initial_steps: bool) -> None:
     fig, ax = plt.subplots()
     T = 50
     data = np.linspace(0, 1, T)
-    setpoint = np.array([0.7])
+    setpoint = np.full(T, [0.7])
     var_symbol = "u"
     setpoint_var_symbol = "u^s"
     data_label = "_test"
@@ -256,12 +256,13 @@ def test_initialize_data_animation(
     fig, ax = plt.subplots()
     T = 50
     data = np.sin(np.linspace(0, 2 * np.pi, T))
-    setpoint = np.array([0.5])
+    setpoint = np.cos(np.linspace(0, 2 * np.pi, T))
     bounds = (0.2, 0.8) if plot_bounds else None
     initial_steps = 10 if highlight_initial_steps else None
 
     # Initialize plot element storage lists
-    lines: list[Line2D] = []
+    data_lines: list[Line2D] = []
+    setpoint_lines: list[Line2D] = []
     rects: list[Rectangle] = []
     right_lines: list[Line2D] = []
     left_lines: list[Line2D] = []
@@ -285,7 +286,8 @@ def test_initialize_data_animation(
         control_text="Control",
         fontsize=10,
         legend_params={},
-        lines=lines,
+        data_lines=data_lines,
+        setpoint_lines=setpoint_lines,
         rects=rects,
         right_rect_lines=right_lines,
         left_rect_lines=left_lines,
@@ -299,7 +301,8 @@ def test_initialize_data_animation(
     )
 
     # Verify plot objects are correctly created and stored in lists
-    assert len(lines) == 1
+    assert len(data_lines) == 1
+    assert len(setpoint_lines) == 1
     assert len(y_centers) == 1
 
     if initial_steps:
@@ -333,17 +336,20 @@ def test_update_data_animation(
     T = 25
     index = 20
     data = np.sin(np.linspace(0, 1, T))
+    setpoint = np.cos(np.linspace(0, 1, T))
     initial_steps = 10 if highlight_initial_steps else None
 
     # Create dummy plot elements
-    line = Line2D([], [])
+    data_line = Line2D([], [])
+    setpoint_line = Line2D([], [])
     rect = Rectangle((0, 0), 0, 1)
     right_line = Line2D([0], [0])
     left_line = Line2D([0], [0])
     init_text = ax.text(0, 0, "Init")
     control_text = ax.text(0, 0, "Control")
 
-    ax.add_line(line)
+    ax.add_line(data_line)
+    ax.add_line(setpoint_line)
     ax.add_patch(rect)
     ax.add_line(right_line)
     ax.add_line(left_line)
@@ -352,11 +358,13 @@ def test_update_data_animation(
     update_data_animation(
         index=index,
         data=data,
+        setpoint=setpoint,
         data_length=T,
         points_per_frame=1,
         initial_steps=initial_steps,
         continuous_updates=continuous_updates,
-        line=line,
+        data_line=data_line,
+        setpoint_line=setpoint_line,
         rect=rect,
         y_axis_center=0.5,
         right_rect_line=right_line,
@@ -370,7 +378,7 @@ def test_update_data_animation(
     )
 
     # Verify updated line data
-    x_line, y_line = line.get_data()
+    x_line, y_line = data_line.get_data()
     assert len(np.asarray(x_line)) == index + 1
     np.testing.assert_equal(np.asarray(y_line), data[: index + 1])
 

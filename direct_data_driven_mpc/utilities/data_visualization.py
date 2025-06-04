@@ -129,11 +129,13 @@ def plot_input_output(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (np.ndarray | None): An array of shape (m, 1) containing `m` input
-            setpoint values. If `None`, input setpoint lines will not be
+        u_s (np.ndarray | None): An array containing input setpoint values of
+            shape (T, m), where `m` is the number of inputs and `T` is the
+            number of time steps. If `None`, input setpoint lines will not be
             plotted. Defaults to `None`.
-        y_s (np.ndarray): An array of shape (p, 1) containing `p` output
-            setpoint values.
+        y_s (np.ndarray): An array containing output setpoint values of shape
+            (T, p), where `p` is the number of outputs and `T` is the number of
+            time steps.
         u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
@@ -220,17 +222,18 @@ def plot_input_output(
             "Dimension mismatch. The number of time steps for `u_k` "
             f"({u_k.shape[0]}) and `y_k` ({y_k.shape[0]}) must match."
         )
-    if y_k.shape[1] != y_s.shape[0]:
+    if y_k.shape != y_s.shape:
         raise ValueError(
-            "Dimension mismatch. The number of outputs from `y_k` "
-            f"({y_k.shape[1]}) and `y_s` ({y_s.shape[0]}) must match."
+            f"Dimension mismatch. The shape of `y_k` ({y_k.shape}) and "
+            f"`y_s` ({y_s.shape}) must match."
         )
+
     # If input setpoint is passed, verify input data dimension match
     if u_s is not None:
-        if u_k.shape[1] != u_s.shape[0]:
+        if u_k.shape != u_s.shape:
             raise ValueError(
-                "Dimension mismatch. The number of outputs from `u_k` "
-                f"({u_k.shape[1]}) and `u_s` ({u_s.shape[0]}) must match."
+                f"Dimension mismatch. The shape of `u_k` ({u_k.shape}) and "
+                f"`u_s` ({u_s.shape}) must match."
             )
 
     # Retrieve number of input and output data sequences
@@ -287,7 +290,7 @@ def plot_input_output(
     # Plot input data
     for i in range(m):
         # Get input setpoint if provided
-        u_setpoint = u_s[i, :] if u_s is not None else None
+        u_setpoint = u_s[:, i] if u_s is not None else None
 
         # Define plot index based on the number of input plots
         plot_index = -1 if m == 1 else i
@@ -344,7 +347,7 @@ def plot_input_output(
         plot_data(
             axis=axs_y[j],
             data=y_k[:, j],
-            setpoint=y_s[j, :],
+            setpoint=y_s[:, j],
             index=plot_index,
             data_line_params=outputs_line_params,
             bounds_line_params=bounds_line_params,
@@ -406,8 +409,8 @@ def plot_data(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float | None): The setpoint value for the data. If
-            `None`, the setpoint line will not be plotted.
+        setpoint (float | None): An array containing setpoint values to be
+            plotted. If `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
             labels.
@@ -472,7 +475,7 @@ def plot_data(
     if setpoint is not None:
         axis.plot(
             range(0, T),
-            np.full(T, setpoint),
+            setpoint,
             **setpoint_line_params,
             label=setpoint_label,
         )
@@ -629,11 +632,13 @@ def plot_input_output_animation(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (np.ndarray | None): An array of shape (m, 1) containing `m` input
-            setpoint values. If `None`, input setpoint lines will not be
+        u_s (np.ndarray | None): An array containing input setpoint values of
+            shape (T, m), where `m` is the number of inputs and `T` is the
+            number of time steps. If `None`, input setpoint lines will not be
             plotted. Defaults to `None`.
-        y_s (np.ndarray): An array of shape (p, 1) containing `p` output
-            setpoint values.
+        y_s (np.ndarray): An array containing output setpoint values of shape
+            (T, p), where `p` is the number of outputs and `T` is the number of
+            time steps.
         u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
@@ -722,17 +727,18 @@ def plot_input_output_animation(
             "Dimension mismatch. The number of time steps for `u_k` "
             f"({u_k.shape[0]}) and y_k ({y_k.shape[0]}) must match."
         )
-    if y_k.shape[1] != y_s.shape[0]:
+    if y_k.shape != y_s.shape:
         raise ValueError(
-            "Dimension mismatch. The number of outputs from `y_k` "
-            f"({y_k.shape[1]}) and y_s ({y_s.shape[0]}) must match."
+            f"Dimension mismatch. The shape of `y_k` ({y_k.shape}) and "
+            f"`y_s` ({y_s.shape}) must match."
         )
+
     # If input setpoint is passed, verify input data dimension match
     if u_s is not None:
-        if u_k.shape[1] != u_s.shape[0]:
+        if u_k.shape != u_s.shape:
             raise ValueError(
-                "Dimension mismatch. The number of outputs from `u_k` "
-                f"({u_k.shape[1]}) and u_s ({u_s.shape[0]}) must match."
+                f"Dimension mismatch. The shape of `u_k` ({u_k.shape}) and "
+                f"`u_s` ({u_s.shape}) must match."
             )
 
     # Retrieve number of input and output data sequences and their length
@@ -767,6 +773,8 @@ def plot_input_output_animation(
     # Define input-output line lists
     u_lines: list[Line2D] = []
     y_lines: list[Line2D] = []
+    u_s_lines: list[Line2D] = []
+    y_s_lines: list[Line2D] = []
 
     # Define initial measurement rectangles and texts lists
     u_rects: list[Rectangle] = []
@@ -787,11 +795,14 @@ def plot_input_output_animation(
     # Initialize input plot elements
     for i in range(m):
         # Get input setpoint if provided
-        u_setpoint = u_s[i, :] if u_s is not None else None
+        u_setpoint = u_s[:, i] if u_s is not None else None
+
         # Define plot index based on the number of input plots
         plot_index = -1 if m == 1 else i
+
         # Get input bounds if provided
         u_bounds = u_bounds_list[i] if u_bounds_list else None
+
         initialize_data_animation(
             axis=axs_u[i],
             data=u_k[:, i],
@@ -807,7 +818,8 @@ def plot_input_output_animation(
             control_text=control_text,
             fontsize=fontsize,
             legend_params=legend_params,
-            lines=u_lines,
+            data_lines=u_lines,
+            setpoint_lines=u_s_lines,
             rects=u_rects,
             right_rect_lines=u_right_rect_lines,
             left_rect_lines=u_left_rect_lines,
@@ -825,12 +837,14 @@ def plot_input_output_animation(
     for j in range(p):
         # Define plot index based on the number of output plots
         plot_index = -1 if p == 1 else j
+
         # Get output bounds if provided
         y_bounds = y_bounds_list[i] if y_bounds_list else None
+
         initialize_data_animation(
             axis=axs_y[j],
             data=y_k[:, j],
-            setpoint=y_s[j, :],
+            setpoint=y_s[:, j],
             index=plot_index,
             data_line_params=outputs_line_params,
             bounds_line_params=bounds_line_params,
@@ -842,7 +856,8 @@ def plot_input_output_animation(
             control_text=control_text,
             fontsize=fontsize,
             legend_params=legend_params,
-            lines=y_lines,
+            data_lines=y_lines,
+            setpoint_lines=y_s_lines,
             rects=y_rects,
             right_rect_lines=y_right_rect_lines,
             left_rect_lines=y_left_rect_lines,
@@ -886,6 +901,10 @@ def plot_input_output_animation(
 
         # Update input plot data
         for i in range(m):
+            # Get input setpoint if provided
+            u_s_data = u_s[: current_index + 1, i] if u_s is not None else None
+            u_s_line = u_s_lines[i] if u_s is not None else None
+
             # Get initial step plot elements if
             # initial steps highlighting is enabled
             if initial_steps:
@@ -909,11 +928,13 @@ def plot_input_output_animation(
             update_data_animation(
                 index=current_index,
                 data=u_k[: current_index + 1, i],
+                setpoint=u_s_data,
                 data_length=T,
                 points_per_frame=points_per_frame,
                 initial_steps=initial_steps,
                 continuous_updates=continuous_updates,
-                line=u_lines[i],
+                data_line=u_lines[i],
+                setpoint_line=u_s_line,
                 rect=u_rect,
                 y_axis_center=u_y_axis_centers[i],
                 right_rect_line=u_right_rect_line,
@@ -951,11 +972,13 @@ def plot_input_output_animation(
             update_data_animation(
                 index=current_index,
                 data=y_k[: current_index + 1, j],
+                setpoint=y_s[: current_index + 1, j],
                 data_length=T,
                 points_per_frame=points_per_frame,
                 initial_steps=initial_steps,
                 continuous_updates=continuous_updates,
-                line=y_lines[j],
+                data_line=y_lines[j],
+                setpoint_line=y_s_lines[j],
                 rect=y_rect,
                 y_axis_center=y_y_axis_centers[j],
                 right_rect_line=y_right_rect_line,
@@ -971,6 +994,8 @@ def plot_input_output_animation(
         return (
             u_lines
             + y_lines
+            + u_s_lines
+            + y_s_lines
             + u_rects
             + u_right_rect_lines
             + u_left_rect_lines
@@ -1009,7 +1034,8 @@ def initialize_data_animation(
     control_text: str,
     fontsize: int,
     legend_params: dict[str, Any],
-    lines: list[Line2D],
+    data_lines: list[Line2D],
+    setpoint_lines: list[Line2D],
     rects: list[Rectangle],
     right_rect_lines: list[Line2D],
     left_rect_lines: list[Line2D],
@@ -1036,8 +1062,8 @@ def initialize_data_animation(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float | None): The setpoint value for the data. If `None`, a
-            setpoint line will not be plotted.
+        setpoint (float | None): An array containing setpoint values to be
+            plotted. If `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
             labels.
@@ -1065,8 +1091,10 @@ def initialize_data_animation(
             for customizing the plot legend (e.g., fontsize, loc,
             handlelength). If the 'loc' key is present in the dictionary, it
             overrides the `legend_loc` value.
-        lines (list[Line2D]): The list where the initialized plot lines will
-            be stored.
+        data_lines (list[Line2D]): The list where the initialized data plot
+            lines will be stored.
+        setpoint_lines (list[Line2D]): The list where the initialized setpoint
+            plot lines will be stored.
         rects (list[Rectangle]): The list where the initialized rectangles
             representing the initial measurement region will be stored.
         right_rect_lines (list[Line2D]): The list where the initialized
@@ -1111,8 +1139,8 @@ def initialize_data_animation(
     # Construct index label string based on index value
     index_str = f"_{index + 1}" if index != -1 else ""
 
-    # Initialize plot lines
-    lines.append(
+    # Initialize data plot lines
+    data_lines.append(
         axis.plot(
             [], [], **data_line_params, label=f"${var_symbol}{index_str}$"
         )[0]
@@ -1127,14 +1155,11 @@ def initialize_data_animation(
         # Plot upper bound line
         axis.axhline(y=upper_bound, **bounds_line_params)
 
-    # Plot setpoint
+    # Initialize setpoint plot lines if provided
     setpoint_label = f"${setpoint_var_symbol}{index_str}$"
     if setpoint is not None:
-        axis.plot(
-            range(0, T),
-            np.full(T, setpoint),
-            **setpoint_line_params,
-            label=setpoint_label,
+        setpoint_lines.append(
+            axis.plot([], [], **setpoint_line_params, label=setpoint_label)[0]
         )
 
     # Define axis limits
@@ -1258,11 +1283,13 @@ def initialize_data_animation(
 def update_data_animation(
     index: int,
     data: np.ndarray,
+    setpoint: np.ndarray | None,
     data_length: int,
     points_per_frame: int,
     initial_steps: int | None,
     continuous_updates: bool,
-    line: Line2D,
+    data_line: Line2D,
+    setpoint_line: Line2D | None,
     rect: Rectangle | None,
     y_axis_center: float,
     right_rect_line: Line2D | None,
@@ -1287,6 +1314,8 @@ def update_data_animation(
     Args:
         index (int): The current data index.
         data (np.ndarray): An array containing data to be plotted.
+        setpoint (float | None): An array containing setpoint values to be
+            plotted. If `None`, the setpoint line will not be plotted.
         data_length (int): The length of the `data` array.
         points_per_frame (int): The number of data points shown per animation
             frame.
@@ -1297,7 +1326,11 @@ def update_data_animation(
         continuous_updates (bool): Whether the initial measurement period
             highlight should move with the latest data to represent continuous
             input-output measurement updates.
-        line (Line2D): The plot line corresponding to the data series plot.
+        data_line (Line2D): The plot line corresponding to the data series
+            plot.
+        setpoint_line (Line2D | None): The plot line corresponding to the
+            setpoint series plot. If `None`, the setpoint line will not be
+            plotted.
         rect (Rectangle | None): The rectangle representing the initial
             measurement region.
         y_axis_center (float): The y-axis center of the plot axis.
@@ -1318,8 +1351,12 @@ def update_data_animation(
         control_text_width (float): The width of the `control_text_obj` object
             in data coordinates.
     """
-    # Update plot line data
-    line.set_data(range(0, index + 1), data[: index + 1])
+    # Update data plot line
+    data_line.set_data(range(0, index + 1), data[: index + 1])
+
+    # Update setpoint plot line
+    if setpoint is not None and setpoint_line is not None:
+        setpoint_line.set_data(range(0, index + 1), setpoint[: index + 1])
 
     # Determine if an update is needed. Always update for continuous updates
     if initial_steps:

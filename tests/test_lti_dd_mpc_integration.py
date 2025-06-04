@@ -152,16 +152,16 @@ def test_lti_dd_mpc_integration(
     np.testing.assert_allclose(y_sys[-1], y_s, rtol=1e-1)
 
     # Test control data plotting
-    u_s = dd_mpc_config["u_s"]
-    y_s = dd_mpc_config["y_s"]
+    u_s_data = np.tile(dd_mpc_config["u_s"].T, (n_steps, 1))
+    y_s_data = np.tile(dd_mpc_config["y_s"].T, (n_steps, 1))
     U = dd_mpc_config["U"]
     u_bounds_list = U.tolist() if U is not None else None
 
     plot_input_output(
         u_k=u_sys,
         y_k=y_sys,
-        u_s=u_s,
-        y_s=y_s,
+        u_s=u_s_data,
+        y_s=y_s_data,
         u_bounds_list=u_bounds_list,
         dpi=100,
     )
@@ -174,8 +174,8 @@ def test_lti_dd_mpc_integration(
     anim = plot_input_output_animation(
         u_k=u_sys,
         y_k=y_sys,
-        u_s=u_s,
-        y_s=y_s,
+        u_s=u_s_data,
+        y_s=y_s_data,
         u_bounds_list=u_bounds_list,
         initial_steps=N,
         interval=1000.0 / anim_fps,

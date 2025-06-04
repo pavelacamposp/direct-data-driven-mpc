@@ -129,14 +129,14 @@ def test_nonlinear_dd_mpc_integration(
         np.testing.assert_allclose(y_sys[-1], y_r, rtol=1e-1)
 
     # Test control data plotting
-    y_r = dd_mpc_config["y_r"]
+    y_r_data = np.tile(dd_mpc_config["y_r"].T, (n_steps, 1))
     U = dd_mpc_config["U"]
     u_bounds_list = U.tolist() if U is not None else None
 
     plot_input_output(
         u_k=u_sys,
         y_k=y_sys,
-        y_s=y_r,
+        y_s=y_r_data,
         u_bounds_list=u_bounds_list,
         dpi=100,
     )
@@ -149,7 +149,7 @@ def test_nonlinear_dd_mpc_integration(
     anim = plot_input_output_animation(
         u_k=u_sys,
         y_k=y_sys,
-        y_s=y_r,
+        y_s=y_r_data,
         u_bounds_list=u_bounds_list,
         initial_steps=N,
         interval=1000.0 / anim_fps,
