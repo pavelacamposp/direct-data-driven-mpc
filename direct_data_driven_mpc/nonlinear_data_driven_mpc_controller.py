@@ -130,9 +130,9 @@ class NonlinearDataDrivenMPCController:
             constraints over the prediction horizon.
         U_const_up (np.ndarray): A tiled upper bound for the input trajectory
             constraints over the prediction horizon.
-        Us_const_low (np.ndarray): The lower bound for the input equilibrium
+        Us_const_low (np.ndarray): The lower bound for the equilibrium input
             constraints.
-        Us_const_up (np.ndarray): The upper bound for the input equilibrium
+        Us_const_up (np.ndarray): The upper bound for the equilibrium input
             constraints.
 
     References:
@@ -813,7 +813,7 @@ class NonlinearDataDrivenMPCController:
             input-output equilibrium pair (predicted equilibrium setpoints
             `u_s`, `y_s`) in any minimal realization (last `n` input-output
             predictions, as considered in [2]). Defined by Equation (22d).
-        - **Input**: Constraints both the input equilibrium (predicted input
+        - **Input**: Constraints both the equilibrium input (predicted input
             setpoint `u_s`) and the input trajectory (`ubar`). Defined by
             Equation (22e).
 
