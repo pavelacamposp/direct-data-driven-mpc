@@ -16,9 +16,11 @@ from direct_data_driven_mpc.utilities.controller.controller_creation import (
 
 
 @pytest.fixture
-@patch.object(LTIDataDrivenMPCController, "initialize_data_driven_mpc")
+@patch.object(LTIDataDrivenMPCController, "get_optimal_control_input")
+@patch.object(LTIDataDrivenMPCController, "solve_mpc_problem")
 def dummy_lti_controller(
-    _: Mock,
+    mock_solve_mpc_problem: Mock,
+    mock_get_optimal_control_input: Mock,
     dummy_lti_controller_data: tuple[
         LTIDataDrivenMPCParams, np.ndarray, np.ndarray
     ],
@@ -26,6 +28,9 @@ def dummy_lti_controller(
     controller_params, u_d, y_d = dummy_lti_controller_data
     m = u_d.shape[1]
     p = y_d.shape[1]
+
+    # Patch controller methods to bypass solver status checks
+    mock_get_optimal_control_input.return_value = np.ones((1,))
 
     dummy_lti_controller = LTIDataDrivenMPCController(
         n=controller_params["n"],
@@ -55,9 +60,13 @@ def dummy_lti_controller(
 
 
 @pytest.fixture
-@patch.object(LTIDataDrivenMPCController, "initialize_data_driven_mpc")
+@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
+@patch.object(NonlinearDataDrivenMPCController, "solve_mpc_problem")
+@patch.object(NonlinearDataDrivenMPCController, "solve_alpha_sr_Lin_Dt")
 def dummy_nonlinear_controller(
-    _: Mock,
+    mock_solve_alpha_problem: Mock,
+    mock_solve_mpc_problem: Mock,
+    mock_get_optimal_control_input: Mock,
     dummy_nonlinear_controller_data: tuple[
         NonlinearDataDrivenMPCParams, np.ndarray, np.ndarray
     ],
@@ -65,6 +74,13 @@ def dummy_nonlinear_controller(
     controller_params, u, y = dummy_nonlinear_controller_data
     m = u.shape[1]
     p = y.shape[1]
+
+    # Patch controller methods to bypass solver status checks
+    N = controller_params["N"]
+    L = controller_params["L"]
+    n = controller_params["n"]
+    mock_solve_alpha_problem.return_value = np.zeros((N - L - n, 1))
+    mock_get_optimal_control_input.return_value = np.ones((1,))
 
     dummy_nonlinear_controller = NonlinearDataDrivenMPCController(
         n=controller_params["n"],
