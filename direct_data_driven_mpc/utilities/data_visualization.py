@@ -856,22 +856,27 @@ def plot_input_output_animation(
             legend_loc="lower right",
         )
 
-    # Get initial text bounding box width
-    init_text_width_input = get_text_width_in_data(
-        text_object=u_init_texts[0], axis=axs_u[0], fig=fig
-    )
-    init_text_width_output = get_text_width_in_data(
-        text_object=y_init_texts[0], axis=axs_y[0], fig=fig
-    )
+    # Calculate text bounding box width for initial and
+    # control data if initial steps highlighting is enabled
+    init_text_width = 0.0
+    control_text_width = 0.0
+    if initial_steps:
+        # Get initial text bounding box width
+        init_text_width_input = get_text_width_in_data(
+            text_object=u_init_texts[0], axis=axs_u[0], fig=fig
+        )
+        init_text_width_output = get_text_width_in_data(
+            text_object=y_init_texts[0], axis=axs_y[0], fig=fig
+        )
 
-    # Calculate maximum text width between input and
-    # output labels to show them at the same time
-    init_text_width = max(init_text_width_input, init_text_width_output)
+        # Calculate maximum text width between input and
+        # output labels to show them at the same time
+        init_text_width = max(init_text_width_input, init_text_width_output)
 
-    # Get control text bounding box width
-    control_text_width = get_text_width_in_data(
-        text_object=u_control_texts[0], axis=axs_u[0], fig=fig
-    )
+        # Get control text bounding box width
+        control_text_width = get_text_width_in_data(
+            text_object=u_control_texts[0], axis=axs_u[0], fig=fig
+        )
 
     # Animation update function
     def update(frame: int) -> list[Any]:
@@ -881,11 +886,26 @@ def plot_input_output_animation(
 
         # Update input plot data
         for i in range(m):
-            # Get lower boundary line of the initial measurement region
-            # if continuous updates are enabled
-            u_left_rect_line = (
-                u_left_rect_lines[i] if continuous_updates else None
-            )
+            # Get initial step plot elements if
+            # initial steps highlighting is enabled
+            if initial_steps:
+                u_rect = u_rects[i]
+                u_right_rect_line = u_right_rect_lines[i]
+                u_init_text = u_init_texts[i]
+                u_control_text = u_control_texts[i]
+
+                # Get lower boundary line of the initial measurement
+                # region if continuous updates are enabled
+                u_left_rect_line = (
+                    u_left_rect_lines[i] if continuous_updates else None
+                )
+            else:
+                u_rect = None
+                u_right_rect_line = None
+                u_init_text = None
+                u_control_text = None
+                u_left_rect_line = None
+
             update_data_animation(
                 index=current_index,
                 data=u_k[: current_index + 1, i],
@@ -894,12 +914,12 @@ def plot_input_output_animation(
                 initial_steps=initial_steps,
                 continuous_updates=continuous_updates,
                 line=u_lines[i],
-                rect=u_rects[i],
+                rect=u_rect,
                 y_axis_center=u_y_axis_centers[i],
-                right_rect_line=u_right_rect_lines[i],
+                right_rect_line=u_right_rect_line,
                 left_rect_line=u_left_rect_line,
-                init_text_obj=u_init_texts[i],
-                control_text_obj=u_control_texts[i],
+                init_text_obj=u_init_text,
+                control_text_obj=u_control_text,
                 display_initial_text=display_initial_text,
                 display_control_text=display_control_text,
                 init_text_width=init_text_width,
@@ -908,11 +928,26 @@ def plot_input_output_animation(
 
         # Update output plot data
         for j in range(p):
-            # Get lower boundary line of the initial measurement region
-            # if continuous updates are enabled
-            y_left_rect_line = (
-                y_left_rect_lines[j] if continuous_updates else None
-            )
+            # Get initial step plot elements if
+            # initial steps highlighting is enabled
+            if initial_steps:
+                y_rect = y_rects[j]
+                y_right_rect_line = y_right_rect_lines[j]
+                y_init_text = y_init_texts[j]
+                y_control_text = y_control_texts[j]
+
+                # Get lower boundary line of the initial measurement
+                # region if continuous updates are enabled
+                y_left_rect_line = (
+                    y_left_rect_lines[j] if continuous_updates else None
+                )
+            else:
+                y_rect = None
+                y_right_rect_line = None
+                y_init_text = None
+                y_control_text = None
+                y_left_rect_line = None
+
             update_data_animation(
                 index=current_index,
                 data=y_k[: current_index + 1, j],
@@ -921,12 +956,12 @@ def plot_input_output_animation(
                 initial_steps=initial_steps,
                 continuous_updates=continuous_updates,
                 line=y_lines[j],
-                rect=y_rects[j],
+                rect=y_rect,
                 y_axis_center=y_y_axis_centers[j],
-                right_rect_line=y_right_rect_lines[j],
+                right_rect_line=y_right_rect_line,
                 left_rect_line=y_left_rect_line,
-                init_text_obj=y_init_texts[j],
-                control_text_obj=y_control_texts[j],
+                init_text_obj=y_init_text,
+                control_text_obj=y_control_text,
                 display_initial_text=display_initial_text,
                 display_control_text=display_control_text,
                 init_text_width=init_text_width,
@@ -1228,12 +1263,12 @@ def update_data_animation(
     initial_steps: int | None,
     continuous_updates: bool,
     line: Line2D,
-    rect: Rectangle,
+    rect: Rectangle | None,
     y_axis_center: float,
-    right_rect_line: Line2D,
+    right_rect_line: Line2D | None,
     left_rect_line: Line2D | None,
-    init_text_obj: Text,
-    control_text_obj: Text,
+    init_text_obj: Text | None,
+    control_text_obj: Text | None,
     display_initial_text: bool,
     display_control_text: bool,
     init_text_width: float,
@@ -1263,17 +1298,17 @@ def update_data_animation(
             highlight should move with the latest data to represent continuous
             input-output measurement updates.
         line (Line2D): The plot line corresponding to the data series plot.
-        rect (Rectangle): The rectangle representing the initial measurement
-            region.
+        rect (Rectangle | None): The rectangle representing the initial
+            measurement region.
         y_axis_center (float): The y-axis center of the plot axis.
-        right_rect_line (Line2D): The line object representing the upper
+        right_rect_line (Line2D | None): The line object representing the upper
             boundary of the initial measurement region.
         left_rect_line (Line2D | None]): The line object representing the lower
             boundary of the initial measurement region.
-        init_text_obj (Text): The text object containing the initial
+        init_text_obj (Text | None): The text object containing the initial
             measurement period label.
-        control_text_obj (Text): The text object containing the control period
-            label.
+        control_text_obj (Text | None): The text object containing the control
+            period label.
         display_initial_text (bool): Whether to display the `initial_text`
             label on the plot.
         display_control_text (bool): Whether to display the `control_text`
@@ -1300,6 +1335,12 @@ def update_data_animation(
         lim_index = (
             min(index, initial_steps) if not continuous_updates else index
         )
+
+        # Ensure type safety for static checking
+        assert rect is not None
+        assert right_rect_line is not None
+        assert init_text_obj is not None
+        assert control_text_obj is not None
 
         # Update rectangle width
         rect_width = min(lim_index, initial_steps)

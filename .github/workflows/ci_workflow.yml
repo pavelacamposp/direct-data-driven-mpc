@@ -10,10 +10,15 @@ on:
 jobs:
   ci_workflow:
     runs-on: ubuntu-latest
-    container: python:3.12-slim
+    container: python:3.12-slim-bullseye
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          apt-get update && \
+          apt-get install -y ffmpeg
 
       - name: Install dependencies
         run: |

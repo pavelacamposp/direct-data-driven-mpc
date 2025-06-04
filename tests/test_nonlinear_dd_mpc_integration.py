@@ -1,0 +1,202 @@
+import math
+import os
+from pathlib import Path
+
+import matplotlib
+import numpy as np
+import pytest
+
+from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
+    AlphaRegType,
+)
+from direct_data_driven_mpc.utilities.controller.controller_creation import (
+    create_nonlinear_data_driven_mpc_controller,
+)
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    get_nonlinear_data_driven_mpc_controller_params,
+)
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    simulate_nonlinear_data_driven_mpc_control_loop,
+)
+from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
+    generate_initial_input_output_data,
+)
+from direct_data_driven_mpc.utilities.data_visualization import (
+    plot_input_output,
+    plot_input_output_animation,
+    save_animation,
+)
+from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+    NonlinearSystem,
+)
+
+matplotlib.use("Agg")  # Prevent GUI backend
+
+# Define test configuration file paths
+TEST_NONLINEAR_DD_MPC_CONFIG_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "config/controllers/test_nonlinear_dd_mpc_params.yaml",
+)
+TEST_NONLINEAR_DD_MPC_PARAMS_KEY = "test_nonlinear_dd_mpc_params"
+
+
+def test_nonlinear_system_model() -> NonlinearSystem:
+    """Simple nonlinear system for testing."""
+    eps_max = 0.0
+
+    # Define Dynamics function
+    def cstr_dynamics(x: np.ndarray, u: np.ndarray) -> np.ndarray:
+        x1, x2 = x
+        u1 = u[0]
+
+        x1_new = x1 + 0.1 * (-0.5 * x1 + u1**2)
+        x2_new = x2 + 0.1 * (-0.3 * x2 + u1)
+
+        return np.array([x1_new, x2_new])
+
+    # Define Output function
+    def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
+        return x[[1]]
+
+    # Create nonlinear system model
+    return NonlinearSystem(
+        f=cstr_dynamics,
+        h=cstr_output,
+        n=2,
+        m=1,
+        p=1,
+        eps_max=eps_max,
+    )
+
+
+@pytest.mark.parametrize("n_n_mpc_step", [True, False])
+@pytest.mark.parametrize("ext_out_incr_in", [True, False])
+@pytest.mark.parametrize(
+    "alpha_reg_type",
+    [AlphaRegType.APPROXIMATED, AlphaRegType.PREVIOUS, AlphaRegType.ZERO],
+)
+def test_nonlinear_dd_mpc_integration(
+    alpha_reg_type: AlphaRegType,
+    ext_out_incr_in: bool,
+    n_n_mpc_step: bool,
+    tmp_path: Path,
+) -> None:
+    """
+    Integration test for nonlinear data-driven MPC controllers across multiple
+    configurations.
+    """
+    # Define test parameters
+    np_random = np.random.default_rng(0)
+    n_steps = 300
+    verbose = 0
+
+    # Define system model
+    system_model = test_nonlinear_system_model()
+
+    # Load Data-Driven MPC controller parameters from configuration file
+    m = system_model.m  # Number of inputs
+    p = system_model.p  # Number of outputs
+    dd_mpc_config = get_nonlinear_data_driven_mpc_controller_params(
+        config_file=TEST_NONLINEAR_DD_MPC_CONFIG_PATH,
+        controller_key_value=TEST_NONLINEAR_DD_MPC_PARAMS_KEY,
+        m=m,
+        p=p,
+        verbose=verbose,
+    )
+
+    # Override controller parameters based on parameterized params
+    dd_mpc_config["alpha_reg_type"] = alpha_reg_type
+
+    if ext_out_incr_in:
+        dd_mpc_config["ext_out_incr_in"] = ext_out_incr_in
+        L = dd_mpc_config["L"]
+        n = dd_mpc_config["n"]
+        dd_mpc_config["Q"] = np.eye((m + p) * (L + n + 1))
+
+    dd_mpc_config["n_mpc_step"] = dd_mpc_config["n"] if n_n_mpc_step else 1
+
+    # Generate initial input-output data
+    u, y = generate_initial_input_output_data(
+        system_model=system_model,
+        controller_config=dd_mpc_config,
+        np_random=np_random,
+    )
+
+    # Create nonlinear data-driven MPC controller
+    dd_mpc_controller = create_nonlinear_data_driven_mpc_controller(
+        controller_config=dd_mpc_config, u=u, y=y
+    )
+
+    # Verify controller MPC solution on initialization
+    assert dd_mpc_controller.get_problem_solve_status() == "optimal"
+    assert dd_mpc_controller.get_optimal_cost_value() is not None
+
+    # Simulate data-driven MPC control system
+    u_sys, y_sys = simulate_nonlinear_data_driven_mpc_control_loop(
+        system_model=system_model,
+        data_driven_mpc_controller=dd_mpc_controller,
+        n_steps=n_steps,
+        np_random=np_random,
+        verbose=verbose,
+    )
+
+    # Verify input constraint satisfaction
+    U = dd_mpc_config["U"]
+
+    assert np.all(u_sys >= U[:, 0])
+    assert np.all(u_sys <= U[:, 1])
+
+    # Verify system reached stabilization
+    # (input and outputs are close to their setpoints)
+    y_r = dd_mpc_config["y_r"].flatten()
+
+    # Only assert convergence for alpha regularization types
+    # APPROXIMATED and PREVIOUS, since ZERO tends to underperform
+    if alpha_reg_type != AlphaRegType.ZERO:
+        np.testing.assert_allclose(y_sys[-1], y_r, rtol=1e-1)
+
+    # Test control data plotting
+    y_r = dd_mpc_config["y_r"]
+    U = dd_mpc_config["U"]
+    u_bounds_list = U.tolist() if U is not None else None
+
+    plot_input_output(
+        u_k=u_sys,
+        y_k=y_sys,
+        y_s=y_r,
+        u_bounds_list=u_bounds_list,
+        dpi=100,
+    )
+
+    # Plot and save control data animation
+    N = dd_mpc_config["N"]
+    anim_fps = 50
+    anim_points_per_frame = 5
+
+    anim = plot_input_output_animation(
+        u_k=u_sys,
+        y_k=y_sys,
+        y_s=y_r,
+        u_bounds_list=u_bounds_list,
+        initial_steps=N,
+        interval=1000.0 / anim_fps,
+        points_per_frame=anim_points_per_frame,
+        dpi=100,
+    )
+
+    # Save input-output animation as a GIF
+    data_length = N + n_steps
+    anim_frames = math.ceil((data_length - 1) / anim_points_per_frame) + 1
+    anim_bitrate = 2000
+    anim_path = os.path.join(tmp_path, "anim.gif")
+
+    save_animation(
+        animation=anim,
+        total_frames=anim_frames,
+        fps=anim_fps,
+        bitrate=anim_bitrate,
+        file_path=anim_path,
+    )
+
+    # Assert animation file exists (animation was created)
+    assert os.path.isfile(anim_path)
