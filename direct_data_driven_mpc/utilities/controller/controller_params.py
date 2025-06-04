@@ -132,8 +132,8 @@ NONLINEAR_DD_MPC_FILE_PARAMS = [
     "Us",
     "u_range",
     "alpha_reg_type",
-    "lamb_alpha_s",
-    "lamb_sigma_s",
+    "lambda_alpha_s",
+    "lambda_sigma_s",
     "y_r",
     "ext_out_incr_in",
     "update_cost_threshold",
@@ -469,9 +469,9 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     # Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)
     # Ridge regularization weight for alpha_s
-    dd_mpc_params["lamb_alpha_s"] = params["lamb_alpha_s"]
+    dd_mpc_params["lamb_alpha_s"] = params["lambda_alpha_s"]
     # Ridge regularization weight for sigma_s
-    dd_mpc_params["lamb_sigma_s"] = params["lamb_sigma_s"]
+    dd_mpc_params["lamb_sigma_s"] = params["lambda_sigma_s"]
 
     # System Output setpoint
     y_r = params["y_r"]

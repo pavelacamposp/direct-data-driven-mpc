@@ -15,8 +15,8 @@ test_nonlinear_dd_mpc_params:
   u_range:
     - [-1.0, 1.0]
   alpha_reg_type: 0
-  lamb_alpha_s: 1e-3
-  lamb_sigma_s: 1.0e7
+  lambda_alpha_s: 1e-3
+  lambda_sigma_s: 1.0e7
   y_r: [3.0]
   ext_out_incr_in: true
   update_cost_threshold: null
