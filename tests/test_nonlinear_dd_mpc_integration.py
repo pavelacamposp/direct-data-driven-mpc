@@ -71,7 +71,7 @@ def test_nonlinear_dd_mpc_integration(
     p = system_model.p  # Number of outputs
     dd_mpc_config = get_nonlinear_data_driven_mpc_controller_params(
         config_file=TEST_NONLINEAR_DD_MPC_CONFIG_PATH,
-        controller_key_value=TEST_NONLINEAR_DD_MPC_PARAMS_KEY,
+        controller_key=TEST_NONLINEAR_DD_MPC_PARAMS_KEY,
         m=m,
         p=p,
         verbose=verbose,

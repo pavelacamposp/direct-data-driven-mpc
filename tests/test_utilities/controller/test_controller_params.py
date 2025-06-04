@@ -57,7 +57,7 @@ def test_get_lti_data_driven_mpc_controller_params(
     # Load controller parameters
     params = get_lti_data_driven_mpc_controller_params(
         config_file="dummy.yaml",
-        controller_key_value="controller_key",
+        controller_key="controller_key",
         m=m,
         p=p,
     )
@@ -105,7 +105,7 @@ def test_get_nonlinear_data_driven_mpc_controller_params(
     # Load controller parameters
     params = get_nonlinear_data_driven_mpc_controller_params(
         config_file="dummy.yaml",
-        controller_key_value="controller_key",
+        controller_key="controller_key",
         m=m,
         p=p,
     )
