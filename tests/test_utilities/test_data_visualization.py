@@ -22,6 +22,7 @@ from direct_data_driven_mpc.utilities.data_visualization import (
     plot_input_output_animation,
     save_animation,
     update_data_animation,
+    validate_data_dimensions,
 )
 
 matplotlib.use("Agg")  # Prevent GUI backend
@@ -78,51 +79,6 @@ def test_plot_input_output(
         # Check input setpoint line data if included
         expected_y_s = np.full_like(y_k[:, j], y_s[j, 0])
         np.testing.assert_equal(np.asarray(lines[1].get_ydata()), expected_y_s)
-
-    plt.close("all")
-
-
-def test_plot_input_output_mismatched_dim_len(
-    dummy_plot_data: tuple[np.ndarray, ...],
-) -> None:
-    u_k, y_k, u_s, y_s = dummy_plot_data
-    m = u_k.shape[1]
-    p = y_k.shape[1]
-
-    # Verify `ValueError` is raised on dimension
-    # mismatch between input-output arrays
-    with pytest.raises(ValueError, match="Dimension mismatch"):
-        plot_input_output(u_k=u_k[:-1], y_k=y_k, y_s=y_s)
-
-    # Verify `ValueError` is raised on dimension
-    # mismatch between setpoint arrays
-    with pytest.raises(ValueError, match="Dimension mismatch"):
-        plot_input_output(u_k=u_k, y_k=y_k, y_s=y_s[:1])
-
-    with pytest.raises(ValueError, match="Dimension mismatch"):
-        plot_input_output(u_k=u_k, y_k=y_k, u_s=u_s[:1], y_s=y_s)
-
-    # Verify `ValueError` is raised when bounds or
-    # y-limits list lengths mismatch
-    mismatch_cases = [
-        ("u_bounds_list", {"u_bounds_list": [(0.0, 1.0)] * (m + 1)}),
-        ("y_bounds_list", {"y_bounds_list": [(0.0, 1.0)] * (p + 1)}),
-        ("u_ylimits_list", {"u_ylimits_list": [(0.0, 1.0)] * (m + 1)}),
-        ("y_ylimits_list", {"y_ylimits_list": [(0.0, 1.0)] * (p + 1)}),
-    ]
-
-    for param_name, kwargs in mismatch_cases:
-        with pytest.raises(ValueError, match=f"{param_name}.*does not match"):
-            # Prevent mypy [arg-type] error
-            safe_kwargs: dict[str, Any] = kwargs
-
-            plot_input_output(
-                u_k=u_k,
-                y_k=y_k,
-                u_s=u_s,
-                y_s=y_s,
-                **safe_kwargs,
-            )
 
     plt.close("all")
 
@@ -427,6 +383,62 @@ def test_save_animation(tmp_path: Path) -> None:
     assert os.path.isfile(file_path)
 
     plt.close(fig)
+
+
+def test_validate_data_dimensions_input_output(
+    dummy_plot_data: tuple[np.ndarray, ...],
+) -> None:
+    u_k, y_k, u_s, y_s = dummy_plot_data
+
+    # Verify `ValueError` is raised on dimension
+    # mismatch between input-output arrays
+    with pytest.raises(ValueError, match="Dimension mismatch"):
+        validate_data_dimensions(u_k=u_k[:-1], y_k=y_k, y_s=y_s)
+
+    # Verify `ValueError` is raised on shape mismatch between setpoint arrays
+    with pytest.raises(ValueError, match="Shape mismatch"):
+        validate_data_dimensions(u_k=u_k, y_k=y_k, y_s=y_s[:1])
+
+    with pytest.raises(ValueError, match="Shape mismatch"):
+        validate_data_dimensions(u_k=u_k, y_k=y_k, u_s=u_s[:1], y_s=y_s)
+
+
+@pytest.mark.parametrize(
+    "invalid_parameter",
+    [
+        "u_bounds_list",
+        "y_bounds_list",
+        "u_ylimits_list",
+        "y_ylimits_list",
+    ],
+)
+def test_validate_data_dimensions_bounds_lists(
+    invalid_parameter: str,
+    dummy_plot_data: tuple[np.ndarray, ...],
+) -> None:
+    u_k, y_k, u_s, y_s = dummy_plot_data
+    m = u_k.shape[1]
+    p = y_k.shape[1]
+
+    # Determine correct length based on param_name
+    expected_len = m if "u_" in invalid_parameter else p
+    invalid_list = [(0.0, 1.0)] * (expected_len + 1)
+
+    kwargs: dict[str, Any] = {invalid_parameter: invalid_list}
+
+    # Verify `ValueError` is raised when bounds or
+    # y-limits list lengths mismatch
+    with pytest.raises(
+        ValueError,
+        match=rf"{invalid_parameter}.*does not match",
+    ):
+        validate_data_dimensions(
+            u_k=u_k,
+            y_k=y_k,
+            u_s=u_s,
+            y_s=y_s,
+            **kwargs,
+        )
 
 
 def test_create_input_output_figure() -> None:

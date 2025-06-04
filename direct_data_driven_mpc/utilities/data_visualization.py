@@ -216,53 +216,17 @@ def plot_input_output(
             the lengths of `u_bounds_list`, `y_bounds_list`, `u_ylimits_list`,
             or `y_ylimits_list` do not match the number of subplots.
     """
-    # Check input-output data dimensions
-    if not (u_k.shape[0] == y_k.shape[0]):
-        raise ValueError(
-            "Dimension mismatch. The number of time steps for `u_k` "
-            f"({u_k.shape[0]}) and `y_k` ({y_k.shape[0]}) must match."
-        )
-    if y_k.shape != y_s.shape:
-        raise ValueError(
-            f"Dimension mismatch. The shape of `y_k` ({y_k.shape}) and "
-            f"`y_s` ({y_s.shape}) must match."
-        )
-
-    # If input setpoint is passed, verify input data dimension match
-    if u_s is not None:
-        if u_k.shape != u_s.shape:
-            raise ValueError(
-                f"Dimension mismatch. The shape of `u_k` ({u_k.shape}) and "
-                f"`u_s` ({u_s.shape}) must match."
-            )
-
-    # Retrieve number of input and output data sequences
-    m = u_k.shape[1]  # Number of inputs
-    p = y_k.shape[1]  # Number of outputs
-
-    # Error handling for bounds list lengths
-    if u_bounds_list and len(u_bounds_list) != m:
-        raise ValueError(
-            f"The length of `u_bounds_list` ({len(u_bounds_list)}) does not "
-            f"match the number of input subplots ({m})."
-        )
-    if y_bounds_list and len(y_bounds_list) != p:
-        raise ValueError(
-            f"The length of `y_bounds_list` ({len(y_bounds_list)}) does not "
-            f"match the number of output subplots ({p})."
-        )
-
-    # Error handling for y-limit lengths
-    if u_ylimits_list and len(u_ylimits_list) != m:
-        raise ValueError(
-            f"The length of `u_ylimits_list` ({len(u_ylimits_list)}) does not "
-            f"match the number of input subplots ({m})."
-        )
-    if y_ylimits_list and len(y_ylimits_list) != p:
-        raise ValueError(
-            f"The length of `y_ylimits_list` ({len(y_ylimits_list)}) does not "
-            f"match the number of output subplots ({p})."
-        )
+    # Validate data dimensions
+    validate_data_dimensions(
+        u_k=u_k,
+        y_k=y_k,
+        u_s=u_s,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        y_bounds_list=y_bounds_list,
+        u_ylimits_list=u_ylimits_list,
+        y_ylimits_list=y_ylimits_list,
+    )
 
     # Initialize Matplotlib params if not provided
     inputs_line_params = init_dict_if_none(inputs_line_params)
@@ -270,6 +234,10 @@ def plot_input_output(
     setpoints_line_params = init_dict_if_none(setpoints_line_params)
     bounds_line_params = init_dict_if_none(bounds_line_params)
     legend_params = init_dict_if_none(legend_params)
+
+    # Retrieve number of input and output data sequences
+    m = u_k.shape[1]  # Number of inputs
+    p = y_k.shape[1]  # Number of outputs
 
     # Create figure if lists of Axes are not provided
     is_ext_fig = axs_u is not None and axs_y is not None  # External figure
@@ -288,6 +256,9 @@ def plot_input_output(
         fig = axs_u[0].figure
 
     # Plot input data
+    m = u_k.shape[1]  # Number of inputs
+    p = y_k.shape[1]  # Number of outputs
+
     for i in range(m):
         # Get input setpoint if provided
         u_setpoint = u_s[:, i] if u_s is not None else None
@@ -721,42 +692,20 @@ def plot_input_output_animation(
             the lengths of `u_bounds_list` or `y_bounds_list` do not match the
             number of subplots.
     """
-    # Check input-output data dimensions
-    if not (u_k.shape[0] == y_k.shape[0]):
-        raise ValueError(
-            "Dimension mismatch. The number of time steps for `u_k` "
-            f"({u_k.shape[0]}) and y_k ({y_k.shape[0]}) must match."
-        )
-    if y_k.shape != y_s.shape:
-        raise ValueError(
-            f"Dimension mismatch. The shape of `y_k` ({y_k.shape}) and "
-            f"`y_s` ({y_s.shape}) must match."
-        )
-
-    # If input setpoint is passed, verify input data dimension match
-    if u_s is not None:
-        if u_k.shape != u_s.shape:
-            raise ValueError(
-                f"Dimension mismatch. The shape of `u_k` ({u_k.shape}) and "
-                f"`u_s` ({u_s.shape}) must match."
-            )
+    # Validate data dimensions
+    validate_data_dimensions(
+        u_k=u_k,
+        y_k=y_k,
+        u_s=u_s,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        y_bounds_list=y_bounds_list,
+    )
 
     # Retrieve number of input and output data sequences and their length
     m = u_k.shape[1]  # Number of inputs
     p = y_k.shape[1]  # Number of outputs
     T = u_k.shape[0]  # Length of data
-
-    # Error handling for bounds list lengths
-    if u_bounds_list and len(u_bounds_list) != m:
-        raise ValueError(
-            f"The length of `u_bounds_list` ({len(u_bounds_list)}) does not "
-            f"match the number of input subplots ({m})."
-        )
-    if y_bounds_list and len(y_bounds_list) != p:
-        raise ValueError(
-            f"The length of `y_bounds_list` ({len(y_bounds_list)}) does not "
-            f"match the number of output subplots ({p})."
-        )
 
     # Initialize Matplotlib params if not provided
     inputs_line_params = init_dict_if_none(inputs_line_params)
@@ -1449,6 +1398,93 @@ def save_animation(
             writer=writer,
             progress_callback=lambda i, n: pbar.update(1),
         )
+
+
+def validate_data_dimensions(
+    u_k: np.ndarray,
+    y_k: np.ndarray,
+    y_s: np.ndarray,
+    u_s: np.ndarray | None = None,
+    u_bounds_list: list[tuple[float, float]] | None = None,
+    y_bounds_list: list[tuple[float, float]] | None = None,
+    u_ylimits_list: list[tuple[float, float]] | None = None,
+    y_ylimits_list: list[tuple[float, float]] | None = None,
+) -> None:
+    """
+    Validate that input-output data arrays, and bound and ylimit lists have the
+    expected shapes and lengths.
+
+    Args:
+        u_k (np.ndarray): An array containing control input data of shape (T,
+            m), where `m` is the number of inputs and `T` is the number of
+            time steps.
+        y_k (np.ndarray): An array containing system output data of shape (T,
+            p), where `p` is the number of outputs and `T` is the number of
+            time steps.
+        u_s (np.ndarray | None): An array containing input setpoint values of
+            shape (T, m), where `m` is the number of inputs and `T` is the
+            number of time steps.
+        y_s (np.ndarray): An array containing output setpoint values of shape
+            (T, p), where `p` is the number of outputs and `T` is the number of
+            time steps.
+        u_bounds_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_bound, upper_bound) specifying bounds for each input data
+            sequence.
+        y_bounds_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_bound, upper_bound) specifying bounds for each output data
+            sequence.
+        u_ylimits_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            input subplot.
+        y_ylimits_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_limit, upper_limit) specifying the Y-axis limits for each
+            output subplot.
+
+    Raises:
+        ValueError: If any array dimensions mismatch expected shapes, or if
+            the lengths of `u_bounds_list`, `y_bounds_list`, `u_ylimits_list`,
+            or `y_ylimits_list` do not match the number of subplots.
+    """
+    # Check input-output data dimensions
+    if u_k.shape[0] != y_k.shape[0]:
+        raise ValueError(
+            "Dimension mismatch. The number of time steps for `u_k` "
+            f"({u_k.shape[0]}) and `y_k` ({y_k.shape[0]}) must match."
+        )
+    if y_k.shape != y_s.shape:
+        raise ValueError(
+            f"Shape mismatch. The shapes of `y_k` ({y_k.shape}) and "
+            f"`y_s` ({y_s.shape}) must match."
+        )
+
+    # If input setpoint is passed, verify input data dimension match
+    if u_s is not None:
+        if u_k.shape != u_s.shape:
+            raise ValueError(
+                f"Shape mismatch. The shape of `u_k` ({u_k.shape}) and "
+                f"`u_s` ({u_s.shape}) must match."
+            )
+
+    # Define function to check list lengths
+    def check_bounds_list_length(
+        name: str, data_list: list[tuple[float, float]] | None, expected: int
+    ) -> None:
+        if data_list and len(data_list) != expected:
+            raise ValueError(
+                f"The length of `{name}` ({len(data_list)}) does not match "
+                f"the expected value ({expected})."
+            )
+
+    # Error handling for bounds list lengths
+    m = u_k.shape[1]  # Number of inputs
+    p = y_k.shape[1]  # Number of outputs
+
+    check_bounds_list_length("u_bounds_list", u_bounds_list, m)
+    check_bounds_list_length("y_bounds_list", y_bounds_list, p)
+
+    # Error handling for y-limit lengths
+    check_bounds_list_length("u_ylimits_list", u_ylimits_list, m)
+    check_bounds_list_length("y_ylimits_list", y_ylimits_list, p)
 
 
 def get_padded_limits(
