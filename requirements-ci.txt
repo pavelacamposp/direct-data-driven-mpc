@@ -1,5 +1,6 @@
 numpy==2.2.5
 matplotlib==3.10.1
+clarabel==0.10.0
 cvxpy==1.6.5
 tqdm==4.67.1
 PyYAML==6.0.2
