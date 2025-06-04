@@ -69,6 +69,7 @@ def test_nonlinear_system_model() -> NonlinearSystem:
     )
 
 
+@pytest.mark.nonlinear_integration
 @pytest.mark.parametrize("n_n_mpc_step", [True, False])
 @pytest.mark.parametrize("ext_out_incr_in", [True, False])
 @pytest.mark.parametrize(

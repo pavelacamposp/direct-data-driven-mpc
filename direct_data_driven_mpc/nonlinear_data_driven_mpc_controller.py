@@ -1187,10 +1187,7 @@ class NonlinearDataDrivenMPCController:
         Store the previous optimal value of `alpha` for regularization in
         subsequent MPC iterations.
         """
-        self.prev_alpha_val = self.alpha.value  #  type: ignore[assignment]
-        # Note:
-        # mypy [assignment] is ignored since `alpha.value` could only be `None`
-        # if `alpha` were a sparse matrix, which is not the case in our system
+        self.prev_alpha_val = self.alpha.value
 
     def get_du_value_at_step(self, n_step: int = 0) -> np.ndarray | None:
         """
