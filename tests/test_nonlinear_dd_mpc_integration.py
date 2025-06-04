@@ -40,35 +40,7 @@ TEST_NONLINEAR_DD_MPC_CONFIG_PATH = os.path.join(
 TEST_NONLINEAR_DD_MPC_PARAMS_KEY = "test_nonlinear_dd_mpc_params"
 
 
-def test_nonlinear_system_model() -> NonlinearSystem:
-    """Simple nonlinear system for testing."""
-    eps_max = 0.0
-
-    # Define Dynamics function
-    def cstr_dynamics(x: np.ndarray, u: np.ndarray) -> np.ndarray:
-        x1, x2 = x
-        u1 = u[0]
-
-        x1_new = x1 + 0.1 * (-0.5 * x1 + u1**2)
-        x2_new = x2 + 0.1 * (-0.3 * x2 + u1)
-
-        return np.array([x1_new, x2_new])
-
-    # Define Output function
-    def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
-        return x[[1]]
-
-    # Create nonlinear system model
-    return NonlinearSystem(
-        f=cstr_dynamics,
-        h=cstr_output,
-        n=2,
-        m=1,
-        p=1,
-        eps_max=eps_max,
-    )
-
-
+@pytest.mark.nonlinear_integration
 @pytest.mark.parametrize("n_n_mpc_step", [True, False])
 @pytest.mark.parametrize("ext_out_incr_in", [True, False])
 @pytest.mark.parametrize(
@@ -79,6 +51,7 @@ def test_nonlinear_dd_mpc_integration(
     alpha_reg_type: AlphaRegType,
     ext_out_incr_in: bool,
     n_n_mpc_step: bool,
+    test_nonlinear_system_model: NonlinearSystem,
     tmp_path: Path,
 ) -> None:
     """
@@ -91,7 +64,7 @@ def test_nonlinear_dd_mpc_integration(
     verbose = 0
 
     # Define system model
-    system_model = test_nonlinear_system_model()
+    system_model = test_nonlinear_system_model
 
     # Load Data-Driven MPC controller parameters from configuration file
     m = system_model.m  # Number of inputs

@@ -8,7 +8,7 @@ on:
     branches: ["main"]
 
 jobs:
-  ci_workflow:
+  code_quality_unit_tests:
     runs-on: ubuntu-latest
     container: python:3.12-slim-bullseye
     steps:
@@ -44,7 +44,84 @@ jobs:
       - name: YAML Lint
         run: yamllint --strict .
 
-      - name: Run tests with coverage
+      - name: Run unit tests with coverage
         run: |
-          coverage run -m pytest --maxfail=2 --disable-warnings
+          coverage run --parallel-mode -m pytest \
+            --maxfail=2 \
+            --disable-warnings \
+            -m "not lti_integration and not nonlinear_integration"
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data-unit
+          path: .coverage.*
+          include-hidden-files: true
+
+  integration_tests:
+    runs-on: ubuntu-latest
+    container: python:3.12-slim-bullseye
+    strategy:
+      matrix:
+        test_type: [lti_integration, nonlinear_integration]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          apt-get update && \
+          apt-get install -y ffmpeg
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --default-timeout=60 --retries=5 -r requirements-ci.txt
+
+      - name: Install project package in editable mode
+        run: |
+          pip install -e .
+
+      - name: Run integration test with coverage - ${{ matrix.test_type }}
+        run: |
+          coverage run --parallel-mode -m pytest \
+            --disable-warnings \
+            -m "${{ matrix.test_type }}"
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: "coverage-data-${{ matrix.test_type }}"
+          path: .coverage.*
+          include-hidden-files: true
+
+  coverage_report:
+    needs: [code_quality_unit_tests, integration_tests]
+    runs-on: ubuntu-latest
+    container: python:3.12-slim-bullseye
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download unit test coverage data
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-data-unit
+
+      - name: Download LTI integration test coverage data
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-data-lti_integration
+
+      - name: Download nonlinear integration test coverage data
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-data-nonlinear_integration
+
+      - name: Install coverage
+        run: pip install coverage
+
+      - name: Combine and show coverage report
+        run: |
+          coverage combine
           coverage report

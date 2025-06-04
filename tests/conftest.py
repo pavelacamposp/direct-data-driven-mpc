@@ -12,6 +12,9 @@ from direct_data_driven_mpc.utilities.controller.controller_creation import (
     LTIDataDrivenMPCParams,
     NonlinearDataDrivenMPCParams,
 )
+from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+    NonlinearSystem,
+)
 
 from .mocks import (
     MockLTIDDMPCController,
@@ -127,3 +130,33 @@ def dummy_nonlinear_controller_data() -> tuple[
     # input. This is not always the case.
 
     return (nonlinear_dd_mpc_params, u, y)
+
+
+@pytest.fixture
+def test_nonlinear_system_model() -> NonlinearSystem:
+    """Simple nonlinear system for testing."""
+    eps_max = 0.0
+
+    # Define Dynamics function
+    def cstr_dynamics(x: np.ndarray, u: np.ndarray) -> np.ndarray:
+        x1, x2 = x
+        u1 = u[0]
+
+        x1_new = x1 + 0.1 * (-0.5 * x1 + u1**2)
+        x2_new = x2 + 0.1 * (-0.3 * x2 + u1)
+
+        return np.array([x1_new, x2_new])
+
+    # Define Output function
+    def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
+        return x[[1]]
+
+    # Create nonlinear system model
+    return NonlinearSystem(
+        f=cstr_dynamics,
+        h=cstr_output,
+        n=2,
+        m=1,
+        p=1,
+        eps_max=eps_max,
+    )
