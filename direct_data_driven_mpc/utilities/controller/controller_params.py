@@ -75,7 +75,6 @@ class NonlinearDataDrivenMPCParams(TypedDict, total=False):
 
     lamb_alpha: float  # Regularization parameter for alpha
     lamb_sigma: float  # Regularization parameter for sigma
-    c: float  # Convex slack variable constraint constant
 
     U: np.ndarray  # Bounds for the predicted input
     Us: np.ndarray  # Bounds for the predicted input setpoint
