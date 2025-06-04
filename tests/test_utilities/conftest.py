@@ -48,7 +48,7 @@ def dummy_plot_data() -> tuple[np.ndarray, ...]:
     p = 2
     u_k = np.zeros((T, m))
     y_k = np.ones((T, p))
-    u_s = np.ones((m, 1))
-    y_s = np.ones((p, 1))
+    u_s = np.ones((T, m))
+    y_s = np.ones((T, p))
 
     return u_k, y_k, u_s, y_s
