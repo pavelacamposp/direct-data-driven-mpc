@@ -60,7 +60,7 @@ def test_nonlinear_dd_mpc_integration(
     """
     # Define test parameters
     np_random = np.random.default_rng(0)
-    n_steps = 300
+    n_steps = 50
     verbose = 0
 
     # Define system model
@@ -87,6 +87,20 @@ def test_nonlinear_dd_mpc_integration(
         dd_mpc_config["Q"] = np.eye((m + p) * (L + n + 1))
 
     dd_mpc_config["n_mpc_step"] = dd_mpc_config["n"] if n_n_mpc_step else 1
+
+    # Adjust parameters for specific controller
+    # configurations to ensure CVXPY solutions are feasible
+    # Note:
+    # Different combinations of controller parameters may require different
+    # tuning to avoid solver errors. For example, a controller with
+    # `ext_out_incr_in = True` will have different parameter values than one
+    # with `ext_out_incr_in = False`.
+    if (
+        alpha_reg_type == AlphaRegType.APPROXIMATED
+        and ext_out_incr_in
+        and not n_n_mpc_step
+    ):
+        dd_mpc_config["lamb_alpha_s"] = 1e-5
 
     # Generate initial input-output data
     u, y = generate_initial_input_output_data(
@@ -127,6 +141,27 @@ def test_nonlinear_dd_mpc_integration(
     # APPROXIMATED and PREVIOUS, since ZERO tends to underperform
     if alpha_reg_type != AlphaRegType.ZERO:
         np.testing.assert_allclose(y_sys[-1], y_r, rtol=1e-1)
+
+    # Change controller setpoint
+    new_y_r = dd_mpc_config["y_r"] + 0.5
+
+    dd_mpc_controller.set_output_setpoint(new_y_r)
+
+    np.testing.assert_equal(dd_mpc_controller.y_r_param.value, new_y_r)
+
+    # Simulate data-driven MPC control system for the new setpoint
+    n_steps_setpoint_change = 75
+    _, y_change = simulate_nonlinear_data_driven_mpc_control_loop(
+        system_model=system_model,
+        data_driven_mpc_controller=dd_mpc_controller,
+        n_steps=n_steps_setpoint_change,
+        np_random=np_random,
+        verbose=verbose,
+    )
+
+    # Verify system reached stabilization for the new setpoint
+    if alpha_reg_type != AlphaRegType.ZERO:
+        np.testing.assert_allclose(y_change[-1], new_y_r.flatten(), rtol=2e-1)
 
     # Test control data plotting
     y_r_data = np.tile(dd_mpc_config["y_r"].T, (n_steps, 1))
