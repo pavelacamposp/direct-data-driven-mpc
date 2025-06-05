@@ -129,13 +129,13 @@ def plot_input_output(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
+        y_s (np.ndarray): An array containing output setpoint values of shape
+            (T, p), where `p` is the number of outputs and `T` is the number of
+            time steps.
         u_s (np.ndarray | None): An array containing input setpoint values of
             shape (T, m), where `m` is the number of inputs and `T` is the
             number of time steps. If `None`, input setpoint lines will not be
             plotted. Defaults to `None`.
-        y_s (np.ndarray): An array containing output setpoint values of shape
-            (T, p), where `p` is the number of outputs and `T` is the number of
-            time steps.
         u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
@@ -201,7 +201,8 @@ def plot_input_output(
             properties for customizing the plot legends (e.g., fontsize,
             loc, handlelength). If not provided, Matplotlib's default legend
             properties will be used.
-        data_label (str): The label for the current data sequences.
+        data_label (str): A string appended to each data series label in the
+            plot legend.
         axs_u (list[Axes] | None): A list of external axes for input plots.
             Defaults to `None`.
         axs_y (list[Axes] | None): A list of external axes for output plots.
@@ -400,7 +401,8 @@ def plot_data(
             setpoint data series (e.g., "u^s" for inputs, "y^s" for outputs).
         var_label (str): The variable label representing the control signal
             (e.g., "Input", "Output").
-        data_label (str): The label for the current data sequence.
+        data_label (str): A string appended to each data series label in the
+            plot legend.
         initial_text (str): Label text to display over the initial measurement
             period of the plot.
         control_text (str): Label text to display over the post-initial
@@ -604,13 +606,13 @@ def plot_input_output_animation(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
+        y_s (np.ndarray): An array containing output setpoint values of shape
+            (T, p), where `p` is the number of outputs and `T` is the number of
+            time steps.
         u_s (np.ndarray | None): An array containing input setpoint values of
             shape (T, m), where `m` is the number of inputs and `T` is the
             number of time steps. If `None`, input setpoint lines will not be
             plotted. Defaults to `None`.
-        y_s (np.ndarray): An array containing output setpoint values of shape
-            (T, p), where `p` is the number of outputs and `T` is the number of
-            time steps.
         u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence. If provided, horizontal lines representing these bounds
@@ -1449,12 +1451,12 @@ def validate_data_dimensions(
         y_k (np.ndarray): An array containing system output data of shape (T,
             p), where `p` is the number of outputs and `T` is the number of
             time steps.
-        u_s (np.ndarray | None): An array containing input setpoint values of
-            shape (T, m), where `m` is the number of inputs and `T` is the
-            number of time steps.
         y_s (np.ndarray): An array containing output setpoint values of shape
             (T, p), where `p` is the number of outputs and `T` is the number of
             time steps.
+        u_s (np.ndarray | None): An array containing input setpoint values of
+            shape (T, m), where `m` is the number of inputs and `T` is the
+            number of time steps.
         u_bounds_list (list[tuple[float, float]] | None): A list of tuples
             (lower_bound, upper_bound) specifying bounds for each input data
             sequence.
