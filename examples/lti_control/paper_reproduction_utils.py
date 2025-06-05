@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
-import matplotlib.pyplot as plt
 import numpy as np
 from numpy.random import Generator
 
@@ -19,13 +17,6 @@ from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_lti_data_driven_mpc_control_loop,
 )
 from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
-from direct_data_driven_mpc.utilities.visualization.control_plot import (
-    plot_input_output,
-)
-from direct_data_driven_mpc.utilities.visualization.plot_utilities import (
-    create_input_output_figure,
-    init_dict_if_none,
-)
 
 
 # Define Data-Driven MPC controller schemes
@@ -300,105 +291,3 @@ def simulate_data_driven_mpc_control_loops_reproduction(
         y_sys_data.append(y_sys)
 
     return u_sys_data, y_sys_data
-
-
-def plot_input_output_reproduction(
-    data_driven_mpc_controller_schemes: list[LTIDataDrivenMPCScheme],
-    u_data: list[np.ndarray],
-    y_data: list[np.ndarray],
-    u_s: np.ndarray,
-    y_s: np.ndarray,
-    u_ylimits_list: list[tuple[float, float]] | None,
-    y_ylimits_list: list[tuple[float, float]] | None,
-    setpoints_line_params: dict[str, Any] | None = None,
-    legend_params: dict[str, Any] | None = None,
-    figsize: tuple[int, int] = (14, 8),
-    dpi: int = 300,
-    fontsize: int = 12,
-    title: str | None = None,
-) -> None:
-    """
-    Plot input-output data with setpoints from multiple Data-Driven MPC
-    controller scheme simulations in a Matplotlib figure.
-
-    This function creates 2 rows of subplots: the first row for control
-    inputs, and the second for system outputs. Each subplot shows the
-    data series corresponding to each controller scheme alongside their
-    setpoints as a constant line. The appearance of plot lines is predefined
-    for each controller scheme.
-
-    Args:
-        data_driven_mpc_controller_schemes (list[LTIDataDrivenMPCScheme]): A
-            list of Robust LTI Data-Driven MPC schemes.
-        u_data (list[np.ndarray]): A list of arrays containing control input
-            data from each controller scheme simulation.
-        y_data (list[np.ndarray]): A list of arrays containing system output
-            data from each controller scheme simulation.
-        u_s (np.ndarray): An array of shape `(m, 1)` containing the `m` input
-            setpoint values considered for the controller simulations.
-        y_s (np.ndarray): An array of shape `(p, 1)` containing the `p` output
-            setpoint values considered for the controller simulations.
-        u_ylimits_list (list[tuple[float, float]] | None): A list of tuples
-            (lower_limit, upper_limit) specifying the Y-axis limits for each
-            input subplot. If `None`, the Y-axis limits will be determined
-            automatically.
-        y_ylimits_list (list[tuple[float, float]] | None): A list of tuples
-            (lower_limit, upper_limit) specifying the Y-axis limits for each
-            output subplot. If `None`, the Y-axis limits will be determined
-            automatically.
-        setpoints_line_params (dict[str, Any] | None): A dictionary of
-            Matplotlib properties for customizing the lines used to plot the
-            setpoint values (e.g., color, linestyle, linewidth). If not
-            provided, Matplotlib's default line properties will be used.
-        legend_params (dict[str, Any] | None): A dictionary of Matplotlib
-            properties for customizing the plot legends (e.g., fontsize,
-            loc, handlelength). If not provided, Matplotlib's default legend
-            properties will be used.
-        figsize (tuple[int, int]): The (width, height) dimensions of the
-            created Matplotlib figure.
-        dpi (int): The DPI resolution of the figure.
-        fontsize (int): The fontsize for labels, legends and axes ticks.
-        title (str | None): The title for the created plot figure.
-    """
-    # Retrieve number of input and output data sequences and their length
-    m = u_data[0].shape[1]  # Number of inputs
-    p = y_data[0].shape[1]  # Number of outputs
-
-    # Initialize Matplotlib params if not provided
-    setpoints_line_params = init_dict_if_none(setpoints_line_params)
-    legend_params = init_dict_if_none(legend_params)
-
-    # Create example figure subplots
-    _, axs_u, axs_y = create_input_output_figure(
-        m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title
-    )
-
-    # Plot data iterating through each controller scheme
-    for i, dd_mpc_scheme in enumerate(data_driven_mpc_controller_schemes):
-        # Get the scheme configuration
-        scheme_config = DD_MPC_SCHEME_CONFIG[dd_mpc_scheme]
-
-        # Get Data-Driven MPC scheme line parameters for plotting
-        controller_line_params = DD_MPC_SCHEME_LINE_PARAMS[dd_mpc_scheme]
-
-        # Plot input-output data for scheme
-        plot_input_output(
-            u_k=u_data[i],
-            y_k=y_data[i],
-            u_s=u_s,
-            y_s=y_s,
-            inputs_line_params=controller_line_params,
-            outputs_line_params=controller_line_params,
-            setpoints_line_params=setpoints_line_params,
-            data_label=f" ({scheme_config.label})",
-            u_ylimits_list=u_ylimits_list,
-            y_ylimits_list=y_ylimits_list,
-            axs_u=axs_u,
-            axs_y=axs_y,
-            dpi=dpi,
-            fontsize=fontsize,
-            legend_params=legend_params,
-        )
-
-    # Show plot
-    plt.show()

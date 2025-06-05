@@ -41,10 +41,11 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 from paper_reproduction_utils import (
+    DD_MPC_SCHEME_CONFIG,
+    DD_MPC_SCHEME_LINE_PARAMS,
     LTIDataDrivenMPCScheme,
     create_data_driven_mpc_controllers_reproduction,
     get_equilibrium_state_from_output,
-    plot_input_output_reproduction,
     simulate_data_driven_mpc_control_loops_reproduction,
 )
 
@@ -57,6 +58,9 @@ from direct_data_driven_mpc.utilities.controller.initial_data_generation import 
     simulate_n_input_output_measurements,
 )
 from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
+from direct_data_driven_mpc.utilities.visualization.comparison_plot import (
+    plot_input_output_comparison,
+)
 from direct_data_driven_mpc.utilities.yaml_config_loading import (
     load_yaml_config_params,
 )
@@ -421,14 +425,22 @@ def main() -> None:
     if verbose:
         print("Displaying reproduction plot: Data-Driven MPC for LTI systems")
 
-    plot_input_output_reproduction(
-        data_driven_mpc_controller_schemes=dd_mpc_controller_schemes,
+    inputs_line_params_list = list(DD_MPC_SCHEME_LINE_PARAMS.values())
+    outputs_line_params_list = inputs_line_params_list
+    var_suffix_list = [
+        f" ({scheme_config.label})"
+        for scheme_config in DD_MPC_SCHEME_CONFIG.values()
+    ]
+    plot_input_output_comparison(
         u_data=u_sys_data,
         y_data=y_sys_data,
         u_s=u_s_data,
         y_s=y_s_data,
         u_ylimits_list=u_ylimits_list,
         y_ylimits_list=y_ylimits_list,
+        inputs_line_param_list=inputs_line_params_list,
+        outputs_line_param_list=outputs_line_params_list,
+        var_suffix_list=var_suffix_list,
         title=plot_title,
         **plot_params,
     )
