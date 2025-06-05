@@ -1,7 +1,7 @@
 numpy
 matplotlib>=3.9.0
 clarabel==0.10.0
-cvxpy
+cvxpy==1.6.5
 tqdm
 PyYAML
 PyQt6
