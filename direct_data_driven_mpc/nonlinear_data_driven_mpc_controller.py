@@ -709,16 +709,26 @@ class NonlinearDataDrivenMPCController:
 
         This method initializes the following MPC parameters:
 
+        - Output setpoint: `y_r_param`.
         - Hankel matrices: `HLn1_u_param` and `HLn1_y_param`.
         - Past inputs and outputs: `u_past_param` and `y_past_param`.
         - Past input increments: `du_past_param` (if applicable).
         - Computed value of `alpha_Lin^sr(D_t)`: `alpha_sr_Lin_D_param` (if
           `alpha` is not regularized with respect to zero).
 
-        These parameters are updated at each MPC iteration. Using CVXPY
-        `Parameter` objects allows efficient updates without the need of
-        reformulating the MPC problem at every step.
+        The value of `y_r_param` is initialized to `y_r`.
+
+        These parameters are updated at each MPC iteration, except for
+        `y_r_param`, which must be manually updated when setting a new
+        controller setpoint.
+
+        Using CVXPY `Parameter` objects allows efficient updates without the
+        need of reformulating the MPC problem at every step.
         """
+        # Define the parameter for y_r and initialize its value
+        self.y_r_param = cp.Parameter(self.y_r.shape, name="y_r")
+        self.y_r_param.value = self.y_r
+
         # H_{L+n+1}(u) - H_{L+n+1}(du)
         self.HLn1_u_param = cp.Parameter(self.HLn1_u.shape, name="HLn1_u")
 
@@ -1014,7 +1024,7 @@ class NonlinearDataDrivenMPCController:
 
         # Define control-related cost
         control_cost = self.tracking_cost + cp.quad_form(
-            self.y_s[: self.p] - self.y_r, self.S
+            self.y_s[: self.p] - self.y_r_param, self.S
         )
 
         # Define alpha-related cost
@@ -1360,10 +1370,6 @@ class NonlinearDataDrivenMPCController:
         """
         Set the system output setpoint of the Data-Driven MPC controller.
 
-        This method updates the system setpoint `y_r` to the provided values.
-        Then, it reinitializes the controller to redefine the Data-Driven MPC
-        formulation.
-
         Args:
             y_r (np.ndarray): The setpoint for system outputs.
 
@@ -1372,7 +1378,8 @@ class NonlinearDataDrivenMPCController:
 
         Note:
             This method sets the values of the `y_r` attribute with the
-            provided new setpoint.
+            provided new setpoint and updates the value of `y_r_param`
+            to update the data-driven MPC controller setpoint.
         """
         # Validate input types and dimensions
         if y_r.shape != self.y_r.shape:
@@ -1381,11 +1388,9 @@ class NonlinearDataDrivenMPCController:
                 f"{self.y_s.shape}, but got {y_r.shape} instead."
             )
 
-        # Update Output setpoint
+        # Update output setpoint and its parameter value
         self.y_r = y_r
-
-        # Reinitialize Data-Driven MPC controller
-        self.initialize_data_driven_mpc()
+        self.y_r_param.value = y_r
 
     def define_alpha_sr_Lin_Dt_prob(self) -> None:
         """
@@ -1442,7 +1447,7 @@ class NonlinearDataDrivenMPCController:
 
         # Define objective
         objective = cp.Minimize(
-            cp.quad_form(self.y_s[: self.p] - self.y_r, self.S)
+            cp.quad_form(self.y_s[: self.p] - self.y_r_param, self.S)
             + self.lamb_alpha_s * cp.norm(self.alpha_s, 2) ** 2
             + self.lamb_sigma_s * cp.norm(self.sigma_s, 2) ** 2
         )

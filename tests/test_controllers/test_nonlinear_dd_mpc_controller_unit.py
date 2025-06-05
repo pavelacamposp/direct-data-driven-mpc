@@ -149,15 +149,10 @@ def test_nonlinear_dd_mpc_controller_invalid_params(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
 def test_nonlinear_store_input_output_measurement(
-    mock_controller_get_optimal_input: Mock,
     valid_dimensions: bool,
     dummy_nonlinear_controller: NonlinearDataDrivenMPCController,
 ) -> None:
-    # Patch optimal control input retrieval to bypass solver status checks
-    mock_controller_get_optimal_input.return_value = np.ones((1,))
-
     # Get dummy nonlinear data-driven MPC controller
     controller = dummy_nonlinear_controller
 
@@ -179,15 +174,10 @@ def test_nonlinear_store_input_output_measurement(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
 def test_nonlinear_set_input_output_data(
-    mock_controller_get_optimal_input: Mock,
     valid_dimensions: bool,
     dummy_nonlinear_controller: NonlinearDataDrivenMPCController,
 ) -> None:
-    # Patch optimal control input retrieval to bypass solver status checks
-    mock_controller_get_optimal_input.return_value = np.ones((1,))
-
     # Get dummy nonlinear data-driven MPC controller
     controller = dummy_nonlinear_controller
 
@@ -209,9 +199,7 @@ def test_nonlinear_set_input_output_data(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(NonlinearDataDrivenMPCController, "initialize_data_driven_mpc")
 def test_nonlinear_set_output_setpoint(
-    mock_controller_init: Mock,
     valid_dimensions: bool,
     dummy_nonlinear_controller: NonlinearDataDrivenMPCController,
 ) -> None:
@@ -226,7 +214,6 @@ def test_nonlinear_set_output_setpoint(
 
         assert np.allclose(controller.y_r, y_r)
 
-        mock_controller_init.assert_called()
     else:
         y_r = np.ones((controller.y_r.shape[0] + 1, 1))
 

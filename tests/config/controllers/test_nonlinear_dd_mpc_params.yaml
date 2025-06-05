@@ -3,9 +3,9 @@ test_nonlinear_dd_mpc_params:
   n: 4
   N: 50
   L: 10
-  Q_weights: 1
+  Q_weights: 10
   R_weights: 1
-  S_weights: 10
+  S_weights: 100
   lambda_alpha: 10.0
   lambda_sigma: 1.0e7
   U:
@@ -15,7 +15,7 @@ test_nonlinear_dd_mpc_params:
   u_range:
     - [-1.0, 1.0]
   alpha_reg_type: 0
-  lambda_alpha_s: 1e-3
+  lambda_alpha_s: 1e-5
   lambda_sigma_s: 1.0e7
   y_r: [3.0]
   ext_out_incr_in: true

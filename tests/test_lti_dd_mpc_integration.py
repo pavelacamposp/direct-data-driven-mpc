@@ -151,6 +151,28 @@ def test_lti_dd_mpc_integration(
     np.testing.assert_allclose(u_sys[-1], u_s, rtol=2e-1)
     np.testing.assert_allclose(y_sys[-1], y_s, rtol=1e-1)
 
+    # Change controller setpoint
+    new_u_s = np.zeros_like(dd_mpc_config["u_s"])
+    new_y_s = np.zeros_like(dd_mpc_config["y_s"])
+    dd_mpc_controller.set_input_output_setpoints(new_u_s, new_y_s)
+
+    np.testing.assert_equal(dd_mpc_controller.u_s, new_u_s)
+    np.testing.assert_equal(dd_mpc_controller.y_s, new_y_s)
+
+    # Simulate data-driven MPC control system for the new setpoint
+    n_steps_setpoint_change = 30
+    u_change, y_change = simulate_lti_data_driven_mpc_control_loop(
+        system_model=system_model,
+        data_driven_mpc_controller=dd_mpc_controller,
+        n_steps=n_steps_setpoint_change,
+        np_random=np_random,
+        verbose=verbose,
+    )
+
+    # Verify system reached stabilization for the new setpoint
+    np.testing.assert_allclose(u_change[-1], new_u_s.flatten(), atol=2e-1)
+    np.testing.assert_allclose(y_change[-1], new_y_s.flatten(), atol=2e-1)
+
     # Test control data plotting
     u_s_data = np.tile(dd_mpc_config["u_s"].T, (n_steps, 1))
     y_s_data = np.tile(dd_mpc_config["y_s"].T, (n_steps, 1))

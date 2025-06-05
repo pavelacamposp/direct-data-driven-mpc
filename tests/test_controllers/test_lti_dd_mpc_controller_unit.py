@@ -187,15 +187,10 @@ def test_lti_dd_mpc_controller_invalid_params(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(LTIDataDrivenMPCController, "get_optimal_control_input")
 def test_lti_store_input_output_measurement(
-    mock_controller_get_optimal_input: Mock,
     valid_dimensions: bool,
     dummy_lti_controller: LTIDataDrivenMPCController,
 ) -> None:
-    # Patch optimal control input retrieval to bypass solver status checks
-    mock_controller_get_optimal_input.return_value = np.ones((1,))
-
     # Get dummy LTI data-driven MPC controller
     controller = dummy_lti_controller
 
@@ -217,15 +212,10 @@ def test_lti_store_input_output_measurement(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(LTIDataDrivenMPCController, "get_optimal_control_input")
 def test_lti_set_past_input_output_data(
-    mock_controller_get_optimal_input: Mock,
     valid_dimensions: bool,
     dummy_lti_controller: LTIDataDrivenMPCController,
 ) -> None:
-    # Patch optimal control input retrieval to bypass solver status checks
-    mock_controller_get_optimal_input.return_value = np.ones((1,))
-
     # Get dummy LTI data-driven MPC controller
     controller = dummy_lti_controller
 
@@ -247,9 +237,7 @@ def test_lti_set_past_input_output_data(
 
 
 @pytest.mark.parametrize("valid_dimensions", [True, False])
-@patch.object(LTIDataDrivenMPCController, "initialize_data_driven_mpc")
 def test_lti_set_input_output_setpoints(
-    mock_controller_init: Mock,
     valid_dimensions: bool,
     dummy_lti_controller: LTIDataDrivenMPCController,
 ) -> None:
@@ -266,7 +254,6 @@ def test_lti_set_input_output_setpoints(
         assert np.allclose(controller.u_s, u_s)
         assert np.allclose(controller.y_s, y_s)
 
-        mock_controller_init.assert_called()
     else:
         u_s = np.ones((controller.u_s.shape[0] + 1, 1))
         y_s = np.ones((controller.y_s.shape[0] + 1, 1))

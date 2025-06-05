@@ -493,13 +493,27 @@ class LTIDataDrivenMPCController:
         Define MPC optimization parameters that are updated at every step
         iteration.
 
-        This method initializes the past inputs (`u_past_param`) and past
-        outputs (`y_past_param`) MPC parameters.
+        This method initializes the input setpoint (`u_s_param`), output
+        setpoint (`y_s_param`), past inputs (`u_past_param`), and past outputs
+        (`y_past_param`) MPC parameters.
 
-        These parameters are updated at each MPC iteration. Using CVXPY
-        `Parameter` objects allows efficient updates without the need of
-        reformulating the MPC problem at every step.
+        The values of `u_s_param` and `y_s_param` are initialized to `u_s` and
+        `y_s`.
+
+        These parameters are updated at each MPC iteration, except for
+        `u_s_param` and `y_s_param`, which must be manually updated when
+        setting new controller setpoint pairs.
+
+        Using CVXPY `Parameter` objects allows efficient updates without the
+        need of reformulating the MPC problem at every step.
         """
+        # Define input-output setpoint parameters and initialize their values
+        self.u_s_param = cp.Parameter(self.u_s.shape, name="u_s")
+        self.u_s_param.value = self.u_s
+
+        self.y_s_param = cp.Parameter(self.y_s.shape, name="y_s")
+        self.y_s_param.value = self.y_s
+
         # u[t-n, t-1]
         self.u_past_param = cp.Parameter((self.n * self.m, 1), name="u_past")
 
@@ -566,7 +580,7 @@ class LTIDataDrivenMPCController:
             self.define_internal_state_constraints()
         )
         self.terminal_constraints = (
-            self.define_terminal_state_constraints(u_s=self.u_s, y_s=self.y_s)
+            self.define_terminal_state_constraints()
             if self.use_terminal_constraints
             else []
         )
@@ -673,9 +687,7 @@ class LTIDataDrivenMPCController:
 
         return internal_state_constraints
 
-    def define_terminal_state_constraints(
-        self, u_s: np.ndarray, y_s: np.ndarray
-    ) -> list[cp.Constraint]:
+    def define_terminal_state_constraints(self) -> list[cp.Constraint]:
         """
         Define the terminal state constraints for the Data-Driven MPC
         formulation.
@@ -703,8 +715,8 @@ class LTIDataDrivenMPCController:
 
         # Replicate steady-state vectors to match minimum realization
         # dimensions for constraint comparison
-        u_sn = np.tile(u_s, (self.n, 1))
-        y_sn = np.tile(y_s, (self.n, 1))
+        u_sn = cp.vstack([self.u_s_param] * self.n)
+        y_sn = cp.vstack([self.y_s_param] * self.n)
 
         # Define terminal state constraints for Nominal and Robust MPC
         # based on Equations (3d) and (6c) of [1], respectively.
@@ -816,8 +828,10 @@ class LTIDataDrivenMPCController:
 
         # Define control-related cost
         control_cost = cp.quad_form(
-            ubar_pred - np.tile(self.u_s, (self.L, 1)), self.R
-        ) + cp.quad_form(ybar_pred - np.tile(self.y_s, (self.L, 1)), self.Q)
+            ubar_pred - cp.vstack([self.u_s_param] * self.L), self.R
+        ) + cp.quad_form(
+            ybar_pred - cp.vstack([self.y_s_param] * self.L), self.Q
+        )
 
         # Define noise-related cost if controller type is Robust
         if self.controller_type == LTIDataDrivenMPCType.ROBUST:
@@ -1072,10 +1086,6 @@ class LTIDataDrivenMPCController:
         """
         Set the control and system setpoints of the Data-Driven MPC controller.
 
-        This method updates the control and system setpoints, `u_s` and `y_s`
-        to their provided values. Then, it reinitializes the controller to
-        redefine the Data-Driven MPC formulation.
-
         Args:
             u_s (np.ndarray): The setpoint for control inputs.
             y_s (np.ndarray): The setpoint for system outputs.
@@ -1086,7 +1096,8 @@ class LTIDataDrivenMPCController:
 
         Note:
             This method sets the values of the `u_s` and `y_s` attributes with
-            the provided new setpoints.
+            the provided new setpoints and updates the values of `u_s_param`
+            and `y_r_param` to update the data-driven MPC controller setpoint.
         """
         # Validate input types and dimensions
         if u_s.shape != self.u_s.shape:
@@ -1100,9 +1111,8 @@ class LTIDataDrivenMPCController:
                 f"{self.y_s.shape}, but got {y_s.shape} instead."
             )
 
-        # Update Input-Output setpoint pairs
+        # Update input-output setpoints and their parameter values
         self.u_s = u_s
         self.y_s = y_s
-
-        # Reinitialize Data-Driven MPC controller
-        self.initialize_data_driven_mpc()
+        self.u_s_param.value = u_s
+        self.y_s_param.value = y_s
