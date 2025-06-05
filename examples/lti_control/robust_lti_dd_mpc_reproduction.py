@@ -41,7 +41,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 from paper_reproduction_utils import (
-    DataDrivenMPCScheme,
+    LTIDataDrivenMPCScheme,
     create_data_driven_mpc_controllers_reproduction,
     get_equilibrium_state_from_output,
     plot_input_output_reproduction,
@@ -98,9 +98,9 @@ y_ylimits_list = [(0.4, 1.0), (0.4, 1.0)]  # Output plot Y-axis limits
 
 # Robust Data-Driven MPC controllers showcased in paper example
 dd_mpc_controller_schemes = [
-    DataDrivenMPCScheme.TEC,
-    DataDrivenMPCScheme.TEC_N_STEP,
-    DataDrivenMPCScheme.UCON,
+    LTIDataDrivenMPCScheme.TEC,
+    LTIDataDrivenMPCScheme.TEC_N_STEP,
+    LTIDataDrivenMPCScheme.UCON,
 ]
 
 

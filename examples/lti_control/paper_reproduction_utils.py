@@ -27,7 +27,7 @@ from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
 
 
 # Define Data-Driven MPC controller schemes
-class DataDrivenMPCScheme(Enum):
+class LTIDataDrivenMPCScheme(Enum):
     """
     Robust Data-Driven MPC schemes, as presented in the paper example from
     [1].
@@ -57,17 +57,17 @@ class DDMPCSchemeConfig:
 
 # Define Data-Driven MPC scheme configurations
 DD_MPC_SCHEME_CONFIG = {
-    DataDrivenMPCScheme.TEC: DDMPCSchemeConfig(
+    LTIDataDrivenMPCScheme.TEC: DDMPCSchemeConfig(
         label="TEC",
         n_mpc_step=1,
         terminal_constraints=True,
     ),
-    DataDrivenMPCScheme.TEC_N_STEP: DDMPCSchemeConfig(
+    LTIDataDrivenMPCScheme.TEC_N_STEP: DDMPCSchemeConfig(
         label="TEC, n-step",
         n_mpc_step=-1,  # -1 used as a placeholder for 'n' steps
         terminal_constraints=True,
     ),
-    DataDrivenMPCScheme.UCON: DDMPCSchemeConfig(
+    LTIDataDrivenMPCScheme.UCON: DDMPCSchemeConfig(
         label="UCON",
         n_mpc_step=1,
         terminal_constraints=False,
@@ -76,17 +76,17 @@ DD_MPC_SCHEME_CONFIG = {
 
 # Define Matplotlib line parameters for Data-Driven MPC schemes
 DD_MPC_SCHEME_LINE_PARAMS = {
-    DataDrivenMPCScheme.TEC: {
+    LTIDataDrivenMPCScheme.TEC: {
         "color": "blue",
         "linestyle": "solid",
         "linewidth": 2,
     },
-    DataDrivenMPCScheme.TEC_N_STEP: {
+    LTIDataDrivenMPCScheme.TEC_N_STEP: {
         "color": "lime",
         "linestyle": (0, (5, 5)),
         "linewidth": 2,
     },
-    DataDrivenMPCScheme.UCON: {
+    LTIDataDrivenMPCScheme.UCON: {
         "color": "black",
         "linestyle": ":",
         "linewidth": 2,
@@ -136,7 +136,7 @@ def create_data_driven_mpc_controllers_reproduction(
     controller_config: LTIDataDrivenMPCParams,
     u_d: np.ndarray,
     y_d: np.ndarray,
-    data_driven_mpc_controller_schemes: list[DataDrivenMPCScheme],
+    data_driven_mpc_controller_schemes: list[LTIDataDrivenMPCScheme],
 ) -> list[LTIDataDrivenMPCController]:
     """
     Create `LTIDataDrivenMPCController` instances for a specified list of
@@ -163,9 +163,9 @@ def create_data_driven_mpc_controllers_reproduction(
         y_d (np.ndarray): An array of shape `(N, p)` representing the system's
             output response to `u_d`. `N` is the trajectory length and `p` is
             the number of system outputs.
-        data_driven_mpc_controller_schemes (list[DataDrivenMPCScheme]): A list
-            of `DataDrivenMPCScheme` objects, which represent Robust
-            Data-Driven MPC schemes based on the paper example from [1].
+        data_driven_mpc_controller_schemes (list[LTIDataDrivenMPCScheme]): A
+            list of Robust LTI Data-Driven MPC schemes defined based on the
+            paper example from [1].
 
     Returns:
         list[LTIDataDrivenMPCController]: A list of
@@ -225,7 +225,7 @@ def create_data_driven_mpc_controllers_reproduction(
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
     data_driven_mpc_controllers: list[LTIDataDrivenMPCController],
-    controller_schemes: list[DataDrivenMPCScheme],
+    controller_schemes: list[LTIDataDrivenMPCScheme],
     n_steps: int,
     np_random: Generator,
     verbose: int,
@@ -245,8 +245,8 @@ def simulate_data_driven_mpc_control_loops_reproduction(
             Time-Invariant (LTI) system.
         data_driven_mpc_controllers (list[LTIDataDrivenMPCController]): A
             list of LTI data-driven MPC controllers to be simulated.
-        controller_schemes (list[DataDrivenMPCScheme]): The corresponding MPC
-            schemes used to configure each controller in
+        controller_schemes (list[LTIDataDrivenMPCScheme]): The corresponding
+            LTI Data-Driven MPC schemes used to configure each controller in
             `data_driven_mpc_controllers`.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating
@@ -301,7 +301,7 @@ def simulate_data_driven_mpc_control_loops_reproduction(
 
 
 def plot_input_output_reproduction(
-    data_driven_mpc_controller_schemes: list[DataDrivenMPCScheme],
+    data_driven_mpc_controller_schemes: list[LTIDataDrivenMPCScheme],
     u_data: list[np.ndarray],
     y_data: list[np.ndarray],
     u_s: np.ndarray,
@@ -326,9 +326,8 @@ def plot_input_output_reproduction(
     for each controller scheme.
 
     Args:
-        data_driven_mpc_controller_schemes (list[DataDrivenMPCScheme]): A list
-            of `DataDrivenMPCScheme` objects representing Robust Data-Driven
-            MPC schemes.
+        data_driven_mpc_controller_schemes (list[LTIDataDrivenMPCScheme]): A
+            list of Robust LTI Data-Driven MPC schemes.
         u_data (list[np.ndarray]): A list of arrays containing control input
             data from each controller scheme simulation.
         y_data (list[np.ndarray]): A list of arrays containing system output
