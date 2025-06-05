@@ -41,7 +41,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 from paper_reproduction_utils import (
-    DataDrivenMPCScheme,
+    LTIDataDrivenMPCScheme,
     create_data_driven_mpc_controllers_reproduction,
     get_equilibrium_state_from_output,
     plot_input_output_reproduction,
@@ -98,9 +98,9 @@ y_ylimits_list = [(0.4, 1.0), (0.4, 1.0)]  # Output plot Y-axis limits
 
 # Robust Data-Driven MPC controllers showcased in paper example
 dd_mpc_controller_schemes = [
-    DataDrivenMPCScheme.TEC,
-    DataDrivenMPCScheme.TEC_N_STEP,
-    DataDrivenMPCScheme.UCON,
+    LTIDataDrivenMPCScheme.TEC,
+    LTIDataDrivenMPCScheme.TEC_N_STEP,
+    LTIDataDrivenMPCScheme.UCON,
 ]
 
 
@@ -145,7 +145,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--verbose",
         type=int,
-        default=2,
+        default=1,
         choices=[0, 1, 2],
         help="The verbosity level: 0 = no output, 1 = "
         "minimal output, 2 = detailed output.",
@@ -166,6 +166,10 @@ def main() -> None:
 
     # Verbose argument
     verbose = args.verbose
+
+    if verbose:
+        print("--- Robust LTI Data-Driven MPC Paper Reproduction ---")
+        print("-" * 53)
 
     # ==============================================
     # 1. Define Simulation and Controller Parameters
@@ -202,10 +206,10 @@ def main() -> None:
     n_steps = t_sim + 1  # Number of simulation steps
 
     # Create a Random Number Generator for reproducibility
-    np_random = np.random.default_rng(seed=seed)
-
     if verbose:
-        print(f"Random number generator initialized with seed: {seed}")
+        print(f"\nInitializing random number generator with seed: {seed}")
+
+    np_random = np.random.default_rng(seed=seed)
 
     # ==============================================
     # 2. Randomize Initial System State (Simulation)
@@ -231,6 +235,8 @@ def main() -> None:
     # 3. Initial Input-Output Data Generation (Simulation)
     # ====================================================
     if verbose:
+        print("\nInitial Input-Output Data Generation")
+        print("-" * 36)
         print("Generating initial input-output data")
 
     # Generate initial input-output data using a
@@ -251,11 +257,15 @@ def main() -> None:
     # 4. Data-Driven MPC Controller Instance Creation
     # ===============================================
     if verbose:
+        if verbose:
+            print("\nRobust Data-Driven MPC Controller Evaluation")
+            print("-" * 44)
+
         formatted_schemes = ", ".join(
             [scheme.name for scheme in dd_mpc_controller_schemes]
         )
         print(
-            "Initializing Robust Data-Driven MPC controllers following "
+            "Initializing Robust Data-Driven MPC controllers for "
             f"schemes: {formatted_schemes}"
         )
 
@@ -306,8 +316,8 @@ def main() -> None:
     # =============================================================
     if verbose:
         print(
-            "Simulating `n` steps using control input setpoint to "
-            "update controllers' past input-output measurements"
+            "Simulating `n` steps using the control input setpoint to "
+            "update each controller's past input-output data"
         )
 
     # Simulate `n` (the estimated system order) steps of the system using a
@@ -327,26 +337,29 @@ def main() -> None:
 
     # Update the past `n` input-output measurements of each
     # Data-Driven MPC controller (for reproduction)
-    for controller in dd_mpc_controllers:
-        controller.set_past_input_output_data(
-            u_past=U_n.reshape(-1, 1), y_past=Y_n.reshape(-1, 1)
-        )
-
     if verbose:
-        print("Controllers' past `n` input-output measurements updated")
+        print(
+            "Updating the past `n` input-output measurements for each "
+            "controller"
+        )
         if verbose > 1:
             print(
                 f"    Past input data = {U_n.shape}, Past output data = "
                 f"{Y_n.shape}"
             )
 
+    for controller in dd_mpc_controllers:
+        controller.set_past_input_output_data(
+            u_past=U_n.reshape(-1, 1), y_past=Y_n.reshape(-1, 1)
+        )
+
     # ===============================
     # 7. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
         print(
-            "Starting control system simulation for each Robust "
-            "Data-Driven MPC scheme"
+            "\nStarting control system simulations for all Robust "
+            "Data-Driven MPC schemes"
         )
 
     # Simulate the Data-Driven MPC control systems following Algorithm 1 for a
@@ -363,6 +376,7 @@ def main() -> None:
             simulate_data_driven_mpc_control_loops_reproduction(
                 system_model=system_model,
                 data_driven_mpc_controllers=dd_mpc_controllers,
+                controller_schemes=dd_mpc_controller_schemes,
                 n_steps=n_steps - n,
                 np_random=np_random,
                 verbose=verbose,
@@ -385,6 +399,10 @@ def main() -> None:
     # =========================================
     # 8. Plot Control System Inputs and Outputs
     # =========================================
+    if verbose:
+        print("\nReproduction Plot Visualization")
+        print("-" * 31)
+
     # Control input setpoint
     u_s_data = np.tile(dd_mpc_config["u_s"].T, (n_steps, 1))
 
@@ -416,6 +434,9 @@ def main() -> None:
     )
 
     plt.close()  # Close figures
+
+    if verbose:
+        print("\n--- LTI Data-Driven MPC Controller Reproduction finished ---")
 
 
 if __name__ == "__main__":

@@ -219,7 +219,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--verbose",
         type=int,
-        default=2,
+        default=1,
         choices=[0, 1, 2],
         help="The verbosity level: 0 = no output, 1 = "
         "minimal output, 2 = detailed output.",
@@ -257,6 +257,10 @@ def main() -> None:
     # Verbose argument
     verbose = args.verbose
 
+    if verbose:
+        print("--- Nonlinear Data-Driven MPC Controller Example ---")
+        print("-" * 52)
+
     # ==============================================
     # 1. Define Simulation and Controller Parameters
     # ==============================================
@@ -269,9 +273,6 @@ def main() -> None:
         cstr_model_key=cstr_model_key,
         verbose=verbose,
     )
-
-    if verbose:
-        print("Initialized nonlinear Continuous Stirred Tank Reactor system")
 
     # --- Define Data-Driven MPC Controller Parameters ---
     if verbose:
@@ -325,13 +326,13 @@ def main() -> None:
     n_steps = t_sim + 1  # Number of simulation steps
 
     # Create a Random Number Generator for reproducibility
-    np_random = np.random.default_rng(seed=seed)
-
     if verbose:
         if seed is None:
-            print("Random number generator initialized with a random seed")
+            print("\nInitializing random number generator with a random seed")
         else:
-            print(f"Random number generator initialized with seed: {seed}")
+            print(f"\nInitializing random number generator with seed: {seed}")
+
+    np_random = np.random.default_rng(seed=seed)
 
     # ============================================
     # 2. Set Initial System State for Reproduction
@@ -342,13 +343,12 @@ def main() -> None:
     # Set system state to x_0 for reproduction
     system_model.x = np.array(x_0)
 
-    if verbose > 1:
-        print(f"    Initial system state set to: {x_0}")
-
     # ====================================================
     # 3. Initial Input-Output Data Generation (Simulation)
     # ====================================================
     if verbose:
+        print("\nInitial Input-Output Data Generation")
+        print("-" * 36)
         print("Generating initial input-output data")
 
     # Generate initial input-output data using a
@@ -366,6 +366,8 @@ def main() -> None:
     # 4. Data-Driven MPC Controller Instance Creation
     # ===============================================
     if verbose:
+        print("\nNonlinear Data-Driven MPC Controller Evaluation")
+        print("-" * 47)
         print("Initializing Nonlinear Data-Driven MPC controller")
 
     # Create a Direct Data-Driven MPC controller
@@ -392,6 +394,10 @@ def main() -> None:
     # =====================================================
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
+    if verbose:
+        print("\nInput-Output Data Visualization")
+        print("-" * 31)
+
     N = dd_mpc_config["N"]  # Initial input-output trajectory length
 
     # System output setpoint
@@ -409,7 +415,7 @@ def main() -> None:
     plot_params = get_plot_params(config_path=plot_params_config_path)
 
     if verbose:
-        print("Displaying control system inputs and outputs plot")
+        print("Plotting control system input and output trajectories")
 
     plot_input_output(
         u_k=u_sys,
@@ -430,8 +436,8 @@ def main() -> None:
     # Plot extended input-output data
     if verbose:
         print(
-            "Displaying control system inputs and outputs including "
-            "initial input-output measurements"
+            "Plotting control system data including initial input-output "
+            "measurements"
         )
 
     plot_input_output(
@@ -453,7 +459,7 @@ def main() -> None:
 
     if verbose:
         print(
-            "Displaying reproduction plot: Data-Driven MPC for Nonlinear "
+            "Displaying reproduction plot: Data-Driven MPC for nonlinear "
             "systems"
         )
 
@@ -471,7 +477,7 @@ def main() -> None:
 
     # --- Animate extended input-output data ---
     if verbose:
-        print("Displaying animation from extended input-output data")
+        print("Generating animated plot of the extended input-output data")
 
     anim = plot_input_output_animation(
         u_k=U_data,
@@ -497,9 +503,9 @@ def main() -> None:
         anim_frames = math.ceil((data_length - 1) / anim_points_per_frame) + 1
 
         if verbose:
-            print("Saving extended input-output animation to file")
+            print("\nSaving extended input-output data animation")
             if verbose > 1:
-                print(f"    Saving animation to: {anim_path}")
+                print(f"    Output file: {anim_path}")
                 print(
                     f"    Animation FPS: {anim_fps}, Bitrate: "
                     f"{anim_bitrate} (video only), Data Length: "
@@ -507,7 +513,7 @@ def main() -> None:
                     f"{anim_points_per_frame}, Total Frames: {anim_frames}"
                 )
 
-        # Save input-output animation as an MP4 video
+        # Save input-output animation to a file
         save_animation(
             animation=anim,
             total_frames=anim_frames,
@@ -517,9 +523,12 @@ def main() -> None:
         )
 
         if verbose:
-            print("Animation file saved successfully")
+            print(f"\nAnimation file saved successfully to {anim_path}")
 
     plt.close()  # Close figures
+
+    if verbose:
+        print("\n--- Controller example finished ---")
 
 
 if __name__ == "__main__":

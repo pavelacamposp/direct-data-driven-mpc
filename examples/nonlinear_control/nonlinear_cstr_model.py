@@ -159,4 +159,10 @@ def create_nonlinear_cstr_system(
         eps_max=eps_max,
     )
 
+    if verbose:
+        print(
+            "Nonlinear Continuous Stirred Tank Reactor system initialized "
+            "with loaded parameters"
+        )
+
     return cstr_system

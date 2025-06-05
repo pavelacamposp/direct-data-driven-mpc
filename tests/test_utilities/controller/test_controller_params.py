@@ -251,8 +251,8 @@ def test_print_parameter_loading_details(
         assert out == ""
     elif verbosity_level == 1:
         assert (
-            f"Loaded {controller_label} Data-Driven MPC controller "
-            "parameters\n" in out
+            f"{controller_label} Data-Driven MPC controller parameters "
+            "successfully loaded\n" in out
         )
     else:
         assert (
