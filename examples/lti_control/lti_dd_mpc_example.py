@@ -251,7 +251,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--verbose",
         type=int,
-        default=2,
+        default=1,
         choices=[0, 1, 2],
         help="The verbosity level: 0 = no output, 1 = "
         "minimal output, 2 = detailed output.",
@@ -294,6 +294,10 @@ def main() -> None:
     # Verbose argument
     verbose = args.verbose
 
+    if verbose:
+        print("--- LTI Data-Driven MPC Controller Example ---")
+        print("-" * 46)
+
     # ==============================================
     # 1. Define Simulation and Controller Parameters
     # ==============================================
@@ -310,7 +314,7 @@ def main() -> None:
     # --- Define Data-Driven MPC Controller Parameters ---
     if verbose:
         print(
-            "Loading Data-Driven MPC controller parameters from "
+            "\nLoading LTI Data-Driven MPC controller parameters from "
             "configuration file"
         )
 
@@ -375,13 +379,13 @@ def main() -> None:
     n_steps = t_sim + 1  # Number of simulation steps
 
     # Create a Random Number Generator for reproducibility
-    np_random = np.random.default_rng(seed=seed)
-
     if verbose:
         if seed is None:
-            print("Random number generator initialized with a random seed")
+            print("\nInitializing random number generator with a random seed")
         else:
-            print(f"Random number generator initialized with seed: {seed}")
+            print(f"\nInitializing random number generator with seed: {seed}")
+
+    np_random = np.random.default_rng(seed=seed)
 
     # ==============================================
     # 2. Randomize Initial System State (Simulation)
@@ -407,6 +411,8 @@ def main() -> None:
     # 3. Initial Input-Output Data Generation (Simulation)
     # ====================================================
     if verbose:
+        print("\nInitial Input-Output Data Generation")
+        print("-" * 36)
         print("Generating initial input-output data")
 
     # Generate initial input-output data using a
@@ -427,7 +433,10 @@ def main() -> None:
     # 4. Data-Driven MPC Controller Instance Creation
     # ===============================================
     controller_type_str = dd_mpc_config["controller_type"].name.capitalize()
+
     if verbose:
+        print("\nLTI Data-Driven MPC Controller Evaluation")
+        print("-" * 41)
         print(f"Initializing {controller_type_str} Data-Driven MPC controller")
 
     # Create a Direct Data-Driven MPC controller
@@ -439,9 +448,7 @@ def main() -> None:
     # 5. Data-Driven MPC Control Loop
     # ===============================
     if verbose:
-        print(
-            f"Simulating {controller_type_str} Data-Driven MPC control system"
-        )
+        print("Simulating LTI Data-Driven MPC control system")
 
     # Simulate the Data-Driven MPC control system following Algorithm 1 for a
     # Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC
@@ -457,6 +464,10 @@ def main() -> None:
     # =====================================================
     # 6. Plot and Animate Control System Inputs and Outputs
     # =====================================================
+    if verbose:
+        print("\nInput-Output Data Visualization")
+        print("-" * 31)
+
     N = dd_mpc_config["N"]  # Initial input-output trajectory length
 
     # Control input setpoint
@@ -476,7 +487,7 @@ def main() -> None:
     plot_params = get_plot_params(config_path=plot_params_config_path)
 
     if verbose:
-        print("Displaying control system inputs and outputs plot")
+        print("Plotting control system input and output trajectories")
 
     plot_input_output(
         u_k=u_sys,
@@ -499,8 +510,8 @@ def main() -> None:
     # Plot extended input-output data
     if verbose:
         print(
-            "Displaying control system inputs and outputs including initial "
-            "input-output measurements"
+            "Plotting control system data including initial input-output "
+            "measurements"
         )
 
     plot_input_output(
@@ -516,7 +527,7 @@ def main() -> None:
 
     # --- Animate extended input-output data ---
     if verbose:
-        print("Displaying animation from extended input-output data")
+        print("Generating animated plot of the extended input-output data")
 
     anim = plot_input_output_animation(
         u_k=U_data,
@@ -538,9 +549,9 @@ def main() -> None:
         anim_frames = math.ceil((data_length - 1) / anim_points_per_frame) + 1
 
         if verbose:
-            print("Saving extended input-output animation to file")
+            print("\nSaving extended input-output data animation")
             if verbose > 1:
-                print(f"    Saving animation to: {anim_path}")
+                print(f"    Output file: {anim_path}")
                 print(
                     f"    Animation FPS: {anim_fps}, Bitrate: {anim_bitrate} "
                     f"(video only), Data Length: {data_length}, Points per "
@@ -548,7 +559,7 @@ def main() -> None:
                     f"{anim_frames}"
                 )
 
-        # Save input-output animation as an MP4 video
+        # Save input-output animation to a file
         save_animation(
             animation=anim,
             total_frames=anim_frames,
@@ -558,9 +569,12 @@ def main() -> None:
         )
 
         if verbose:
-            print("Animation file saved successfully")
+            print(f"\nAnimation file saved successfully to {anim_path}")
 
     plt.close()  # Close figures
+
+    if verbose:
+        print("\n--- Controller example finished ---")
 
 
 if __name__ == "__main__":

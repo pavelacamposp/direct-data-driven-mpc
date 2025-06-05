@@ -608,7 +608,8 @@ def print_parameter_loading_details(
     """
     if verbose == 1:
         print(
-            f"Loaded {controller_label} Data-Driven MPC controller parameters"
+            f"{controller_label} Data-Driven MPC controller parameters "
+            "successfully loaded"
         )
     if verbose > 1:
         print(

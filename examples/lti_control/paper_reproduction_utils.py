@@ -225,6 +225,7 @@ def create_data_driven_mpc_controllers_reproduction(
 def simulate_data_driven_mpc_control_loops_reproduction(
     system_model: LTIModel,
     data_driven_mpc_controllers: list[LTIDataDrivenMPCController],
+    controller_schemes: list[DataDrivenMPCScheme],
     n_steps: int,
     np_random: Generator,
     verbose: int,
@@ -243,8 +244,10 @@ def simulate_data_driven_mpc_control_loops_reproduction(
         system_model (LTIModel): An `LTIModel` instance representing a Linear
             Time-Invariant (LTI) system.
         data_driven_mpc_controllers (list[LTIDataDrivenMPCController]): A
-            list of `LTIDataDrivenMPCController` instances representing the
-            Data-Driven MPC controllers to be simulated.
+            list of LTI data-driven MPC controllers to be simulated.
+        controller_schemes (list[DataDrivenMPCScheme]): The corresponding MPC
+            schemes used to configure each controller in
+            `data_driven_mpc_controllers`.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating
             random noise for the system's output.
@@ -272,7 +275,11 @@ def simulate_data_driven_mpc_control_loops_reproduction(
     n_controllers = len(data_driven_mpc_controllers)
     for i, controller in enumerate(data_driven_mpc_controllers):
         if verbose:
-            print(f"Simulating controller {i + 1}/{n_controllers}")
+            scheme_name = controller_schemes[i].name
+            print(
+                f"  [{i + 1}/{n_controllers}] Simulating controller scheme "
+                f"{scheme_name}"
+            )
 
         # Reset system internal state
         system_model.set_state(state=model_initial_state)
