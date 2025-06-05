@@ -385,8 +385,11 @@ def main() -> None:
     # =========================================
     # 8. Plot Control System Inputs and Outputs
     # =========================================
-    u_s = dd_mpc_config["u_s"]  # Control input setpoint
-    y_s = dd_mpc_config["y_s"]  # System output setpoint
+    # Control input setpoint
+    u_s_data = np.tile(dd_mpc_config["u_s"].T, (n_steps, 1))
+
+    # System output setpoint
+    y_s_data = np.tile(dd_mpc_config["y_s"].T, (n_steps, 1))
 
     # --- Plot results in a figure replicating Fig. 2 of [1] ---
     plot_title = "Robust Data-Driven MPC Reproduction"
@@ -404,8 +407,8 @@ def main() -> None:
         data_driven_mpc_controller_schemes=dd_mpc_controller_schemes,
         u_data=u_sys_data,
         y_data=y_sys_data,
-        u_s=u_s,
-        y_s=y_s,
+        u_s=u_s_data,
+        y_s=y_s_data,
         u_ylimits_list=u_ylimits_list,
         y_ylimits_list=y_ylimits_list,
         title=plot_title,
