@@ -100,7 +100,7 @@ def test_nonlinear_dd_mpc_integration(
         and ext_out_incr_in
         and not n_n_mpc_step
     ):
-        dd_mpc_config["lamb_alpha_s"] = 1e-5
+        dd_mpc_config["lamb_alpha_s"] = 1e-4
 
     # Generate initial input-output data
     u, y = generate_initial_input_output_data(
