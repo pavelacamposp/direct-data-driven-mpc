@@ -18,7 +18,10 @@ jobs:
       - name: Install ffmpeg
         run: |
           apt-get update && \
-          apt-get install -y ffmpeg
+          until apt-get install -y ffmpeg; do \
+            echo "Retrying ffmpeg installation..."; \
+            sleep 5; \
+          done
 
       - name: Install dependencies
         run: |
@@ -71,7 +74,10 @@ jobs:
       - name: Install ffmpeg
         run: |
           apt-get update && \
-          apt-get install -y ffmpeg
+          until apt-get install -y ffmpeg; do \
+            echo "Retrying ffmpeg installation..."; \
+            sleep 5; \
+          done
 
       - name: Install dependencies
         run: |
