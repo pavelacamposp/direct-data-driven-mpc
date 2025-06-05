@@ -553,6 +553,7 @@ def plot_input_output_animation(
     outputs_line_params: dict[str, Any] | None = None,
     setpoints_line_params: dict[str, Any] | None = None,
     bounds_line_params: dict[str, Any] | None = None,
+    dynamic_setpoint_lines: bool = False,
     u_setpoint_var_symbol: str = "u^s",
     y_setpoint_var_symbol: str = "y^s",
     initial_steps: int | None = None,
@@ -638,6 +639,9 @@ def plot_input_output_animation(
             properties for customizing the lines used to plot the bounds of
             input-output data series (e.g., color, linestyle, linewidth). If
             not provided, Matplotlib's default line properties will be used.
+        dynamic_setpoint_lines (bool): Whether to update setpoint lines
+            dynamically. If `False`, they will be fully plotted at the start
+            using all setpoint data.
         u_setpoint_var_symbol (str): The variable symbol used to label the
             input setpoint data series (e.g., "u^s").
         y_setpoint_var_symbol (str): The variable symbol used to label the
@@ -760,6 +764,7 @@ def plot_input_output_animation(
             data_line_params=inputs_line_params,
             bounds_line_params=bounds_line_params,
             setpoint_line_params=setpoints_line_params,
+            dynamic_setpoint_lines=dynamic_setpoint_lines,
             var_symbol="u",
             setpoint_var_symbol=u_setpoint_var_symbol,
             var_label="Input",
@@ -798,6 +803,7 @@ def plot_input_output_animation(
             data_line_params=outputs_line_params,
             bounds_line_params=bounds_line_params,
             setpoint_line_params=setpoints_line_params,
+            dynamic_setpoint_lines=dynamic_setpoint_lines,
             var_symbol="y",
             setpoint_var_symbol=y_setpoint_var_symbol,
             var_label="Output",
@@ -852,7 +858,11 @@ def plot_input_output_animation(
         for i in range(m):
             # Get input setpoint if provided
             u_s_data = u_s[: current_index + 1, i] if u_s is not None else None
-            u_s_line = u_s_lines[i] if u_s is not None else None
+            u_s_line = (
+                u_s_lines[i]
+                if u_s is not None and dynamic_setpoint_lines
+                else None
+            )
 
             # Get initial step plot elements if
             # initial steps highlighting is enabled
@@ -898,6 +908,9 @@ def plot_input_output_animation(
 
         # Update output plot data
         for j in range(p):
+            # Get output setpoint line
+            y_s_line = y_s_lines[j] if dynamic_setpoint_lines else None
+
             # Get initial step plot elements if
             # initial steps highlighting is enabled
             if initial_steps:
@@ -927,7 +940,7 @@ def plot_input_output_animation(
                 initial_steps=initial_steps,
                 continuous_updates=continuous_updates,
                 data_line=y_lines[j],
-                setpoint_line=y_s_lines[j],
+                setpoint_line=y_s_line,
                 rect=y_rect,
                 y_axis_center=y_y_axis_centers[j],
                 right_rect_line=y_right_rect_line,
@@ -976,6 +989,7 @@ def initialize_data_animation(
     data_line_params: dict[str, Any],
     setpoint_line_params: dict[str, Any],
     bounds_line_params: dict[str, Any],
+    dynamic_setpoint_lines: bool,
     var_symbol: str,
     setpoint_var_symbol: str,
     var_label: str,
@@ -1025,6 +1039,9 @@ def initialize_data_animation(
         bounds_line_params (dict[str, Any]): A dictionary of Matplotlib
             properties for customizing the lines used to plot the bounds of
             the data series (e.g., color, linestyle, linewidth).
+        dynamic_setpoint_lines (bool): Whether to update setpoint lines
+            dynamically. If `False`, they will be fully plotted at the start
+            using all setpoint data.
         var_symbol (str): The variable symbol used to label the data series
             (e.g., "u" for inputs, "y" for outputs).
         setpoint_var_symbol (str): The variable symbol used to label the
@@ -1107,9 +1124,20 @@ def initialize_data_animation(
     # Initialize setpoint plot lines if provided
     setpoint_label = f"${setpoint_var_symbol}{index_str}$"
     if setpoint is not None:
-        setpoint_lines.append(
-            axis.plot([], [], **setpoint_line_params, label=setpoint_label)[0]
-        )
+        if dynamic_setpoint_lines:
+            setpoint_lines.append(
+                axis.plot(
+                    [], [], **setpoint_line_params, label=setpoint_label
+                )[0]
+            )
+        else:
+            # Plot setpoint line with entire setpoint data
+            axis.plot(
+                range(0, T),
+                setpoint,
+                **setpoint_line_params,
+                label=setpoint_label,
+            )
 
     # Define axis limits
     # Get minimum and maximum Y-axis values from data and setpoint

@@ -85,12 +85,15 @@ def test_plot_input_output(
 
 @pytest.mark.parametrize("highlight_initial_steps", [True, False])
 @pytest.mark.parametrize("plot_bounds", [True, False])
-def test_plot_data(plot_bounds: bool, highlight_initial_steps: bool) -> None:
+@pytest.mark.parametrize("include_setpoint", [True, False])
+def test_plot_data(
+    include_setpoint: bool, plot_bounds: bool, highlight_initial_steps: bool
+) -> None:
     # Define test parameters
     fig, ax = plt.subplots()
     T = 50
     data = np.linspace(0, 1, T)
-    setpoint = np.full(T, [0.7])
+    setpoint = np.full(T, [0.7]) if include_setpoint else None
     var_symbol = "u"
     setpoint_var_symbol = "u^s"
     data_label = "_test"
@@ -125,14 +128,24 @@ def test_plot_data(plot_bounds: bool, highlight_initial_steps: bool) -> None:
     lines = ax.get_lines()
 
     # Expected lines: data, setpoint, 2 x bounds, initial steps line
-    expected_lines = 2 + 2 * int(plot_bounds) + int(highlight_initial_steps)
+    expected_lines = (
+        1
+        + int(include_setpoint)
+        + 2 * int(plot_bounds)
+        + int(highlight_initial_steps)
+    )
+
     assert len(lines) == expected_lines
 
     # Verify data is correctly plotted
-    line_data_label_tuples: list[tuple[np.ndarray, str]] = [
-        (data, f"${var_symbol}_1${data_label}"),
-        (np.full(T, setpoint), f"${setpoint_var_symbol}_1$"),
-    ]
+    line_data_label_tuples: list[tuple[np.ndarray, str]]
+    if include_setpoint:
+        line_data_label_tuples = [
+            (data, f"${var_symbol}_1${data_label}"),
+            (np.full(T, setpoint), f"${setpoint_var_symbol}_1$"),
+        ]
+    else:
+        line_data_label_tuples = [(data, f"${var_symbol}_1${data_label}")]
 
     for line_data, line_label in line_data_label_tuples:
         data_line = next(
@@ -149,7 +162,9 @@ def test_plot_data(plot_bounds: bool, highlight_initial_steps: bool) -> None:
     legend = ax.get_legend()
     labels = [text.get_text() for text in legend.get_texts()]
     assert f"${var_symbol}_1${data_label}" in labels
-    assert f"${setpoint_var_symbol}_1$" in labels
+
+    if include_setpoint:
+        assert f"${setpoint_var_symbol}_1$" in labels
 
     if plot_bounds:
         assert "Constraints" in labels
@@ -177,7 +192,9 @@ def test_plot_data(plot_bounds: bool, highlight_initial_steps: bool) -> None:
 
 @pytest.mark.parametrize("continuous_updates", [True, False])
 @pytest.mark.parametrize("highlight_initial_steps", [True, False])
+@pytest.mark.parametrize("dynamic_setpoint_lines", [True, False])
 def test_plot_input_output_animation_return(
+    dynamic_setpoint_lines: bool,
     highlight_initial_steps: bool,
     continuous_updates: bool,
     dummy_plot_data: tuple[np.ndarray, ...],
@@ -191,6 +208,7 @@ def test_plot_input_output_animation_return(
         y_k=y_k,
         u_s=u_s,
         y_s=y_s,
+        dynamic_setpoint_lines=dynamic_setpoint_lines,
         initial_steps=initial_steps,
         continuous_updates=continuous_updates,
     )
@@ -202,9 +220,13 @@ def test_plot_input_output_animation_return(
 
 @pytest.mark.parametrize("continuous_updates", [True, False])
 @pytest.mark.parametrize("highlight_initial_steps", [True, False])
+@pytest.mark.parametrize("dynamic_setpoint_lines", [True, False])
 @pytest.mark.parametrize("plot_bounds", [True, False])
+@pytest.mark.parametrize("include_setpoint", [True, False])
 def test_initialize_data_animation(
+    include_setpoint: bool,
     plot_bounds: bool,
+    dynamic_setpoint_lines: bool,
     highlight_initial_steps: bool,
     continuous_updates: bool,
 ) -> None:
@@ -212,7 +234,9 @@ def test_initialize_data_animation(
     fig, ax = plt.subplots()
     T = 50
     data = np.sin(np.linspace(0, 2 * np.pi, T))
-    setpoint = np.cos(np.linspace(0, 2 * np.pi, T))
+    setpoint = (
+        np.cos(np.linspace(0, 2 * np.pi, T)) if include_setpoint else None
+    )
     bounds = (0.2, 0.8) if plot_bounds else None
     initial_steps = 10 if highlight_initial_steps else None
 
@@ -235,6 +259,7 @@ def test_initialize_data_animation(
         data_line_params={"color": "blue"},
         setpoint_line_params={"color": "green"},
         bounds_line_params={"color": "red"},
+        dynamic_setpoint_lines=dynamic_setpoint_lines,
         var_symbol="u",
         setpoint_var_symbol="u^s",
         var_label="Input",
@@ -258,7 +283,12 @@ def test_initialize_data_animation(
 
     # Verify plot objects are correctly created and stored in lists
     assert len(data_lines) == 1
-    assert len(setpoint_lines) == 1
+
+    if include_setpoint:
+        assert len(setpoint_lines) == (1 if dynamic_setpoint_lines else 0)
+    else:
+        assert len(setpoint_lines) == 0
+
     assert len(y_centers) == 1
 
     if initial_steps:
@@ -283,7 +313,9 @@ def test_initialize_data_animation(
 
 @pytest.mark.parametrize("continuous_updates", [True, False])
 @pytest.mark.parametrize("highlight_initial_steps", [True, False])
+@pytest.mark.parametrize("include_setpoint", [True, False])
 def test_update_data_animation(
+    include_setpoint: bool,
     highlight_initial_steps: bool,
     continuous_updates: bool,
 ) -> None:
@@ -292,12 +324,12 @@ def test_update_data_animation(
     T = 25
     index = 20
     data = np.sin(np.linspace(0, 1, T))
-    setpoint = np.cos(np.linspace(0, 1, T))
+    setpoint = np.cos(np.linspace(0, 1, T)) if include_setpoint else None
     initial_steps = 10 if highlight_initial_steps else None
 
     # Create dummy plot elements
     data_line = Line2D([], [])
-    setpoint_line = Line2D([], [])
+    setpoint_line = Line2D([], []) if include_setpoint else None
     rect = Rectangle((0, 0), 0, 1)
     right_line = Line2D([0], [0])
     left_line = Line2D([0], [0])
@@ -305,7 +337,10 @@ def test_update_data_animation(
     control_text = ax.text(0, 0, "Control")
 
     ax.add_line(data_line)
-    ax.add_line(setpoint_line)
+
+    if setpoint_line is not None:
+        ax.add_line(setpoint_line)
+
     ax.add_patch(rect)
     ax.add_line(right_line)
     ax.add_line(left_line)
