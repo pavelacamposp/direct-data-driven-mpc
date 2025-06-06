@@ -18,12 +18,14 @@ from direct_data_driven_mpc.utilities.controller.controller_params import (
 from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_lti_data_driven_mpc_control_loop,
 )
-from direct_data_driven_mpc.utilities.data_visualization import (
-    create_input_output_figure,
-    init_dict_if_none,
+from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.utilities.visualization.control_plot import (
     plot_input_output,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.utilities.visualization.plot_utilities import (
+    create_input_output_figure,
+    init_dict_if_none,
+)
 
 
 # Define Data-Driven MPC controller schemes

@@ -51,12 +51,14 @@ from direct_data_driven_mpc.utilities.controller.initial_data_generation import 
     generate_initial_input_output_data,
     randomize_initial_system_state,
 )
-from direct_data_driven_mpc.utilities.data_visualization import (
+from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
+from direct_data_driven_mpc.utilities.visualization.control_plot import (
     plot_input_output,
+)
+from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
     plot_input_output_animation,
     save_animation,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
 from direct_data_driven_mpc.utilities.yaml_config_loading import (
     load_yaml_config_params,
 )

@@ -41,8 +41,10 @@ from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
 from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
     generate_initial_input_output_data,
 )
-from direct_data_driven_mpc.utilities.data_visualization import (
+from direct_data_driven_mpc.utilities.visualization.control_plot import (
     plot_input_output,
+)
+from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
     plot_input_output_animation,
     save_animation,
 )
