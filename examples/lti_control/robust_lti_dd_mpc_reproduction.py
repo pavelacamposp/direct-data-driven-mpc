@@ -40,7 +40,7 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-from paper_reproduction_utils import (
+from reproduction_utilities.paper_reproduction_utils import (
     DD_MPC_SCHEME_CONFIG,
     DD_MPC_SCHEME_LINE_PARAMS,
     LTIDataDrivenMPCScheme,

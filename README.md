@@ -135,7 +135,7 @@ To use different controller parameters, modify the configuration files in [`exam
 Example system parameters are defined in [`examples/config/models/`](examples/config/models/).
 
 - **LTI system**: Parameters can be modified directly in [`four_tank_system_params.yaml`](examples/config/models/four_tank_system_params.yaml).
-- **Nonlinear system**: The system dynamics are defined in [`nonlinear_cstr_model.py`](examples/nonlinear_control/nonlinear_cstr_model.py) and its parameters in [`nonlinear_cstr_system_params.yaml`](examples/config/models/nonlinear_cstr_system_params.yaml).
+- **Nonlinear system**: The system dynamics are defined in [`nonlinear_cstr_model.py`](examples/nonlinear_control/utilities/nonlinear_cstr_model.py) and its parameters in [`nonlinear_cstr_system_params.yaml`](examples/config/models/nonlinear_cstr_system_params.yaml).
 
 ### Customizing Plots
 Matplotlib properties for input-output plots can be customized by modifying [plot_params.yaml](examples/config/plots/plot_params.yaml).
