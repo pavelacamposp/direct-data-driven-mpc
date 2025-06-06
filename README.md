@@ -206,7 +206,7 @@ To modularize the creation of Data-Driven MPC controllers, the following utility
 The [`direct_data_driven_mpc/utilities/controller/data_driven_mpc_sim.py`](direct_data_driven_mpc/utilities/controller/data_driven_mpc_sim.py) module implements the main control loops for both Data-Driven MPC controllers, following **Algorithms 1 and 2 of** [[1]](#1) for LTI systems and **Algorithm 1 of** [[2]](#2) for Nonlinear systems.
 
 ### Visualization (Static and Animated Plots)
-Custom functions are implemented in [`direct_data_driven_mpc/utilities/data_visualization.py`](direct_data_driven_mpc/utilities/data_visualization.py) to display input-output data in static and animated plots. These functions use Matplotlib for visualization and FFmpeg for saving animations in various formats (e.g., GIF, MP4).
+Custom functions are implemented in [`direct_data_driven_mpc/utilities/visualization/`](direct_data_driven_mpc/utilities/visualization/) to display input-output data in static and animated plots. These functions use Matplotlib for visualization and FFmpeg for saving animations in various formats (e.g., GIF, MP4).
 
 ### Examples
 The `examples` directory contains scripts that demonstrate the operation of the Data-Driven MPC controller and reproduce the results presented in the referenced papers.
