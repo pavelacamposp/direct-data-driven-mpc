@@ -23,11 +23,8 @@ def test_plot_input_output(
 
     # Test input-output plot
     try:
-        if include_u_s:
-            plot_input_output(u_k=u_k, y_k=y_k, u_s=u_s, y_s=y_s)
-        else:
-            plot_input_output(u_k=u_k, y_k=y_k, y_s=y_s)
-
+        u_s_arg = u_s if include_u_s else None
+        plot_input_output(u_k=u_k, y_k=y_k, u_s=u_s_arg, y_s=y_s)
     except Exception as e:
         pytest.fail(
             f"`plot_input_output` (`include_u_s` = {include_u_s}) raised an "
@@ -64,7 +61,69 @@ def test_plot_input_output(
         expected_y_s = np.full_like(y_k[:, j], y_s[j, 0])
         np.testing.assert_equal(np.asarray(lines[1].get_ydata()), expected_y_s)
 
-    plt.close("all")
+    plt.close(fig)
+
+
+def test_plot_input_output_custom_labels(
+    dummy_plot_data: tuple[np.ndarray, ...],
+) -> None:
+    # Define test parameters
+    u_k, y_k, u_s, y_s = dummy_plot_data
+    _, m = u_k.shape
+    _, p = y_k.shape
+
+    # Define custom labels
+    input_label = "Custom Input"
+    output_label = "Custom Output"
+
+    u_setpoint_labels = [f"Setpoint U{i}" for i in range(m)]
+    y_setpoint_labels = [f"Setpoint Y{i}" for i in range(p)]
+    x_axis_labels = [f"Time X-Axis {i}" for i in range(m)]
+    input_y_axis_labels = [f"Input Y-Axis {i}" for i in range(m)]
+    output_y_axis_labels = [f"Output Y-Axis {i}" for i in range(p)]
+
+    plot_input_output(
+        u_k=u_k,
+        y_k=y_k,
+        u_s=u_s,
+        y_s=y_s,
+        input_label=input_label,
+        output_label=output_label,
+        u_setpoint_labels=u_setpoint_labels,
+        y_setpoint_labels=y_setpoint_labels,
+        input_y_axis_labels=input_y_axis_labels,
+        output_y_axis_labels=output_y_axis_labels,
+        x_axis_labels=x_axis_labels,
+    )
+
+    # Get current figure and axes
+    fig = plt.gcf()
+    axs = fig.axes
+
+    # Verify that custom variable and axis labels are included in the plot
+    # Check for inputs
+    for i, ax in enumerate(axs[:m]):
+        assert ax.get_xlabel() == x_axis_labels[i]
+        assert ax.get_ylabel() == input_y_axis_labels[i]
+
+        legend_texts = [
+            text.get_text() for text in ax.get_legend().get_texts()
+        ]
+        assert input_label in legend_texts
+        assert u_setpoint_labels[i] in legend_texts
+
+    # Check for outputs
+    for i, ax in enumerate(axs[m:]):
+        assert ax.get_xlabel() == x_axis_labels[i]
+        assert ax.get_ylabel() == output_y_axis_labels[i]
+
+        legend_texts = [
+            text.get_text() for text in ax.get_legend().get_texts()
+        ]
+        assert output_label in legend_texts
+        assert y_setpoint_labels[i] in legend_texts
+
+    plt.close(fig)
 
 
 @pytest.mark.parametrize("highlight_initial_steps", [True, False])
