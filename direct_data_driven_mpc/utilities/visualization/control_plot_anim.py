@@ -503,7 +503,7 @@ def initialize_data_animation(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float | None): An array containing setpoint values to be
+        setpoint (np.ndarray | None): An array containing setpoint values to be
             plotted. If `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
@@ -769,7 +769,7 @@ def update_data_animation(
     Args:
         index (int): The current data index.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float | None): An array containing setpoint values to be
+        setpoint (np.ndarray | None): An array containing setpoint values to be
             plotted. If `None`, the setpoint line will not be plotted.
         data_length (int): The length of the `data` array.
         points_per_frame (int): The number of data points shown per animation

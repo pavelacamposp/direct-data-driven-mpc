@@ -80,7 +80,7 @@ def test_plot_data(
     setpoint = np.full(T, [0.7]) if include_setpoint else None
     var_symbol = "u"
     setpoint_var_symbol = "u^s"
-    data_label = "_test"
+    var_suffix = "_test"
     bounds = (0.2, 0.8) if plot_bounds else None
     initial_steps = 10 if highlight_initial_steps else None
 
@@ -95,7 +95,7 @@ def test_plot_data(
         var_symbol=var_symbol,
         setpoint_var_symbol=setpoint_var_symbol,
         var_label="Input",
-        data_label=data_label,
+        var_suffix=var_suffix,
         initial_text="Init",
         control_text="Control",
         display_initial_text=True,
@@ -125,11 +125,11 @@ def test_plot_data(
     line_data_label_tuples: list[tuple[np.ndarray, str]]
     if include_setpoint:
         line_data_label_tuples = [
-            (data, f"${var_symbol}_1${data_label}"),
+            (data, f"${var_symbol}_1${var_suffix}"),
             (np.full(T, setpoint), f"${setpoint_var_symbol}_1$"),
         ]
     else:
-        line_data_label_tuples = [(data, f"${var_symbol}_1${data_label}")]
+        line_data_label_tuples = [(data, f"${var_symbol}_1${var_suffix}")]
 
     for line_data, line_label in line_data_label_tuples:
         data_line = next(
@@ -145,7 +145,7 @@ def test_plot_data(
     # Check legend
     legend = ax.get_legend()
     labels = [text.get_text() for text in legend.get_texts()]
-    assert f"${var_symbol}_1${data_label}" in labels
+    assert f"${var_symbol}_1${var_suffix}" in labels
 
     if include_setpoint:
         assert f"${setpoint_var_symbol}_1$" in labels

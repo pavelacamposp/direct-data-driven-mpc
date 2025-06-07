@@ -7,6 +7,7 @@ from .control_plot import (
     plot_input_output,
 )
 from .plot_utilities import (
+    check_list_length,
     create_input_output_figure,
     init_dict_if_none,
 )
@@ -28,6 +29,13 @@ def plot_input_output_comparison(
     y_ylimits_list: list[tuple[float, float]] | None = None,
     fontsize: int = 12,
     title: str | None = None,
+    input_labels: list[str] | None = None,
+    output_labels: list[str] | None = None,
+    u_setpoint_labels: list[str] | None = None,
+    y_setpoint_labels: list[str] | None = None,
+    x_axis_labels: list[str] | None = None,
+    input_y_axis_labels: list[str] | None = None,
+    output_y_axis_labels: list[str] | None = None,
 ) -> None:
     """
     Plot multiple input-output trajectories with setpoints in a Matplotlib
@@ -86,43 +94,51 @@ def plot_input_output_comparison(
             automatically.
         fontsize (int): The fontsize for labels, legends and axes ticks.
         title (str | None): The title for the created plot figure.
+        input_labels (list[str] | None): A list of strings specifying custom
+            legend labels for input data series. If provided, the label at each
+            index will override the default label constructed using
+            `var_suffix_list`.
+        output_labels (list[str] | None): A list of strings specifying custom
+            legend labels for output data series. If provided, the label at
+            each index will override the default label constructed using
+            `var_suffix_list`.
+        u_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for input setpoint series. If provided, the
+            label at each index will override the corresponding default label.
+        y_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for output setpoint series. If provided, the
+            label at each index will override the corresponding default label.
+        x_axis_labels (list[str] | None): A list of strings specifying custom
+            X-axis labels for each subplot. If provided, the label at each
+            index will override the corresponding default label.
+        input_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each input subplot. If provided, the label
+            at each index will override the corresponding default label.
+        output_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each output subplot. If provided, the
+            label at each index will override the corresponding default label.
 
     Raises:
         ValueError: If input/output array shapes, or line parameter list
             lengths, are not as expected.
     """
-    u_shape = u_data[0].shape
-    y_shape = y_data[0].shape
-
-    # Validate input-output data dimensions
-    if not all(u.shape == u_shape for u in u_data):
-        raise ValueError(
-            f"All `u_data` arrays must have the same shape ({u_shape})."
-        )
-
-    if not all(y.shape == y_shape for y in y_data):
-        raise ValueError(
-            f"All `y_data` arrays must have the same shape ({y_shape})."
-        )
-
-    # Validate plot line parameter list lengths
-    if inputs_line_param_list and outputs_line_param_list:
-        input_line_params_len = len(inputs_line_param_list)
-        output_line_params_len = len(outputs_line_param_list)
-        if input_line_params_len != output_line_params_len:
-            raise ValueError(
-                "The lengths of `inputs_line_param_list` ("
-                f"{input_line_params_len}) and `outputs_line_param_list` ("
-                f"{output_line_params_len}) do not match."
-            )
+    validate_comparison_plot_parameters(
+        u_data=u_data,
+        y_data=y_data,
+        inputs_line_param_list=inputs_line_param_list,
+        outputs_line_param_list=outputs_line_param_list,
+        var_suffix_list=var_suffix_list,
+        input_labels=input_labels,
+        output_labels=output_labels,
+    )
 
     # Initialize Matplotlib params if not provided
     setpoints_line_params = init_dict_if_none(setpoints_line_params)
     legend_params = init_dict_if_none(legend_params)
 
     # Create figure with subplots
-    m = u_shape[1]  # Number of inputs
-    p = y_shape[1]  # Number of outputs
+    m = u_data[0].shape[1]  # Number of inputs
+    p = y_data[0].shape[1]  # Number of outputs
 
     _, axs_u, axs_y = create_input_output_figure(
         m=m, p=p, figsize=figsize, dpi=dpi, fontsize=fontsize, title=title
@@ -142,7 +158,10 @@ def plot_input_output_comparison(
             else None
         )
 
+        # Retrieve plot labels for each index
         var_suffix = var_suffix_list[i] if var_suffix_list else ""
+        input_label = input_labels[i] if input_labels else None
+        output_label = output_labels[i] if output_labels else None
 
         # Plot input-output data
         plot_input_output(
@@ -153,7 +172,7 @@ def plot_input_output_comparison(
             inputs_line_params=inputs_line_params,
             outputs_line_params=outputs_line_params,
             setpoints_line_params=setpoints_line_params,
-            data_label=var_suffix,
+            var_suffix=var_suffix,
             dpi=dpi,
             u_ylimits_list=u_ylimits_list,
             y_ylimits_list=y_ylimits_list,
@@ -161,7 +180,60 @@ def plot_input_output_comparison(
             legend_params=legend_params,
             axs_u=axs_u,
             axs_y=axs_y,
+            input_label=input_label,
+            output_label=output_label,
+            u_setpoint_labels=u_setpoint_labels,
+            y_setpoint_labels=y_setpoint_labels,
+            x_axis_labels=x_axis_labels,
+            input_y_axis_labels=input_y_axis_labels,
+            output_y_axis_labels=output_y_axis_labels,
         )
 
     # Show plot
     plt.show()
+
+
+def validate_comparison_plot_parameters(
+    u_data: list[np.ndarray],
+    y_data: list[np.ndarray],
+    inputs_line_param_list: list[dict[str, Any]] | None = None,
+    outputs_line_param_list: list[dict[str, Any]] | None = None,
+    var_suffix_list: list[str] | None = None,
+    input_labels: list[str] | None = None,
+    output_labels: list[str] | None = None,
+) -> None:
+    if not u_data or not y_data:
+        raise ValueError(
+            "`u_data` and `y_data` must contain at least one simulation."
+        )
+
+    if len(u_data) != len(y_data):
+        raise ValueError(
+            "`u_data` and `y_data` must have the same number of trajectories."
+        )
+
+    # Validate input-output data dimensions
+    u_shape = u_data[0].shape
+    y_shape = y_data[0].shape
+
+    if not all(u.shape == u_shape for u in u_data):
+        raise ValueError(
+            f"All `u_data` arrays must have the same shape ({u_shape})."
+        )
+
+    if not all(y.shape == y_shape for y in y_data):
+        raise ValueError(
+            f"All `y_data` arrays must have the same shape ({y_shape})."
+        )
+
+    # Validate list lengths if provided
+    n_sim = len(u_data)
+
+    # Lists for input plots
+    check_list_length("inputs_line_param_list", inputs_line_param_list, n_sim)
+    check_list_length(
+        "outputs_line_param_list", outputs_line_param_list, n_sim
+    )
+    check_list_length("var_suffix_list", var_suffix_list, n_sim)
+    check_list_length("input_labels", input_labels, n_sim)
+    check_list_length("output_labels", output_labels, n_sim)

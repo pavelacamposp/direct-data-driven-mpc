@@ -39,10 +39,17 @@ def plot_input_output(
     y_ylimits_list: list[tuple[float, float]] | None = None,
     fontsize: int = 12,
     legend_params: dict[str, Any] | None = None,
-    data_label: str = "",
+    var_suffix: str = "",
     axs_u: list[Axes] | None = None,
     axs_y: list[Axes] | None = None,
     title: str | None = None,
+    input_label: str | None = None,
+    output_label: str | None = None,
+    u_setpoint_labels: list[str] | None = None,
+    y_setpoint_labels: list[str] | None = None,
+    x_axis_labels: list[str] | None = None,
+    input_y_axis_labels: list[str] | None = None,
+    output_y_axis_labels: list[str] | None = None,
 ) -> None:
     """
     Plot input-output data with setpoints in a Matplotlib figure.
@@ -148,7 +155,7 @@ def plot_input_output(
             properties for customizing the plot legends (e.g., fontsize,
             loc, handlelength). If not provided, Matplotlib's default legend
             properties will be used.
-        data_label (str): A string appended to each data series label in the
+        var_suffix (str): A string appended to each data series label in the
             plot legend.
         axs_u (list[Axes] | None): A list of external axes for input plots.
             Defaults to `None`.
@@ -158,6 +165,29 @@ def plot_input_output(
             the figure is created internally (i.e., `axs_u` and `axs_y` are not
             provided). If `None`, no title will be displayed. Defaults to
             `None`.
+        input_label (str | None): A custom legend label for the input data
+            series. If provided, this label will override the default label
+            constructed using `var_suffix`.
+        output_label (str | None): A custom legend label for the output data
+            series. If provided, this label will override the default label
+            constructed using `var_suffix`.
+        u_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for input setpoint series. If provided, the
+            label at each index will override the default label constructed
+            using `u_setpoint_var_symbol`.
+        y_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for output setpoint series. If provided, the
+            label at each index will override the default label constructed
+            using `y_setpoint_var_symbol`.
+        x_axis_labels (list[str] | None): A list of strings specifying custom
+            X-axis labels for each subplot. If provided, the label at each
+            index will override the default "Time step $k$".
+        input_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each input subplot. If provided, the label
+            at each index will override the default constructed labels.
+        output_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each output subplot. If provided, the
+            label at each index will override the default constructed labels.
 
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
@@ -174,6 +204,11 @@ def plot_input_output(
         y_bounds_list=y_bounds_list,
         u_ylimits_list=u_ylimits_list,
         y_ylimits_list=y_ylimits_list,
+        u_setpoint_labels=u_setpoint_labels,
+        y_setpoint_labels=y_setpoint_labels,
+        x_axis_labels=x_axis_labels,
+        input_y_axis_labels=input_y_axis_labels,
+        output_y_axis_labels=output_y_axis_labels,
     )
 
     # Initialize Matplotlib params if not provided
@@ -235,7 +270,7 @@ def plot_input_output(
             var_symbol="u",
             setpoint_var_symbol=u_setpoint_var_symbol,
             var_label="Input",
-            data_label=data_label,
+            var_suffix=var_suffix,
             initial_text=initial_excitation_text,
             control_text=control_text,
             display_initial_text=display_initial_text,
@@ -246,6 +281,10 @@ def plot_input_output(
             bounds=u_bounds,
             initial_steps=initial_steps,
             plot_ylimits=u_plot_ylimit,
+            data_label=input_label,
+            setpoint_labels=u_setpoint_labels,
+            x_axis_labels=x_axis_labels,
+            y_axis_labels=input_y_axis_labels,
         )
 
     # Plot output data
@@ -254,7 +293,7 @@ def plot_input_output(
         plot_index = -1 if p == 1 else j
 
         # Get output bounds if provided
-        y_bounds = y_bounds_list[i] if y_bounds_list else None
+        y_bounds = y_bounds_list[j] if y_bounds_list else None
 
         # Get plot Y-axis limit if provided
         y_plot_ylimits = y_ylimits_list[j] if y_ylimits_list else None
@@ -274,7 +313,7 @@ def plot_input_output(
             var_symbol="y",
             setpoint_var_symbol=y_setpoint_var_symbol,
             var_label="Output",
-            data_label=data_label,
+            var_suffix=var_suffix,
             initial_text=initial_measurement_text,
             control_text=control_text,
             display_initial_text=display_initial_text,
@@ -285,6 +324,10 @@ def plot_input_output(
             bounds=y_bounds,
             initial_steps=initial_steps,
             plot_ylimits=y_plot_ylimits,
+            data_label=output_label,
+            setpoint_labels=y_setpoint_labels,
+            x_axis_labels=x_axis_labels,
+            y_axis_labels=output_y_axis_labels,
         )
 
     # Show the plot if the figure was created internally
@@ -303,7 +346,7 @@ def plot_data(
     var_symbol: str,
     setpoint_var_symbol: str,
     var_label: str,
-    data_label: str,
+    var_suffix: str,
     initial_text: str,
     control_text: str,
     display_initial_text: bool,
@@ -314,6 +357,10 @@ def plot_data(
     bounds: tuple[float, float] | None = None,
     initial_steps: int | None = None,
     plot_ylimits: tuple[float, float] | None = None,
+    data_label: str | None = None,
+    setpoint_labels: list[str] | None = None,
+    x_axis_labels: list[str] | None = None,
+    y_axis_labels: list[str] | None = None,
 ) -> None:
     """
     Plot a data series with setpoints in a specified axis. Optionally,
@@ -328,7 +375,7 @@ def plot_data(
     Args:
         axis (Axes): The Matplotlib axis object to plot on.
         data (np.ndarray): An array containing data to be plotted.
-        setpoint (float | None): An array containing setpoint values to be
+        setpoint (np.ndarray | None): An array containing setpoint values to be
             plotted. If `None`, the setpoint line will not be plotted.
         index (int): The index of the data used for labeling purposes (e.g.,
             "u_1", "u_2"). If set to -1, subscripts will not be added to
@@ -348,7 +395,7 @@ def plot_data(
             setpoint data series (e.g., "u^s" for inputs, "y^s" for outputs).
         var_label (str): The variable label representing the control signal
             (e.g., "Input", "Output").
-        data_label (str): A string appended to each data series label in the
+        var_suffix (str): A string appended to each data series label in the
             plot legend.
         initial_text (str): Label text to display over the initial measurement
             period of the plot.
@@ -376,6 +423,20 @@ def plot_data(
             upper_limit) specifying the Y-axis limits for the plot. If `None`,
             the Y-axis limits will be determined automatically. Defaults to
             `None`.
+        data_label (str | None): A custom legend label for the data series. If
+            provided, this label will override the default constructed label
+            using `var_symbol` and `var_suffix`.
+        setpoint_labels (list[str] | None): A list of strings specifying custom
+            legend labels for the setpoint series. If provided, the label at
+            `index` will be used instead of the default label constructed using
+            `setpoint_var_symbol`.
+        x_axis_labels (list[str] | None): A list of strings specifying custom
+            X-axis labels for each subplot or data index. If provided, the
+            label at `index` will override the default "Time step $k$".
+        y_axis_labels (list[str] | None): A list of strings specifying custom
+            Y-axis labels for each subplot or data index. If provided, the
+            label at `index` will override the default label constructed from
+            `var_label` and `var_symbol`.
     """
     T = data.shape[0]  # Data length
 
@@ -383,21 +444,30 @@ def plot_data(
     index_str = f"_{index + 1}" if index != -1 else ""
 
     # Plot data series
+    data_label_str = (
+        data_label if data_label else f"${var_symbol}{index_str}${var_suffix}"
+    )
+
     axis.plot(
         range(0, T),
         data,
         **data_line_params,
-        label=f"${var_symbol}{index_str}${data_label}",
+        label=data_label_str,
     )
 
     # Plot setpoint if provided
-    setpoint_label = f"${setpoint_var_symbol}{index_str}$"
+    setpoint_label_str = (
+        setpoint_labels[index]
+        if setpoint_labels
+        else f"${setpoint_var_symbol}{index_str}$"
+    )
+
     if setpoint is not None:
         axis.plot(
             range(0, T),
             setpoint,
             **setpoint_line_params,
-            label=setpoint_label,
+            label=setpoint_label_str,
         )
 
     # Plot bounds if provided
@@ -465,17 +535,24 @@ def plot_data(
                 u_control_text.set_visible(False)
 
     # Format labels, legend and ticks
-    axis.set_xlabel("Time step $k$", fontsize=fontsize)
-    axis.set_ylabel(
-        f"{var_label} ${var_symbol}{index_str}$", fontsize=fontsize
+    x_axis_label_str = (
+        x_axis_labels[index] if x_axis_labels else "Time step $k$"
     )
+    y_axis_label_str = (
+        y_axis_labels[index]
+        if y_axis_labels
+        else f"{var_label} ${var_symbol}{index_str}$"
+    )
+
+    axis.set_xlabel(x_axis_label_str, fontsize=fontsize)
+    axis.set_ylabel(y_axis_label_str, fontsize=fontsize)
     axis.legend(**legend_params)
     axis.tick_params(axis="both", labelsize=fontsize)
 
     # Remove duplicate labels from legend (required for external figures
     # that plot multiple data sequences on the same plot to avoid label
     # repetition) and reposition labels
-    end_labels_list = [setpoint_label]
+    end_labels_list = [setpoint_label_str]
     if bounds is not None:
         end_labels_list.append(bounds_label)
 
