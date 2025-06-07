@@ -163,6 +163,9 @@ def plot_input_output_comparison(
         input_label = input_labels[i] if input_labels else None
         output_label = output_labels[i] if output_labels else None
 
+        # Plot setpoint line only for the first data set to prevent cluttering
+        plot_setpoint_lines = i == 0
+
         # Plot input-output data
         plot_input_output(
             u_k=u_data[i],
@@ -187,6 +190,7 @@ def plot_input_output_comparison(
             x_axis_labels=x_axis_labels,
             input_y_axis_labels=input_y_axis_labels,
             output_y_axis_labels=output_y_axis_labels,
+            plot_setpoint_lines=plot_setpoint_lines,
         )
 
     # Show plot

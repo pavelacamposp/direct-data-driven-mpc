@@ -50,6 +50,7 @@ def plot_input_output(
     x_axis_labels: list[str] | None = None,
     input_y_axis_labels: list[str] | None = None,
     output_y_axis_labels: list[str] | None = None,
+    plot_setpoint_lines: bool = True,
 ) -> None:
     """
     Plot input-output data with setpoints in a Matplotlib figure.
@@ -188,6 +189,9 @@ def plot_input_output(
         output_y_axis_labels (list[str] | None): A list of strings specifying
             custom Y-axis labels for each output subplot. If provided, the
             label at each index will override the default constructed labels.
+        plot_setpoint_lines (bool): Whether to plot setpoint lines. If `False`,
+            no setpoint line will be plotted. Used for avoiding duplicate
+            setpoint entries in multi-data plots. Defaults to `True`.
 
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
@@ -285,6 +289,7 @@ def plot_input_output(
             setpoint_labels=u_setpoint_labels,
             x_axis_labels=x_axis_labels,
             y_axis_labels=input_y_axis_labels,
+            plot_setpoint_lines=plot_setpoint_lines,
         )
 
     # Plot output data
@@ -328,6 +333,7 @@ def plot_input_output(
             setpoint_labels=y_setpoint_labels,
             x_axis_labels=x_axis_labels,
             y_axis_labels=output_y_axis_labels,
+            plot_setpoint_lines=plot_setpoint_lines,
         )
 
     # Show the plot if the figure was created internally
@@ -361,6 +367,7 @@ def plot_data(
     setpoint_labels: list[str] | None = None,
     x_axis_labels: list[str] | None = None,
     y_axis_labels: list[str] | None = None,
+    plot_setpoint_lines: bool = True,
 ) -> None:
     """
     Plot a data series with setpoints in a specified axis. Optionally,
@@ -437,6 +444,8 @@ def plot_data(
             Y-axis labels for each subplot or data index. If provided, the
             label at `index` will override the default label constructed from
             `var_label` and `var_symbol`.
+        plot_setpoint_lines (bool): Whether to plot setpoint lines. If `False`,
+            no setpoint line will be plotted.
     """
     T = data.shape[0]  # Data length
 
@@ -462,7 +471,7 @@ def plot_data(
         else f"${setpoint_var_symbol}{index_str}$"
     )
 
-    if setpoint is not None:
+    if setpoint is not None and plot_setpoint_lines:
         axis.plot(
             range(0, T),
             setpoint,
