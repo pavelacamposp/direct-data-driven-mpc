@@ -18,9 +18,12 @@ def plot_input_output_comparison(
     y_data: list[np.ndarray],
     y_s: np.ndarray,
     u_s: np.ndarray | None = None,
+    u_bounds_list: list[tuple[float, float]] | None = None,
+    y_bounds_list: list[tuple[float, float]] | None = None,
     inputs_line_param_list: list[dict[str, Any]] | None = None,
     outputs_line_param_list: list[dict[str, Any]] | None = None,
     setpoints_line_params: dict[str, Any] | None = None,
+    bounds_line_params: dict[str, Any] | None = None,
     var_suffix_list: list[str] | None = None,
     legend_params: dict[str, Any] | None = None,
     figsize: tuple[int, int] = (14, 8),
@@ -60,6 +63,18 @@ def plot_input_output_comparison(
             setpoint values. These setpoints correspond to the control inputs
             from `u_data`. If `None`, input setpoint lines will not be plotted.
             Defaults to `None`.
+        u_bounds_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_bound, upper_bound) specifying bounds for each input data
+            sequence. If provided, horizontal lines representing these bounds
+            will be plotted in each subplot. If `None`, no horizontal lines
+            will be plotted. The number of tuples must match the number of
+            input data sequences. Defaults to `None`.
+        y_bounds_list (list[tuple[float, float]] | None): A list of tuples
+            (lower_bound, upper_bound) specifying bounds for each output data
+            sequence. If provided, horizontal lines representing these bounds
+            will be plotted in each subplot. If `None`, no horizontal lines
+            will be plotted. The number of tuples must match the number of
+            output data sequences. Defaults to `None`.
         inputs_line_param_list (list[dict[str, Any]] | None): A list of
             `M` dictionaries, where each dictionary specifies Matplotlib
             properties for customizing the plot lines corresponding to one of
@@ -74,6 +89,10 @@ def plot_input_output_comparison(
             Matplotlib properties for customizing the lines used to plot the
             setpoint values (e.g., color, linestyle, linewidth). If not
             provided, Matplotlib's default line properties will be used.
+        bounds_line_params (dict[str, Any] | None): A dictionary of Matplotlib
+            properties for customizing the lines used to plot the bounds of
+            input-output data series (e.g., color, linestyle, linewidth). If
+            not provided, Matplotlib's default line properties will be used.
         var_suffix_list (list[str] | None): A list of strings appended to each
             data series label in the plot legend. If not provided, no strings
             are appended.
@@ -172,9 +191,12 @@ def plot_input_output_comparison(
             y_k=y_data[i],
             u_s=u_s,
             y_s=y_s,
+            u_bounds_list=u_bounds_list,
+            y_bounds_list=y_bounds_list,
             inputs_line_params=inputs_line_params,
             outputs_line_params=outputs_line_params,
             setpoints_line_params=setpoints_line_params,
+            bounds_line_params=bounds_line_params,
             var_suffix=var_suffix,
             dpi=dpi,
             u_ylimits_list=u_ylimits_list,
