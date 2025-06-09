@@ -73,6 +73,11 @@ def validate_data_dimensions(
     y_bounds_list: list[tuple[float, float]] | None = None,
     u_ylimits_list: list[tuple[float, float]] | None = None,
     y_ylimits_list: list[tuple[float, float]] | None = None,
+    u_setpoint_labels: list[str] | None = None,
+    y_setpoint_labels: list[str] | None = None,
+    x_axis_labels: list[str] | None = None,
+    input_y_axis_labels: list[str] | None = None,
+    output_y_axis_labels: list[str] | None = None,
 ) -> None:
     """
     Validate that input-output data arrays, and bound and ylimit lists have the
@@ -103,11 +108,21 @@ def validate_data_dimensions(
         y_ylimits_list (list[tuple[float, float]] | None): A list of tuples
             (lower_limit, upper_limit) specifying the Y-axis limits for each
             output subplot.
+        u_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for input setpoint series.
+        y_setpoint_labels (list[str] | None): A list of strings specifying
+            custom legend labels for output setpoint series.
+        x_axis_labels (list[str] | None): A list of strings specifying custom
+            X-axis labels for each subplot.
+        input_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each input subplot.
+        output_y_axis_labels (list[str] | None): A list of strings specifying
+            custom Y-axis labels for each output subplot.
 
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if
-            the lengths of `u_bounds_list`, `y_bounds_list`, `u_ylimits_list`,
-            or `y_ylimits_list` do not match the number of subplots.
+            the lengths of the list arguments do not match the number of
+            subplots.
     """
     # Check input-output data dimensions
     if u_k.shape[0] != y_k.shape[0]:
@@ -129,26 +144,22 @@ def validate_data_dimensions(
                 f"`u_s` ({u_s.shape}) must match."
             )
 
-    # Define function to check list lengths
-    def check_bounds_list_length(
-        name: str, data_list: list[tuple[float, float]] | None, expected: int
-    ) -> None:
-        if data_list and len(data_list) != expected:
-            raise ValueError(
-                f"The length of `{name}` ({len(data_list)}) does not match "
-                f"the expected value ({expected})."
-            )
-
-    # Error handling for bounds list lengths
+    # Error handling for list lengths
     m = u_k.shape[1]  # Number of inputs
     p = y_k.shape[1]  # Number of outputs
 
-    check_bounds_list_length("u_bounds_list", u_bounds_list, m)
-    check_bounds_list_length("y_bounds_list", y_bounds_list, p)
+    check_list_length("u_bounds_list", u_bounds_list, m)
+    check_list_length("y_bounds_list", y_bounds_list, p)
+    check_list_length("u_ylimits_list", u_ylimits_list, m)
+    check_list_length("y_ylimits_list", y_ylimits_list, p)
 
-    # Error handling for y-limit lengths
-    check_bounds_list_length("u_ylimits_list", u_ylimits_list, m)
-    check_bounds_list_length("y_ylimits_list", y_ylimits_list, p)
+    check_list_length("u_setpoint_labels", u_setpoint_labels, m)
+    check_list_length("y_setpoint_labels", y_setpoint_labels, p)
+
+    # Lists for Y-axis labels
+    check_list_length("x_axis_labels", x_axis_labels, max(m, p))
+    check_list_length("input_y_axis_labels", input_y_axis_labels, m)
+    check_list_length("output_y_axis_labels", output_y_axis_labels, p)
 
 
 def get_padded_limits(
@@ -333,3 +344,19 @@ def create_input_output_figure(
 
 def init_dict_if_none(d: dict[Any, Any] | None) -> dict[Any, Any]:
     return {} if d is None else d
+
+
+def get_label_from_list(
+    label_list: list[str], index: int, fallback: str
+) -> str:
+    return label_list[index] if label_list else fallback
+
+
+def check_list_length(
+    name: str, data_list: list | None, expected: int
+) -> None:
+    if data_list and len(data_list) != expected:
+        raise ValueError(
+            f"The length of `{name}` ({len(data_list)}) does not match "
+            f"the expected value ({expected})."
+        )

@@ -76,6 +76,51 @@ def test_validate_data_dimensions_bounds_lists(
         )
 
 
+@pytest.mark.parametrize(
+    "invalid_parameter",
+    [
+        "u_setpoint_labels",
+        "y_setpoint_labels",
+        "x_axis_labels",
+        "input_y_axis_labels",
+        "output_y_axis_labels",
+    ],
+)
+def test_validate_data_dimensions_label_lists(
+    invalid_parameter: str,
+    dummy_plot_data: tuple[np.ndarray, ...],
+) -> None:
+    u_k, y_k, u_s, y_s = dummy_plot_data
+    m = u_k.shape[1]
+    p = y_k.shape[1]
+
+    # Determine correct length based on param_name
+    if "u_setpoint" in invalid_parameter or "input_" in invalid_parameter:
+        expected_len = m
+    elif "y_setpoint" in invalid_parameter or "output_" in invalid_parameter:
+        expected_len = p
+    else:
+        expected_len = max(m, p)
+
+    invalid_list = ["Label"] * (expected_len + 1)
+
+    kwargs: dict[str, Any] = {invalid_parameter: invalid_list}
+
+    # Verify `ValueError` is raised when bounds or
+    # y-limits list lengths mismatch
+    with pytest.raises(
+        ValueError,
+        match=rf"{invalid_parameter}.*does not match",
+    ):
+        validate_data_dimensions(
+            u_k=u_k,
+            y_k=y_k,
+            u_s=u_s,
+            y_s=y_s,
+            **kwargs,
+        )
+
+
 @pytest.mark.parametrize("include_X_s", [True, False])
 def test_get_padded_limits(include_X_s: bool) -> None:
     # Define test parameters

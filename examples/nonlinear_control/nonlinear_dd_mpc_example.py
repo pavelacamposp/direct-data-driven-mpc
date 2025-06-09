@@ -24,7 +24,7 @@ from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
-from nonlinear_cstr_model import create_nonlinear_cstr_system
+from utilities.nonlinear_cstr_model import create_nonlinear_cstr_system
 
 from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     AlphaRegType,
