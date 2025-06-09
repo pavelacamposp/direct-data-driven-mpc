@@ -20,16 +20,18 @@ def test_plot_input_output(
     u_k, y_k, u_s, y_s = dummy_plot_data
     T, m = u_k.shape
     _, p = y_k.shape
+    u_bounds_list = [(0.0, 1.0)] * m
+    y_bounds_list = [(0.0, 1.0)] * p
 
     # Test input-output plot
-    try:
-        u_s_arg = u_s if include_u_s else None
-        plot_input_output(u_k=u_k, y_k=y_k, u_s=u_s_arg, y_s=y_s)
-    except Exception as e:
-        pytest.fail(
-            f"`plot_input_output` (`include_u_s` = {include_u_s}) raised an "
-            f"exception: {e}"
-        )
+    plot_input_output(
+        u_k=u_k,
+        y_k=y_k,
+        u_s=u_s if include_u_s else None,
+        y_s=y_s,
+        u_bounds_list=u_bounds_list,
+        y_bounds_list=y_bounds_list,
+    )
 
     # Get current figure and axes
     fig = plt.gcf()
@@ -51,15 +53,37 @@ def test_plot_input_output(
                 np.asarray(lines[1].get_ydata()), expected_u_s
             )
 
+        # Check input constraint lines
+        constraint_lines = lines[2:] if include_u_s else lines[1:]
+        assert len(constraint_lines) == 2
+        for line, bound in zip(
+            constraint_lines, u_bounds_list[j], strict=True
+        ):
+            y_data = line.get_ydata()
+
+            # Check if constraint is plotted as a horizontal line
+            assert np.allclose(y_data, [bound, bound])
+
     # Verify that output data is correctly plotted
     for j, ax in enumerate(axs[m:]):
         # Check input line data
         lines = ax.get_lines()
         np.testing.assert_equal(np.asarray(lines[0].get_ydata()), y_k[:, j])
 
-        # Check input setpoint line data if included
+        # Check output setpoint line data
         expected_y_s = np.full_like(y_k[:, j], y_s[j, 0])
         np.testing.assert_equal(np.asarray(lines[1].get_ydata()), expected_y_s)
+
+        # Check output constraint lines
+        constraint_lines = lines[2:]
+        assert len(constraint_lines) == 2
+        for line, bound in zip(
+            constraint_lines, u_bounds_list[j], strict=True
+        ):
+            y_data = line.get_ydata()
+
+            # Check if constraint is plotted as a horizontal line
+            assert np.allclose(y_data, [bound, bound])
 
     plt.close(fig)
 
