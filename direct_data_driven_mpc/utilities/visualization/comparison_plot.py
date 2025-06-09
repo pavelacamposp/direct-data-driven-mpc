@@ -182,8 +182,8 @@ def plot_input_output_comparison(
         input_label = input_labels[i] if input_labels else None
         output_label = output_labels[i] if output_labels else None
 
-        # Plot setpoint line only for the first data set to prevent cluttering
-        plot_setpoint_lines = i == 0
+        # Plot setpoint line only for the last data set to prevent cluttering
+        plot_setpoint_lines = i == (len(u_data) - 1)
 
         # Plot input-output data
         plot_input_output(
