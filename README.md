@@ -1,5 +1,15 @@
 # Direct Data-Driven Model Predictive Control (MPC)
 
+<div align="center">
+
+[![GitHub Actions status](https://github.com/pavelacamposp/direct_data_driven_mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct_data_driven_mpc/actions/workflows/ci_workflow.yml)
+[![codecov](https://codecov.io/gh/pavelacamposp/direct_data_driven_mpc/graph/badge.svg)](https://codecov.io/gh/pavelacamposp/direct_data_driven_mpc)
+[![Ruff](https://img.shields.io/badge/Lint%20%26%20Format-Ruff-blue?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
+[![Python](https://img.shields.io/badge/python-3.10%20|%203.12-blue)](https://docs.python.org/3.10)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
 <table>
   <tr>
     <th width="50%">Robust Data-Driven MPC</th>
