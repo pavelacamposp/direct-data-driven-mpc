@@ -42,6 +42,7 @@ TEST_NONLINEAR_DD_MPC_CONFIG_PATH = os.path.join(
 TEST_NONLINEAR_DD_MPC_PARAMS_KEY = "test_nonlinear_dd_mpc_params"
 
 
+@pytest.mark.integration
 @pytest.mark.nonlinear_integration
 @pytest.mark.parametrize("n_n_mpc_step", [True, False])
 @pytest.mark.parametrize("ext_out_incr_in", [True, False])

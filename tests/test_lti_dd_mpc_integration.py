@@ -47,6 +47,7 @@ TEST_LTI_DD_MPC_CONFIG_PATH = os.path.join(
 TEST_LTI_DD_MPC_PARAMS_KEY = "test_lti_dd_mpc_params"
 
 
+@pytest.mark.integration
 @pytest.mark.lti_integration
 @pytest.mark.parametrize("n_n_mpc_step", [True, False])
 @pytest.mark.parametrize(

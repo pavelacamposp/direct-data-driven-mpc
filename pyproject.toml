@@ -78,6 +78,7 @@ ignore-words-list = "Ot"
 
 [tool.pytest.ini_options]
 markers =[
+  "integration: Marks all integration tests",
   "lti_integration: Integration tests for LTI controller",
   "nonlinear_integration: Integration tests for nonlinear controller"
 ]

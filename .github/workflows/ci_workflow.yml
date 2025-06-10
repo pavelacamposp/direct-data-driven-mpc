@@ -52,7 +52,7 @@ jobs:
           coverage run --parallel-mode -m pytest \
             --maxfail=2 \
             --disable-warnings \
-            -m "not lti_integration and not nonlinear_integration"
+            -m "not integration"
 
       - name: Upload coverage file
         uses: actions/upload-artifact@v4
