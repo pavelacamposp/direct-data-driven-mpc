@@ -127,7 +127,12 @@ jobs:
       - name: Install coverage
         run: pip install coverage
 
-      - name: Combine and show coverage report
+      - name: Generate coverage report
         run: |
           coverage combine
-          coverage report
+          coverage xml
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
