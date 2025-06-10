@@ -124,10 +124,13 @@ jobs:
         with:
           name: coverage-data-nonlinear_integration
 
-      - name: Install Git and coverage
+      - name: Install dependencies
         run: |
           apt-get update \
           && apt-get install -y --no-install-recommends git \
+            git \
+            curl \
+            gpg \
           && pip install coverage
 
       - name: Generate coverage report
