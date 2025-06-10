@@ -49,10 +49,10 @@ jobs:
 
       - name: Run unit tests with coverage
         run: |
-          coverage run --parallel-mode -m pytest \
+          coverage run --parallel-mode --branch -m pytest \
             --maxfail=2 \
             --disable-warnings \
-            -m "not lti_integration and not nonlinear_integration"
+            -m "not integration"
 
       - name: Upload coverage file
         uses: actions/upload-artifact@v4
@@ -90,7 +90,7 @@ jobs:
 
       - name: Run integration test with coverage - ${{ matrix.test_type }}
         run: |
-          coverage run --parallel-mode -m pytest \
+          coverage run --parallel-mode --branch -m pytest \
             --disable-warnings \
             -m "${{ matrix.test_type }}"
 
@@ -124,10 +124,21 @@ jobs:
         with:
           name: coverage-data-nonlinear_integration
 
-      - name: Install coverage
-        run: pip install coverage
+      - name: Install dependencies
+        run: |
+          apt-get update \
+          && apt-get install -y --no-install-recommends git \
+            git \
+            curl \
+            gpg \
+          && pip install coverage
 
-      - name: Combine and show coverage report
+      - name: Generate coverage report
         run: |
           coverage combine
-          coverage report
+          coverage xml
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
