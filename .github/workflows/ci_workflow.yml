@@ -49,7 +49,7 @@ jobs:
 
       - name: Run unit tests with coverage
         run: |
-          coverage run --parallel-mode -m pytest \
+          coverage run --parallel-mode --branch -m pytest \
             --maxfail=2 \
             --disable-warnings \
             -m "not integration"
@@ -90,7 +90,7 @@ jobs:
 
       - name: Run integration test with coverage - ${{ matrix.test_type }}
         run: |
-          coverage run --parallel-mode -m pytest \
+          coverage run --parallel-mode --branch -m pytest \
             --disable-warnings \
             -m "${{ matrix.test_type }}"
 
