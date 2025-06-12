@@ -39,6 +39,7 @@ def plot_input_output_comparison(
     x_axis_labels: list[str] | None = None,
     input_y_axis_labels: list[str] | None = None,
     output_y_axis_labels: list[str] | None = None,
+    show: bool = True,
 ) -> None:
     """
     Plot multiple input-output trajectories with setpoints in a Matplotlib
@@ -136,6 +137,9 @@ def plot_input_output_comparison(
         output_y_axis_labels (list[str] | None): A list of strings specifying
             custom Y-axis labels for each output subplot. If provided, the
             label at each index will override the corresponding default label.
+        show (bool): Whether to call `plt.show()` for the figure or not. Useful
+            when adding plot elements externally before rendering the figure.
+            Defaults to `True`.
 
     Raises:
         ValueError: If input/output array shapes, or line parameter list
@@ -215,8 +219,9 @@ def plot_input_output_comparison(
             plot_setpoint_lines=plot_setpoint_lines,
         )
 
-    # Show plot
-    plt.show()
+    # Show plot if enabled
+    if show:
+        plt.show()
 
 
 def validate_comparison_plot_parameters(
