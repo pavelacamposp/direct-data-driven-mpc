@@ -12,5 +12,5 @@ coverage:
         informational: true
 
 comment:
-  layout: "reach, diff, files"
+  layout: "header, diff, files"
   behavior: default
