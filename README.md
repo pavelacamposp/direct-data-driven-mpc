@@ -2,8 +2,8 @@
 
 <div align="center">
 
-[![GitHub Actions status](https://github.com/pavelacamposp/direct_data_driven_mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct_data_driven_mpc/actions/workflows/ci_workflow.yml)
-[![codecov](https://codecov.io/gh/pavelacamposp/direct_data_driven_mpc/graph/badge.svg)](https://codecov.io/gh/pavelacamposp/direct_data_driven_mpc)
+[![GitHub Actions status](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml)
+[![codecov](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc/graph/badge.svg)](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc)
 [![Ruff](https://img.shields.io/badge/Lint%20%26%20Format-Ruff-blue?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
 [![Python](https://img.shields.io/badge/python-3.10%20|%203.12-blue)](https://docs.python.org/3.10)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -75,11 +75,11 @@ Follow these steps to create a virtual environment and install this package:
 
 1. Clone this repository.
    ```bash
-   git clone https://github.com/pavelacamposp/direct_data_driven_mpc.git
+   git clone https://github.com/pavelacamposp/direct-data-driven-mpc.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd direct_data_driven_mpc
+   cd direct-data-driven-mpc
    ```
 3. Create a virtual environment in the project directory:
     - Unix/macOS:
@@ -99,7 +99,7 @@ Follow these steps to create a virtual environment and install this package:
         ```cmd
         venv\Scripts\activate
         ```
-5. Install `direct_data_driven_mpc` (Data-Driven MPC controller package):
+5. Install `direct-data-driven-mpc` (Data-Driven MPC controller package):
     ```bash
     pip install -e .
     ```
