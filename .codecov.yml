@@ -11,6 +11,4 @@ coverage:
         target: auto
         informational: true
 
-comment:
-  layout: "header, diff, files"
-  behavior: default
+comment: false
