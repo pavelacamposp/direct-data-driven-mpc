@@ -1,9 +1,9 @@
-numpy
-matplotlib>=3.9.0
+numpy==2.3.1
+matplotlib==3.10.3
 clarabel==0.10.0
-cvxpy==1.6.5
-tqdm
-PyYAML
+cvxpy==1.6.6
+tqdm==4.67.1
+PyYAML==6.0.2
 PyQt6
 pre-commit
-mypy
+mypy==1.16.1

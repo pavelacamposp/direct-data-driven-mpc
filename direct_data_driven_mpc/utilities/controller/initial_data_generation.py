@@ -59,6 +59,9 @@ def randomize_initial_system_state(
 
     # Randomize initial system state before excitation
     x_i0 = np_random.uniform(-1.0, 1.0, size=ns)
+
+    assert isinstance(x_i0, np.ndarray)  # Prevent mypy [arg-type] error
+
     system_model.set_state(state=x_i0)
 
     # Generate a random input array

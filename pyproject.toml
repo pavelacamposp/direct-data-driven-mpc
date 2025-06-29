@@ -41,7 +41,7 @@ Homepage = "https://github.com/pavelacamposp/direct-data-driven-mpc"
 [project.optional-dependencies]
 dev = [
   "pre-commit",
-  "mypy",
+  "mypy==1.16.1",
 ]
 
 [tool.ruff]
