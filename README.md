@@ -84,7 +84,7 @@ Follow these steps to create a virtual environment and install this package:
 3. Create a virtual environment in the project directory:
     - Unix/macOS:
         ```bash
-        python3 -m venv venv
+        python3 -m venv .venv
         ```
     - Windows:
         ```cmd
@@ -115,7 +115,7 @@ Follow these steps to create a virtual environment and install this package:
 > ```
 
 ## Usage
-The example scripts [`lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_example.py) and [`nonlinear_dd_mpc_example.py`](examples/nonlinear_control/nonlinear_dd_mpc_example.py)demonstrate the setup, simulation, and data visualization of the Data-Driven MPC controllers applied to LTI and Nonlinear systems, respectively.
+The example scripts [`lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_example.py) and [`nonlinear_dd_mpc_example.py`](examples/nonlinear_control/nonlinear_dd_mpc_example.py) demonstrate the setup, simulation, and data visualization of the Data-Driven MPC controllers applied to LTI and Nonlinear systems, respectively.
 
 To run the example scripts, use the following commands:
 
