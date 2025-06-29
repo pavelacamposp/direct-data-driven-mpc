@@ -93,7 +93,7 @@ Follow these steps to create a virtual environment and install this package:
 4. Activate the virtual environment:
     - Unix/macOS:
         ```bash
-        source venv/bin/activate
+        source .venv/bin/activate
         ```
     - Windows:
         ```cmd
