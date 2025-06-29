@@ -134,7 +134,7 @@ def simulate_lti_data_driven_mpc_control_loop(
             mpc_cost_val = data_driven_mpc_controller.get_optimal_cost_value()
             print_mpc_step_info(
                 verbose=verbose,
-                step=t,
+                step=k,
                 mpc_cost_val=mpc_cost_val,
                 u_sys_k=u_sys[k, :].flatten(),
                 u_s=u_s.flatten(),
@@ -305,7 +305,7 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
             mpc_cost_val = data_driven_mpc_controller.get_optimal_cost_value()
             print_mpc_step_info(
                 verbose=verbose,
-                step=t,
+                step=k,
                 mpc_cost_val=mpc_cost_val,
                 y_sys_k=y_sys[k, :].flatten(),
                 y_s=y_r.flatten(),

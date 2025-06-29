@@ -1097,7 +1097,7 @@ class LTIDataDrivenMPCController:
         Note:
             This method sets the values of the `u_s` and `y_s` attributes with
             the provided new setpoints and updates the values of `u_s_param`
-            and `y_r_param` to update the data-driven MPC controller setpoint.
+            and `y_s_param` to update the data-driven MPC controller setpoint.
         """
         # Validate input types and dimensions
         if u_s.shape != self.u_s.shape:
@@ -1105,7 +1105,7 @@ class LTIDataDrivenMPCController:
                 "Incorrect dimensions. `u_s` must have shape "
                 f"{self.u_s.shape}, but got {u_s.shape} instead."
             )
-        if y_s.shape != self.y_s.shape:  # Replace with actual expected shape
+        if y_s.shape != self.y_s.shape:
             raise ValueError(
                 "Incorrect dimensions. `y_s` must have shape "
                 f"{self.y_s.shape}, but got {y_s.shape} instead."
