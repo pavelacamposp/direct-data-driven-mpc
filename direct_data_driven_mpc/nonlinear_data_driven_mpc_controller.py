@@ -1385,7 +1385,7 @@ class NonlinearDataDrivenMPCController:
         if y_r.shape != self.y_r.shape:
             raise ValueError(
                 "Incorrect dimensions. `y_r` must have shape "
-                f"{self.y_s.shape}, but got {y_r.shape} instead."
+                f"{self.y_r.shape}, but got {y_r.shape} instead."
             )
 
         # Update output setpoint and its parameter value
