@@ -823,7 +823,7 @@ class NonlinearDataDrivenMPCController:
             input-output equilibrium pair (predicted equilibrium setpoints
             `u_s`, `y_s`) in any minimal realization (last `n` input-output
             predictions, as considered in [2]). Defined by Equation (22d).
-        - **Input**: Constraints both the equilibrium input (predicted input
+        - **Input**: Constrains both the equilibrium input (predicted input
             setpoint `u_s`) and the input trajectory (`ubar`). Defined by
             Equation (22e).
 
@@ -946,8 +946,8 @@ class NonlinearDataDrivenMPCController:
         References:
             [2]: See class-level docstring for full reference details.
         """
-        # Define terminal state constraints for Nominal and Robust MPC
-        # based on Equation (3d) and Equation (6c) of [2], respectively.
+        # Define terminal state constraints for the
+        # Nonlinear MPC based on Equation (22d) of [2]
         terminal_constraints = [
             cp.vstack([self.ubar_terminal, self.ybar_terminal])
             == cp.vstack(

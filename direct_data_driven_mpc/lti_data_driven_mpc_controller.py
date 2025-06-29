@@ -556,7 +556,7 @@ class LTIDataDrivenMPCController:
             input-output pair (`u_s`, `y_s`) in any minimal realization (last
             `n` input-output predictions, as considered in [1]). Defined by
             Equations (3d) (Nominal) and (6c) (Robust).
-        - **Input**: Constraints the predicted input (`ubar`). Defined by
+        - **Input**: Constrains the predicted input (`ubar`). Defined by
             Equation (6c).
         - **Slack Variable**: Bounds a slack variable that accounts
             for noisy online measurements and for noisy data used for
