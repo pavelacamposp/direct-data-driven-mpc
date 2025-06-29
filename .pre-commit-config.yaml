@@ -15,9 +15,9 @@ repos:
         language: system
         types: [python]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.7
+    rev: v0.12.1
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
       - id: ruff-format
   - repo: https://github.com/codespell-project/codespell
@@ -26,7 +26,7 @@ repos:
       - id: codespell
         files: ^.*\.(py|c|cpp|h|m|md|rst|yml)$
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.37.0
+    rev: v1.37.1
     hooks:
       - id: yamllint
         args: ["--strict"]
