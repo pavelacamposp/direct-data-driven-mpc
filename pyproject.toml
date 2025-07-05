@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "direct-data-driven-mpc"
-version = "1.1"
+version = "1.1.0"
 authors = [
   { name = "Pável A. Campos-Peña", email = "pcamposp@uni.pe" }
 ]
