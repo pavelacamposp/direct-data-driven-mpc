@@ -16,8 +16,8 @@
     <th width="50%">Nonlinear Data-Driven MPC</th>
   </tr>
   <tr>
-    <td><img src="docs/resources/robust_dd_mpc_anim.gif" alt="Robust Data-Driven MPC Animation"></td>
-    <td><img src="docs/resources/nonlinear_dd_mpc_anim.gif" alt="Nonlinear Data-Driven MPC Animation"></td>
+    <td><img src="https://raw.githubusercontent.com/pavelacamposp/direct-data-driven-mpc/main/docs/resources/robust_dd_mpc_anim.gif" alt="Robust Data-Driven MPC Animation"></td>
+    <td><img src="https://raw.githubusercontent.com/pavelacamposp/direct-data-driven-mpc/main/docs/resources/nonlinear_dd_mpc_anim.gif" alt="Nonlinear Data-Driven MPC Animation"></td>
   </tr>
   <tr>
     <td>Robust controller applied to an LTI system.</td>
@@ -190,7 +190,7 @@ The figures below show the expected output from executing these scripts. The gra
 
 |LTI Data-Driven MPC|Nonlinear Data-Driven MPC|
 |-|-|
-|<img src="docs/resources/robust_dd_mpc_reproduction.png" alt="Robust Data-Driven MPC Animation">|<img src="docs/resources/nonlinear_dd_mpc_reproduction.png" alt="Nonlinear Data-Driven MPC Animation">|
+|<img src="https://raw.githubusercontent.com/pavelacamposp/direct-data-driven-mpc/main/docs/resources/robust_dd_mpc_reproduction.png" alt="Robust Data-Driven MPC Animation">|<img src="https://raw.githubusercontent.com/pavelacamposp/direct-data-driven-mpc/main/docs/resources/nonlinear_dd_mpc_reproduction.png" alt="Nonlinear Data-Driven MPC Animation">|
 |Reproduction of results from [[1]](#1)|Reproduction of results from [[2]](#2)|
 
 ## Code Structure
