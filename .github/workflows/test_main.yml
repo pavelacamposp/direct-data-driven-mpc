@@ -1,0 +1,87 @@
+---
+name: Test Main
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  unit_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_container:
+          - version: "3.10"
+            image: "python:3.10-slim-bullseye"
+          - version: "3.11"
+            image: "python:3.11-slim-bullseye"
+          - version: "3.12"
+            image: "python:3.12-slim-bullseye"
+    container:
+      image: ${{ matrix.python_container.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          apt-get update && \
+          until apt-get install -y ffmpeg; do \
+            echo "Retrying ffmpeg installation..."; \
+            sleep 5; \
+          done
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --default-timeout=60 --retries=5 -r requirements-ci.txt
+
+      - name: Install project package in editable mode
+        run: |
+          pip install -e .
+
+      - name: Run unit tests
+        run: |
+          pytest --maxfail=2 --disable-warnings -m "not integration"
+
+  integration_tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_container:
+          - version: "3.10"
+            image: "python:3.10-slim-bullseye"
+          - version: "3.11"
+            image: "python:3.11-slim-bullseye"
+          - version: "3.12"
+            image: "python:3.12-slim-bullseye"
+        test_type: [lti_integration, nonlinear_integration]
+    container:
+      image: ${{ matrix.python_container.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          apt-get update && \
+          until apt-get install -y ffmpeg; do \
+            echo "Retrying ffmpeg installation..."; \
+            sleep 5; \
+          done
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --default-timeout=60 --retries=5 -r requirements-ci.txt
+
+      - name: Install project package in editable mode
+        run: |
+          pip install -e .
+
+      - name: Run integration test - ${{ matrix.test_type }}
+        run: |
+          pytest --disable-warnings -m "${{ matrix.test_type }}"
