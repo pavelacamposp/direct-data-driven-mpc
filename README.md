@@ -2,6 +2,7 @@
 
 <div align="center">
 
+[![PyPi](https://img.shields.io/pypi/v/direct-data-driven-mpc)](https://pypi.org/project/direct-data-driven-mpc)
 [![GitHub Actions status](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml)
 [![codecov](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc/graph/badge.svg)](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc)
 [![Ruff](https://img.shields.io/badge/Lint%20%26%20Format-Ruff-blue?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
@@ -66,53 +67,36 @@ This package requires the following:
     ```
 
 ## Installation
-Follow these steps to create a virtual environment and install this package:
+Install `direct-data-driven-mpc` via PyPI:
+```bash
+pip install direct-data-driven-mpc
+```
+**Note:** We recommend using a virtual environment to install this package, although it is not required.
 
-> [!NOTE]
-> On some Unix-based systems (like Ubuntu/Debian), you may need to install `venv` manually if it's not included with Python:
-> - **On Ubuntu/Debian**: `sudo apt install python3-venv`
-> - **On macOS** and **Windows**: `venv` should be included with Python 3 by default. Make sure to check if Python is installed correctly.
-
-1. Clone this repository.
-   ```bash
-   git clone https://github.com/pavelacamposp/direct-data-driven-mpc.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd direct-data-driven-mpc
-   ```
-3. Create a virtual environment in the project directory:
-    - Unix/macOS:
-        ```bash
-        python3 -m venv .venv
-        ```
-    - Windows:
-        ```cmd
-        python -m venv venv
-        ```
-4. Activate the virtual environment:
-    - Unix/macOS:
-        ```bash
-        source .venv/bin/activate
-        ```
-    - Windows:
-        ```cmd
-        venv\Scripts\activate
-        ```
-5. Install `direct-data-driven-mpc` (Data-Driven MPC controller package):
+### For Contributors:
+If you plan to contribute to or develop the project, follow these steps to set up a local development environment:
+1. Clone the repository and navigate to the project directory:
     ```bash
-    pip install -e .
+    git clone https://github.com/pavelacamposp/direct-data-driven-mpc.git && cd direct-data-driven-mpc
+    ```
+2. Create and activate a virtual environment:
+    - Unix/macOS:
+      ```bash
+      python3 -m venv .venv && source .venv/bin/activate
+      ```
+    - Windows:
+      ```cmd
+      python -m venv venv && venv\Scripts\activate
+      ```
+3. Install the package with development dependencies:
+    ```bash
+    pip install -e ".[dev]"
     ```
 
-> [!NOTE]
-> If you plan to contribute to or develop the project, you can install optional development dependencies by running:
-> ```bash
-> pip install -e ".[dev]"
-> ```
-> This will install tools like `pre-commit` and `mypy`. To enable automatic checks before each commit using `pre-commit` hooks, run:
-> ```bash
-> pre-commit install
-> ```
+This will install tools like `pre-commit` and `mypy`. To enable automatic checks before each commit using `pre-commit` hooks, run:
+```bash
+pre-commit install
+```
 
 ## Usage
 The example scripts [`lti_dd_mpc_example.py`](examples/lti_control/lti_dd_mpc_example.py) and [`nonlinear_dd_mpc_example.py`](examples/nonlinear_control/nonlinear_dd_mpc_example.py) demonstrate the setup, simulation, and data visualization of the Data-Driven MPC controllers applied to LTI and Nonlinear systems, respectively.
