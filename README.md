@@ -26,7 +26,7 @@
   </tr>
 </table>
 
-This repository provides a Python implementation of Direct Data-Driven Model Predictive Control (MPC) controllers for Linear Time-Invariant (LTI) and Nonlinear systems using CVXPY. It includes **robust** and **nonlinear** controllers implemented based on the Data-Driven MPC schemes presented in the papers ["Data-Driven Model Predictive Control With Stability and Robustness Guarantees"](https://arxiv.org/abs/1906.04679) and ["Linear Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case"](https://arxiv.org/abs/2105.08567) by J. Berberich et al.
+This repository provides a Python implementation of Direct Data-Driven Model Predictive Control (MPC) controllers for Linear Time-Invariant (LTI) and Nonlinear systems using CVXPY. It includes **robust** and **nonlinear** controllers implemented based on the Data-Driven MPC schemes presented in the papers ["Data-Driven Model Predictive Control With Stability and Robustness Guarantees"](https://ieeexplore.ieee.org/document/9109670) and ["Linear Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case"](https://ieeexplore.ieee.org/document/9756053) by J. Berberich et al.
 
 A **direct data-driven controller** maps measured input-output data from an unknown system *directly* onto the controller without requiring an explicit system identification step. This approach is particularly useful in applications where the system dynamics are too complex to be modeled accurately or where traditional system identification methods are impractical or difficult to apply.
 
@@ -234,18 +234,15 @@ J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven Model Pre
 
 #### BibTex entry:
 ```bibtex
-@article{Berberich_2021,
-   title={Data-Driven Model Predictive Control With Stability and Robustness Guarantees},
-   volume={66},
-   ISSN={2334-3303},
-   url={http://dx.doi.org/10.1109/TAC.2020.3000182},
-   DOI={10.1109/tac.2020.3000182},
-   number={4},
-   journal={IEEE Transactions on Automatic Control},
-   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
-   author={Berberich, Julian and Kohler, Johannes and Muller, Matthias A. and Allgower, Frank},
-   year={2021},
-   month=apr, pages={1702–1717}}
+@ARTICLE{9109670,
+  author={Berberich, Julian and Köhler, Johannes and Müller, Matthias A. and Allgöwer, Frank},
+  journal={IEEE Transactions on Automatic Control},
+  title={Data-Driven Model Predictive Control With Stability and Robustness Guarantees},
+  year={2021},
+  volume={66},
+  number={4},
+  pages={1702-1717},
+  doi={10.1109/TAC.2020.3000182}}
 ```
 
 ### Data-Driven MPC Control for Nonlinear systems
@@ -254,16 +251,13 @@ J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear Tracking MPC f
 
 #### BibTex entry:
 ```bibtex
-@article{Berberich_2022,
-   title={Linear Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case},
-   volume={67},
-   ISSN={2334-3303},
-   url={http://dx.doi.org/10.1109/TAC.2022.3166851},
-   DOI={10.1109/tac.2022.3166851},
-   number={9},
-   journal={IEEE Transactions on Automatic Control},
-   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
-   author={Berberich, Julian and Kohler, Johannes and Muller, Matthias A. and Allgower, Frank},
-   year={2022},
-   month=sep, pages={4406–4421} }
+@ARTICLE{9756053,
+  author={Berberich, Julian and Köhler, Johannes and Müller, Matthias A. and Allgöwer, Frank},
+  journal={IEEE Transactions on Automatic Control},
+  title={Linear Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case},
+  year={2022},
+  volume={67},
+  number={9},
+  pages={4406-4421},
+  doi={10.1109/TAC.2022.3166851}}
 ```
