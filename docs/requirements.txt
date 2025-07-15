@@ -1,0 +1,8 @@
+sphinx==8.2.3
+sphinx_copybutton==0.5.2
+sphinx_design==0.6.1
+sphinx-book-theme==1.1.4
+cvxpy==1.6.6
+matplotlib==3.10.3
+pyyaml==6.0.2
+tqdm==4.67.1
