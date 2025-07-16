@@ -1,0 +1,1333 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController &#8212; Direct Data-Driven MPC</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles.css?v=eab398a6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../_static/documentation_options.js?v=60f8217a"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html" />
+    <link rel="prev" title="LTI Data-Driven MPC" href="../lti_controller.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Direct Data-Driven MPC</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Quick Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/pavelacamposp/direct-data-driven-mpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/direct-data-driven-mpc" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/pypi/v/direct-data-driven-mpc" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://docs.python.org/3.10" title="Python" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/Python-3.10%20|%203.12-blue" class="icon-link-image" alt="Python"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://opensource.org/license/MIT" title="License: MIT" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="icon-link-image" alt="License: MIT"/></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Welcome to Direct Data-Driven Model Predictive Control (MPC)!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/installation.html">Package Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/paper_reproduction.html">Paper Reproduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/project_structure.html">Project Structure</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Source API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../lti_controller.html">LTI Data-Driven MPC</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../nonlinear_controller.html">Nonlinear Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utilities/index.html">Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../utilities/controller.html">Controller Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html">direct_data_driven_mpc.utilities.controller.controller_creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/controller/direct_data_driven_mpc.utilities.controller.controller_params.html">direct_data_driven_mpc.utilities.controller.controller_params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html">direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/controller/direct_data_driven_mpc.utilities.controller.initial_data_generation.html">direct_data_driven_mpc.utilities.controller.initial_data_generation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../utilities/models.html">Model Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/models/direct_data_driven_mpc.utilities.models.lti_model.html">direct_data_driven_mpc.utilities.models.lti_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/models/direct_data_driven_mpc.utilities.models.nonlinear_model.html">direct_data_driven_mpc.utilities.models.nonlinear_model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../utilities/visualization.html">Visualization Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html">direct_data_driven_mpc.utilities.visualization.control_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot_anim.html">direct_data_driven_mpc.utilities.visualization.control_plot_anim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/visualization/direct_data_driven_mpc.utilities.visualization.comparison_plot.html">direct_data_driven_mpc.utilities.visualization.comparison_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/visualization/direct_data_driven_mpc.utilities.visualization.plot_utilities.html">direct_data_driven_mpc.utilities.visualization.plot_utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../sections/license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/edit/main/api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2Fapi/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController"><code class="docutils literal notranslate"><span class="pre">LTIDataDrivenMPCController</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.evaluate_input_persistent_excitation"><code class="docutils literal notranslate"><span class="pre">evaluate_input_persistent_excitation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_prediction_horizon_length"><code class="docutils literal notranslate"><span class="pre">check_prediction_horizon_length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_weighting_matrices_dimensions"><code class="docutils literal notranslate"><span class="pre">check_weighting_matrices_dimensions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.initialize_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">initialize_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_and_solve_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">update_and_solve_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_variables"><code class="docutils literal notranslate"><span class="pre">define_optimization_variables()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">define_optimization_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">update_optimization_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_constraints"><code class="docutils literal notranslate"><span class="pre">define_mpc_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_system_dynamic_constraints"><code class="docutils literal notranslate"><span class="pre">define_system_dynamic_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_internal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_internal_state_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_terminal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_terminal_state_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_input_constraints"><code class="docutils literal notranslate"><span class="pre">define_input_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_slack_variable_constraint"><code class="docutils literal notranslate"><span class="pre">define_slack_variable_constraint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_cost_function"><code class="docutils literal notranslate"><span class="pre">define_cost_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_problem"><code class="docutils literal notranslate"><span class="pre">define_mpc_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.solve_mpc_problem"><code class="docutils literal notranslate"><span class="pre">solve_mpc_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_problem_solve_status"><code class="docutils literal notranslate"><span class="pre">get_problem_solve_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_cost_value"><code class="docutils literal notranslate"><span class="pre">get_optimal_cost_value()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input_at_step"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input_at_step()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.store_input_output_measurement"><code class="docutils literal notranslate"><span class="pre">store_input_output_measurement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_past_input_output_data"><code class="docutils literal notranslate"><span class="pre">set_past_input_output_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_input_output_setpoints"><code class="docutils literal notranslate"><span class="pre">set_input_output_setpoints()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="direct-data-driven-mpc-lti-data-driven-mpc-controller-ltidatadrivenmpccontroller">
+<h1>direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController<a class="headerlink" href="#direct-data-driven-mpc-lti-data-driven-mpc-controller-ltidatadrivenmpccontroller" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LTIDataDrivenMPCController</span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController" title="Link to this definition">#</a></dt>
+<dd><p>A class that implements a Data-Driven Model Predictive Control (MPC)
+controller for Linear Time-Invariant (LTI) systems. This controller can be
+configured as either a Nominal or a Robust controller. The implementation
+is based on research by J. Berberich et al., as described in [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>controller_type</strong> (<a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType"><code class="xref py py-class docutils literal notranslate"><span class="pre">LTIDataDrivenMPCType</span></code></a>) – The LTI Data-Driven MPC
+controller type.</p></li>
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The estimated order of the system.</p></li>
+<li><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of control inputs.</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of system outputs.</p></li>
+<li><p><strong>u_d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A persistently exciting input sequence.</p></li>
+<li><p><strong>y_d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The system’s output response to <cite>u_d</cite>.</p></li>
+<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The length of the initial input (<cite>u_d</cite>) and output (<cite>y_d</cite>)
+trajectories.</p></li>
+<li><p><strong>u_past</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The past <cite>n</cite> input measurements (u[t-n, t-1]).</p></li>
+<li><p><strong>y_past</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The past <cite>n</cite> output measurements (y[t-n, t-1]).</p></li>
+<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The prediction horizon length.</p></li>
+<li><p><strong>Q</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The output weighting matrix for the MPC formulation.</p></li>
+<li><p><strong>R</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The input weighting matrix for the MPC formulation.</p></li>
+<li><p><strong>u_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for control inputs.</p></li>
+<li><p><strong>y_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for system outputs.</p></li>
+<li><p><strong>eps_max</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The estimated upper bound of the system
+measurement noise.</p></li>
+<li><p><strong>lamb_alpha</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The ridge regularization base weight for
+<cite>alpha</cite>, scaled by <cite>eps_max</cite>.</p></li>
+<li><p><strong>lamb_sigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The ridge regularization weight for
+<cite>sigma</cite>.</p></li>
+<li><p><strong>U</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span> <span class="pre">|</span> <span class="pre">None</span></code>) – An array of shape (<cite>m</cite>, 2) containing the
+bounds for the <cite>m</cite> predicted inputs. Each row specifies the
+<cite>[min, max]</cite> bounds for a single input. If <cite>None</cite>, no input bounds
+are applied.</p></li>
+<li><p><strong>c</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – A constant used to define a Convex constraint for
+the slack variable <cite>sigma</cite> in a Robust MPC formulation.</p></li>
+<li><p><strong>slack_var_constraint_type</strong> (<a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType"><code class="xref py py-class docutils literal notranslate"><span class="pre">SlackVarConstraintType</span></code></a>) – The constraint
+type for the slack variable <cite>sigma</cite> in a Robust MPC formulation.</p></li>
+<li><p><strong>n_mpc_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of consecutive applications of the
+optimal input for an n-Step Data-Driven MPC Scheme (multi-step).</p></li>
+<li><p><strong>use_terminal_constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If <cite>True</cite>, include terminal equality
+constraints in the Data-Driven MPC formulation. If <cite>False</cite>, the
+controller will not enforce these constraints.</p></li>
+<li><p><strong>HLn_ud</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The Hankel matrix constructed from the input data
+<cite>u_d</cite>.</p></li>
+<li><p><strong>HLn_yd</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The Hankel matrix constructed from the output
+data <cite>y_d</cite>.</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The optimization variable for a data-driven
+input-output trajectory characterization of the system.</p></li>
+<li><p><strong>ubar</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted control input variable.</p></li>
+<li><p><strong>ybar</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted system output variable.</p></li>
+<li><p><strong>sigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">cp.Variable</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The slack variable to account for noisy
+measurements in a Robust Data-Driven MPC.</p></li>
+<li><p><strong>dynamics_constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The system dynamics
+constraints for a Data-Driven MPC formulation.</p></li>
+<li><p><strong>internal_state_constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The internal state
+constraints for a Data-Driven MPC formulation.</p></li>
+<li><p><strong>terminal_constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The terminal state
+constraints for a Data-Driven MPC formulation.</p></li>
+<li><p><strong>slack_var_constraint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The slack variable
+constraints for a Robust Data-Driven MPC formulation.</p></li>
+<li><p><strong>constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The combined constraints for the
+Data-Driven MPC formulation.</p></li>
+<li><p><strong>cost</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.expression.Expression" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.expression.Expression</span></code></a>) – The cost function for the Data-Driven MPC
+formulation.</p></li>
+<li><p><strong>problem</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.problems.html#cvxpy.Problem" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.problems.problem.Problem</span></code></a>) – The quadratic programming problem for the
+Data-Driven MPC.</p></li>
+<li><p><strong>optimal_u</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The optimal control input derived from the
+Data-Driven MPC solution.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, “Data-Driven
+Model Predictive Control With Stability and Robustness Guarantees,” in
+IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+April 2021, doi: 10.1109/TAC.2020.3000182.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">R</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">u_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lamb_alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lamb_sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">U</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slack_var_constraint_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType"><span class="pre">SlackVarConstraintType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SlackVarConstraintType.CONVEX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">controller_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType"><span class="pre">LTIDataDrivenMPCType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">LTIDataDrivenMPCType.NOMINAL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_mpc_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_terminal_constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Initialize a Direct LTI Data-Driven MPC with specified system model
+parameters, an initial input-output data trajectory measured from the
+system, and LTI Data-Driven MPC parameters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The input data <cite>u_d</cite> used to excite the system to get the initial
+output data must be persistently exciting of order (L + 2 * n), as
+defined in the Data-Driven MPC formulations in [1].</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The estimated order of the system.</p></li>
+<li><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of control inputs.</p></li>
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of system outputs.</p></li>
+<li><p><strong>u_d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A persistently exciting input sequence.</p></li>
+<li><p><strong>y_d</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The system’s output response to <cite>u_d</cite>.</p></li>
+<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The prediction horizon length.</p></li>
+<li><p><strong>Q</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The output weighting matrix for the MPC
+formulation.</p></li>
+<li><p><strong>R</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The input weighting matrix for the MPC
+formulation.</p></li>
+<li><p><strong>u_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for control inputs.</p></li>
+<li><p><strong>y_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for system outputs.</p></li>
+<li><p><strong>eps_max</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The estimated upper bound of the system
+measurement noise.</p></li>
+<li><p><strong>lamb_alpha</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The ridge regularization base weight
+for <cite>alpha</cite>. It is scaled by <cite>eps_max</cite>.</p></li>
+<li><p><strong>lamb_sigma</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The ridge regularization weight for
+<cite>sigma</cite>.</p></li>
+<li><p><strong>U</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span> <span class="pre">|</span> <span class="pre">None</span></code>) – An array of shape (<cite>m</cite>, 2) containing
+the bounds for the <cite>m</cite> predicted inputs. Each row specifies
+the <cite>[min, max]</cite> bounds for a single input. If <cite>None</cite>, no
+input bounds are applied. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>c</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span> <span class="pre">|</span> <span class="pre">None</span></code>) – A constant used to define a Convex constraint
+for the slack variable <cite>sigma</cite> in a Robust MPC formulation.</p></li>
+<li><p><strong>slack_var_constraint_type</strong> (<a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType"><code class="xref py py-class docutils literal notranslate"><span class="pre">SlackVarConstraintType</span></code></a>) – The
+constraint type for the slack variable <cite>sigma</cite> in a Robust MPC
+formulation.</p></li>
+<li><p><strong>controller_type</strong> (<a class="reference internal" href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType" title="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType"><code class="xref py py-class docutils literal notranslate"><span class="pre">LTIDataDrivenMPCType</span></code></a>) – The Data-Driven MPC
+controller type.</p></li>
+<li><p><strong>n_mpc_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of consecutive applications of the
+optimal input for an n-Step Data-Driven MPC Scheme
+(multi-step). Defaults to 1.</p></li>
+<li><p><strong>use_terminal_constraints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If <cite>True</cite>, include terminal
+equality constraints in the Data-Driven MPC formulation. If
+<cite>False</cite>, the controller will not enforce these constraints.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
+“Data-Driven Model Predictive Control With Stability and Robustness
+Guarantees,” in IEEE Transactions on Automatic Control, vol. 66,
+no. 4, pp. 1702-1717, April 2021, doi: 10.1109/TAC.2020.3000182.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.evaluate_input_persistent_excitation">
+<span class="sig-name descname"><span class="pre">evaluate_input_persistent_excitation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.evaluate_input_persistent_excitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.evaluate_input_persistent_excitation" title="Link to this definition">#</a></dt>
+<dd><p>Evaluate whether the input data is persistently exciting of order
+(L + 2 * n).</p>
+<p>This method first verifies that the length of the elements in the
+input data matches the number of inputs of the system. Then, it
+ensures that the length of the input sequence meets a minimum
+threshold, as defined in Remark 1 [1]. Finally, it evaluates the rank
+of the Hankel matrix induced by the input sequence to determine if the
+input sequence is persistently exciting, as described in Definition 1
+[1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the length of the elements in the data sequence
+    does not match the number of inputs of the system, or if the
+    input data is not persistently exciting of order (L + 2 * n).</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_prediction_horizon_length">
+<span class="sig-name descname"><span class="pre">check_prediction_horizon_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.check_prediction_horizon_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_prediction_horizon_length" title="Link to this definition">#</a></dt>
+<dd><p>Check if the prediction horizon length, <cite>L</cite>, satisfies the MPC system
+design restriction based on the type of the Direct Data-Driven MPC
+controller. For a <cite>Nominal</cite> type, it must be greater than or equal to
+the estimated system order <cite>n</cite>. For a <cite>Robust</cite> controller, it must be
+greater than or equal to two times the estimated system order <cite>n</cite>.</p>
+<p>These restrictions are defined by Assumption 3, for the Nominal MPC
+scheme, and Assumption 4, for the Robust one, as described in [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the prediction horizon <cite>L</cite> is less than the
+    required threshold based on the controller type.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_weighting_matrices_dimensions">
+<span class="sig-name descname"><span class="pre">check_weighting_matrices_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.check_weighting_matrices_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_weighting_matrices_dimensions" title="Link to this definition">#</a></dt>
+<dd><p>Check if the dimensions of the output and input weighting matrices, Q
+and R, are correct for an MPC formulation based on their order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the dimensions of the Q or R matrices are incorrect.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.initialize_data_driven_mpc">
+<span class="sig-name descname"><span class="pre">initialize_data_driven_mpc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.initialize_data_driven_mpc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.initialize_data_driven_mpc" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the Data-Driven MPC controller.</p>
+<p>This method performs the following tasks:</p>
+<ol class="arabic simple">
+<li><p>Constructs Hankel matrices from the initial input-output trajectory
+data (<cite>u_d</cite>, <cite>y_d</cite>). These matrices are used for the data-driven
+characterization of the unknown system, as defined by the system
+dynamic constraints in the Robust and Nominal Data-Driven MPC
+formulations of [1].</p></li>
+<li><p>Defines the optimization variables for the Data-Driven MPC problem.</p></li>
+<li><p>Defines the constraints for the MPC problem, which include the
+system dynamics, internal state, terminal state, and input
+constraints. For a Robust MPC controller, it also includes the
+slack variable constraint.</p></li>
+<li><p>Defines the cost function for the MPC problem.</p></li>
+<li><p>Formulates the MPC problem as a Quadratic Programming (QP) problem.</p></li>
+<li><p>Solves the initialized MPC problem to ensure the formulation is
+valid and retrieve the optimal control input for the initial
+setup.</p></li>
+</ol>
+<p>This initialization process ensures that all necessary components for
+the Data-Driven MPC are correctly defined and that the MPC problem is
+solvable with the provided initial data.</p>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_and_solve_data_driven_mpc">
+<span class="sig-name descname"><span class="pre">update_and_solve_data_driven_mpc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.update_and_solve_data_driven_mpc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_and_solve_data_driven_mpc" title="Link to this definition">#</a></dt>
+<dd><p>Update the Data-Driven MPC optimization parameters, solve the problem,
+and store the optimal control input.</p>
+<p>This method updates the MPC optimization parameters to incorporate the
+latest <cite>n</cite> input-output measurements of the system. It then solves the
+MPC problem and stores the resulting optimal control input.</p>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_variables">
+<span class="sig-name descname"><span class="pre">define_optimization_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_optimization_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_variables" title="Link to this definition">#</a></dt>
+<dd><p>Define the optimization variables for the Data-Driven MPC formulation
+based on the specified MPC controller type.</p>
+<p>This method defines data-driven MPC optimization variables as
+described in the Nominal and Robust MPC formulations in [1]:</p>
+<ul class="simple">
+<li><p><strong>Nominal MPC</strong>: Defines the variable <cite>alpha</cite> for a data-driven
+input-output trajectory characterization of the system, and the
+predicted input (<cite>ubar</cite>) and output (<cite>ybar</cite>) variables, as described
+in Equation (3).</p></li>
+<li><p><strong>Robust MPC</strong>: In addition to the optimization variables defined for
+a Nominal MPC formulation, defines the <cite>sigma</cite> variable to account
+for noisy measurements, as described in Equation (6).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method initializes the <cite>alpha</cite>, <cite>ubar</cite>, <cite>ybar</cite>, and <cite>sigma</cite>
+attributes to define the MPC optimization variables based on the
+MPC controller type. The <cite>sigma</cite> variable is only initialized for
+a Robust MPC controller.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_parameters">
+<span class="sig-name descname"><span class="pre">define_optimization_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_optimization_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_parameters" title="Link to this definition">#</a></dt>
+<dd><p>Define MPC optimization parameters that are updated at every step
+iteration.</p>
+<p>This method initializes the input setpoint (<cite>u_s_param</cite>), output
+setpoint (<cite>y_s_param</cite>), past inputs (<cite>u_past_param</cite>), and past outputs
+(<cite>y_past_param</cite>) MPC parameters.</p>
+<p>The values of <cite>u_s_param</cite> and <cite>y_s_param</cite> are initialized to <cite>u_s</cite> and
+<cite>y_s</cite>.</p>
+<p>These parameters are updated at each MPC iteration, except for
+<cite>u_s_param</cite> and <cite>y_s_param</cite>, which must be manually updated when
+setting new controller setpoint pairs.</p>
+<p>Using CVXPY <cite>Parameter</cite> objects allows efficient updates without the
+need of reformulating the MPC problem at every step.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_optimization_parameters">
+<span class="sig-name descname"><span class="pre">update_optimization_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.update_optimization_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_optimization_parameters" title="Link to this definition">#</a></dt>
+<dd><p>Update MPC optimization parameters.</p>
+<p>This method updates MPC parameters with the latest input-output
+measurement data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_constraints">
+<span class="sig-name descname"><span class="pre">define_mpc_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_mpc_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_constraints" title="Link to this definition">#</a></dt>
+<dd><p>Define the constraints for the Data-Driven MPC formulation based on
+the specified MPC controller type.</p>
+<p>This method defines the following constraints, as described in the
+Nominal and Robust MPC formulations in [1]:</p>
+<ul class="simple">
+<li><p><strong>System dynamics</strong>: Ensures input-output predictions are possible
+trajectories of the system based on a data-driven characterization of
+all its input-output trajectories. In a Robust MPC scheme, adds a
+slack variable to account for noisy measurements. Defined by
+Equations (3b) (Nominal) and (6a) (Robust).</p></li>
+<li><p><strong>Internal state</strong>: Ensures predictions align with the internal state
+of the system’s trajectory. This constrains the first <cite>n</cite>
+input-output predictions to match the past <cite>n</cite> input-output
+measurements of the system, guaranteeing that the predictions
+consider the initial state of the system. Defined by Equations (3c)
+(Nominal) and (6b) (Robust).</p></li>
+<li><p><strong>Terminal state</strong>: Aims to stabilize the internal state of the
+system so it aligns with the steady-state that corresponds to the
+input-output pair (<cite>u_s</cite>, <cite>y_s</cite>) in any minimal realization (last <cite>n</cite>
+input-output predictions, as considered in [1]). Defined by Equations
+(3d) (Nominal) and (6c) (Robust).</p></li>
+<li><p><strong>Input</strong>: Constrains the predicted input (<cite>ubar</cite>). Defined by
+Equation (6c).</p></li>
+<li><p><strong>Slack Variable</strong>: Bounds a slack variable that accounts
+for noisy online measurements and for noisy data used for prediction
+(used to construct the Hankel matrices). Defined by Equation (6d),
+for a Non-Convex constraint, and Remark 3, for a Convex constraint
+and an implicit alternative.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method initializes the <cite>dynamics_constraints</cite>,
+<cite>internal_state_constraints</cite>, <cite>terminal_constraints</cite>,
+<cite>input_constraints</cite>, <cite>slack_var_constraint</cite>, and <cite>constraints</cite>
+attributes to define the MPC constraints based on the MPC
+controller type.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_system_dynamic_constraints">
+<span class="sig-name descname"><span class="pre">define_system_dynamic_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_system_dynamic_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_system_dynamic_constraints" title="Link to this definition">#</a></dt>
+<dd><p>Define the system dynamic constraints for the Data-Driven MPC
+formulation corresponding to the specified MPC controller type.</p>
+<p>These constraints use a data-driven characterization of all the
+input-output trajectories of a system, as defined by Theorem 1 [1], to
+ensure predictions are possible system trajectories. This is analogous
+to the system dynamics constraints in a typical MPC formulation.</p>
+<p>In a Robust MPC scheme, these constraints include a slack variable to
+account for noisy online measurements and for noisy data used for
+prediction (used to construct the Hankel matrices).</p>
+<p>These constraints are defined according to the following equations
+from the Nominal and Robust MPC formulations in [1]:</p>
+<ul class="simple">
+<li><p><strong>Nominal MPC:</strong> Equation (3b).</p></li>
+<li><p><strong>Robust MPC:</strong> Equation (6a).</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY system dynamic
+constraints for the Data-Driven MPC controller, corresponding to
+the specified MPC controller type.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_internal_state_constraints">
+<span class="sig-name descname"><span class="pre">define_internal_state_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_internal_state_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_internal_state_constraints" title="Link to this definition">#</a></dt>
+<dd><p>Define the internal state constraints for the Data-Driven MPC
+formulation.</p>
+<p>These constraints ensure predictions align with the internal state of
+the system’s trajectory. This way, the first <cite>n</cite> input-output
+predictions are constrained to match the past <cite>n</cite> input-output
+measurements of the system, guaranteeing that the predictions consider
+the initial state of the system.</p>
+<p>These constraints are defined according to Equations (3c) (Nominal)
+and (6b) (Robust) from the Nominal and Robust MPC formulations in [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY internal state
+constraints for the Data-Driven MPC controller.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is essential to update the past <cite>n</cite> input-output measurements
+of the system, <cite>u_past</cite> and <cite>y_past</cite>, at each MPC iteration.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_terminal_state_constraints">
+<span class="sig-name descname"><span class="pre">define_terminal_state_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_terminal_state_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_terminal_state_constraints" title="Link to this definition">#</a></dt>
+<dd><p>Define the terminal state constraints for the Data-Driven MPC
+formulation.</p>
+<p>These constraints aim to stabilize the internal state of the system so
+it aligns with the steady-state that corresponds to the input-output
+pair (<cite>u_s</cite>, <cite>y_s</cite>) in any minimal realization, specifically the last
+<cite>n</cite> input-output predictions, as considered in [1].</p>
+<p>These constraints are defined according to Equations (3d) (Nominal) and
+(6c) (Robust) from the Nominal and Robust MPC formulations in [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY terminal state
+constraints for the Data-Driven MPC controller.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_input_constraints">
+<span class="sig-name descname"><span class="pre">define_input_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_input_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_input_constraints" title="Link to this definition">#</a></dt>
+<dd><p>Define the input constraints for the Data-Driven MPC formulation.</p>
+<p>These constraints are defined according to Equation (6c) of [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY input constraints
+for the Data-Driven MPC controller.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_slack_variable_constraint">
+<span class="sig-name descname"><span class="pre">define_slack_variable_constraint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_slack_variable_constraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_slack_variable_constraint" title="Link to this definition">#</a></dt>
+<dd><p>Define the slack variable constraint for a Robust Data-Driven MPC
+formulation based on the specified slack variable constraint type.</p>
+<p>This constraint bounds a slack variable (<cite>sigma</cite>) that accounts for
+noisy online measurements and for noisy data used for prediction (used
+to construct the Hankel matrices for the system dynamic constraint).</p>
+<p>As described in [1], this constraint can be defined in three different
+ways, achieving the same theoretical guarantees:</p>
+<ul class="simple">
+<li><p><strong>Non-Convex</strong>: Defines a non-convex constraint (Equation (6d)).</p></li>
+<li><p><strong>Convex</strong>: Defines a convex constraint using a sufficiently large
+coefficient <cite>c</cite> (Remark 3).</p></li>
+<li><p><strong>None</strong>: Omits an explicit constraint definition. The slack variable
+constraint is implicitly met, relying on a high <cite>lamb_sigma</cite> value
+(Remark 3).</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY slack variable
+constraint for the Robust Data-Driven MPC controller, corresponding
+to the specified slack variable constraint type. The list is empty
+if the <cite>NONE</cite> constraint type is selected.</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_cost_function">
+<span class="sig-name descname"><span class="pre">define_cost_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_cost_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_cost_function" title="Link to this definition">#</a></dt>
+<dd><p>Define the cost function for the Data-Driven MPC formulation based on
+the specified MPC controller type.</p>
+<p>This method defines the MPC cost function as described in the Nominal
+and Robust MPC formulations in [1]:</p>
+<ul class="simple">
+<li><p><strong>Nominal MPC</strong>: Implements a quadratic stage cost that penalizes
+deviations of the predicted control inputs (<cite>ubar</cite>) and outputs
+(<cite>ybar</cite>) from the desired equilibrium (<cite>u_s</cite>, <cite>y_s</cite>), as described in
+Equation (3).</p></li>
+<li><p><strong>Robust MPC</strong>: In addition to the quadratic stage cost, adds ridge
+regularization terms for <cite>alpha</cite> and <cite>sigma</cite> variables to account for
+noisy measurements, as described in Equation (6).</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method initializes the <cite>cost</cite> attribute to define the MPC
+cost function based on the MPC controller type.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_problem">
+<span class="sig-name descname"><span class="pre">define_mpc_problem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.define_mpc_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_problem" title="Link to this definition">#</a></dt>
+<dd><p>Define the optimization problem for the Data-Driven MPC formulation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method initializes the <cite>problem</cite> attribute to define the MPC
+problem of the Data-Driven MPC controller, which is formulated as
+a Quadratic Programming (QP) problem. It assumes that the <cite>cost</cite>
+(objective function) and <cite>constraints</cite> attributes have already
+been defined.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.solve_mpc_problem">
+<span class="sig-name descname"><span class="pre">solve_mpc_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.solve_mpc_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.solve_mpc_problem" title="Link to this definition">#</a></dt>
+<dd><p>Solve the optimization problem for the Data-Driven MPC formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>str</em> – The status of the optimization problem after attempting to
+solve it (e.g., “optimal”, “optimal_inaccurate”, “infeasible”,
+“unbounded”).</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method assumes that the MPC problem has already been defined.
+It solves the problem and updates the <cite>problem</cite> attribute with the
+solution status.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_problem_solve_status">
+<span class="sig-name descname"><span class="pre">get_problem_solve_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.get_problem_solve_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_problem_solve_status" title="Link to this definition">#</a></dt>
+<dd><p>Get the solve status of the optimization problem of the Data-Driven MPC
+formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>str</em> – The status of the optimization problem after attempting to
+solve it (e.g., “optimal”, “optimal_inaccurate”, “infeasible”,
+“unbounded”).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_cost_value">
+<span class="sig-name descname"><span class="pre">get_optimal_cost_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.get_optimal_cost_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_cost_value" title="Link to this definition">#</a></dt>
+<dd><p>Get the cost value corresponding to the solved optimization problem of
+the Data-Driven MPC formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>float</em> – The optimal cost value of the solved MPC optimization
+problem.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input">
+<span class="sig-name descname"><span class="pre">get_optimal_control_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.get_optimal_control_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve and store the optimal control input from the MPC solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>np.ndarray</em> – The predicted optimal control input from time step 0
+to (L - 1).</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the MPC problem solution status was not “optimal”
+    or “optimal_inaccurate”.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method should be called after the MPC problem has been
+solved. It stores the predicted optimal control input in the
+<cite>optimal_u</cite> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input_at_step">
+<span class="sig-name descname"><span class="pre">get_optimal_control_input_at_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_step</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.get_optimal_control_input_at_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input_at_step" title="Link to this definition">#</a></dt>
+<dd><p>Get the optimal control input from the MPC solution corresponding
+to a specified time step in the prediction horizon [0, L-1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The time step of the optimal control input to
+retrieve. It must be within the range [0, L-1].</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>np.ndarray</em> – An array containing the optimal control input for the
+specified prediction time step.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method assumes that the optimal control input from the MPC
+solution has been stored in the <cite>optimal_u</cite> attribute.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>n_step</cite> is not within the range [0, L-1].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.store_input_output_measurement">
+<span class="sig-name descname"><span class="pre">store_input_output_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_current</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.store_input_output_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.store_input_output_measurement" title="Link to this definition">#</a></dt>
+<dd><p>Store an input-output measurement pair for the current time step in
+the input-output storage variables.</p>
+<p>This method updates the input-output storage variables <cite>u_past</cite> and
+<cite>y_past</cite> by appending the current input-output measurements and
+removing the oldest measurements located at the first position. This
+ensures these variables only store the past <cite>n</cite> measurements, as
+required for the internal state constraints defined by Equations (3c)
+(Nominal) and (6b) (Robust) of [1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u_current</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The control input for the current
+time step, expected to match the dimensions of prior inputs.</p></li>
+<li><p><strong>y_current</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The measured system output for the current
+time step, expected to match the dimensions of prior outputs.
+This output should correspond to the system’s response to
+<cite>u_current</cite>, as both represent a trajectory of the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>u_current</cite> or <cite>y_current</cite> do not match the
+    expected dimensions.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method modifies the <cite>u_past</cite> and <cite>y_past</cite> arrays directly to
+ensure that only the most recent <cite>n</cite> measurements are retained.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1]: See class-level docstring for full reference details.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_past_input_output_data">
+<span class="sig-name descname"><span class="pre">set_past_input_output_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_past</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_past</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.set_past_input_output_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_past_input_output_data" title="Link to this definition">#</a></dt>
+<dd><p>Set the storage variables for past input-output measurements.</p>
+<p>This method assigns the provided input-output measurements to the
+arrays storing past input-output measurements, <cite>u_past</cite> and <cite>y_past</cite>.
+It is intended to be used for setting the historical data used in
+the MPC problem formulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u_past</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array containing past control inputs.
+Expected to have a shape of (n * m, 1), where ‘n’ is the
+estimated system order and ‘m’ is the dimension of the input.</p></li>
+<li><p><strong>y_past</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array containing past measured system
+outputs. Expected to have a shape of (n * p, 1) where ‘n’ is
+the estimated system order and ‘p’ is the dimension of the
+output.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>u_past</cite> or <cite>y_past</cite> do not have correct
+    dimensions.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method sets the values of the <cite>u_past</cite> and <cite>y_past</cite>
+attributes with the provided new historical data.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_input_output_setpoints">
+<span class="sig-name descname"><span class="pre">set_input_output_setpoints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html#LTIDataDrivenMPCController.set_input_output_setpoints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_input_output_setpoints" title="Link to this definition">#</a></dt>
+<dd><p>Set the control and system setpoints of the Data-Driven MPC controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for control inputs.</p></li>
+<li><p><strong>y_s</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The setpoint for system outputs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>u_s</cite> or <cite>y_s</cite> do not have the expected
+    dimensions.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method sets the values of the <cite>u_s</cite> and <cite>y_s</cite> attributes with
+the provided new setpoints and updates the values of <cite>u_s_param</cite>
+and <cite>y_s_param</cite> to update the data-driven MPC controller setpoint.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../lti_controller.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">LTI Data-Driven MPC</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController"><code class="docutils literal notranslate"><span class="pre">LTIDataDrivenMPCController</span></code></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.evaluate_input_persistent_excitation"><code class="docutils literal notranslate"><span class="pre">evaluate_input_persistent_excitation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_prediction_horizon_length"><code class="docutils literal notranslate"><span class="pre">check_prediction_horizon_length()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_weighting_matrices_dimensions"><code class="docutils literal notranslate"><span class="pre">check_weighting_matrices_dimensions()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.initialize_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">initialize_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_and_solve_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">update_and_solve_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_variables"><code class="docutils literal notranslate"><span class="pre">define_optimization_variables()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">define_optimization_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">update_optimization_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_constraints"><code class="docutils literal notranslate"><span class="pre">define_mpc_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_system_dynamic_constraints"><code class="docutils literal notranslate"><span class="pre">define_system_dynamic_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_internal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_internal_state_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_terminal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_terminal_state_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_input_constraints"><code class="docutils literal notranslate"><span class="pre">define_input_constraints()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_slack_variable_constraint"><code class="docutils literal notranslate"><span class="pre">define_slack_variable_constraint()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_cost_function"><code class="docutils literal notranslate"><span class="pre">define_cost_function()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_problem"><code class="docutils literal notranslate"><span class="pre">define_mpc_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.solve_mpc_problem"><code class="docutils literal notranslate"><span class="pre">solve_mpc_problem()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_problem_solve_status"><code class="docutils literal notranslate"><span class="pre">get_problem_solve_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_cost_value"><code class="docutils literal notranslate"><span class="pre">get_optimal_cost_value()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input_at_step"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input_at_step()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.store_input_output_measurement"><code class="docutils literal notranslate"><span class="pre">store_input_output_measurement()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_past_input_output_data"><code class="docutils literal notranslate"><span class="pre">set_past_input_output_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_input_output_setpoints"><code class="docutils literal notranslate"><span class="pre">set_input_output_setpoints()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pável A. Campos-Peña
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pável A. Campos-Peña.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jul 16, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

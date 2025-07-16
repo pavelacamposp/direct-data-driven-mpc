@@ -1,0 +1,19 @@
+/* Define class to vertically align objects in tables */
+.vcenter {
+    vertical-align: middle;
+}
+
+/* Make project title and index header bold */
+.bd-sidebar .navbar-brand {
+    font-weight: bold;
+}
+
+.bd-sidenav__home-link {
+    font-weight: bold;
+}
+
+/* Enable line breaking for long code headings */
+h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

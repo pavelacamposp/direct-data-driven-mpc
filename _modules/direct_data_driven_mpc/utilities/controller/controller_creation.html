@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>direct_data_driven_mpc.utilities.controller.controller_creation &#8212; Direct Data-Driven MPC</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles.css?v=eab398a6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=60f8217a"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/utilities/controller/controller_creation';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Direct Data-Driven MPC</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Quick Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/pavelacamposp/direct-data-driven-mpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/direct-data-driven-mpc" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/pypi/v/direct-data-driven-mpc" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://docs.python.org/3.10" title="Python" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/Python-3.10%20|%203.12-blue" class="icon-link-image" alt="Python"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://opensource.org/license/MIT" title="License: MIT" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="icon-link-image" alt="License: MIT"/></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../index.html">
+                    Welcome to Direct Data-Driven Model Predictive Control (MPC)!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/installation.html">Package Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/paper_reproduction.html">Paper Reproduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/project_structure.html">Project Structure</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Source API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/lti_controller.html">LTI Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller.html">Nonlinear Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utilities/index.html">Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/controller.html">Controller Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html">direct_data_driven_mpc.utilities.controller.controller_creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_params.html">direct_data_driven_mpc.utilities.controller.controller_params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html">direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.initial_data_generation.html">direct_data_driven_mpc.utilities.controller.initial_data_generation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/models.html">Model Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.lti_model.html">direct_data_driven_mpc.utilities.models.lti_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.nonlinear_model.html">direct_data_driven_mpc.utilities.models.nonlinear_model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/visualization.html">Visualization Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html">direct_data_driven_mpc.utilities.visualization.control_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot_anim.html">direct_data_driven_mpc.utilities.visualization.control_plot_anim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.comparison_plot.html">direct_data_driven_mpc.utilities.visualization.comparison_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.plot_utilities.html">direct_data_driven_mpc.utilities.visualization.plot_utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/utilities/controller/controller_creation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for direct_data_driven_mpc.utilities.controller.controller_creation</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for creating data-driven MPC controllers.</span>
+
+<span class="sd">This module provides functions to create data-driven MPC controllers for both</span>
+<span class="sd">LTI and nonlinear systems using controller configurations and initial</span>
+<span class="sd">input-output measurement data.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.lti_data_driven_mpc_controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LTIDataDrivenMPCController</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NonlinearDataDrivenMPCController</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.utilities.controller.controller_params</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LTIDataDrivenMPCParams</span><span class="p">,</span>
+    <span class="n">NonlinearDataDrivenMPCParams</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_lti_data_driven_mpc_controller">
+<a class="viewcode-back" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html#direct_data_driven_mpc.utilities.controller.controller_creation.create_lti_data_driven_mpc_controller">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_lti_data_driven_mpc_controller</span><span class="p">(</span>
+    <span class="n">controller_config</span><span class="p">:</span> <span class="n">LTIDataDrivenMPCParams</span><span class="p">,</span>
+    <span class="n">u_d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">use_terminal_constraints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LTIDataDrivenMPCController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an `LTIDataDrivenMPCController` instance using a specified</span>
+<span class="sd">    Data-Driven MPC controller configuration and initial input-output</span>
+<span class="sd">    trajectory data measured from a system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        controller_config (LTIDataDrivenMPCParams): A dictionary containing</span>
+<span class="sd">            configuration parameters for a Data-Driven MPC controller designed</span>
+<span class="sd">            for Linear Time-Invariant (LTI) systems.</span>
+<span class="sd">        u_d (np.ndarray): An array of shape `(N, m)` representing a</span>
+<span class="sd">            persistently exciting input sequence used to generate output data</span>
+<span class="sd">            from the system. `N` is the trajectory length and `m` is the</span>
+<span class="sd">            number of control inputs.</span>
+<span class="sd">        y_d (np.ndarray): An array of shape `(N, p)` representing the system&#39;s</span>
+<span class="sd">            output response to `u_d`. `N` is the trajectory length and `p` is</span>
+<span class="sd">            the number of system outputs.</span>
+<span class="sd">        use_terminal_constraints (bool): If `True`, include terminal equality</span>
+<span class="sd">            constraints in the Data-Driven MPC formulation. If `False`, the</span>
+<span class="sd">            controller will not enforce these constraints. Defaults to `True`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        LTIDataDrivenMPCController: An `LTIDataDrivenMPCController` instance,</span>
+<span class="sd">        which represents a Data-Driven MPC controller designed for Linear</span>
+<span class="sd">        Time-Invariant (LTI) systems, based on the specified configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get model parameters from input-output trajectory data</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">u_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">y_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of outputs</span>
+
+    <span class="c1"># Retrieve Data-Driven MPC controller parameters</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span>  <span class="c1"># Estimated system order</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>  <span class="c1"># Prediction horizon</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;Q&quot;</span><span class="p">]</span>  <span class="c1"># Output weighting matrix</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>  <span class="c1"># Input weighting matrix</span>
+
+    <span class="n">u_s</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;u_s&quot;</span><span class="p">]</span>  <span class="c1"># Control input setpoint</span>
+    <span class="n">y_s</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;y_s&quot;</span><span class="p">]</span>  <span class="c1"># System output setpoint</span>
+
+    <span class="c1"># Estimated upper bound of the system measurement noise</span>
+    <span class="n">eps_max</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;eps_max&quot;</span><span class="p">]</span>
+    <span class="c1"># Ridge regularization base weight for `alpha` (scaled by `eps_max`)</span>
+    <span class="n">lamb_alpha</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_alpha&quot;</span><span class="p">]</span>
+    <span class="c1"># Ridge regularization weight for sigma</span>
+    <span class="n">lamb_sigma</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_sigma&quot;</span><span class="p">]</span>
+
+    <span class="n">U</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;U&quot;</span><span class="p">]</span>  <span class="c1"># Bounds for the predicted input</span>
+
+    <span class="c1"># Convex slack variable constraint constant</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Slack variable constraint type</span>
+    <span class="n">slack_var_constraint_type</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;slack_var_constraint_type&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Data-Driven MPC controller type</span>
+    <span class="n">controller_type</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;controller_type&quot;</span><span class="p">]</span>
+
+    <span class="c1"># n-Step Data-Driven MPC Scheme parameters</span>
+    <span class="c1"># Number of consecutive applications of the optimal input</span>
+    <span class="n">n_mpc_step</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;n_mpc_step&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Create Data-Driven MPC controller</span>
+    <span class="n">lti_data_driven_mpc_controller</span> <span class="o">=</span> <span class="n">LTIDataDrivenMPCController</span><span class="p">(</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">u_d</span><span class="o">=</span><span class="n">u_d</span><span class="p">,</span>
+        <span class="n">y_d</span><span class="o">=</span><span class="n">y_d</span><span class="p">,</span>
+        <span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span>
+        <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span>
+        <span class="n">u_s</span><span class="o">=</span><span class="n">u_s</span><span class="p">,</span>
+        <span class="n">y_s</span><span class="o">=</span><span class="n">y_s</span><span class="p">,</span>
+        <span class="n">eps_max</span><span class="o">=</span><span class="n">eps_max</span><span class="p">,</span>
+        <span class="n">lamb_alpha</span><span class="o">=</span><span class="n">lamb_alpha</span><span class="p">,</span>
+        <span class="n">lamb_sigma</span><span class="o">=</span><span class="n">lamb_sigma</span><span class="p">,</span>
+        <span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
+        <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span>
+        <span class="n">slack_var_constraint_type</span><span class="o">=</span><span class="n">slack_var_constraint_type</span><span class="p">,</span>
+        <span class="n">controller_type</span><span class="o">=</span><span class="n">controller_type</span><span class="p">,</span>
+        <span class="n">n_mpc_step</span><span class="o">=</span><span class="n">n_mpc_step</span><span class="p">,</span>
+        <span class="n">use_terminal_constraints</span><span class="o">=</span><span class="n">use_terminal_constraints</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lti_data_driven_mpc_controller</span></div>
+
+
+
+<div class="viewcode-block" id="create_nonlinear_data_driven_mpc_controller">
+<a class="viewcode-back" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html#direct_data_driven_mpc.utilities.controller.controller_creation.create_nonlinear_data_driven_mpc_controller">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_nonlinear_data_driven_mpc_controller</span><span class="p">(</span>
+    <span class="n">controller_config</span><span class="p">:</span> <span class="n">NonlinearDataDrivenMPCParams</span><span class="p">,</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NonlinearDataDrivenMPCController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a `NonlinearDataDrivenMPCController` instance using a specified</span>
+<span class="sd">    Data-Driven MPC controller configuration and initial input-output</span>
+<span class="sd">    trajectory data measured from a system.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        controller_config (NonlinearDataDrivenMPCParams): A dictionary</span>
+<span class="sd">            containing configuration parameters for a Data-Driven MPC</span>
+<span class="sd">            controller designed for nonlinear systems.</span>
+<span class="sd">        u (np.ndarray): An array of shape `(N, m)` representing a</span>
+<span class="sd">            persistently exciting input sequence used to generate output data</span>
+<span class="sd">            from the system. `N` is the trajectory length and `m` is the</span>
+<span class="sd">            number of control inputs.</span>
+<span class="sd">        y (np.ndarray): An array of shape `(N, p)` representing the system&#39;s</span>
+<span class="sd">            output response to `u`. `N` is the trajectory length and `p` is</span>
+<span class="sd">            the number of system outputs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        NonlinearDataDrivenMPCController: A `NonlinearDataDrivenMPCController`</span>
+<span class="sd">        instance, which represents a Data-Driven MPC controller designed for</span>
+<span class="sd">        nonlinear systems, based on the specified configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get model parameters from input-output trajectory data</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of outputs</span>
+
+    <span class="c1"># Retrieve Data-Driven MPC controller parameters</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">]</span>  <span class="c1"># Estimated system order</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">]</span>  <span class="c1"># Prediction horizon</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;Q&quot;</span><span class="p">]</span>  <span class="c1"># Output weighting matrix</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>  <span class="c1"># Input weighting matrix</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;S&quot;</span><span class="p">]</span>  <span class="c1"># Output setpoint weighting matrix</span>
+
+    <span class="c1"># Ridge regularization weight for alpha</span>
+    <span class="n">lamb_alpha</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_alpha&quot;</span><span class="p">]</span>
+    <span class="c1"># Ridge regularization weight for sigma</span>
+    <span class="n">lamb_sigma</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_sigma&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Bounds for the predicted input</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;U&quot;</span><span class="p">]</span>
+    <span class="c1"># Bounds for the predicted input setpoint</span>
+    <span class="n">Us</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;Us&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Alpha regularization type</span>
+    <span class="n">alpha_reg_type</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;alpha_reg_type&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Nonlinear MPC parameters for alpha_reg_type = 0 (Approximated)</span>
+    <span class="c1"># Ridge regularization weight for alpha_s</span>
+    <span class="n">lamb_alpha_s</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_alpha_s&quot;</span><span class="p">]</span>
+    <span class="c1"># Ridge regularization weight for sigma_s</span>
+    <span class="n">lamb_sigma_s</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;lamb_sigma_s&quot;</span><span class="p">]</span>
+
+    <span class="c1"># System Output setpoint</span>
+    <span class="n">y_r</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;y_r&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Extended Output Representation and Incremental Input</span>
+    <span class="n">ext_out_incr_in</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;ext_out_incr_in&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Tracking cost value threshold</span>
+    <span class="n">update_cost_threshold</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;update_cost_threshold&quot;</span><span class="p">]</span>
+
+    <span class="c1"># n-Step Data-Driven MPC Scheme parameters</span>
+    <span class="c1"># Number of consecutive applications of the optimal input</span>
+    <span class="n">n_mpc_step</span> <span class="o">=</span> <span class="n">controller_config</span><span class="p">[</span><span class="s2">&quot;n_mpc_step&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Create Data-Driven MPC controller</span>
+    <span class="n">nonlinear_data_driven_mpc_controller</span> <span class="o">=</span> <span class="n">NonlinearDataDrivenMPCController</span><span class="p">(</span>
+        <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span>
+        <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+        <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+        <span class="n">L</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span>
+        <span class="n">R</span><span class="o">=</span><span class="n">R</span><span class="p">,</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">S</span><span class="p">,</span>
+        <span class="n">y_r</span><span class="o">=</span><span class="n">y_r</span><span class="p">,</span>
+        <span class="n">lamb_alpha</span><span class="o">=</span><span class="n">lamb_alpha</span><span class="p">,</span>
+        <span class="n">lamb_sigma</span><span class="o">=</span><span class="n">lamb_sigma</span><span class="p">,</span>
+        <span class="n">U</span><span class="o">=</span><span class="n">U</span><span class="p">,</span>
+        <span class="n">Us</span><span class="o">=</span><span class="n">Us</span><span class="p">,</span>
+        <span class="n">lamb_alpha_s</span><span class="o">=</span><span class="n">lamb_alpha_s</span><span class="p">,</span>
+        <span class="n">lamb_sigma_s</span><span class="o">=</span><span class="n">lamb_sigma_s</span><span class="p">,</span>
+        <span class="n">alpha_reg_type</span><span class="o">=</span><span class="n">alpha_reg_type</span><span class="p">,</span>
+        <span class="n">ext_out_incr_in</span><span class="o">=</span><span class="n">ext_out_incr_in</span><span class="p">,</span>
+        <span class="n">update_cost_threshold</span><span class="o">=</span><span class="n">update_cost_threshold</span><span class="p">,</span>
+        <span class="n">n_mpc_step</span><span class="o">=</span><span class="n">n_mpc_step</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">nonlinear_data_driven_mpc_controller</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pável A. Campos-Peña
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pável A. Campos-Peña.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jul 16, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

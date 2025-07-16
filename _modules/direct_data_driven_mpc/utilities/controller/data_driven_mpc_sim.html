@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim &#8212; Direct Data-Driven MPC</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles.css?v=eab398a6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=60f8217a"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/utilities/controller/data_driven_mpc_sim';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Direct Data-Driven MPC</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Quick Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/pavelacamposp/direct-data-driven-mpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/direct-data-driven-mpc" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/pypi/v/direct-data-driven-mpc" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://docs.python.org/3.10" title="Python" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/Python-3.10%20|%203.12-blue" class="icon-link-image" alt="Python"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://opensource.org/license/MIT" title="License: MIT" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="icon-link-image" alt="License: MIT"/></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../index.html">
+                    Welcome to Direct Data-Driven Model Predictive Control (MPC)!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/installation.html">Package Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/paper_reproduction.html">Paper Reproduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/project_structure.html">Project Structure</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Source API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/lti_controller.html">LTI Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller.html">Nonlinear Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utilities/index.html">Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/controller.html">Controller Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html">direct_data_driven_mpc.utilities.controller.controller_creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_params.html">direct_data_driven_mpc.utilities.controller.controller_params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html">direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.initial_data_generation.html">direct_data_driven_mpc.utilities.controller.initial_data_generation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/models.html">Model Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.lti_model.html">direct_data_driven_mpc.utilities.models.lti_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.nonlinear_model.html">direct_data_driven_mpc.utilities.models.nonlinear_model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/visualization.html">Visualization Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html">direct_data_driven_mpc.utilities.visualization.control_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot_anim.html">direct_data_driven_mpc.utilities.visualization.control_plot_anim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.comparison_plot.html">direct_data_driven_mpc.utilities.visualization.comparison_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.plot_utilities.html">direct_data_driven_mpc.utilities.visualization.plot_utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/utilities/controller/data_driven_mpc_sim.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for simulating data-driven MPC control loops.</span>
+
+<span class="sd">This module provides functions for simulating the closed-loop operation of</span>
+<span class="sd">both LTI and nonlinear data-driven MPC controllers applied to a system.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.random</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.lti_data_driven_mpc_controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">LTIDataDrivenMPCController</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NonlinearDataDrivenMPCController</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.utilities.models.lti_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LTIModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.utilities.models.nonlinear_model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NonlinearSystem</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="simulate_lti_data_driven_mpc_control_loop">
+<a class="viewcode-back" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html#direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.simulate_lti_data_driven_mpc_control_loop">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate_lti_data_driven_mpc_control_loop</span><span class="p">(</span>
+    <span class="n">system_model</span><span class="p">:</span> <span class="n">LTIModel</span><span class="p">,</span>
+    <span class="n">data_driven_mpc_controller</span><span class="p">:</span> <span class="n">LTIDataDrivenMPCController</span><span class="p">,</span>
+    <span class="n">n_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">np_random</span><span class="p">:</span> <span class="n">Generator</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate a Data-Driven MPC control loop applied to a Linear Time-Invariant</span>
+<span class="sd">    (LTI) system and return the resulting input-output data sequences.</span>
+
+<span class="sd">    This function simulates the closed-loop operation of a Data-Driven MPC</span>
+<span class="sd">    controller designed for LTI systems, following the Data-Driven MPC schemes</span>
+<span class="sd">    described in Algorithm 1 (Nominal) and Algorithm 2 (Robust) of [1].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        system_model (LTIModel): An `LTIModel` instance representing a Linear</span>
+<span class="sd">            Time-Invariant (LTI) system.</span>
+<span class="sd">        data_driven_mpc_controller (LTIDataDrivenMPCController): An</span>
+<span class="sd">            `LTIDataDrivenMPCController` instance representing a Data-Driven</span>
+<span class="sd">            MPC controller designed for Linear Time-Invariant (LTI) systems.</span>
+<span class="sd">        n_steps (int): The number of time steps for the simulation.</span>
+<span class="sd">        np_random (Generator): A Numpy random number generator for generating</span>
+<span class="sd">            random noise for the system&#39;s output.</span>
+<span class="sd">        verbose (int): The verbosity level: 0 = no output, 1 = minimal output,</span>
+<span class="sd">            2 = detailed output.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:</span>
+
+<span class="sd">        - An array of shape `(n_steps, m)` representing the optimal control</span>
+<span class="sd">          inputs applied to the system, where `m` is the number of control</span>
+<span class="sd">          inputs.</span>
+<span class="sd">        - An array of shape `(n_steps, p)` representing the output response</span>
+<span class="sd">          of the system, where `p` is the number of system outputs.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, &quot;Data-Driven</span>
+<span class="sd">        Model Predictive Control With Stability and Robustness Guarantees,&quot; in</span>
+<span class="sd">        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,</span>
+<span class="sd">        April 2021, doi: 10.1109/TAC.2020.3000182.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Retrieve model parameters</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">p</span>  <span class="c1"># Number of outputs</span>
+    <span class="n">eps_max_sim</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">eps_max</span>  <span class="c1"># Upper bound of the system</span>
+    <span class="c1"># measurement noise (simulation)</span>
+
+    <span class="c1"># Retrieve Data-Driven MPC controller parameters</span>
+    <span class="c1"># Control input setpoint</span>
+    <span class="n">u_s</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">u_s</span>
+    <span class="c1"># System output setpoint</span>
+    <span class="n">y_s</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">y_s</span>
+    <span class="c1"># Number of consecutive applications of the optimal input</span>
+    <span class="c1"># for an n-Step Data-Driven MPC Scheme (multi-step)</span>
+    <span class="n">n_mpc_step</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">n_mpc_step</span>
+
+    <span class="c1"># Initialize control loop input-output data arrays</span>
+    <span class="n">u_sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+    <span class="n">y_sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+
+    <span class="c1"># Generate bounded uniformly distributed additive measurement noise</span>
+    <span class="n">w_sys</span> <span class="o">=</span> <span class="n">eps_max_sim</span> <span class="o">*</span> <span class="n">np_random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+
+    <span class="c1"># --- Simulate Data-Driven MPC control system ---</span>
+    <span class="c1"># Create progress bar if verbose level is 1</span>
+    <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">n_steps</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Simulate the Data-Driven MPC control system following Algorithm 1 for a</span>
+    <span class="c1"># Data-Driven MPC Scheme, and Algorithm 2 for an n-Step Data-Driven MPC</span>
+    <span class="c1"># Scheme, as described in [1].</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_mpc_step</span><span class="p">):</span>
+        <span class="c1"># --- Algorithm 1 and Algorithm 2 (n-step): ---</span>
+        <span class="c1"># 1) Solve Data-Driven MPC after taking past `n` input-output</span>
+        <span class="c1">#    measurements u[t-n, t-1], y[t-n, t-1].</span>
+
+        <span class="c1"># Update and solve the Data-Driven MPC problem</span>
+        <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">update_and_solve_data_driven_mpc</span><span class="p">()</span>
+
+        <span class="c1"># Simulate closed loop</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">n_mpc_step</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)):</span>
+            <span class="c1"># --- Algorithm 1: ---</span>
+            <span class="c1"># 2) Apply the input ut = ubar*[0](t).</span>
+            <span class="c1"># --- Algorithm 2 (n-step): ---</span>
+            <span class="c1"># 2) Apply the input sequence u[t, t+n-1] = ubar*[0, n-1](t)</span>
+            <span class="c1">#    over the next `n` time steps.</span>
+
+            <span class="c1"># Update control input</span>
+            <span class="n">n_step</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="n">t</span>  <span class="c1"># Time step `n`. Results 0 for n_mpc_step = 1</span>
+            <span class="n">optimal_u_step_n</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">get_optimal_control_input_at_step</span><span class="p">(</span>
+                    <span class="n">n_step</span><span class="o">=</span><span class="n">n_step</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">optimal_u_step_n</span>
+
+            <span class="c1"># --- Simulate system with optimal control input ---</span>
+            <span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">simulate_step</span><span class="p">(</span>
+                <span class="n">u</span><span class="o">=</span><span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">w</span><span class="o">=</span><span class="n">w_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># --- Algorithm 1 and Algorithm 2 (n-step): ---</span>
+            <span class="c1"># 1) At time `t`, take the past `n` measurements u[t-n, t-1],</span>
+            <span class="c1">#    y[t-n, t-1] and solve Data-Driven MPC.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Note: The Data-Driven MPC is solved at the start of the next</span>
+            <span class="c1"># iteration.</span>
+
+            <span class="c1"># Update past input-output measurements</span>
+            <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">store_input_output_measurement</span><span class="p">(</span>
+                <span class="n">u_current</span><span class="o">=</span><span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">y_current</span><span class="o">=</span><span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Print simulation progress and control information</span>
+            <span class="n">mpc_cost_val</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">get_optimal_cost_value</span><span class="p">()</span>
+            <span class="n">print_mpc_step_info</span><span class="p">(</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                <span class="n">mpc_cost_val</span><span class="o">=</span><span class="n">mpc_cost_val</span><span class="p">,</span>
+                <span class="n">u_sys_k</span><span class="o">=</span><span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">u_s</span><span class="o">=</span><span class="n">u_s</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">y_sys_k</span><span class="o">=</span><span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">y_s</span><span class="o">=</span><span class="n">y_s</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># --- Algorithm 1: ---</span>
+        <span class="c1"># 3) Set t = t + 1 and go back to 1).</span>
+        <span class="c1"># --- Algorithm 2 (n-step): ---</span>
+        <span class="c1"># 3) Set t = t + n and go back to 1).</span>
+
+    <span class="c1"># Close progress bar if previously created</span>
+    <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">progress_bar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">u_sys</span><span class="p">,</span> <span class="n">y_sys</span></div>
+
+
+
+<div class="viewcode-block" id="simulate_nonlinear_data_driven_mpc_control_loop">
+<a class="viewcode-back" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html#direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.simulate_nonlinear_data_driven_mpc_control_loop">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate_nonlinear_data_driven_mpc_control_loop</span><span class="p">(</span>
+    <span class="n">system_model</span><span class="p">:</span> <span class="n">NonlinearSystem</span><span class="p">,</span>
+    <span class="n">data_driven_mpc_controller</span><span class="p">:</span> <span class="n">NonlinearDataDrivenMPCController</span><span class="p">,</span>
+    <span class="n">n_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">np_random</span><span class="p">:</span> <span class="n">Generator</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span>
+        <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">NonlinearSystem</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="kc">None</span>
+    <span class="p">]</span>
+    <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulate a Data-Driven MPC control loop applied to a nonlinear system and</span>
+<span class="sd">    return the resulting input-output data sequences.</span>
+
+<span class="sd">    This function simulates the closed-loop operation of a Data-Driven MPC</span>
+<span class="sd">    controller designed for nonlinear systems, following the Nonlinear</span>
+<span class="sd">    Data-Driven MPC scheme described in Algorithm 1 of [2].</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        system_model (NonlinearSystem): A `NonlinearSystem` instance</span>
+<span class="sd">            representing a nonlinear system.</span>
+<span class="sd">        data_driven_mpc_controller (NonlinearDataDrivenMPCController): A</span>
+<span class="sd">            `NonlinearDataDrivenMPCController` instance representing a</span>
+<span class="sd">            Data-Driven MPC controller designed for nonlinear systems.</span>
+<span class="sd">        n_steps (int): The number of time steps for the simulation.</span>
+<span class="sd">        np_random (Generator): A Numpy random number generator for generating</span>
+<span class="sd">            random noise for the system&#39;s output.</span>
+<span class="sd">        verbose (int): The verbosity level: 0 = no output, 1 = minimal output,</span>
+<span class="sd">            2 = detailed output.</span>
+<span class="sd">        callback (Callable | None): A function executed after each control</span>
+<span class="sd">            step. It should follow the signature `(step: int, system_model:</span>
+<span class="sd">            NonlinearSystem, u_sys_k: np.ndarray, y_sys_k: np.ndarray, y_r:</span>
+<span class="sd">            np.ndarray)`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:</span>
+
+<span class="sd">        - An array of shape `(n_steps, m)` representing the optimal control</span>
+<span class="sd">          inputs applied to the system, where `m` is the number of control</span>
+<span class="sd">          inputs.</span>
+<span class="sd">        - An array of shape `(n_steps, p)` representing the output response of</span>
+<span class="sd">          the system, where `p` is the number of system outputs.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, &quot;Linear</span>
+<span class="sd">        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,&quot; in</span>
+<span class="sd">        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,</span>
+<span class="sd">        Sept. 2022, doi: 10.1109/TAC.2022.3166851.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Retrieve model parameters</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">m</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">p</span>  <span class="c1"># Number of outputs</span>
+    <span class="n">eps_max_sim</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">eps_max</span>  <span class="c1"># Upper bound of the system</span>
+    <span class="c1"># measurement noise (simulation)</span>
+
+    <span class="c1"># Retrieve Data-Driven MPC controller parameters</span>
+    <span class="c1"># System output setpoint</span>
+    <span class="n">y_r</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">y_r</span>
+    <span class="c1"># Number of consecutive applications of the optimal input</span>
+    <span class="c1"># for an n-Step Data-Driven MPC Scheme (multi-step)</span>
+    <span class="n">n_mpc_step</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">n_mpc_step</span>
+
+    <span class="c1"># Initialize control loop input-output data arrays</span>
+    <span class="n">u_sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+    <span class="n">y_sys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+
+    <span class="c1"># Generate bounded uniformly distributed additive measurement noise</span>
+    <span class="n">w_sys</span> <span class="o">=</span> <span class="n">eps_max_sim</span> <span class="o">*</span> <span class="n">np_random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="n">n_steps</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+
+    <span class="c1"># --- Simulate Data-Driven MPC control system ---</span>
+    <span class="c1"># Create progress bar if verbose level is 1</span>
+    <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">n_steps</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># Simulate the Nonlinear Data-Driven MPC control system</span>
+    <span class="c1"># as described in Algorithm 1 of [2].</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">,</span> <span class="n">n_mpc_step</span><span class="p">):</span>
+        <span class="c1"># --- Algorithm 1: ---</span>
+        <span class="c1"># 1) At time `t &gt;= N`, compute `alpha_sr_Lin(Dt)` by solving Equation</span>
+        <span class="c1">#    (12) or its approximation from Equation (23).</span>
+        <span class="c1">#</span>
+        <span class="c1"># Note:</span>
+        <span class="c1">#   - The `NonlinearDataDrivenMPCController` controller class</span>
+        <span class="c1">#     implements the approximation of `alpha_sr_Lin(Dt)` by solving</span>
+        <span class="c1">#     Equation (23) of [2]. This can be enabled by initializing the</span>
+        <span class="c1">#     controller with the `alpha_reg_type` parameter set to</span>
+        <span class="c1">#     `AlphaRegType.APPROXIMATED`.</span>
+        <span class="c1">#   - As described in Section V of [2], the paper&#39;s example does not</span>
+        <span class="c1">#     compute `alpha_sr_Lin(Dt)` by solving either Equation (12) or</span>
+        <span class="c1">#     (23). Instead, its value is &quot;approximated&quot; using the previous</span>
+        <span class="c1">#     optimal solution of `alpha` to encourage stationary behavior.</span>
+        <span class="c1">#     This can be enabled by setting `alpha_reg_type` to</span>
+        <span class="c1">#     `AlphaRegType.PREVIOUS` during controller initialization.</span>
+
+        <span class="c1"># Update and solve the Data-Driven MPC problem</span>
+        <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">update_and_solve_data_driven_mpc</span><span class="p">()</span>
+        <span class="c1"># Note: The `update_and_solve_data_driven_mpc` method computes the</span>
+        <span class="c1"># value of `alpha_sr_Lin(Dt)` and solves the Nonlinear Data-Driven MPC</span>
+        <span class="c1"># problem.</span>
+
+        <span class="c1"># Simulate closed loop</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">n_mpc_step</span><span class="p">,</span> <span class="n">n_steps</span><span class="p">)):</span>
+            <span class="c1"># --- Algorithm 1: ---</span>
+            <span class="c1"># 2) Solve the Nonlinear Data-Driven MPC problem (22) and apply</span>
+            <span class="c1">#    the first `n` input components:</span>
+            <span class="c1">#       u_{t+k} = ubar*_k(t), for k in I[0,n-1].</span>
+
+            <span class="c1"># Update control input</span>
+            <span class="n">n_step</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="n">t</span>  <span class="c1"># Time step `n`. Results 0 for n_mpc_step = 1</span>
+            <span class="n">optimal_u_step_n</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">get_optimal_control_input_at_step</span><span class="p">(</span>
+                    <span class="n">n_step</span><span class="o">=</span><span class="n">n_step</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">optimal_u_step_n</span>
+
+            <span class="c1"># --- Simulate system with optimal control input ---</span>
+            <span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">system_model</span><span class="o">.</span><span class="n">simulate_step</span><span class="p">(</span>
+                <span class="n">u</span><span class="o">=</span><span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">w</span><span class="o">=</span><span class="n">w_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># --- Algorithm 1: ---</span>
+            <span class="c1"># Update input-output measurements online after each iteration.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Note: This is not explicitly stated in the algorithm, but is</span>
+            <span class="c1"># described throughout the paper.</span>
+
+            <span class="c1"># Update input-output measurements online</span>
+            <span class="n">du_current</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">get_du_value_at_step</span><span class="p">(</span>
+                <span class="n">n_step</span><span class="o">=</span><span class="n">n_step</span>
+            <span class="p">)</span>
+            <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">store_input_output_measurement</span><span class="p">(</span>
+                <span class="n">u_current</span><span class="o">=</span><span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span>
+                <span class="n">y_current</span><span class="o">=</span><span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span>
+                <span class="n">du_current</span><span class="o">=</span><span class="n">du_current</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># Note: Input increment updates are required for controllers that</span>
+            <span class="c1"># use an extended output representation and input increments</span>
+            <span class="c1"># (as the controller presented in Section V of [2]). This is not</span>
+            <span class="c1"># necessary for controllers that operate in a standard manner,</span>
+            <span class="c1"># which use direct control inputs and do not extend the system</span>
+            <span class="c1"># state.</span>
+
+            <span class="c1"># Call callback function after each simulation step if provided</span>
+            <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
+                <span class="n">callback</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">system_model</span><span class="p">,</span> <span class="n">u_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y_r</span><span class="p">)</span>
+
+            <span class="c1"># Print simulation progress and control information</span>
+            <span class="n">mpc_cost_val</span> <span class="o">=</span> <span class="n">data_driven_mpc_controller</span><span class="o">.</span><span class="n">get_optimal_cost_value</span><span class="p">()</span>
+            <span class="n">print_mpc_step_info</span><span class="p">(</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
+                <span class="n">mpc_cost_val</span><span class="o">=</span><span class="n">mpc_cost_val</span><span class="p">,</span>
+                <span class="n">y_sys_k</span><span class="o">=</span><span class="n">y_sys</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">y_s</span><span class="o">=</span><span class="n">y_r</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Close progress bar if previously created</span>
+    <span class="k">if</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">progress_bar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">u_sys</span><span class="p">,</span> <span class="n">y_sys</span></div>
+
+
+
+<div class="viewcode-block" id="print_mpc_step_info">
+<a class="viewcode-back" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html#direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.print_mpc_step_info">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_mpc_step_info</span><span class="p">(</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">step</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">mpc_cost_val</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y_sys_k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">u_sys_k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">u_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">progress_bar</span><span class="p">:</span> <span class="n">tqdm</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Print MPC step information based on the verbosity level.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        verbose (int): The verbosity level. `1`: Updates the progress bar with</span>
+<span class="sd">            the current step information. `2`: Prints detailed step</span>
+<span class="sd">            information, including input and output errors.</span>
+<span class="sd">        step (int): Current time step.</span>
+<span class="sd">        mpc_cost_val (float): The current MPC cost value.</span>
+<span class="sd">        u_s (np.ndarray | None): The input setpoint array. If `None`, input</span>
+<span class="sd">            errors will not be printed. Defaults to `None`.</span>
+<span class="sd">        u_sys_k (np.ndarray | None): The input vector for the current time</span>
+<span class="sd">            step. If `None`, input errors will not be printed. Defaults to</span>
+<span class="sd">            `None`.</span>
+<span class="sd">        y_s (np.ndarray): The output setpoint array.</span>
+<span class="sd">        y_sys_k (np.ndarray): The output vector for the current time step.</span>
+<span class="sd">        progress_bar (tqdm | None): A progress bar displaying simulation</span>
+<span class="sd">            progress information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">progress_bar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Update progress bar</span>
+        <span class="n">progress_bar</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;    Simulation progress - MPC cost value: </span><span class="si">{</span><span class="n">mpc_cost_val</span><span class="si">:</span><span class="s2">&gt;8.4f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="n">progress_bar</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># Calculate and format output errors</span>
+        <span class="n">y_error</span> <span class="o">=</span> <span class="n">y_s</span> <span class="o">-</span> <span class="n">y_sys_k</span>
+        <span class="n">formatted_y_error</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;y_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">e = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">&gt;6.3f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">error</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_error</span><span class="p">)]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Calculate and format input errors</span>
+        <span class="k">if</span> <span class="n">u_sys_k</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">u_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">u_error</span> <span class="o">=</span> <span class="n">u_s</span> <span class="o">-</span> <span class="n">u_sys_k</span>
+            <span class="n">formatted_u_error</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="sa">f</span><span class="s2">&quot;u_</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">e = </span><span class="si">{</span><span class="n">error</span><span class="si">:</span><span class="s2">&gt;6.3f</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">error</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">u_error</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Construct error message including input errors</span>
+            <span class="n">error_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_u_error</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">formatted_y_error</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Construct error message without input errors</span>
+            <span class="n">error_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_y_error</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;    Time step: </span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">&gt;4</span><span class="si">}</span><span class="s2"> - MPC cost value: &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mpc_cost_val</span><span class="si">:</span><span class="s2">&gt;8.4f</span><span class="si">}</span><span class="s2"> - Error: &quot;</span> <span class="o">+</span> <span class="n">error_message</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pável A. Campos-Peña
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pável A. Campos-Peña.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jul 16, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

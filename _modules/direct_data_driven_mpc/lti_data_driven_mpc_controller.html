@@ -1,0 +1,1729 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>direct_data_driven_mpc.lti_data_driven_mpc_controller &#8212; Direct Data-Driven MPC</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles.css?v=eab398a6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=60f8217a"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Direct Data-Driven MPC</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Quick Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/pavelacamposp/direct-data-driven-mpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/direct-data-driven-mpc" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/pypi/v/direct-data-driven-mpc" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://docs.python.org/3.10" title="Python" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/Python-3.10%20|%203.12-blue" class="icon-link-image" alt="Python"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://opensource.org/license/MIT" title="License: MIT" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="icon-link-image" alt="License: MIT"/></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    Welcome to Direct Data-Driven Model Predictive Control (MPC)!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../sections/installation.html">Package Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/paper_reproduction.html">Paper Reproduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sections/project_structure.html">Project Structure</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Source API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/controllers/lti_controller.html">LTI Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/controllers/nonlinear_controller.html">Nonlinear Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utilities/index.html">Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/utilities/controller.html">Controller Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html">direct_data_driven_mpc.utilities.controller.controller_creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_params.html">direct_data_driven_mpc.utilities.controller.controller_params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html">direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.initial_data_generation.html">direct_data_driven_mpc.utilities.controller.initial_data_generation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/utilities/models.html">Model Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/models/direct_data_driven_mpc.utilities.models.lti_model.html">direct_data_driven_mpc.utilities.models.lti_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/models/direct_data_driven_mpc.utilities.models.nonlinear_model.html">direct_data_driven_mpc.utilities.models.nonlinear_model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/utilities/visualization.html">Visualization Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html">direct_data_driven_mpc.utilities.visualization.control_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot_anim.html">direct_data_driven_mpc.utilities.visualization.control_plot_anim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.comparison_plot.html">direct_data_driven_mpc.utilities.visualization.comparison_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.plot_utilities.html">direct_data_driven_mpc.utilities.visualization.plot_utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../api/utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../sections/license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/lti_data_driven_mpc_controller.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for direct_data_driven_mpc.lti_data_driven_mpc_controller</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cvxpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">direct_data_driven_mpc.utilities.hankel_matrix</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">evaluate_persistent_excitation</span><span class="p">,</span>
+    <span class="n">hankel_matrix</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Define Direct Data-Driven MPC Controller Types</span>
+<div class="viewcode-block" id="LTIDataDrivenMPCType">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LTIDataDrivenMPCType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Controller types for Data-Driven MPC controllers for Linear Time-Invariant</span>
+<span class="sd">    (LTI) systems.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        NOMINAL: A nominal data-driven MPC controller that assumes noise-free</span>
+<span class="sd">            measurements. Based on the Nominal Data-Driven MPC scheme described</span>
+<span class="sd">            in [1].</span>
+<span class="sd">        ROBUST: A robust data-driven MPC controller that incorporates</span>
+<span class="sd">            additional constraints to account for noisy output measurements.</span>
+<span class="sd">            Based on the Robust Data-Driven MPC scheme described in [1].</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, &quot;Data-Driven</span>
+<span class="sd">        Model Predictive Control With Stability and Robustness Guarantees,&quot; in</span>
+<span class="sd">        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,</span>
+<span class="sd">        April 2021, doi: 10.1109/TAC.2020.3000182.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOMINAL</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Nominal Data-Driven MPC</span>
+    <span class="n">ROBUST</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Robust Data-Driven MPC</span></div>
+
+
+
+<span class="c1"># Define Slack Variable Constraint Types for Robust Data-Driven MPC</span>
+<div class="viewcode-block" id="SlackVarConstraintType">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SlackVarConstraintType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constraint types for the slack variable used in the formulation of Robust</span>
+<span class="sd">    Data-Driven MPC controllers for Linear Time-Invariant (LTI) systems.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        NON_CONVEX: A non-convex constraint on the slack variable. Currently</span>
+<span class="sd">            not implemented since it cannot be efficiently solved.</span>
+<span class="sd">        CONVEX: A convex constraint on the slack variable. Based on Remark 3 of</span>
+<span class="sd">            [1].</span>
+<span class="sd">        NONE: No explicit constraint is applied. The slack variable constraint</span>
+<span class="sd">            is assumed to be implicitly satisfied. Based on Remark 3 of [1].</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, &quot;Data-Driven</span>
+<span class="sd">        Model Predictive Control With Stability and Robustness Guarantees,&quot; in</span>
+<span class="sd">        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,</span>
+<span class="sd">        April 2021, doi: 10.1109/TAC.2020.3000182.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NON_CONVEX</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">CONVEX</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LTIDataDrivenMPCController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class that implements a Data-Driven Model Predictive Control (MPC)</span>
+<span class="sd">    controller for Linear Time-Invariant (LTI) systems. This controller can be</span>
+<span class="sd">    configured as either a Nominal or a Robust controller. The implementation</span>
+<span class="sd">    is based on research by J. Berberich et al., as described in [1].</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        controller_type (LTIDataDrivenMPCType): The LTI Data-Driven MPC</span>
+<span class="sd">            controller type.</span>
+<span class="sd">        n (int): The estimated order of the system.</span>
+<span class="sd">        m (int): The number of control inputs.</span>
+<span class="sd">        p (int): The number of system outputs.</span>
+<span class="sd">        u_d (np.ndarray): A persistently exciting input sequence.</span>
+<span class="sd">        y_d (np.ndarray): The system&#39;s output response to `u_d`.</span>
+<span class="sd">        N (int): The length of the initial input (`u_d`) and output (`y_d`)</span>
+<span class="sd">            trajectories.</span>
+<span class="sd">        u_past (np.ndarray): The past `n` input measurements (u[t-n, t-1]).</span>
+<span class="sd">        y_past (np.ndarray): The past `n` output measurements (y[t-n, t-1]).</span>
+<span class="sd">        L (int): The prediction horizon length.</span>
+<span class="sd">        Q (np.ndarray): The output weighting matrix for the MPC formulation.</span>
+<span class="sd">        R (np.ndarray): The input weighting matrix for the MPC formulation.</span>
+<span class="sd">        u_s (np.ndarray): The setpoint for control inputs.</span>
+<span class="sd">        y_s (np.ndarray): The setpoint for system outputs.</span>
+<span class="sd">        eps_max (float | None): The estimated upper bound of the system</span>
+<span class="sd">            measurement noise.</span>
+<span class="sd">        lamb_alpha (float | None): The ridge regularization base weight for</span>
+<span class="sd">            `alpha`, scaled by `eps_max`.</span>
+<span class="sd">        lamb_sigma (float | None): The ridge regularization weight for</span>
+<span class="sd">            `sigma`.</span>
+<span class="sd">        U (np.ndarray | None): An array of shape (`m`, 2) containing the</span>
+<span class="sd">            bounds for the `m` predicted inputs. Each row specifies the</span>
+<span class="sd">            `[min, max]` bounds for a single input. If `None`, no input bounds</span>
+<span class="sd">            are applied.</span>
+<span class="sd">        c (float | None): A constant used to define a Convex constraint for</span>
+<span class="sd">            the slack variable `sigma` in a Robust MPC formulation.</span>
+<span class="sd">        slack_var_constraint_type (SlackVarConstraintType): The constraint</span>
+<span class="sd">            type for the slack variable `sigma` in a Robust MPC formulation.</span>
+<span class="sd">        n_mpc_step (int): The number of consecutive applications of the</span>
+<span class="sd">            optimal input for an n-Step Data-Driven MPC Scheme (multi-step).</span>
+<span class="sd">        use_terminal_constraints (bool): If `True`, include terminal equality</span>
+<span class="sd">            constraints in the Data-Driven MPC formulation. If `False`, the</span>
+<span class="sd">            controller will not enforce these constraints.</span>
+<span class="sd">        HLn_ud (np.ndarray): The Hankel matrix constructed from the input data</span>
+<span class="sd">            `u_d`.</span>
+<span class="sd">        HLn_yd (np.ndarray): The Hankel matrix constructed from the output</span>
+<span class="sd">            data `y_d`.</span>
+<span class="sd">        alpha (cp.Variable): The optimization variable for a data-driven</span>
+<span class="sd">            input-output trajectory characterization of the system.</span>
+<span class="sd">        ubar (cp.Variable): The predicted control input variable.</span>
+<span class="sd">        ybar (cp.Variable): The predicted system output variable.</span>
+<span class="sd">        sigma (cp.Variable | None): The slack variable to account for noisy</span>
+<span class="sd">            measurements in a Robust Data-Driven MPC.</span>
+<span class="sd">        dynamics_constraints (list[cp.Constraint]): The system dynamics</span>
+<span class="sd">            constraints for a Data-Driven MPC formulation.</span>
+<span class="sd">        internal_state_constraints (list[cp.Constraint]): The internal state</span>
+<span class="sd">            constraints for a Data-Driven MPC formulation.</span>
+<span class="sd">        terminal_constraints (list[cp.Constraint]): The terminal state</span>
+<span class="sd">            constraints for a Data-Driven MPC formulation.</span>
+<span class="sd">        slack_var_constraint (list[cp.Constraint]): The slack variable</span>
+<span class="sd">            constraints for a Robust Data-Driven MPC formulation.</span>
+<span class="sd">        constraints (list[cp.Constraint]): The combined constraints for the</span>
+<span class="sd">            Data-Driven MPC formulation.</span>
+<span class="sd">        cost (cp.Expression): The cost function for the Data-Driven MPC</span>
+<span class="sd">            formulation.</span>
+<span class="sd">        problem (cp.Problem): The quadratic programming problem for the</span>
+<span class="sd">            Data-Driven MPC.</span>
+<span class="sd">        optimal_u (np.ndarray): The optimal control input derived from the</span>
+<span class="sd">            Data-Driven MPC solution.</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, &quot;Data-Driven</span>
+<span class="sd">        Model Predictive Control With Stability and Robustness Guarantees,&quot; in</span>
+<span class="sd">        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,</span>
+<span class="sd">        April 2021, doi: 10.1109/TAC.2020.3000182.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.__init__">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">p</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">u_d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">y_d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">L</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">R</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">u_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">y_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">eps_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lamb_alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lamb_sigma</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">U</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">c</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">slack_var_constraint_type</span><span class="p">:</span> <span class="n">SlackVarConstraintType</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">CONVEX</span>
+        <span class="p">),</span>
+        <span class="n">controller_type</span><span class="p">:</span> <span class="n">LTIDataDrivenMPCType</span> <span class="o">=</span> <span class="p">(</span><span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">NOMINAL</span><span class="p">),</span>
+        <span class="n">n_mpc_step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">use_terminal_constraints</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a Direct LTI Data-Driven MPC with specified system model</span>
+<span class="sd">        parameters, an initial input-output data trajectory measured from the</span>
+<span class="sd">        system, and LTI Data-Driven MPC parameters.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            The input data `u_d` used to excite the system to get the initial</span>
+<span class="sd">            output data must be persistently exciting of order (L + 2 * n), as</span>
+<span class="sd">            defined in the Data-Driven MPC formulations in [1].</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n (int): The estimated order of the system.</span>
+<span class="sd">            m (int): The number of control inputs.</span>
+<span class="sd">            p (int): The number of system outputs.</span>
+<span class="sd">            u_d (np.ndarray): A persistently exciting input sequence.</span>
+<span class="sd">            y_d (np.ndarray): The system&#39;s output response to `u_d`.</span>
+<span class="sd">            L (int): The prediction horizon length.</span>
+<span class="sd">            Q (np.ndarray): The output weighting matrix for the MPC</span>
+<span class="sd">                formulation.</span>
+<span class="sd">            R (np.ndarray): The input weighting matrix for the MPC</span>
+<span class="sd">                formulation.</span>
+<span class="sd">            u_s (np.ndarray): The setpoint for control inputs.</span>
+<span class="sd">            y_s (np.ndarray): The setpoint for system outputs.</span>
+<span class="sd">            eps_max (float | None): The estimated upper bound of the system</span>
+<span class="sd">                measurement noise.</span>
+<span class="sd">            lamb_alpha (float | None): The ridge regularization base weight</span>
+<span class="sd">                for `alpha`. It is scaled by `eps_max`.</span>
+<span class="sd">            lamb_sigma (float | None): The ridge regularization weight for</span>
+<span class="sd">                `sigma`.</span>
+<span class="sd">            U (np.ndarray | None): An array of shape (`m`, 2) containing</span>
+<span class="sd">                the bounds for the `m` predicted inputs. Each row specifies</span>
+<span class="sd">                the `[min, max]` bounds for a single input. If `None`, no</span>
+<span class="sd">                input bounds are applied. Defaults to `None`.</span>
+<span class="sd">            c (float | None): A constant used to define a Convex constraint</span>
+<span class="sd">                for the slack variable `sigma` in a Robust MPC formulation.</span>
+<span class="sd">            slack_var_constraint_type (SlackVarConstraintType): The</span>
+<span class="sd">                constraint type for the slack variable `sigma` in a Robust MPC</span>
+<span class="sd">                formulation.</span>
+<span class="sd">            controller_type (LTIDataDrivenMPCType): The Data-Driven MPC</span>
+<span class="sd">                controller type.</span>
+<span class="sd">            n_mpc_step (int): The number of consecutive applications of the</span>
+<span class="sd">                optimal input for an n-Step Data-Driven MPC Scheme</span>
+<span class="sd">                (multi-step). Defaults to 1.</span>
+<span class="sd">            use_terminal_constraints (bool): If `True`, include terminal</span>
+<span class="sd">                equality constraints in the Data-Driven MPC formulation. If</span>
+<span class="sd">                `False`, the controller will not enforce these constraints.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,</span>
+<span class="sd">            &quot;Data-Driven Model Predictive Control With Stability and Robustness</span>
+<span class="sd">            Guarantees,&quot; in IEEE Transactions on Automatic Control, vol. 66,</span>
+<span class="sd">            no. 4, pp. 1702-1717, April 2021, doi: 10.1109/TAC.2020.3000182.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set controller type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">=</span> <span class="n">controller_type</span>  <span class="c1"># Nominal or Robust Controller</span>
+
+        <span class="c1"># Validate controller type</span>
+        <span class="n">controller_types</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">NOMINAL</span><span class="p">,</span>
+            <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">controller_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">controller_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported controller type.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Define system model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>  <span class="c1"># Estimated system order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">m</span>  <span class="c1"># Number of inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>  <span class="c1"># Number of outputs</span>
+
+        <span class="c1"># Initial Input-Output trajectory data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_d</span> <span class="o">=</span> <span class="n">u_d</span>  <span class="c1"># Input trajectory data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_d</span> <span class="o">=</span> <span class="n">y_d</span>  <span class="c1"># Output trajectory data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">=</span> <span class="n">u_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Initial input-output trajectory length</span>
+
+        <span class="c1"># Initialize storage variables for past `n` input-output measurements</span>
+        <span class="c1"># (used for the internal state constraints that ensure predictions</span>
+        <span class="c1"># align with the internal state of the system&#39;s trajectory)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_past</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">u_d</span><span class="p">[</span><span class="o">-</span><span class="n">n</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># u[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_past</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">y_d</span><span class="p">[</span><span class="o">-</span><span class="n">n</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># y[t-n, t-1]</span>
+
+        <span class="c1"># Define Data-Driven MPC parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">=</span> <span class="n">L</span>  <span class="c1"># Prediction horizon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span>  <span class="c1"># Output weighting matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">R</span> <span class="o">=</span> <span class="n">R</span>  <span class="c1"># Input weighting matrix</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_s</span> <span class="o">=</span> <span class="n">u_s</span>  <span class="c1"># Control input setpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_s</span> <span class="o">=</span> <span class="n">y_s</span>  <span class="c1"># System output setpoint</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps_max</span> <span class="o">=</span> <span class="n">eps_max</span>  <span class="c1"># Upper limit of bounded measurement noise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lamb_alpha</span> <span class="o">=</span> <span class="n">lamb_alpha</span>  <span class="c1"># Ridge regularization base weight for</span>
+        <span class="c1"># alpha. It is scaled by `eps_max`.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lamb_sigma</span> <span class="o">=</span> <span class="n">lamb_sigma</span>  <span class="c1"># Ridge regularization weight for sigma</span>
+        <span class="c1"># (If large enough, can neglect noise constraints)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="o">=</span> <span class="n">U</span>  <span class="c1"># Bounds for the predicted input</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>  <span class="c1"># Convex slack variable constraint:</span>
+        <span class="c1"># ||sigma||_inf &lt;= c * eps_max</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">slack_var_constraint_type</span> <span class="o">=</span> <span class="n">slack_var_constraint_type</span>  <span class="c1"># Slack</span>
+        <span class="c1"># variable constraint type</span>
+
+        <span class="c1"># Validate slack variable constraint type</span>
+        <span class="n">slack_var_constraint_types</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">NON_CONVEX</span><span class="p">,</span>
+            <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">CONVEX</span><span class="p">,</span>
+            <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">slack_var_constraint_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">slack_var_constraint_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported slack variable constraint type.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Ensure correct parameter definition for Robust MPC controller</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">:</span>
+            <span class="k">if</span> <span class="kc">None</span> <span class="ow">in</span> <span class="p">(</span><span class="n">eps_max</span><span class="p">,</span> <span class="n">lamb_alpha</span><span class="p">,</span> <span class="n">lamb_sigma</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;All robust MPC parameters (`eps_max`, `lamb_alpha`, &quot;</span>
+                    <span class="s2">&quot;`lamb_sigma`, `c`) must be provided for a &#39;ROBUST&#39; &quot;</span>
+                    <span class="s2">&quot;controller.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="c1"># n-Step Data-Driven MPC Scheme parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_mpc_step</span> <span class="o">=</span> <span class="n">n_mpc_step</span>  <span class="c1"># Number of consecutive applications</span>
+        <span class="c1"># of the optimal input</span>
+
+        <span class="c1"># Define bounds for the predicted inputs and predicted input setpoints</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">U_const_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">U_const_up</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">U</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Terminal constraints use in Data-Driven MPC formulation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_terminal_constraints</span> <span class="o">=</span> <span class="n">use_terminal_constraints</span>
+
+        <span class="c1"># Evaluate if input trajectory data is persistently exciting of</span>
+        <span class="c1"># order (L + 2 * n)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_input_persistent_excitation</span><span class="p">()</span>
+
+        <span class="c1"># Check correct prediction horizon length and cost matrix dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_prediction_horizon_length</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_weighting_matrices_dimensions</span><span class="p">()</span>
+
+        <span class="c1"># Initialize Data-Driven MPC controller</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_data_driven_mpc</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.evaluate_input_persistent_excitation">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.evaluate_input_persistent_excitation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_input_persistent_excitation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Evaluate whether the input data is persistently exciting of order</span>
+<span class="sd">        (L + 2 * n).</span>
+
+<span class="sd">        This method first verifies that the length of the elements in the</span>
+<span class="sd">        input data matches the number of inputs of the system. Then, it</span>
+<span class="sd">        ensures that the length of the input sequence meets a minimum</span>
+<span class="sd">        threshold, as defined in Remark 1 [1]. Finally, it evaluates the rank</span>
+<span class="sd">        of the Hankel matrix induced by the input sequence to determine if the</span>
+<span class="sd">        input sequence is persistently exciting, as described in Definition 1</span>
+<span class="sd">        [1].</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the length of the elements in the data sequence</span>
+<span class="sd">                does not match the number of inputs of the system, or if the</span>
+<span class="sd">                input data is not persistently exciting of order (L + 2 * n).</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the length of the elements of the data sequence</span>
+        <span class="n">u_d_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># m - Number of inputs</span>
+
+        <span class="c1"># Check if the number of inputs matches the expected</span>
+        <span class="c1"># number of inputs of the system</span>
+        <span class="k">if</span> <span class="n">u_d_n</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The length of the elements of the data sequence (</span><span class="si">{</span><span class="n">u_d_n</span><span class="si">}</span><span class="s2">) &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;should match the number of inputs of the system (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Compute the minimum required length of the input sequence</span>
+        <span class="c1"># based on Remark 1 of [1]</span>
+        <span class="n">N_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># Check if the length of the input sequence is sufficient</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">&lt;</span> <span class="n">N_min</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Initial input trajectory data is not persistently exciting &quot;</span>
+                <span class="s2">&quot;of order (L + 2 * n). It does not satisfy the inequality: &quot;</span>
+                <span class="s2">&quot;N - L - 2 * n + 1 ≥ m * (L + 2 * n). The required minimum N &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;is </span><span class="si">{</span><span class="n">N_min</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Evaluate if input data is persistently exciting of order (L + 2 * n)</span>
+        <span class="c1"># based on the rank of its induced Hankel matrix</span>
+        <span class="n">expected_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span>
+        <span class="n">in_hankel_rank</span><span class="p">,</span> <span class="n">in_pers_exc</span> <span class="o">=</span> <span class="n">evaluate_persistent_excitation</span><span class="p">(</span>
+            <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">u_d</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">expected_order</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">in_pers_exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Initial input trajectory data is not persistently exciting &quot;</span>
+                <span class="s2">&quot;of order (L + 2 * n). The rank of its induced Hankel matrix &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">in_hankel_rank</span><span class="si">}</span><span class="s2">) does not match the expected rank (&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">u_d_n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">expected_order</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.check_prediction_horizon_length">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_prediction_horizon_length">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_prediction_horizon_length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the prediction horizon length, `L`, satisfies the MPC system</span>
+<span class="sd">        design restriction based on the type of the Direct Data-Driven MPC</span>
+<span class="sd">        controller. For a `Nominal` type, it must be greater than or equal to</span>
+<span class="sd">        the estimated system order `n`. For a `Robust` controller, it must be</span>
+<span class="sd">        greater than or equal to two times the estimated system order `n`.</span>
+
+<span class="sd">        These restrictions are defined by Assumption 3, for the Nominal MPC</span>
+<span class="sd">        scheme, and Assumption 4, for the Robust one, as described in [1].</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the prediction horizon `L` is less than the</span>
+<span class="sd">                required threshold based on the controller type.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">NOMINAL</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;The prediction horizon (`L`) must be greater than or &quot;</span>
+                    <span class="s2">&quot;equal to the estimated system order `n`.&quot;</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;The prediction horizon (`L`) must be greater than or &quot;</span>
+                    <span class="s2">&quot;equal to two times the estimated system order `n`.&quot;</span>
+                <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.check_weighting_matrices_dimensions">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.check_weighting_matrices_dimensions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_weighting_matrices_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the dimensions of the output and input weighting matrices, Q</span>
+<span class="sd">        and R, are correct for an MPC formulation based on their order.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the dimensions of the Q or R matrices are incorrect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">expected_output_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">expected_input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_output_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Output weighting square matrix Q should be of order (p * L).&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_input_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Input weighting square matrix R should be of order (m * L).&quot;</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.initialize_data_driven_mpc">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.initialize_data_driven_mpc">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_data_driven_mpc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the Data-Driven MPC controller.</span>
+
+<span class="sd">        This method performs the following tasks:</span>
+
+<span class="sd">        1. Constructs Hankel matrices from the initial input-output trajectory</span>
+<span class="sd">           data (`u_d`, `y_d`). These matrices are used for the data-driven</span>
+<span class="sd">           characterization of the unknown system, as defined by the system</span>
+<span class="sd">           dynamic constraints in the Robust and Nominal Data-Driven MPC</span>
+<span class="sd">           formulations of [1].</span>
+<span class="sd">        2. Defines the optimization variables for the Data-Driven MPC problem.</span>
+<span class="sd">        3. Defines the constraints for the MPC problem, which include the</span>
+<span class="sd">           system dynamics, internal state, terminal state, and input</span>
+<span class="sd">           constraints. For a Robust MPC controller, it also includes the</span>
+<span class="sd">           slack variable constraint.</span>
+<span class="sd">        4. Defines the cost function for the MPC problem.</span>
+<span class="sd">        5. Formulates the MPC problem as a Quadratic Programming (QP) problem.</span>
+<span class="sd">        6. Solves the initialized MPC problem to ensure the formulation is</span>
+<span class="sd">           valid and retrieve the optimal control input for the initial</span>
+<span class="sd">           setup.</span>
+
+<span class="sd">        This initialization process ensures that all necessary components for</span>
+<span class="sd">        the Data-Driven MPC are correctly defined and that the MPC problem is</span>
+<span class="sd">        solvable with the provided initial data.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Construct Hankel Matrices from the initial input-output trajectory</span>
+        <span class="c1"># for the data-driven characterization of the unknown system.</span>
+        <span class="c1"># Used for the system dynamic constraints, as defined by Equations</span>
+        <span class="c1"># (3b) (Nominal) and (6a) (Robust) of [1].</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HLn_ud</span> <span class="o">=</span> <span class="n">hankel_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># H_{L+n}(u^d)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HLn_yd</span> <span class="o">=</span> <span class="n">hankel_matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_d</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>  <span class="c1"># H_{L+n}(y^d)</span>
+
+        <span class="c1"># Define the Data-Driven MPC problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_optimization_variables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_optimization_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_optimization_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_mpc_constraints</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_cost_function</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">define_mpc_problem</span><span class="p">()</span>
+
+        <span class="c1"># Validate the Data-Driven MPC formulation with an initial solution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solve_mpc_problem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_optimal_control_input</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.update_and_solve_data_driven_mpc">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_and_solve_data_driven_mpc">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_and_solve_data_driven_mpc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the Data-Driven MPC optimization parameters, solve the problem,</span>
+<span class="sd">        and store the optimal control input.</span>
+
+<span class="sd">        This method updates the MPC optimization parameters to incorporate the</span>
+<span class="sd">        latest `n` input-output measurements of the system. It then solves the</span>
+<span class="sd">        MPC problem and stores the resulting optimal control input.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Update MPC optimization parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_optimization_parameters</span><span class="p">()</span>
+
+        <span class="c1"># Solve MPC problem and store the optimal input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">solve_mpc_problem</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_optimal_control_input</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_optimization_variables">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_variables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_optimization_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the optimization variables for the Data-Driven MPC formulation</span>
+<span class="sd">        based on the specified MPC controller type.</span>
+
+<span class="sd">        This method defines data-driven MPC optimization variables as</span>
+<span class="sd">        described in the Nominal and Robust MPC formulations in [1]:</span>
+
+<span class="sd">        - **Nominal MPC**: Defines the variable `alpha` for a data-driven</span>
+<span class="sd">          input-output trajectory characterization of the system, and the</span>
+<span class="sd">          predicted input (`ubar`) and output (`ybar`) variables, as described</span>
+<span class="sd">          in Equation (3).</span>
+<span class="sd">        - **Robust MPC**: In addition to the optimization variables defined for</span>
+<span class="sd">          a Nominal MPC formulation, defines the `sigma` variable to account</span>
+<span class="sd">          for noisy measurements, as described in Equation (6).</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method initializes the `alpha`, `ubar`, `ybar`, and `sigma`</span>
+<span class="sd">            attributes to define the MPC optimization variables based on the</span>
+<span class="sd">            MPC controller type. The `sigma` variable is only initialized for</span>
+<span class="sd">            a Robust MPC controller.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># alpha(t)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">N</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># ubar[-n, L-1](t)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># ybar[-n, L-1](t)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># The time indices of the predicted input and output start at k = −n,</span>
+        <span class="c1"># since the last `n` inputs and outputs are used to invoke a unique</span>
+        <span class="c1"># initial state at time `t`, as described in Definition 3 of [1].</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">:</span>
+            <span class="c1"># sigma(t)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Variable</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_optimization_parameters">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_optimization_parameters">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_optimization_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define MPC optimization parameters that are updated at every step</span>
+<span class="sd">        iteration.</span>
+
+<span class="sd">        This method initializes the input setpoint (`u_s_param`), output</span>
+<span class="sd">        setpoint (`y_s_param`), past inputs (`u_past_param`), and past outputs</span>
+<span class="sd">        (`y_past_param`) MPC parameters.</span>
+
+<span class="sd">        The values of `u_s_param` and `y_s_param` are initialized to `u_s` and</span>
+<span class="sd">        `y_s`.</span>
+
+<span class="sd">        These parameters are updated at each MPC iteration, except for</span>
+<span class="sd">        `u_s_param` and `y_s_param`, which must be manually updated when</span>
+<span class="sd">        setting new controller setpoint pairs.</span>
+
+<span class="sd">        Using CVXPY `Parameter` objects allows efficient updates without the</span>
+<span class="sd">        need of reformulating the MPC problem at every step.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define input-output setpoint parameters and initialize their values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_s_param</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u_s</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;u_s&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_s_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_s</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_s_param</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_s</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;y_s&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_s_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_s</span>
+
+        <span class="c1"># u[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_past_param</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;u_past&quot;</span><span class="p">)</span>
+
+        <span class="c1"># y[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_past_param</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Parameter</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;y_past&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.update_optimization_parameters">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.update_optimization_parameters">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_optimization_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update MPC optimization parameters.</span>
+
+<span class="sd">        This method updates MPC parameters with the latest input-output</span>
+<span class="sd">        measurement data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># u[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_past_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_past</span>
+
+        <span class="c1"># y[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_past_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_past</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_mpc_constraints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_mpc_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the constraints for the Data-Driven MPC formulation based on</span>
+<span class="sd">        the specified MPC controller type.</span>
+
+<span class="sd">        This method defines the following constraints, as described in the</span>
+<span class="sd">        Nominal and Robust MPC formulations in [1]:</span>
+
+<span class="sd">        - **System dynamics**: Ensures input-output predictions are possible</span>
+<span class="sd">          trajectories of the system based on a data-driven characterization of</span>
+<span class="sd">          all its input-output trajectories. In a Robust MPC scheme, adds a</span>
+<span class="sd">          slack variable to account for noisy measurements. Defined by</span>
+<span class="sd">          Equations (3b) (Nominal) and (6a) (Robust).</span>
+<span class="sd">        - **Internal state**: Ensures predictions align with the internal state</span>
+<span class="sd">          of the system&#39;s trajectory. This constrains the first `n`</span>
+<span class="sd">          input-output predictions to match the past `n` input-output</span>
+<span class="sd">          measurements of the system, guaranteeing that the predictions</span>
+<span class="sd">          consider the initial state of the system. Defined by Equations (3c)</span>
+<span class="sd">          (Nominal) and (6b) (Robust).</span>
+<span class="sd">        - **Terminal state**: Aims to stabilize the internal state of the</span>
+<span class="sd">          system so it aligns with the steady-state that corresponds to the</span>
+<span class="sd">          input-output pair (`u_s`, `y_s`) in any minimal realization (last `n`</span>
+<span class="sd">          input-output predictions, as considered in [1]). Defined by Equations</span>
+<span class="sd">          (3d) (Nominal) and (6c) (Robust).</span>
+<span class="sd">        - **Input**: Constrains the predicted input (`ubar`). Defined by</span>
+<span class="sd">          Equation (6c).</span>
+<span class="sd">        - **Slack Variable**: Bounds a slack variable that accounts</span>
+<span class="sd">          for noisy online measurements and for noisy data used for prediction</span>
+<span class="sd">          (used to construct the Hankel matrices). Defined by Equation (6d),</span>
+<span class="sd">          for a Non-Convex constraint, and Remark 3, for a Convex constraint</span>
+<span class="sd">          and an implicit alternative.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method initializes the `dynamics_constraints`,</span>
+<span class="sd">            `internal_state_constraints`, `terminal_constraints`,</span>
+<span class="sd">            `input_constraints`, `slack_var_constraint`, and `constraints`</span>
+<span class="sd">            attributes to define the MPC constraints based on the MPC</span>
+<span class="sd">            controller type.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define System Dynamic, Internal State and Terminal State Constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dynamics_constraints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">define_system_dynamic_constraints</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">internal_state_constraints</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_internal_state_constraints</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminal_constraints</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_terminal_state_constraints</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_terminal_constraints</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define Input constraints if U is provided</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_constraints</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_input_constraints</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">U</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define Slack Variable Constraint if controller type is Robust</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slack_var_constraint</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_slack_variable_constraint</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Combine constraints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dynamics_constraints</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_state_constraints</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminal_constraints</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_constraints</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">slack_var_constraint</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_system_dynamic_constraints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_system_dynamic_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_system_dynamic_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the system dynamic constraints for the Data-Driven MPC</span>
+<span class="sd">        formulation corresponding to the specified MPC controller type.</span>
+
+<span class="sd">        These constraints use a data-driven characterization of all the</span>
+<span class="sd">        input-output trajectories of a system, as defined by Theorem 1 [1], to</span>
+<span class="sd">        ensure predictions are possible system trajectories. This is analogous</span>
+<span class="sd">        to the system dynamics constraints in a typical MPC formulation.</span>
+
+<span class="sd">        In a Robust MPC scheme, these constraints include a slack variable to</span>
+<span class="sd">        account for noisy online measurements and for noisy data used for</span>
+<span class="sd">        prediction (used to construct the Hankel matrices).</span>
+
+<span class="sd">        These constraints are defined according to the following equations</span>
+<span class="sd">        from the Nominal and Robust MPC formulations in [1]:</span>
+
+<span class="sd">        - **Nominal MPC:** Equation (3b).</span>
+<span class="sd">        - **Robust MPC:** Equation (6a).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[cp.Constraint]: A list containing the CVXPY system dynamic</span>
+<span class="sd">            constraints for the Data-Driven MPC controller, corresponding to</span>
+<span class="sd">            the specified MPC controller type.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">NOMINAL</span><span class="p">:</span>
+            <span class="c1"># Define system dynamic constraints for Nominal MPC</span>
+            <span class="c1"># based on Equation (3b) of [1]</span>
+            <span class="n">dynamics_constraints</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span><span class="p">])</span>
+                <span class="o">==</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">HLn_ud</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">HLn_yd</span><span class="p">])</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">:</span>
+            <span class="c1"># Define system dynamic constraints for Robust MPC</span>
+            <span class="c1"># including a slack variable to account for noise,</span>
+            <span class="c1"># based on Equation (6a) of [1]</span>
+            <span class="n">dynamics_constraints</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">])</span>
+                <span class="o">==</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">HLn_ud</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">HLn_yd</span><span class="p">])</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">dynamics_constraints</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_internal_state_constraints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_internal_state_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_internal_state_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the internal state constraints for the Data-Driven MPC</span>
+<span class="sd">        formulation.</span>
+
+<span class="sd">        These constraints ensure predictions align with the internal state of</span>
+<span class="sd">        the system&#39;s trajectory. This way, the first `n` input-output</span>
+<span class="sd">        predictions are constrained to match the past `n` input-output</span>
+<span class="sd">        measurements of the system, guaranteeing that the predictions consider</span>
+<span class="sd">        the initial state of the system.</span>
+
+<span class="sd">        These constraints are defined according to Equations (3c) (Nominal)</span>
+<span class="sd">        and (6b) (Robust) from the Nominal and Robust MPC formulations in [1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[cp.Constraint]: A list containing the CVXPY internal state</span>
+<span class="sd">            constraints for the Data-Driven MPC controller.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            It is essential to update the past `n` input-output measurements</span>
+<span class="sd">            of the system, `u_past` and `y_past`, at each MPC iteration.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define internal state constraints for Nominal and Robust MPC</span>
+        <span class="c1"># based on Equations (3c) and (6b) of [1], respectively</span>
+        <span class="n">ubar_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">]</span>  <span class="c1"># ubar[-n, -1]</span>
+        <span class="n">ybar_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">]</span>  <span class="c1"># ybar[-n, -1]</span>
+        <span class="n">internal_state_constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">ubar_state</span><span class="p">,</span> <span class="n">ybar_state</span><span class="p">])</span>
+            <span class="o">==</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">u_past_param</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_past_param</span><span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">internal_state_constraints</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_terminal_state_constraints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_terminal_state_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_terminal_state_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the terminal state constraints for the Data-Driven MPC</span>
+<span class="sd">        formulation.</span>
+
+<span class="sd">        These constraints aim to stabilize the internal state of the system so</span>
+<span class="sd">        it aligns with the steady-state that corresponds to the input-output</span>
+<span class="sd">        pair (`u_s`, `y_s`) in any minimal realization, specifically the last</span>
+<span class="sd">        `n` input-output predictions, as considered in [1].</span>
+
+<span class="sd">        These constraints are defined according to Equations (3d) (Nominal) and</span>
+<span class="sd">        (6c) (Robust) from the Nominal and Robust MPC formulations in [1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[cp.Constraint]: A list containing the CVXPY terminal state</span>
+<span class="sd">            constraints for the Data-Driven MPC controller.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get terminal segments of input-output predictions</span>
+        <span class="c1"># ubar[L-n, L-1]</span>
+        <span class="n">ubar_terminal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">]</span>
+        <span class="c1"># ybar[L-n, L-1]</span>
+        <span class="n">ybar_terminal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">]</span>
+
+        <span class="c1"># Replicate steady-state vectors to match minimum realization</span>
+        <span class="c1"># dimensions for constraint comparison</span>
+        <span class="n">u_sn</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">u_s_param</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">y_sn</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">y_s_param</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># Define terminal state constraints for Nominal and Robust MPC</span>
+        <span class="c1"># based on Equations (3d) and (6c) of [1], respectively.</span>
+        <span class="n">terminal_constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">ubar_terminal</span><span class="p">,</span> <span class="n">ybar_terminal</span><span class="p">])</span>
+            <span class="o">==</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">u_sn</span><span class="p">,</span> <span class="n">y_sn</span><span class="p">])</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">terminal_constraints</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_input_constraints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_input_constraints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_input_constraints</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the input constraints for the Data-Driven MPC formulation.</span>
+
+<span class="sd">        These constraints are defined according to Equation (6c) of [1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[cp.Constraint]: A list containing the CVXPY input constraints</span>
+<span class="sd">            for the Data-Driven MPC controller.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define input constraints</span>
+        <span class="n">ubar_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:]</span>  <span class="c1"># ubar[0,L-1]</span>
+        <span class="n">input_constraints</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">ubar_pred</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U_const_low</span><span class="p">,</span>
+            <span class="n">ubar_pred</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">U_const_up</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">input_constraints</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_slack_variable_constraint">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_slack_variable_constraint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_slack_variable_constraint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">cp</span><span class="o">.</span><span class="n">Constraint</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the slack variable constraint for a Robust Data-Driven MPC</span>
+<span class="sd">        formulation based on the specified slack variable constraint type.</span>
+
+<span class="sd">        This constraint bounds a slack variable (`sigma`) that accounts for</span>
+<span class="sd">        noisy online measurements and for noisy data used for prediction (used</span>
+<span class="sd">        to construct the Hankel matrices for the system dynamic constraint).</span>
+
+<span class="sd">        As described in [1], this constraint can be defined in three different</span>
+<span class="sd">        ways, achieving the same theoretical guarantees:</span>
+
+<span class="sd">        - **Non-Convex**: Defines a non-convex constraint (Equation (6d)).</span>
+<span class="sd">        - **Convex**: Defines a convex constraint using a sufficiently large</span>
+<span class="sd">          coefficient `c` (Remark 3).</span>
+<span class="sd">        - **None**: Omits an explicit constraint definition. The slack variable</span>
+<span class="sd">          constraint is implicitly met, relying on a high `lamb_sigma` value</span>
+<span class="sd">          (Remark 3).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list[cp.Constraint]: A list containing the CVXPY slack variable</span>
+<span class="sd">            constraint for the Robust Data-Driven MPC controller, corresponding</span>
+<span class="sd">            to the specified slack variable constraint type. The list is empty</span>
+<span class="sd">            if the `NONE` constraint type is selected.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get prediction segments of sigma variable</span>
+        <span class="n">sigma_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="p">:]</span>  <span class="c1"># sigma[0,L-1]</span>
+
+        <span class="c1"># Define slack variable constraint for Robust MPC based</span>
+        <span class="c1"># on the noise constraint type</span>
+        <span class="n">slack_variable_constraint</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">slack_var_constraint_type</span> <span class="o">==</span> <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">NON_CONVEX</span><span class="p">:</span>
+            <span class="c1"># Raise NotImplementedError for NON-CONVEX constraint</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;Robust Data-Driven MPC with a Non-Convex slack variable &quot;</span>
+                <span class="s2">&quot;constraint is not currently implemented, since it cannot &quot;</span>
+                <span class="s2">&quot;be efficiently solved.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">slack_var_constraint_type</span> <span class="o">==</span> <span class="n">SlackVarConstraintType</span><span class="o">.</span><span class="n">CONVEX</span><span class="p">:</span>
+            <span class="c1"># Prevent mypy [operator] error</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+            <span class="c1"># Define slack variable constraint considering</span>
+            <span class="c1"># a CONVEX constraint based on Remark 3 [1]</span>
+            <span class="n">slack_variable_constraint</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">cp</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">sigma_pred</span><span class="p">,</span> <span class="s2">&quot;inf&quot;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_max</span>
+            <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">slack_variable_constraint</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_cost_function">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_cost_function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_cost_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the cost function for the Data-Driven MPC formulation based on</span>
+<span class="sd">        the specified MPC controller type.</span>
+
+<span class="sd">        This method defines the MPC cost function as described in the Nominal</span>
+<span class="sd">        and Robust MPC formulations in [1]:</span>
+
+<span class="sd">        - **Nominal MPC**: Implements a quadratic stage cost that penalizes</span>
+<span class="sd">          deviations of the predicted control inputs (`ubar`) and outputs</span>
+<span class="sd">          (`ybar`) from the desired equilibrium (`u_s`, `y_s`), as described in</span>
+<span class="sd">          Equation (3).</span>
+<span class="sd">        - **Robust MPC**: In addition to the quadratic stage cost, adds ridge</span>
+<span class="sd">          regularization terms for `alpha` and `sigma` variables to account for</span>
+<span class="sd">          noisy measurements, as described in Equation (6).</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method initializes the `cost` attribute to define the MPC</span>
+<span class="sd">            cost function based on the MPC controller type.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get segments of input-output predictions from time step 0 to (L - 1)</span>
+        <span class="c1"># ubar[0,L-1]</span>
+        <span class="n">ubar_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">]</span>
+        <span class="c1"># ybar[0,L-1]</span>
+        <span class="n">ybar_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ybar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">]</span>
+
+        <span class="c1"># Define control-related cost</span>
+        <span class="n">control_cost</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">quad_form</span><span class="p">(</span>
+            <span class="n">ubar_pred</span> <span class="o">-</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">u_s_param</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">R</span>
+        <span class="p">)</span> <span class="o">+</span> <span class="n">cp</span><span class="o">.</span><span class="n">quad_form</span><span class="p">(</span>
+            <span class="n">ybar_pred</span> <span class="o">-</span> <span class="n">cp</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">y_s_param</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Define noise-related cost if controller type is Robust</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller_type</span> <span class="o">==</span> <span class="n">LTIDataDrivenMPCType</span><span class="o">.</span><span class="n">ROBUST</span><span class="p">:</span>
+            <span class="c1"># Prevent mypy [operator] error</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lamb_alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">lamb_sigma</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">)</span>
+
+            <span class="n">noise_cost</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">lamb_alpha</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_max</span> <span class="o">*</span> <span class="n">cp</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lamb_sigma</span> <span class="o">*</span> <span class="n">cp</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sigma</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Define MPC cost function for a Robust MPC controller</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cost</span> <span class="o">=</span> <span class="n">control_cost</span> <span class="o">+</span> <span class="n">noise_cost</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Define MPC cost function for a Nominal MPC controller</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cost</span> <span class="o">=</span> <span class="n">control_cost</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.define_mpc_problem">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.define_mpc_problem">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_mpc_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define the optimization problem for the Data-Driven MPC formulation.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method initializes the `problem` attribute to define the MPC</span>
+<span class="sd">            problem of the Data-Driven MPC controller, which is formulated as</span>
+<span class="sd">            a Quadratic Programming (QP) problem. It assumes that the `cost`</span>
+<span class="sd">            (objective function) and `constraints` attributes have already</span>
+<span class="sd">            been defined.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Define QP problem</span>
+        <span class="n">objective</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Minimize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cost</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">Problem</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.solve_mpc_problem">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.solve_mpc_problem">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">solve_mpc_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">warm_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve the optimization problem for the Data-Driven MPC formulation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The status of the optimization problem after attempting to</span>
+<span class="sd">            solve it (e.g., &quot;optimal&quot;, &quot;optimal_inaccurate&quot;, &quot;infeasible&quot;,</span>
+<span class="sd">            &quot;unbounded&quot;).</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method assumes that the MPC problem has already been defined.</span>
+<span class="sd">            It solves the problem and updates the `problem` attribute with the</span>
+<span class="sd">            solution status.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">warm_start</span><span class="o">=</span><span class="n">warm_start</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.get_problem_solve_status">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_problem_solve_status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_problem_solve_status</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the solve status of the optimization problem of the Data-Driven MPC</span>
+<span class="sd">        formulation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The status of the optimization problem after attempting to</span>
+<span class="sd">            solve it (e.g., &quot;optimal&quot;, &quot;optimal_inaccurate&quot;, &quot;infeasible&quot;,</span>
+<span class="sd">            &quot;unbounded&quot;).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.get_optimal_cost_value">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_cost_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_optimal_cost_value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the cost value corresponding to the solved optimization problem of</span>
+<span class="sd">        the Data-Driven MPC formulation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: The optimal cost value of the solved MPC optimization</span>
+<span class="sd">            problem.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.get_optimal_control_input">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_optimal_control_input</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve and store the optimal control input from the MPC solution.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: The predicted optimal control input from time step 0</span>
+<span class="sd">            to (L - 1).</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If the MPC problem solution status was not &quot;optimal&quot;</span>
+<span class="sd">                or &quot;optimal_inaccurate&quot;.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method should be called after the MPC problem has been</span>
+<span class="sd">            solved. It stores the predicted optimal control input in the</span>
+<span class="sd">            `optimal_u` attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get segment of the input prediction from time step 0 to (L - 1)</span>
+        <span class="c1"># ubar[0,L-1]</span>
+        <span class="n">ubar_pred</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ubar</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">]</span>
+
+        <span class="c1"># Store the optimal control input ubar*[0,L-1] if the MPC problem</span>
+        <span class="c1"># solution had an &quot;optimal&quot; or &quot;optimal_inaccurate&quot; status</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">problem</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;optimal&quot;</span><span class="p">,</span> <span class="s2">&quot;optimal_inaccurate&quot;</span><span class="p">}:</span>
+            <span class="c1"># Prevent mypy [union-attr] error</span>
+            <span class="k">assert</span> <span class="n">ubar_pred</span><span class="o">.</span><span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimal_u</span> <span class="o">=</span> <span class="n">ubar_pred</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimal_u</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MPC problem was not solved optimally.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.get_optimal_control_input_at_step">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.get_optimal_control_input_at_step">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_optimal_control_input_at_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_step</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the optimal control input from the MPC solution corresponding</span>
+<span class="sd">        to a specified time step in the prediction horizon [0, L-1].</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n_step (int): The time step of the optimal control input to</span>
+<span class="sd">                retrieve. It must be within the range [0, L-1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: An array containing the optimal control input for the</span>
+<span class="sd">            specified prediction time step.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method assumes that the optimal control input from the MPC</span>
+<span class="sd">            solution has been stored in the `optimal_u` attribute.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `n_step` is not within the range [0, L-1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Ensure n_step is within prediction range [0,L-1]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">n_step</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The specified prediction time step (</span><span class="si">{</span><span class="n">n_step</span><span class="si">}</span><span class="s2">) is out of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;range. It should be within [0, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">].&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">optimal_u_step_n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimal_u</span><span class="p">[</span>
+            <span class="n">n_step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:</span> <span class="p">(</span><span class="n">n_step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">optimal_u_step_n</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.store_input_output_measurement">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.store_input_output_measurement">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">store_input_output_measurement</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">u_current</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">y_current</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Store an input-output measurement pair for the current time step in</span>
+<span class="sd">        the input-output storage variables.</span>
+
+<span class="sd">        This method updates the input-output storage variables `u_past` and</span>
+<span class="sd">        `y_past` by appending the current input-output measurements and</span>
+<span class="sd">        removing the oldest measurements located at the first position. This</span>
+<span class="sd">        ensures these variables only store the past `n` measurements, as</span>
+<span class="sd">        required for the internal state constraints defined by Equations (3c)</span>
+<span class="sd">        (Nominal) and (6b) (Robust) of [1].</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u_current (np.ndarray): The control input for the current</span>
+<span class="sd">                time step, expected to match the dimensions of prior inputs.</span>
+<span class="sd">            y_current (np.ndarray): The measured system output for the current</span>
+<span class="sd">                time step, expected to match the dimensions of prior outputs.</span>
+<span class="sd">                This output should correspond to the system&#39;s response to</span>
+<span class="sd">                `u_current`, as both represent a trajectory of the system.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `u_current` or `y_current` do not match the</span>
+<span class="sd">                expected dimensions.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method modifies the `u_past` and `y_past` arrays directly to</span>
+<span class="sd">            ensure that only the most recent `n` measurements are retained.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            [1]: See class-level docstring for full reference details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check measurement dimensions</span>
+        <span class="n">expected_u0_dim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">expected_y0_dim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">u_current</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_u0_dim</span>
+            <span class="ow">or</span> <span class="n">y_current</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_y0_dim</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect dimensions. Expected dimensions are &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">expected_u0_dim</span><span class="si">}</span><span class="s2"> for u_current and </span><span class="si">{</span><span class="n">expected_y0_dim</span><span class="si">}</span><span class="s2"> for &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;y_current, but got </span><span class="si">{</span><span class="n">u_current</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">y_current</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="s2">&quot;instead.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Shift input-output storage arrays to discard the oldest</span>
+        <span class="c1"># measurements and append the new ones</span>
+        <span class="c1"># u[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_past</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">u_past</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="p">:],</span> <span class="n">u_current</span><span class="p">])</span>
+        <span class="c1"># y[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_past</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">y_past</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="p">:],</span> <span class="n">y_current</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.set_past_input_output_data">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_past_input_output_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_past_input_output_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">u_past</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">y_past</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the storage variables for past input-output measurements.</span>
+
+<span class="sd">        This method assigns the provided input-output measurements to the</span>
+<span class="sd">        arrays storing past input-output measurements, `u_past` and `y_past`.</span>
+<span class="sd">        It is intended to be used for setting the historical data used in</span>
+<span class="sd">        the MPC problem formulation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u_past (np.ndarray): An array containing past control inputs.</span>
+<span class="sd">                Expected to have a shape of (n * m, 1), where &#39;n&#39; is the</span>
+<span class="sd">                estimated system order and &#39;m&#39; is the dimension of the input.</span>
+<span class="sd">            y_past (np.ndarray): An array containing past measured system</span>
+<span class="sd">                outputs. Expected to have a shape of (n * p, 1) where &#39;n&#39; is</span>
+<span class="sd">                the estimated system order and &#39;p&#39; is the dimension of the</span>
+<span class="sd">                output.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `u_past` or `y_past` do not have correct</span>
+<span class="sd">                dimensions.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method sets the values of the `u_past` and `y_past`</span>
+<span class="sd">            attributes with the provided new historical data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate input types and dimensions</span>
+        <span class="n">expected_u_dim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">expected_y_dim</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">u_past</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_u_dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect dimensions. `u_past` must have shape &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">expected_u_dim</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="n">u_past</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">y_past</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">expected_y_dim</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect dimensions. `y_past` must have shape &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">expected_y_dim</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="n">y_past</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Update past input-output data</span>
+        <span class="c1"># u[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_past</span> <span class="o">=</span> <span class="n">u_past</span>
+        <span class="c1"># y[t-n, t-1]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_past</span> <span class="o">=</span> <span class="n">y_past</span></div>
+
+
+<div class="viewcode-block" id="LTIDataDrivenMPCController.set_input_output_setpoints">
+<a class="viewcode-back" href="../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html#direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.set_input_output_setpoints">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_input_output_setpoints</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">u_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the control and system setpoints of the Data-Driven MPC controller.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u_s (np.ndarray): The setpoint for control inputs.</span>
+<span class="sd">            y_s (np.ndarray): The setpoint for system outputs.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If `u_s` or `y_s` do not have the expected</span>
+<span class="sd">                dimensions.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method sets the values of the `u_s` and `y_s` attributes with</span>
+<span class="sd">            the provided new setpoints and updates the values of `u_s_param`</span>
+<span class="sd">            and `y_s_param` to update the data-driven MPC controller setpoint.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate input types and dimensions</span>
+        <span class="k">if</span> <span class="n">u_s</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_s</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect dimensions. `u_s` must have shape &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">u_s</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="n">u_s</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">y_s</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_s</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect dimensions. `y_s` must have shape &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">y_s</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, but got </span><span class="si">{</span><span class="n">y_s</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Update input-output setpoints and their parameter values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_s</span> <span class="o">=</span> <span class="n">u_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_s</span> <span class="o">=</span> <span class="n">y_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u_s_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">u_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_s_param</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">y_s</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pável A. Campos-Peña
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pável A. Campos-Peña.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jul 16, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

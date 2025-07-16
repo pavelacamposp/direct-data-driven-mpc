@@ -1,0 +1,1080 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>direct_data_driven_mpc.utilities.visualization.control_plot &#8212; Direct Data-Driven MPC</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles.css?v=eab398a6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../../../_static/documentation_options.js?v=60f8217a"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/utilities/visualization/control_plot';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Direct Data-Driven MPC</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><ul class="navbar-icon-links"
+    aria-label="Quick Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/pavelacamposp/direct-data-driven-mpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/direct-data-driven-mpc" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/pypi/v/direct-data-driven-mpc" class="icon-link-image" alt="PyPI"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://docs.python.org/3.10" title="Python" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/Python-3.10%20|%203.12-blue" class="icon-link-image" alt="Python"/></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://opensource.org/license/MIT" title="License: MIT" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="icon-link-image" alt="License: MIT"/></a>
+        </li>
+</ul></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../index.html">
+                    Welcome to Direct Data-Driven Model Predictive Control (MPC)!
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/installation.html">Package Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/paper_reproduction.html">Paper Reproduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/project_structure.html">Project Structure</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Source API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/lti_controller.html">LTI Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.LTIDataDrivenMPCType</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/lti_controller/direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType.html">direct_data_driven_mpc.lti_data_driven_mpc_controller.SlackVarConstraintType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller.html">Nonlinear Data-Driven MPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/controllers/nonlinear_controller/direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html">direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utilities/index.html">Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/controller.html">Controller Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_creation.html">direct_data_driven_mpc.utilities.controller.controller_creation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.controller_params.html">direct_data_driven_mpc.utilities.controller.controller_params</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim.html">direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/controller/direct_data_driven_mpc.utilities.controller.initial_data_generation.html">direct_data_driven_mpc.utilities.controller.initial_data_generation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/models.html">Model Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.lti_model.html">direct_data_driven_mpc.utilities.models.lti_model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/models/direct_data_driven_mpc.utilities.models.nonlinear_model.html">direct_data_driven_mpc.utilities.models.nonlinear_model</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/visualization.html">Visualization Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html">direct_data_driven_mpc.utilities.visualization.control_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot_anim.html">direct_data_driven_mpc.utilities.visualization.control_plot_anim</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.comparison_plot.html">direct_data_driven_mpc.utilities.visualization.comparison_plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.plot_utilities.html">direct_data_driven_mpc.utilities.visualization.plot_utilities</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../api/utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../sections/license.html">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/utilities/visualization/control_plot.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for direct_data_driven_mpc.utilities.visualization.control_plot</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for plotting control input-output data.</span>
+
+<span class="sd">This module provides functions for plotting input-output trajectories with</span>
+<span class="sd">setpoints using Matplotlib. It creates highly customizable figures with</span>
+<span class="sd">separate subplots for inputs and outputs, with optional highlighting of the</span>
+<span class="sd">initial measurement period for data-driven control systems.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.axes</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.figure</span><span class="w"> </span><span class="kn">import</span> <span class="n">Figure</span><span class="p">,</span> <span class="n">SubFigure</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.plot_utilities</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">create_input_output_figure</span><span class="p">,</span>
+    <span class="n">filter_and_reorder_legend</span><span class="p">,</span>
+    <span class="n">get_text_width_in_data</span><span class="p">,</span>
+    <span class="n">init_dict_if_none</span><span class="p">,</span>
+    <span class="n">validate_data_dimensions</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="plot_input_output">
+<a class="viewcode-back" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html#direct_data_driven_mpc.utilities.visualization.control_plot.plot_input_output">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_input_output</span><span class="p">(</span>
+    <span class="n">u_k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_k</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">y_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">u_s</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">u_bounds_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_bounds_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">inputs_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">outputs_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">setpoints_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">u_setpoint_var_symbol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;u^s&quot;</span><span class="p">,</span>
+    <span class="n">y_setpoint_var_symbol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;y^s&quot;</span><span class="p">,</span>
+    <span class="n">initial_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">initial_excitation_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Init. Excitation&quot;</span><span class="p">,</span>
+    <span class="n">initial_measurement_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Init. Measurement&quot;</span><span class="p">,</span>
+    <span class="n">control_text</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Data-Driven MPC&quot;</span><span class="p">,</span>
+    <span class="n">display_initial_text</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">display_control_text</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">12.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">),</span>
+    <span class="n">dpi</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="n">u_ylimits_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_ylimits_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+    <span class="n">legend_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">var_suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">axs_u</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">axs_y</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Axes</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">u_setpoint_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_setpoint_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">x_axis_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_y_axis_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">output_y_axis_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">plot_setpoint_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot input-output data with setpoints in a Matplotlib figure.</span>
+
+<span class="sd">    This function creates a figure with two rows of subplots, with the first</span>
+<span class="sd">    row containing control inputs, and the second row, system outputs. Each</span>
+<span class="sd">    subplot shows the data series for each data sequence alongside its</span>
+<span class="sd">    setpoint. The appearance of plot lines and legends can be customized by</span>
+<span class="sd">    passing dictionaries of Matplotlib line and legend properties.</span>
+
+<span class="sd">    If provided, the first &#39;initial_steps&#39; time steps are highlighted to</span>
+<span class="sd">    emphasize the initial input-output data measurement period representing</span>
+<span class="sd">    the data-driven system characterization phase in a Data-Driven MPC</span>
+<span class="sd">    algorithm. Additionally, custom labels can be displayed to indicate the</span>
+<span class="sd">    initial measurement and the subsequent MPC control periods, but only if</span>
+<span class="sd">    there is enough space to prevent them from overlapping with other plot</span>
+<span class="sd">    elements.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        If `axs_u` and `axs_y` are provided, the data will be plotted on these</span>
+<span class="sd">        external axes and no new figure will be created. This allows for</span>
+<span class="sd">        multiple data sequences to be plotted on the same external figure.</span>
+<span class="sd">        Each data sequence can be differentiated  using the `data_label`</span>
+<span class="sd">        argument.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        u_k (np.ndarray): An array containing control input data of shape (T,</span>
+<span class="sd">            m), where `m` is the number of inputs and `T` is the number of</span>
+<span class="sd">            time steps.</span>
+<span class="sd">        y_k (np.ndarray): An array containing system output data of shape (T,</span>
+<span class="sd">            p), where `p` is the number of outputs and `T` is the number of</span>
+<span class="sd">            time steps.</span>
+<span class="sd">        y_s (np.ndarray): An array containing output setpoint values of shape</span>
+<span class="sd">            (T, p), where `p` is the number of outputs and `T` is the number of</span>
+<span class="sd">            time steps.</span>
+<span class="sd">        u_s (np.ndarray | None): An array containing input setpoint values of</span>
+<span class="sd">            shape (T, m), where `m` is the number of inputs and `T` is the</span>
+<span class="sd">            number of time steps. If `None`, input setpoint lines will not be</span>
+<span class="sd">            plotted. Defaults to `None`.</span>
+<span class="sd">        u_bounds_list (list[tuple[float, float]] | None): A list of tuples</span>
+<span class="sd">            (lower_bound, upper_bound) specifying bounds for each input data</span>
+<span class="sd">            sequence. If provided, horizontal lines representing these bounds</span>
+<span class="sd">            will be plotted in each subplot. If `None`, no horizontal lines</span>
+<span class="sd">            will be plotted. The number of tuples must match the number of</span>
+<span class="sd">            input data sequences. Defaults to `None`.</span>
+<span class="sd">        y_bounds_list (list[tuple[float, float]] | None): A list of tuples</span>
+<span class="sd">            (lower_bound, upper_bound) specifying bounds for each output data</span>
+<span class="sd">            sequence. If provided, horizontal lines representing these bounds</span>
+<span class="sd">            will be plotted in each subplot. If `None`, no horizontal lines</span>
+<span class="sd">            will be plotted. The number of tuples must match the number of</span>
+<span class="sd">            output data sequences. Defaults to `None`.</span>
+<span class="sd">        inputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the lines used to plot the input data</span>
+<span class="sd">            series (e.g., color, linestyle, linewidth). If not provided,</span>
+<span class="sd">            Matplotlib&#39;s default line properties will be used.</span>
+<span class="sd">        outputs_line_params (dict[str, Any] | None): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the lines used to plot the output data</span>
+<span class="sd">            series (e.g., color, linestyle, linewidth). If not provided,</span>
+<span class="sd">            Matplotlib&#39;s default line properties will be used.</span>
+<span class="sd">        setpoints_line_params (dict[str, Any] | None): A dictionary of</span>
+<span class="sd">            Matplotlib properties for customizing the lines used to plot the</span>
+<span class="sd">            setpoint values (e.g., color, linestyle, linewidth). If not</span>
+<span class="sd">            provided, Matplotlib&#39;s default line properties will be used.</span>
+<span class="sd">        bounds_line_params (dict[str, Any] | None): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the lines used to plot the bounds of</span>
+<span class="sd">            input-output data series (e.g., color, linestyle, linewidth). If</span>
+<span class="sd">            not provided, Matplotlib&#39;s default line properties will be used.</span>
+<span class="sd">        u_setpoint_var_symbol (str): The variable symbol used to label the</span>
+<span class="sd">            input setpoint data series (e.g., &quot;u^s&quot;).</span>
+<span class="sd">        y_setpoint_var_symbol (str): The variable symbol used to label the</span>
+<span class="sd">            output setpoint data series (e.g., &quot;y^s&quot;).</span>
+<span class="sd">        initial_steps (int | None): The number of initial time steps during</span>
+<span class="sd">            which input-output measurements were taken for the data-driven</span>
+<span class="sd">            characterization of the system. This highlights the initial</span>
+<span class="sd">            measurement period in the plot. If `None`, no special highlighting</span>
+<span class="sd">            will be applied. Defaults to `None`.</span>
+<span class="sd">        initial_excitation_text (str): Label text to display over the initial</span>
+<span class="sd">            excitation period of the input plots. Default is</span>
+<span class="sd">            &quot;Init. Excitation&quot;.</span>
+<span class="sd">        initial_measurement_text (str): Label text to display over the initial</span>
+<span class="sd">            measurement period of the output plots. Default is</span>
+<span class="sd">            &quot;Init. Measurement&quot;.</span>
+<span class="sd">        control_text (str): Label text to display over the post-initial</span>
+<span class="sd">            control period. Default is &quot;Data-Driven MPC&quot;.</span>
+<span class="sd">        display_initial_text (bool): Whether to display the `initial_text`</span>
+<span class="sd">            label on the plot. Default is True.</span>
+<span class="sd">        display_control_text (bool): Whether to display the `control_text`</span>
+<span class="sd">            label on the plot. Default is True.</span>
+<span class="sd">        figsize (tuple[float, float]): The (width, height) dimensions of the</span>
+<span class="sd">            created Matplotlib figure.</span>
+<span class="sd">        dpi (int): The DPI resolution of the figure.</span>
+<span class="sd">        u_ylimits_list (list[tuple[float, float]] | None): A list of tuples</span>
+<span class="sd">            (lower_limit, upper_limit) specifying the Y-axis limits for each</span>
+<span class="sd">            input subplot. If `None`, the Y-axis limits will be determined</span>
+<span class="sd">            automatically. Defaults to `None`.</span>
+<span class="sd">        y_ylimits_list (list[tuple[float, float]] | None): A list of tuples</span>
+<span class="sd">            (lower_limit, upper_limit) specifying the Y-axis limits for each</span>
+<span class="sd">            output subplot. If `None`, the Y-axis limits will be determined</span>
+<span class="sd">            automatically. Defaults to `None`.</span>
+<span class="sd">        fontsize (int): The fontsize for labels and axes ticks.</span>
+<span class="sd">        legend_params (dict[str, Any] | None): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the plot legends (e.g., fontsize,</span>
+<span class="sd">            loc, handlelength). If not provided, Matplotlib&#39;s default legend</span>
+<span class="sd">            properties will be used.</span>
+<span class="sd">        var_suffix (str): A string appended to each data series label in the</span>
+<span class="sd">            plot legend.</span>
+<span class="sd">        axs_u (list[Axes] | None): A list of external axes for input plots.</span>
+<span class="sd">            Defaults to `None`.</span>
+<span class="sd">        axs_y (list[Axes] | None): A list of external axes for output plots.</span>
+<span class="sd">            Defaults to `None`.</span>
+<span class="sd">        title (str | None): The title for the created plot figure. Set only if</span>
+<span class="sd">            the figure is created internally (i.e., `axs_u` and `axs_y` are not</span>
+<span class="sd">            provided). If `None`, no title will be displayed. Defaults to</span>
+<span class="sd">            `None`.</span>
+<span class="sd">        input_label (str | None): A custom legend label for the input data</span>
+<span class="sd">            series. If provided, this label will override the default label</span>
+<span class="sd">            constructed using `var_suffix`.</span>
+<span class="sd">        output_label (str | None): A custom legend label for the output data</span>
+<span class="sd">            series. If provided, this label will override the default label</span>
+<span class="sd">            constructed using `var_suffix`.</span>
+<span class="sd">        u_setpoint_labels (list[str] | None): A list of strings specifying</span>
+<span class="sd">            custom legend labels for input setpoint series. If provided, the</span>
+<span class="sd">            label at each index will override the default label constructed</span>
+<span class="sd">            using `u_setpoint_var_symbol`.</span>
+<span class="sd">        y_setpoint_labels (list[str] | None): A list of strings specifying</span>
+<span class="sd">            custom legend labels for output setpoint series. If provided, the</span>
+<span class="sd">            label at each index will override the default label constructed</span>
+<span class="sd">            using `y_setpoint_var_symbol`.</span>
+<span class="sd">        x_axis_labels (list[str] | None): A list of strings specifying custom</span>
+<span class="sd">            X-axis labels for each subplot. If provided, the label at each</span>
+<span class="sd">            index will override the default &quot;Time step $k$&quot;.</span>
+<span class="sd">        input_y_axis_labels (list[str] | None): A list of strings specifying</span>
+<span class="sd">            custom Y-axis labels for each input subplot. If provided, the label</span>
+<span class="sd">            at each index will override the default constructed labels.</span>
+<span class="sd">        output_y_axis_labels (list[str] | None): A list of strings specifying</span>
+<span class="sd">            custom Y-axis labels for each output subplot. If provided, the</span>
+<span class="sd">            label at each index will override the default constructed labels.</span>
+<span class="sd">        plot_setpoint_lines (bool): Whether to plot setpoint lines. If `False`,</span>
+<span class="sd">            no setpoint line will be plotted. Used for avoiding duplicate</span>
+<span class="sd">            setpoint entries in multi-data plots. Defaults to `True`.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If any array dimensions mismatch expected shapes, or if</span>
+<span class="sd">            the lengths of `u_bounds_list`, `y_bounds_list`, `u_ylimits_list`,</span>
+<span class="sd">            or `y_ylimits_list` do not match the number of subplots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validate data dimensions</span>
+    <span class="n">validate_data_dimensions</span><span class="p">(</span>
+        <span class="n">u_k</span><span class="o">=</span><span class="n">u_k</span><span class="p">,</span>
+        <span class="n">y_k</span><span class="o">=</span><span class="n">y_k</span><span class="p">,</span>
+        <span class="n">u_s</span><span class="o">=</span><span class="n">u_s</span><span class="p">,</span>
+        <span class="n">y_s</span><span class="o">=</span><span class="n">y_s</span><span class="p">,</span>
+        <span class="n">u_bounds_list</span><span class="o">=</span><span class="n">u_bounds_list</span><span class="p">,</span>
+        <span class="n">y_bounds_list</span><span class="o">=</span><span class="n">y_bounds_list</span><span class="p">,</span>
+        <span class="n">u_ylimits_list</span><span class="o">=</span><span class="n">u_ylimits_list</span><span class="p">,</span>
+        <span class="n">y_ylimits_list</span><span class="o">=</span><span class="n">y_ylimits_list</span><span class="p">,</span>
+        <span class="n">u_setpoint_labels</span><span class="o">=</span><span class="n">u_setpoint_labels</span><span class="p">,</span>
+        <span class="n">y_setpoint_labels</span><span class="o">=</span><span class="n">y_setpoint_labels</span><span class="p">,</span>
+        <span class="n">x_axis_labels</span><span class="o">=</span><span class="n">x_axis_labels</span><span class="p">,</span>
+        <span class="n">input_y_axis_labels</span><span class="o">=</span><span class="n">input_y_axis_labels</span><span class="p">,</span>
+        <span class="n">output_y_axis_labels</span><span class="o">=</span><span class="n">output_y_axis_labels</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Initialize Matplotlib params if not provided</span>
+    <span class="n">inputs_line_params</span> <span class="o">=</span> <span class="n">init_dict_if_none</span><span class="p">(</span><span class="n">inputs_line_params</span><span class="p">)</span>
+    <span class="n">outputs_line_params</span> <span class="o">=</span> <span class="n">init_dict_if_none</span><span class="p">(</span><span class="n">outputs_line_params</span><span class="p">)</span>
+    <span class="n">setpoints_line_params</span> <span class="o">=</span> <span class="n">init_dict_if_none</span><span class="p">(</span><span class="n">setpoints_line_params</span><span class="p">)</span>
+    <span class="n">bounds_line_params</span> <span class="o">=</span> <span class="n">init_dict_if_none</span><span class="p">(</span><span class="n">bounds_line_params</span><span class="p">)</span>
+    <span class="n">legend_params</span> <span class="o">=</span> <span class="n">init_dict_if_none</span><span class="p">(</span><span class="n">legend_params</span><span class="p">)</span>
+
+    <span class="c1"># Retrieve number of input and output data sequences</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">u_k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">y_k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of outputs</span>
+
+    <span class="c1"># Create figure if lists of Axes are not provided</span>
+    <span class="n">is_ext_fig</span> <span class="o">=</span> <span class="n">axs_u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">axs_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># External figure</span>
+
+    <span class="n">fig</span><span class="p">:</span> <span class="n">Figure</span> <span class="o">|</span> <span class="n">SubFigure</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ext_fig</span><span class="p">:</span>
+        <span class="c1"># Create figure and subplots</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs_u</span><span class="p">,</span> <span class="n">axs_y</span> <span class="o">=</span> <span class="n">create_input_output_figure</span><span class="p">(</span>
+            <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">axs_u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>  <span class="c1"># Prevent mypy [index] error</span>
+
+        <span class="c1"># Use figure from the provided axes</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">axs_u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">figure</span>
+
+    <span class="c1"># Plot input data</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">u_k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of inputs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">y_k</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Number of outputs</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="c1"># Get input setpoint if provided</span>
+        <span class="n">u_setpoint</span> <span class="o">=</span> <span class="n">u_s</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">u_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># Define plot index based on the number of input plots</span>
+        <span class="n">plot_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">i</span>
+
+        <span class="c1"># Get input bounds if provided</span>
+        <span class="n">u_bounds</span> <span class="o">=</span> <span class="n">u_bounds_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">u_bounds_list</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># Get plot Y-axis limit if provided</span>
+        <span class="n">u_plot_ylimit</span> <span class="o">=</span> <span class="n">u_ylimits_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">u_ylimits_list</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># Prevent mypy [index] error</span>
+        <span class="k">assert</span> <span class="n">axs_u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Plot data</span>
+        <span class="n">plot_data</span><span class="p">(</span>
+            <span class="n">axis</span><span class="o">=</span><span class="n">axs_u</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">u_k</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span>
+            <span class="n">setpoint</span><span class="o">=</span><span class="n">u_setpoint</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">plot_index</span><span class="p">,</span>
+            <span class="n">data_line_params</span><span class="o">=</span><span class="n">inputs_line_params</span><span class="p">,</span>
+            <span class="n">bounds_line_params</span><span class="o">=</span><span class="n">bounds_line_params</span><span class="p">,</span>
+            <span class="n">setpoint_line_params</span><span class="o">=</span><span class="n">setpoints_line_params</span><span class="p">,</span>
+            <span class="n">var_symbol</span><span class="o">=</span><span class="s2">&quot;u&quot;</span><span class="p">,</span>
+            <span class="n">setpoint_var_symbol</span><span class="o">=</span><span class="n">u_setpoint_var_symbol</span><span class="p">,</span>
+            <span class="n">var_label</span><span class="o">=</span><span class="s2">&quot;Input&quot;</span><span class="p">,</span>
+            <span class="n">var_suffix</span><span class="o">=</span><span class="n">var_suffix</span><span class="p">,</span>
+            <span class="n">initial_text</span><span class="o">=</span><span class="n">initial_excitation_text</span><span class="p">,</span>
+            <span class="n">control_text</span><span class="o">=</span><span class="n">control_text</span><span class="p">,</span>
+            <span class="n">display_initial_text</span><span class="o">=</span><span class="n">display_initial_text</span><span class="p">,</span>
+            <span class="n">display_control_text</span><span class="o">=</span><span class="n">display_control_text</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
+            <span class="n">legend_params</span><span class="o">=</span><span class="n">legend_params</span><span class="p">,</span>
+            <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">u_bounds</span><span class="p">,</span>
+            <span class="n">initial_steps</span><span class="o">=</span><span class="n">initial_steps</span><span class="p">,</span>
+            <span class="n">plot_ylimits</span><span class="o">=</span><span class="n">u_plot_ylimit</span><span class="p">,</span>
+            <span class="n">data_label</span><span class="o">=</span><span class="n">input_label</span><span class="p">,</span>
+            <span class="n">setpoint_labels</span><span class="o">=</span><span class="n">u_setpoint_labels</span><span class="p">,</span>
+            <span class="n">x_axis_labels</span><span class="o">=</span><span class="n">x_axis_labels</span><span class="p">,</span>
+            <span class="n">y_axis_labels</span><span class="o">=</span><span class="n">input_y_axis_labels</span><span class="p">,</span>
+            <span class="n">plot_setpoint_lines</span><span class="o">=</span><span class="n">plot_setpoint_lines</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Plot output data</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="c1"># Define plot index based on the number of output plots</span>
+        <span class="n">plot_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">j</span>
+
+        <span class="c1"># Get output bounds if provided</span>
+        <span class="n">y_bounds</span> <span class="o">=</span> <span class="n">y_bounds_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span> <span class="n">y_bounds_list</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># Get plot Y-axis limit if provided</span>
+        <span class="n">y_plot_ylimits</span> <span class="o">=</span> <span class="n">y_ylimits_list</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">if</span> <span class="n">y_ylimits_list</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># Prevent mypy [index] error</span>
+        <span class="k">assert</span> <span class="n">axs_y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Plot data</span>
+        <span class="n">plot_data</span><span class="p">(</span>
+            <span class="n">axis</span><span class="o">=</span><span class="n">axs_y</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">y_k</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span>
+            <span class="n">setpoint</span><span class="o">=</span><span class="n">y_s</span><span class="p">[:,</span> <span class="n">j</span><span class="p">],</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">plot_index</span><span class="p">,</span>
+            <span class="n">data_line_params</span><span class="o">=</span><span class="n">outputs_line_params</span><span class="p">,</span>
+            <span class="n">bounds_line_params</span><span class="o">=</span><span class="n">bounds_line_params</span><span class="p">,</span>
+            <span class="n">setpoint_line_params</span><span class="o">=</span><span class="n">setpoints_line_params</span><span class="p">,</span>
+            <span class="n">var_symbol</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+            <span class="n">setpoint_var_symbol</span><span class="o">=</span><span class="n">y_setpoint_var_symbol</span><span class="p">,</span>
+            <span class="n">var_label</span><span class="o">=</span><span class="s2">&quot;Output&quot;</span><span class="p">,</span>
+            <span class="n">var_suffix</span><span class="o">=</span><span class="n">var_suffix</span><span class="p">,</span>
+            <span class="n">initial_text</span><span class="o">=</span><span class="n">initial_measurement_text</span><span class="p">,</span>
+            <span class="n">control_text</span><span class="o">=</span><span class="n">control_text</span><span class="p">,</span>
+            <span class="n">display_initial_text</span><span class="o">=</span><span class="n">display_initial_text</span><span class="p">,</span>
+            <span class="n">display_control_text</span><span class="o">=</span><span class="n">display_control_text</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
+            <span class="n">legend_params</span><span class="o">=</span><span class="n">legend_params</span><span class="p">,</span>
+            <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">y_bounds</span><span class="p">,</span>
+            <span class="n">initial_steps</span><span class="o">=</span><span class="n">initial_steps</span><span class="p">,</span>
+            <span class="n">plot_ylimits</span><span class="o">=</span><span class="n">y_plot_ylimits</span><span class="p">,</span>
+            <span class="n">data_label</span><span class="o">=</span><span class="n">output_label</span><span class="p">,</span>
+            <span class="n">setpoint_labels</span><span class="o">=</span><span class="n">y_setpoint_labels</span><span class="p">,</span>
+            <span class="n">x_axis_labels</span><span class="o">=</span><span class="n">x_axis_labels</span><span class="p">,</span>
+            <span class="n">y_axis_labels</span><span class="o">=</span><span class="n">output_y_axis_labels</span><span class="p">,</span>
+            <span class="n">plot_setpoint_lines</span><span class="o">=</span><span class="n">plot_setpoint_lines</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Show the plot if the figure was created internally</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_ext_fig</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="plot_data">
+<a class="viewcode-back" href="../../../../api/utilities/visualization/direct_data_driven_mpc.utilities.visualization.control_plot.html#direct_data_driven_mpc.utilities.visualization.control_plot.plot_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_data</span><span class="p">(</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Axes</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">setpoint</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">data_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">setpoint_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">bounds_line_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">var_symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">setpoint_var_symbol</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">var_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">var_suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">initial_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">control_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">display_initial_text</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">display_control_text</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">legend_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">fig</span><span class="p">:</span> <span class="n">Figure</span> <span class="o">|</span> <span class="n">SubFigure</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">initial_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">plot_ylimits</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">data_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">setpoint_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">x_axis_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_axis_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">plot_setpoint_lines</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot a data series with setpoints in a specified axis. Optionally,</span>
+<span class="sd">    highlight the initial measurement and control phases using shaded regions</span>
+<span class="sd">    and text labels. The labels will be displayed if there is enough space to</span>
+<span class="sd">    prevent them from overlapping with other plot elements.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The appearance of plot lines and legend can be customized by passing</span>
+<span class="sd">        dictionaries of Matplotlib line and legend properties.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        axis (Axes): The Matplotlib axis object to plot on.</span>
+<span class="sd">        data (np.ndarray): An array containing data to be plotted.</span>
+<span class="sd">        setpoint (np.ndarray | None): An array containing setpoint values to be</span>
+<span class="sd">            plotted. If `None`, the setpoint line will not be plotted.</span>
+<span class="sd">        index (int): The index of the data used for labeling purposes (e.g.,</span>
+<span class="sd">            &quot;u_1&quot;, &quot;u_2&quot;). If set to -1, subscripts will not be added to</span>
+<span class="sd">            labels.</span>
+<span class="sd">        data_line_params (dict[str, Any]): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the line used to plot the data series</span>
+<span class="sd">            (e.g., color, linestyle, linewidth).</span>
+<span class="sd">        setpoint_line_params (dict[str, Any]): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the line used to plot the setpoint</span>
+<span class="sd">            value (e.g., color, linestyle, linewidth).</span>
+<span class="sd">        bounds_line_params (dict[str, Any]): A dictionary of Matplotlib</span>
+<span class="sd">            properties for customizing the lines used to plot the bounds of</span>
+<span class="sd">            the data series (e.g., color, linestyle, linewidth).</span>
+<span class="sd">        var_symbol (str): The variable symbol used to label the data series</span>
+<span class="sd">            (e.g., &quot;u&quot; for inputs, &quot;y&quot; for outputs).</span>
+<span class="sd">        setpoint_var_symbol (str): The variable symbol used to label the</span>
+<span class="sd">            setpoint data series (e.g., &quot;u^s&quot; for inputs, &quot;y^s&quot; for outputs).</span>
+<span class="sd">        var_label (str): The variable label representing the control signal</span>
+<span class="sd">            (e.g., &quot;Input&quot;, &quot;Output&quot;).</span>
+<span class="sd">        var_suffix (str): A string appended to each data series label in the</span>
+<span class="sd">            plot legend.</span>
+<span class="sd">        initial_text (str): Label text to display over the initial measurement</span>
+<span class="sd">            period of the plot.</span>
+<span class="sd">        control_text (str): Label text to display over the post-initial</span>
+<span class="sd">            control period.</span>
+<span class="sd">        display_initial_text (bool): Whether to display the `initial_text`</span>
+<span class="sd">            label on the plot.</span>
+<span class="sd">        display_control_text (bool): Whether to display the `control_text`</span>
+<span class="sd">            label on the plot.</span>
+<span class="sd">        fontsize (int): The fontsize for labels and axes ticks.</span>
+<span class="sd">        legend_params (dict[str, Any]): A dictionary of Matplotlib properties</span>
+<span class="sd">            for customizing the plot legend (e.g., fontsize, loc,</span>
+<span class="sd">            handlelength).</span>
+<span class="sd">        fig (Figure | SubFigure): The Matplotlib figure or subfigure that</span>
+<span class="sd">            contains the axis.</span>
+<span class="sd">        bounds (tuple[float, float] | None): A tuple (lower_bound,</span>
+<span class="sd">            upper_bound) specifying the bounds of the data to be plotted. If</span>
+<span class="sd">            provided, horizontal lines representing these bounds will be</span>
+<span class="sd">            plotted. Defaults to `None`.</span>
+<span class="sd">        initial_steps (int | None): The number of initial time steps during</span>
+<span class="sd">            which input-output measurements were taken for the data-driven</span>
+<span class="sd">            characterization of the system. This highlights the initial</span>
+<span class="sd">            measurement period in the plot. Defaults to `None`.</span>
+<span class="sd">        plot_ylimits (tuple[float, float] | None): A tuple (lower_limit,</span>
+<span class="sd">            upper_limit) specifying the Y-axis limits for the plot. If `None`,</span>
+<span class="sd">            the Y-axis limits will be determined automatically. Defaults to</span>
+<span class="sd">            `None`.</span>
+<span class="sd">        data_label (str | None): A custom legend label for the data series. If</span>
+<span class="sd">            provided, this label will override the default constructed label</span>
+<span class="sd">            using `var_symbol` and `var_suffix`.</span>
+<span class="sd">        setpoint_labels (list[str] | None): A list of strings specifying custom</span>
+<span class="sd">            legend labels for the setpoint series. If provided, the label at</span>
+<span class="sd">            `index` will be used instead of the default label constructed using</span>
+<span class="sd">            `setpoint_var_symbol`.</span>
+<span class="sd">        x_axis_labels (list[str] | None): A list of strings specifying custom</span>
+<span class="sd">            X-axis labels for each subplot or data index. If provided, the</span>
+<span class="sd">            label at `index` will override the default &quot;Time step $k$&quot;.</span>
+<span class="sd">        y_axis_labels (list[str] | None): A list of strings specifying custom</span>
+<span class="sd">            Y-axis labels for each subplot or data index. If provided, the</span>
+<span class="sd">            label at `index` will override the default label constructed from</span>
+<span class="sd">            `var_label` and `var_symbol`.</span>
+<span class="sd">        plot_setpoint_lines (bool): Whether to plot setpoint lines. If `False`,</span>
+<span class="sd">            no setpoint line will be plotted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Data length</span>
+
+    <span class="c1"># Construct index label string based on index value</span>
+    <span class="n">index_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">index</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="c1"># Plot data series</span>
+    <span class="n">data_label_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">data_label</span> <span class="k">if</span> <span class="n">data_label</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">var_symbol</span><span class="si">}{</span><span class="n">index_str</span><span class="si">}</span><span class="s2">$</span><span class="si">{</span><span class="n">var_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">),</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">data_line_params</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">data_label_str</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Plot setpoint if provided</span>
+    <span class="n">setpoint_label_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">setpoint_labels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">setpoint_labels</span>
+        <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">setpoint_var_symbol</span><span class="si">}{</span><span class="n">index_str</span><span class="si">}</span><span class="s2">$&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">setpoint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">plot_setpoint_lines</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">),</span>
+            <span class="n">setpoint</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">setpoint_line_params</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">setpoint_label_str</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Plot bounds if provided</span>
+    <span class="k">if</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">bounds</span>
+        <span class="n">bounds_label</span> <span class="o">=</span> <span class="s2">&quot;Constraints&quot;</span>
+        <span class="c1"># Plot lower bound line</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">lower_bound</span><span class="p">,</span> <span class="o">**</span><span class="n">bounds_line_params</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">bounds_label</span><span class="p">)</span>
+        <span class="c1"># Plot upper bound line</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">upper_bound</span><span class="p">,</span> <span class="o">**</span><span class="n">bounds_line_params</span><span class="p">)</span>
+
+    <span class="c1"># Highlight initial input-output data measurement period if provided</span>
+    <span class="k">if</span> <span class="n">initial_steps</span><span class="p">:</span>
+        <span class="c1"># Highlight period with a grayed rectangle</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">initial_steps</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="c1"># Add a vertical line at the right side of the rectangle</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">initial_steps</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Display initial measurement text if enabled</span>
+        <span class="k">if</span> <span class="n">display_initial_text</span><span class="p">:</span>
+            <span class="c1"># Get y-axis limits</span>
+            <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="c1"># Place label at the center of the highlighted area</span>
+            <span class="n">u_init_text</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="n">initial_steps</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">y_min</span> <span class="o">+</span> <span class="n">y_max</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">initial_text</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="c1"># Get initial text bounding box width</span>
+            <span class="n">init_text_width</span> <span class="o">=</span> <span class="n">get_text_width_in_data</span><span class="p">(</span>
+                <span class="n">text_object</span><span class="o">=</span><span class="n">u_init_text</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span>
+            <span class="p">)</span>
+            <span class="c1"># Hide text box if it overflows the plot area</span>
+            <span class="k">if</span> <span class="n">initial_steps</span> <span class="o">&lt;</span> <span class="n">init_text_width</span><span class="p">:</span>
+                <span class="n">u_init_text</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Display Data-Driven MPC control text if enabled</span>
+        <span class="k">if</span> <span class="n">display_control_text</span><span class="p">:</span>
+            <span class="c1"># Get y-axis limits</span>
+            <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="c1"># Place label at the center of the remaining area</span>
+            <span class="n">u_control_text</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="n">initial_steps</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">y_min</span> <span class="o">+</span> <span class="n">y_max</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">control_text</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+                <span class="n">bbox</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;facecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;edgecolor&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">},</span>
+            <span class="p">)</span>
+            <span class="c1"># Get control text bounding box width</span>
+            <span class="n">control_text_width</span> <span class="o">=</span> <span class="n">get_text_width_in_data</span><span class="p">(</span>
+                <span class="n">text_object</span><span class="o">=</span><span class="n">u_control_text</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span>
+            <span class="p">)</span>
+            <span class="c1"># Hide text box if it overflows the plot area</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">initial_steps</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">control_text_width</span><span class="p">:</span>
+                <span class="n">u_control_text</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Format labels, legend and ticks</span>
+    <span class="n">x_axis_label_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">x_axis_labels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">if</span> <span class="n">x_axis_labels</span> <span class="k">else</span> <span class="s2">&quot;Time step $k$&quot;</span>
+    <span class="p">)</span>
+    <span class="n">y_axis_label_str</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">y_axis_labels</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">y_axis_labels</span>
+        <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var_label</span><span class="si">}</span><span class="s2"> $</span><span class="si">{</span><span class="n">var_symbol</span><span class="si">}{</span><span class="n">index_str</span><span class="si">}</span><span class="s2">$&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_axis_label_str</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_axis_label_str</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">**</span><span class="n">legend_params</span><span class="p">)</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
+
+    <span class="c1"># Remove duplicate labels from legend (required for external figures</span>
+    <span class="c1"># that plot multiple data sequences on the same plot to avoid label</span>
+    <span class="c1"># repetition) and reposition labels</span>
+    <span class="n">end_labels_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">setpoint_label_str</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">end_labels_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bounds_label</span><span class="p">)</span>
+
+    <span class="n">filter_and_reorder_legend</span><span class="p">(</span>
+        <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">legend_params</span><span class="o">=</span><span class="n">legend_params</span><span class="p">,</span> <span class="n">end_labels_list</span><span class="o">=</span><span class="n">end_labels_list</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set x-limits</span>
+    <span class="n">axis</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Set y-limits if provided</span>
+    <span class="k">if</span> <span class="n">plot_ylimits</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">plot_ylimits</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Pável A. Campos-Peña
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Pável A. Campos-Peña.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jul 16, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
