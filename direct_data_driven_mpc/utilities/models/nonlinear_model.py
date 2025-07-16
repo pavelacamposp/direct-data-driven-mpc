@@ -1,3 +1,10 @@
+"""
+Classes for modeling nonlinear systems.
+
+This module provides a class for representing and simulating discrete-time
+nonlinear systems using a state-space representation.
+"""
+
 from typing import Callable
 
 import numpy as np
@@ -5,10 +12,14 @@ import numpy as np
 
 class NonlinearSystem:
     """
-    A class representing a Nonlinear Dynamical system.
+    A class representing a nonlinear dynamical system.
 
     The system is defined by its dynamics and output functions, in the form:
+
+    .. math::
+
         x(k+1) = f(x(k), u(k)) = f_0(x(k)) + B * u(k)
+
         y(k) = h(x(k), u(k)) = h_0(x(k)) + D * u(k)
 
     Attributes:
@@ -33,7 +44,7 @@ class NonlinearSystem:
         eps_max: float = 0.0,
     ):
         """
-        Initialize a Nonlinear Dynamical system with a dynamics function `f`
+        Initialize a nonlinear dynamical system with a dynamics function `f`
         and an output function `h`.
 
         Args:
@@ -59,11 +70,15 @@ class NonlinearSystem:
 
     def simulate_step(self, u: np.ndarray, w: np.ndarray) -> np.ndarray:
         """
-        Simulate a single time step of the Nonlinear system with a given
+        Simulate a single time step of the nonlinear system with a given
         input `u`.
 
         The system simulation follows the state-space equations:
+
+        .. math::
+
             x(k+1) = f(x(k), u(k)) = f_0(x(k)) + B * u(k)
+
             y(k) = h(x(k), u(k)) = h_0(x(k)) + D * u(k)
 
         Args:
@@ -74,7 +89,7 @@ class NonlinearSystem:
 
         Returns:
             np.ndarray: The output vector `y` of shape `(p,)` at the current
-                time step, where `p` is the number of outputs.
+            time step, where `p` is the number of outputs.
 
         Note:
             This method updates the `x` attribute, which represents the
@@ -89,7 +104,7 @@ class NonlinearSystem:
 
     def simulate(self, U: np.ndarray, W: np.ndarray, steps: int) -> np.ndarray:
         """
-        Simulate the Nonlinear system over multiple time steps.
+        Simulate the nonlinear system over multiple time steps.
 
         Args:
             U (np.ndarray): An input matrix of shape `(steps, m)` where
@@ -101,7 +116,7 @@ class NonlinearSystem:
 
         Returns:
             np.ndarray: The output matrix `Y` of shape `(steps, p)` containing
-                the simulated system outputs at each time step.
+            the simulated system outputs at each time step.
 
         Note:
             This method updates the `x` attribute, which represents the

@@ -1,3 +1,11 @@
+"""
+Functions and classes for defining data-driven MPC controller configurations.
+
+This module provides functions for loading data-driven MPC controller
+configurations from YAML configuration files, and classes that define the
+expected configuration structure for both LTI and nonlinear controllers.
+"""
+
 from typing import TypedDict
 
 import numpy as np
@@ -39,6 +47,40 @@ AlphaRegTypesMap = {
 
 # Define dictionary type hints for Data-Driven MPC controller parameters
 class LTIDataDrivenMPCParams(TypedDict, total=False):
+    """
+    Parameters for a Data-Driven MPC controller for Linear Time-Invariant (LTI)
+    systems.
+
+    Attributes:
+        n (int): The estimated order of the system.
+        N (int): The length of the initial input-output trajectory.
+        L (int): The prediction horizon length.
+        Q (np.ndarray): The output weighting matrix.
+        R (np.ndarray): The input weighting matrix.
+        eps_max (float): The estimated upper bound of the system
+            measurement noise.
+        lamb_alpha (float): The ridge regularization base weight for
+            `alpha`, scaled by `eps_max`.
+        lamb_sigma (float): The ridge regularization weight for
+            `sigma`.
+        c (float): A constant used to define a Convex constraint for
+            the slack variable `sigma` in a Robust MPC formulation.
+        U (np.ndarray | None): An array of shape (`m`, 2) containing the
+            bounds for the `m` predicted inputs of the controller. Each row
+            specifies the `[min, max]` bounds for a single input. If `None`, no
+            input bounds are applied.
+        u_range (np.ndarray): The range of the persistently exciting input.
+            Used in the initial input-output data generation process.
+        slack_var_constraint_type (SlackVarConstraintType): The constraint
+            type for the slack variable `sigma` in a Robust MPC formulation.
+        controller_type (LTIDataDrivenMPCType): The LTI Data-Driven MPC
+            controller type.
+        n_mpc_step (int): The number of consecutive applications of the
+            optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
+        u_s (np.ndarray): The setpoint for control inputs.
+        y_s (np.ndarray): The setpoint for system outputs.
+    """
+
     n: int  # Estimated system order
 
     N: int  # Initial input-output trajectory length
@@ -65,6 +107,51 @@ class LTIDataDrivenMPCParams(TypedDict, total=False):
 
 
 class NonlinearDataDrivenMPCParams(TypedDict, total=False):
+    """
+    Parameters for a Data-Driven MPC controller for nonlinear systems.
+
+    Attributes:
+        n (int): The estimated order of the system.
+        N (int): The length of the initial input-output trajectory.
+        L (int): The prediction horizon length.
+        Q (np.ndarray): The output weighting matrix.
+        R (np.ndarray): The input weighting matrix.
+        S (np.ndarray): The output setpoint weighting matrix.
+        lamb_alpha (float): The ridge regularization weight for `alpha`.
+        lamb_sigma (float): The ridge regularization weight for `sigma`.
+        U (np.ndarray): An array of shape (`m`, 2) containing the bounds for
+            the `m` predicted inputs. Each row specifies the `[min, max]`
+            bounds for a single input.
+        Us (np.ndarray): An array of shape (`m`, 2) containing the bounds for
+            the `m` predicted input setpoints. `Us` must be a subset of `U`.
+            Each row specifies the `[min, max]` bounds for a single input.
+        u_range (np.ndarray): The range of the persistently exciting input.
+            Used in the initial input-output data generation process.
+        alpha_reg_type (AlphaRegType): The alpha regularization type for
+            the Nonlinear Data-Driven MPC formulation.
+        lamb_alpha_s (float | None): The ridge regularization weight for
+            `alpha_s` for a controller that uses an approximation of
+            `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
+        lamb_sigma_s (float | None): The ridge regularization weight for
+            `sigma_s` for a controller that uses an approximation of
+            `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
+        y_r (np.ndarray): The system output setpoint.
+        ext_out_incr_in (bool): The controller structure:
+
+            - If `True`, the controller uses an extended output representation
+              (y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] +
+              du[k-1]).
+            - If `False`, the controller operates as a standard controller with
+              direct control inputs and without system state extensions.
+
+            Defaults to `False`.
+        update_cost_threshold (float | None): The tracking cost value
+            threshold. Online input-output data updates are disabled when the
+            tracking cost value is less than this value.
+        n_mpc_step (int): The number of consecutive applications of the
+            optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
+    """
+
     n: int  # Estimated system order
 
     N: int  # Initial input-output trajectory length
@@ -168,8 +255,8 @@ def get_lti_data_driven_mpc_controller_params(
 
     Returns:
         LTIDataDrivenMPCParams: A dictionary of configuration parameters for a
-            Data-Driven MPC controller designed for Linear Time-Invariant (LTI)
-            systems.
+        Data-Driven MPC controller designed for Linear Time-Invariant (LTI)
+        systems.
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
@@ -177,11 +264,10 @@ def get_lti_data_driven_mpc_controller_params(
             parameters are missing in the configuration file.
 
     References:
-        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-            "Data-Driven Model Predictive Control With Stability and
-            Robustness Guarantees," in IEEE Transactions on Automatic Control,
-            vol. 66, no. 4, pp. 1702-1717, April 2021,
-            doi: 10.1109/TAC.2020.3000182.
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
     """
     # Load controller parameters from config file
     params = load_yaml_config_params(
@@ -312,7 +398,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 ) -> NonlinearDataDrivenMPCParams:
     """
     Load and initialize parameters for a Data-Driven MPC controller designed
-    for Nonlinear systems from a YAML configuration file.
+    for nonlinear systems from a YAML configuration file.
 
     The controller parameters are defined based on the Nonlinear Data-Driven
     MPC controller formulation of [2]. The number of control inputs (`m`)
@@ -330,7 +416,7 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     Returns:
         NonlinearDataDrivenMPCParams: A dictionary of configuration parameters
-            for a Data-Driven MPC controller designed for Nonlinear systems.
+        for a Data-Driven MPC controller designed for nonlinear systems.
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.
@@ -339,9 +425,9 @@ def get_nonlinear_data_driven_mpc_controller_params(
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     # Load controller parameters from config file
     params = load_yaml_config_params(
@@ -507,18 +593,17 @@ def construct_weighting_matrix(
     of weights.
 
     Args:
-        weights_param (float | list[float]): The weights for the matrix.
-            - If scalar, applies the same weight to all variables.
-            - If list, assigns specific weights to each variable. Must have
-              `n_vars` elements.
+        weights_param (float | list[float]): The weights for the matrix. If
+            scalar, applies the same weight to all variables. If list, assigns
+            specific weights to each variable. Must contain `n_vars` elements.
         n_vars (int): The number of variables (inputs or outputs).
         horizon (int): The prediction horizon.
-        matrix_label (str): A label for error messages.
-            Defaults to "Weighting".
+        matrix_label (str): A label for error messages. Defaults to
+            "Weighting".
 
     Returns:
         np.ndarray: A square block-diagonal square weight matrix of order
-            (`n_vars` * `horizon`).
+        (`n_vars` * `horizon`).
 
     Raises:
         ValueError: If `weights_param` is not a valid scalar or list with the
@@ -560,9 +645,9 @@ def get_weights_list_from_param(
     Construct a list of weights from a matrix weights parameter.
 
     Args:
-        weights_param (float | list[float]): A weighting parameter.
-            - If scalar, applies the same weight to all variables.
-            - If list, must have `size` elements.
+        weights_param (float | list[float]): A weighting parameter. If scalar,
+            applies the same weight to all variables. If list, must contain
+            `size` elements.
         size (int): The expected number of elements of the resulting list.
         matrix_label (str): A label for error messages. Defaults to
             "Weighting".

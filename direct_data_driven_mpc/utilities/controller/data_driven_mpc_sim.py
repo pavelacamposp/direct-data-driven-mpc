@@ -1,3 +1,10 @@
+"""
+Functions for simulating data-driven MPC control loops.
+
+This module provides functions for simulating the closed-loop operation of
+both LTI and nonlinear data-driven MPC controllers applied to a system.
+"""
+
 from typing import Callable
 
 import numpy as np
@@ -45,18 +52,18 @@ def simulate_lti_data_driven_mpc_control_loop(
 
     Returns:
         tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
-            - An array of shape `(n_steps, m)` representing the optimal control
-                inputs applied to the system, where `m` is the number of
-                control inputs.
-            - An array of shape `(n_steps, p)` representing the output response
-                of the system, where `p` is the number of system outputs.
+
+        - An array of shape `(n_steps, m)` representing the optimal control
+          inputs applied to the system, where `m` is the number of control
+          inputs.
+        - An array of shape `(n_steps, p)` representing the output response
+          of the system, where `p` is the number of system outputs.
 
     References:
-        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-            "Data-Driven Model Predictive Control With Stability and
-            Robustness Guarantees," in IEEE Transactions on Automatic Control,
-            vol. 66, no. 4, pp. 1702-1717, April 2021,
-            doi: 10.1109/TAC.2020.3000182.
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
     """
     # Retrieve model parameters
     m = system_model.m  # Number of inputs
@@ -167,19 +174,19 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
     | None = None,
 ) -> tuple[np.ndarray, np.ndarray]:
     """
-    Simulate a Data-Driven MPC control loop applied to a Nonlinear system and
+    Simulate a Data-Driven MPC control loop applied to a nonlinear system and
     return the resulting input-output data sequences.
 
     This function simulates the closed-loop operation of a Data-Driven MPC
-    controller designed for Nonlinear systems, following the Nonlinear
+    controller designed for nonlinear systems, following the Nonlinear
     Data-Driven MPC scheme described in Algorithm 1 of [2].
 
     Args:
         system_model (NonlinearSystem): A `NonlinearSystem` instance
-            representing a Nonlinear system.
+            representing a nonlinear system.
         data_driven_mpc_controller (NonlinearDataDrivenMPCController): A
             `NonlinearDataDrivenMPCController` instance representing a
-            Data-Driven MPC controller designed for Nonlinear systems.
+            Data-Driven MPC controller designed for nonlinear systems.
         n_steps (int): The number of time steps for the simulation.
         np_random (Generator): A Numpy random number generator for generating
             random noise for the system's output.
@@ -192,17 +199,18 @@ def simulate_nonlinear_data_driven_mpc_control_loop(
 
     Returns:
         tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
-            - An array of shape `(n_steps, m)` representing the optimal control
-                inputs applied to the system, where `m` is the number of
-                control inputs.
-            - An array of shape `(n_steps, p)` representing the output response
-                of the system, where `p` is the number of system outputs.
+
+        - An array of shape `(n_steps, m)` representing the optimal control
+          inputs applied to the system, where `m` is the number of control
+          inputs.
+        - An array of shape `(n_steps, p)` representing the output response of
+          the system, where `p` is the number of system outputs.
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     # Retrieve model parameters
     m = system_model.m  # Number of inputs
@@ -333,10 +341,9 @@ def print_mpc_step_info(
     Print MPC step information based on the verbosity level.
 
     Args:
-        verbose (int): Verbosity level.
-            - `1`: Updates the progress bar with the current step information.
-            - `2`: Prints detailed step information, including input and output
-                errors.
+        verbose (int): The verbosity level. `1`: Updates the progress bar with
+            the current step information. `2`: Prints detailed step
+            information, including input and output errors.
         step (int): Current time step.
         mpc_cost_val (float): The current MPC cost value.
         u_s (np.ndarray | None): The input setpoint array. If `None`, input
