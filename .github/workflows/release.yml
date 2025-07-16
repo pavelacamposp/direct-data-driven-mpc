@@ -94,6 +94,11 @@ jobs:
         run: |
           pip install -e .
 
+      - name: Convert README source file links to absolute GitHub URLs
+        run: |
+          export REPO_URL="https://github.com/pavelacamposp/direct-data-driven-mpc/blob/main/"
+          perl -i -pe 's{\[([^\]]+)\]\((?!https?://|#)([^)]+)\)}{"[$1]($ENV{REPO_URL}$2)"}ge' README.md
+
       - name: Build source and wheel distribution
         run: |
           python -m build
