@@ -1,3 +1,11 @@
+"""
+Functions for creating data-driven MPC controllers.
+
+This module provides functions to create data-driven MPC controllers for both
+LTI and nonlinear systems using controller configurations and initial
+input-output measurement data.
+"""
+
 import numpy as np
 
 from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
@@ -40,8 +48,8 @@ def create_lti_data_driven_mpc_controller(
 
     Returns:
         LTIDataDrivenMPCController: An `LTIDataDrivenMPCController` instance,
-            which represents a Data-Driven MPC controller designed for Linear
-            Time-Invariant (LTI) systems, based on the specified configuration.
+        which represents a Data-Driven MPC controller designed for Linear
+        Time-Invariant (LTI) systems, based on the specified configuration.
     """
     # Get model parameters from input-output trajectory data
     m = u_d.shape[1]  # Number of inputs
@@ -117,7 +125,7 @@ def create_nonlinear_data_driven_mpc_controller(
     Args:
         controller_config (NonlinearDataDrivenMPCParams): A dictionary
             containing configuration parameters for a Data-Driven MPC
-            controller designed for Nonlinear systems.
+            controller designed for nonlinear systems.
         u (np.ndarray): An array of shape `(N, m)` representing a
             persistently exciting input sequence used to generate output data
             from the system. `N` is the trajectory length and `m` is the
@@ -128,8 +136,8 @@ def create_nonlinear_data_driven_mpc_controller(
 
     Returns:
         NonlinearDataDrivenMPCController: A `NonlinearDataDrivenMPCController`
-            instance, which represents a Data-Driven MPC controller designed
-            for Nonlinear systems, based on the specified configuration.
+        instance, which represents a Data-Driven MPC controller designed for
+        nonlinear systems, based on the specified configuration.
     """
     # Get model parameters from input-output trajectory data
     m = u.shape[1]  # Number of inputs

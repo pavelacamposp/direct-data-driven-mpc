@@ -39,13 +39,13 @@ def cstr_dynamics(
 
     Returns:
         np.ndarray: An array containing the updated states (`x1_new`,
-            `x2_new`).
+        `x2_new`).
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     # Get state variables from state array
     x1, x2 = x
@@ -82,9 +82,9 @@ def cstr_output(x: np.ndarray, u: np.ndarray) -> np.ndarray:
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     return x[[1]]  # Output is the concentration x2
 
@@ -111,13 +111,13 @@ def create_nonlinear_cstr_system(
 
     Returns:
         NonlinearSystem: A `NonlinearSystem` instance representing the
-            nonlinear CSTR system.
+        nonlinear CSTR system.
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
     # Load model parameters from config file
     params = load_yaml_config_params(

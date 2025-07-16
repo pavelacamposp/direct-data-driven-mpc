@@ -1,3 +1,13 @@
+"""
+Functions for constructing Hankel matrices and evaluating persistent
+excitation.
+
+This module provides functions for constructing Hankel matrices from
+multidimensional data sequences and for evaluating whether a given data
+sequence is persistently exciting of a given order based on the rank of its
+Hankel matrix.
+"""
+
 import numpy as np
 from numpy.lib.stride_tricks import as_strided
 
@@ -15,8 +25,8 @@ def hankel_matrix(X: np.ndarray, L: int) -> np.ndarray:
 
     Returns:
         np.ndarray: A Hankel matrix of shape (L * n, N - L + 1), where each
-            column represents a flattened window of length L sliding over the
-            N data elements.
+        column represents a flattened window of length L sliding over the N
+        data elements.
 
     Raises:
         ValueError: If the number of elements N is less than the window length
@@ -72,8 +82,8 @@ def evaluate_persistent_excitation(
 
     Returns:
         tuple[int, bool]: A tuple containing the rank of the Hankel matrix and
-            a boolean indicating whether `X` is persistently exciting of the
-            given order.
+        a boolean indicating whether `X` is persistently exciting of the given
+        order.
     """
     # Get data sequence element length
     n = X.shape[1]

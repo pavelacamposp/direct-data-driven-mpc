@@ -26,11 +26,10 @@ class LTIDataDrivenMPCScheme(Enum):
     [1].
 
     References:
-        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-            "Data-Driven Model Predictive Control With Stability and
-            Robustness Guarantees," in IEEE Transactions on Automatic Control,
-            vol. 66, no. 4, pp. 1702-1717, April 2021,
-            doi: 10.1109/TAC.2020.3000182.
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
     """
 
     # 1-step Data-Driven MPC scheme with terminal equality constraints
@@ -107,7 +106,7 @@ def get_equilibrium_state_from_output(
 
     Returns:
         np.ndarray: The estimated initial system state corresponding to the
-            equilibrium output.
+        equilibrium output.
     """
     # Get system order
     n = system_model.n
@@ -162,16 +161,15 @@ def create_data_driven_mpc_controllers_reproduction(
 
     Returns:
         list[LTIDataDrivenMPCController]: A list of
-            `LTIDataDrivenMPCController` instances, which represent
-            Data-Driven MPC controllers designed for Linear Time-Invariant
-            (LTI) systems, based on specified configurations.
+        `LTIDataDrivenMPCController` instances, which represent Data-Driven MPC
+        controllers designed for Linear Time-Invariant (LTI) systems, based on
+        specified configurations.
 
     References:
-        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-            "Data-Driven Model Predictive Control With Stability and
-            Robustness Guarantees," in IEEE Transactions on Automatic Control,
-            vol. 66, no. 4, pp. 1702-1717, April 2021,
-            doi: 10.1109/TAC.2020.3000182.
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
     """
     data_driven_mpc_controllers = []
 
@@ -249,12 +247,13 @@ def simulate_data_driven_mpc_control_loops_reproduction(
 
     Returns:
         tuple[list[np.ndarray], list[np.ndarray]]: A tuple containing:
-            - A list of arrays, each of shape `(n_steps, m)`, representing the
-                optimal control inputs applied to the system for each
-                controller, where `m` is the number of control inputs.
-            - A list of arrays, each of shape `(n_steps, p)`, representing the
-                output response of the system for each controller, where `p`
-                is the number of system outputs.
+
+        - A list of arrays, each of shape `(n_steps, m)`, representing the
+          optimal control inputs applied to the system for each controller,
+          where `m` is the number of control inputs.
+        - A list of arrays, each of shape `(n_steps, p)`, representing the
+          output response of the system for each controller, where `p` is the
+          number of system outputs.
     """
     # Store the internal state of the system to start
     # multiple simulations at the same state

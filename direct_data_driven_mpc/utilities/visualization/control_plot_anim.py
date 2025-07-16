@@ -1,3 +1,15 @@
+"""
+Functions for generating and saving animated control input-output plots.
+
+This module provides functions for generating and saving animated input-output
+plots with setpoints using Matplotlib.
+
+The animated plots consist of separate subplots for inputs and outputs,
+with optional highlighting of the initial measurement period for data-driven
+control systems. They are highly customizable and can be saved in various
+formats (e.g., GIF, MP4) using FFMPEG.
+"""
+
 import math
 import os
 from typing import Any
@@ -57,9 +69,8 @@ def plot_input_output_animation(
     This function generates a figure with two rows of subplots: the top
     subplots display control inputs and the bottom subplots display system
     outputs. Each subplot shows the data series for each sequence alongside
-    its setpoint as a constant line. The appearance of plot lines and legends
-    can be customized by passing dictionaries of Matplotlib line and legend
-    properties.
+    its setpoint. The appearance of plot lines and legends can be customized by
+    passing dictionaries of Matplotlib line and legend properties.
 
     The number of data points shown in each animation frame and the animation
     speed can be configured via the `points_per_frame` and `interval`
@@ -167,7 +178,7 @@ def plot_input_output_animation(
 
     Returns:
         FuncAnimation: A Matplotlib `FuncAnimation` object that animates the
-            progression of input-output data over time.
+        progression of input-output data over time.
 
     Raises:
         ValueError: If any array dimensions mismatch expected shapes, or if

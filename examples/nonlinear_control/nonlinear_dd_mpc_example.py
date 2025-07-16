@@ -2,7 +2,7 @@
 Nonlinear Data-Driven Model Predictive Control (MPC) Example Script
 
 This script demonstrates the setup, simulation, and visualization of a Direct
-Data-Driven MPC controller for Nonlinear systems, applied to a nonlinear
+Data-Driven MPC controller for nonlinear systems, applied to a nonlinear
 continuous stirred tank reactor (CSTR) based on the research of J. Berberich
 et al. [2].
 

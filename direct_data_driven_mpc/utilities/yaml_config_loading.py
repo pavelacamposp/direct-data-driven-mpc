@@ -1,3 +1,10 @@
+"""
+Utility for loading configuration parameters from YAML files.
+
+This module provides a function for loading parameters for specified keys from
+YAML configuration files.
+"""
+
 import os
 from typing import Any
 
@@ -16,7 +23,7 @@ def load_yaml_config_params(config_file: str, key: str) -> Any:
 
     Returns:
         Any: The parameters from the configuration file associated with the
-            specified key.
+        specified key.
 
     Raises:
         FileNotFoundError: If the YAML configuration file is not found.

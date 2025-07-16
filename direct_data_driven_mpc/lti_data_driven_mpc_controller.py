@@ -11,18 +11,52 @@ from direct_data_driven_mpc.utilities.hankel_matrix import (
 
 # Define Direct Data-Driven MPC Controller Types
 class LTIDataDrivenMPCType(Enum):
+    """
+    Controller types for Data-Driven MPC controllers for Linear Time-Invariant
+    (LTI) systems.
+
+    Attributes:
+        NOMINAL: A nominal data-driven MPC controller that assumes noise-free
+            measurements. Based on the Nominal Data-Driven MPC scheme described
+            in [1].
+        ROBUST: A robust data-driven MPC controller that incorporates
+            additional constraints to account for noisy output measurements.
+            Based on the Robust Data-Driven MPC scheme described in [1].
+
+    References:
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
+    """
+
     NOMINAL = 0  # Nominal Data-Driven MPC
     ROBUST = 1  # Robust Data-Driven MPC
 
 
 # Define Slack Variable Constraint Types for Robust Data-Driven MPC
 class SlackVarConstraintType(Enum):
-    # Non-Convex slack variable constraint
+    """
+    Constraint types for the slack variable used in the formulation of Robust
+    Data-Driven MPC controllers for Linear Time-Invariant (LTI) systems.
+
+    Attributes:
+        NON_CONVEX: A non-convex constraint on the slack variable. Currently
+            not implemented since it cannot be efficiently solved.
+        CONVEX: A convex constraint on the slack variable. Based on Remark 3 of
+            [1].
+        NONE: No explicit constraint is applied. The slack variable constraint
+            is assumed to be implicitly satisfied. Based on Remark 3 of [1].
+
+    References:
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
+    """
+
     NON_CONVEX = 0
-    # Convex slack variable constraint
     CONVEX = 1
-    # Omit an explicit constraint. The slack variable
-    # constraint is implicitly satisfied
     NONE = 2
 
 
@@ -34,8 +68,8 @@ class LTIDataDrivenMPCController:
     is based on research by J. Berberich et al., as described in [1].
 
     Attributes:
-        controller_type (DataDrivenMPCType): The Data-Driven MPC controller
-            type.
+        controller_type (LTIDataDrivenMPCType): The LTI Data-Driven MPC
+            controller type.
         n (int): The estimated order of the system.
         m (int): The number of control inputs.
         p (int): The number of system outputs.
@@ -52,9 +86,9 @@ class LTIDataDrivenMPCController:
         y_s (np.ndarray): The setpoint for system outputs.
         eps_max (float | None): The estimated upper bound of the system
             measurement noise.
-        lamb_alpha (float | None]): The ridge regularization base weight for
+        lamb_alpha (float | None): The ridge regularization base weight for
             `alpha`, scaled by `eps_max`.
-        lamb_sigma (float | None]): The ridge regularization weight for
+        lamb_sigma (float | None): The ridge regularization weight for
             `sigma`.
         U (np.ndarray | None): An array of shape (`m`, 2) containing the
             bounds for the `m` predicted inputs. Each row specifies the
@@ -62,7 +96,7 @@ class LTIDataDrivenMPCController:
             are applied.
         c (float | None): A constant used to define a Convex constraint for
             the slack variable `sigma` in a Robust MPC formulation.
-        slack_var_constraint_type (SlackVarConstraintTypes): The constraint
+        slack_var_constraint_type (SlackVarConstraintType): The constraint
             type for the slack variable `sigma` in a Robust MPC formulation.
         n_mpc_step (int): The number of consecutive applications of the
             optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
@@ -97,11 +131,10 @@ class LTIDataDrivenMPCController:
             Data-Driven MPC solution.
 
     References:
-        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-            "Data-Driven Model Predictive Control With Stability and
-            Robustness Guarantees," in IEEE Transactions on Automatic Control,
-            vol. 66, no. 4, pp. 1702-1717, April 2021,
-            doi: 10.1109/TAC.2020.3000182.
+        [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
+        Model Predictive Control With Stability and Robustness Guarantees," in
+        IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
+        April 2021, doi: 10.1109/TAC.2020.3000182.
     """
 
     def __init__(
@@ -163,10 +196,10 @@ class LTIDataDrivenMPCController:
                 input bounds are applied. Defaults to `None`.
             c (float | None): A constant used to define a Convex constraint
                 for the slack variable `sigma` in a Robust MPC formulation.
-            slack_var_constraint_type (SlackVarConstraintTypes): The
+            slack_var_constraint_type (SlackVarConstraintType): The
                 constraint type for the slack variable `sigma` in a Robust MPC
                 formulation.
-            controller_type (DataDrivenMPCType): The Data-Driven MPC
+            controller_type (LTIDataDrivenMPCType): The Data-Driven MPC
                 controller type.
             n_mpc_step (int): The number of consecutive applications of the
                 optimal input for an n-Step Data-Driven MPC Scheme
@@ -177,10 +210,9 @@ class LTIDataDrivenMPCController:
 
         References:
             [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer,
-                "Data-Driven Model Predictive Control With Stability and
-                Robustness Guarantees," in IEEE Transactions on Automatic
-                Control, vol. 66, no. 4, pp. 1702-1717, April 2021, doi:
-                10.1109/TAC.2020.3000182.
+            "Data-Driven Model Predictive Control With Stability and Robustness
+            Guarantees," in IEEE Transactions on Automatic Control, vol. 66,
+            no. 4, pp. 1702-1717, April 2021, doi: 10.1109/TAC.2020.3000182.
         """
         # Set controller type
         self.controller_type = controller_type  # Nominal or Robust Controller
@@ -389,6 +421,7 @@ class LTIDataDrivenMPCController:
         Initialize the Data-Driven MPC controller.
 
         This method performs the following tasks:
+
         1. Constructs Hankel matrices from the initial input-output trajectory
            data (`u_d`, `y_d`). These matrices are used for the data-driven
            characterization of the unknown system, as defined by the system
@@ -457,13 +490,14 @@ class LTIDataDrivenMPCController:
 
         This method defines data-driven MPC optimization variables as
         described in the Nominal and Robust MPC formulations in [1]:
+
         - **Nominal MPC**: Defines the variable `alpha` for a data-driven
-            input-output trajectory characterization of the system, and the
-            predicted input (`ubar`) and output (`ybar`) variables, as
-            described in Equation (3).
-        - **Robust MPC**: In addition to the optimization variables defined
-            for a Nominal MPC formulation, defines the `sigma` variable to
-            account for noisy measurements, as described in Equation (6).
+          input-output trajectory characterization of the system, and the
+          predicted input (`ubar`) and output (`ybar`) variables, as described
+          in Equation (3).
+        - **Robust MPC**: In addition to the optimization variables defined for
+          a Nominal MPC formulation, defines the `sigma` variable to account
+          for noisy measurements, as described in Equation (6).
 
         Note:
             This method initializes the `alpha`, `ubar`, `ybar`, and `sigma`
@@ -540,29 +574,30 @@ class LTIDataDrivenMPCController:
 
         This method defines the following constraints, as described in the
         Nominal and Robust MPC formulations in [1]:
+
         - **System dynamics**: Ensures input-output predictions are possible
-            trajectories of the system based on a data-driven characterization
-            of all its input-output trajectories. In a Robust MPC scheme, adds
-            a slack variable to account for noisy measurements. Defined by
-            Equations (3b) (Nominal) and (6a) (Robust).
-        - **Internal state**: Ensures predictions align with the internal
-            state of the system's trajectory. This constrains the first `n`
-            input-output predictions to match the past `n` input-output
-            measurements of the system, guaranteeing that the predictions
-            consider the initial state of the system. Defined by Equations
-            (3c) (Nominal) and (6b) (Robust).
+          trajectories of the system based on a data-driven characterization of
+          all its input-output trajectories. In a Robust MPC scheme, adds a
+          slack variable to account for noisy measurements. Defined by
+          Equations (3b) (Nominal) and (6a) (Robust).
+        - **Internal state**: Ensures predictions align with the internal state
+          of the system's trajectory. This constrains the first `n`
+          input-output predictions to match the past `n` input-output
+          measurements of the system, guaranteeing that the predictions
+          consider the initial state of the system. Defined by Equations (3c)
+          (Nominal) and (6b) (Robust).
         - **Terminal state**: Aims to stabilize the internal state of the
-            system so it aligns with the steady-state that corresponds to the
-            input-output pair (`u_s`, `y_s`) in any minimal realization (last
-            `n` input-output predictions, as considered in [1]). Defined by
-            Equations (3d) (Nominal) and (6c) (Robust).
+          system so it aligns with the steady-state that corresponds to the
+          input-output pair (`u_s`, `y_s`) in any minimal realization (last `n`
+          input-output predictions, as considered in [1]). Defined by Equations
+          (3d) (Nominal) and (6c) (Robust).
         - **Input**: Constrains the predicted input (`ubar`). Defined by
-            Equation (6c).
+          Equation (6c).
         - **Slack Variable**: Bounds a slack variable that accounts
-            for noisy online measurements and for noisy data used for
-            prediction (used to construct the Hankel matrices). Defined by
-            Equation (6d), for a Non-Convex constraint, and Remark 3, for a
-            Convex constraint and an implicit alternative.
+          for noisy online measurements and for noisy data used for prediction
+          (used to construct the Hankel matrices). Defined by Equation (6d),
+          for a Non-Convex constraint, and Remark 3, for a Convex constraint
+          and an implicit alternative.
 
         Note:
             This method initializes the `dynamics_constraints`,
@@ -622,13 +657,14 @@ class LTIDataDrivenMPCController:
 
         These constraints are defined according to the following equations
         from the Nominal and Robust MPC formulations in [1]:
-        - Nominal MPC: Equation (3b).
-        - Robust MPC: Equation (6a).
+
+        - **Nominal MPC:** Equation (3b).
+        - **Robust MPC:** Equation (6a).
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY system dynamic
-                constraints for the Data-Driven MPC controller, corresponding
-                to the specified MPC controller type.
+            constraints for the Data-Driven MPC controller, corresponding to
+            the specified MPC controller type.
 
         References:
             [1]: See class-level docstring for full reference details.
@@ -667,7 +703,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY internal state
-                constraints for the Data-Driven MPC controller.
+            constraints for the Data-Driven MPC controller.
 
         Note:
             It is essential to update the past `n` input-output measurements
@@ -702,7 +738,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY terminal state
-                constraints for the Data-Driven MPC controller.
+            constraints for the Data-Driven MPC controller.
 
         References:
             [1]: See class-level docstring for full reference details.
@@ -735,7 +771,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY input constraints
-                for the Data-Driven MPC controller.
+            for the Data-Driven MPC controller.
         """
         # Define input constraints
         ubar_pred = self.ubar[self.n * self.m :]  # ubar[0,L-1]
@@ -757,18 +793,19 @@ class LTIDataDrivenMPCController:
 
         As described in [1], this constraint can be defined in three different
         ways, achieving the same theoretical guarantees:
+
         - **Non-Convex**: Defines a non-convex constraint (Equation (6d)).
         - **Convex**: Defines a convex constraint using a sufficiently large
-            coefficient `c` (Remark 3).
+          coefficient `c` (Remark 3).
         - **None**: Omits an explicit constraint definition. The slack variable
-            constraint is implicitly met, relying on a high `lamb_sigma` value
-            (Remark 3).
+          constraint is implicitly met, relying on a high `lamb_sigma` value
+          (Remark 3).
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY slack variable
-                constraint for the Robust Data-Driven MPC controller,
-                corresponding to the specified slack variable constraint type.
-                The list is empty if the `NONE` constraint type is selected.
+            constraint for the Robust Data-Driven MPC controller, corresponding
+            to the specified slack variable constraint type. The list is empty
+            if the `NONE` constraint type is selected.
 
         References:
             [1]: See class-level docstring for full reference details.
@@ -805,13 +842,14 @@ class LTIDataDrivenMPCController:
 
         This method defines the MPC cost function as described in the Nominal
         and Robust MPC formulations in [1]:
+
         - **Nominal MPC**: Implements a quadratic stage cost that penalizes
-            deviations of the predicted control inputs (`ubar`) and outputs
-            (`ybar`) from the desired equilibrium (`u_s`, `y_s`), as described
-            in Equation (3).
+          deviations of the predicted control inputs (`ubar`) and outputs
+          (`ybar`) from the desired equilibrium (`u_s`, `y_s`), as described in
+          Equation (3).
         - **Robust MPC**: In addition to the quadratic stage cost, adds ridge
-            regularization terms for `alpha` and `sigma` variables to account
-            for noisy measurements, as described in Equation (6).
+          regularization terms for `alpha` and `sigma` variables to account for
+          noisy measurements, as described in Equation (6).
 
         Note:
             This method initializes the `cost` attribute to define the MPC
@@ -874,8 +912,8 @@ class LTIDataDrivenMPCController:
 
         Returns:
             str: The status of the optimization problem after attempting to
-                solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
-                "unbounded").
+            solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
+            "unbounded").
 
         Note:
             This method assumes that the MPC problem has already been defined.
@@ -893,8 +931,8 @@ class LTIDataDrivenMPCController:
 
         Returns:
             str: The status of the optimization problem after attempting to
-                solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
-                "unbounded").
+            solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
+            "unbounded").
         """
         return self.problem.status
 
@@ -905,7 +943,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             float: The optimal cost value of the solved MPC optimization
-                problem.
+            problem.
         """
         return self.problem.value
 
@@ -915,7 +953,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             np.ndarray: The predicted optimal control input from time step 0
-                to (L - 1).
+            to (L - 1).
 
         Raises:
             ValueError: If the MPC problem solution status was not "optimal"
@@ -952,7 +990,7 @@ class LTIDataDrivenMPCController:
 
         Returns:
             np.ndarray: An array containing the optimal control input for the
-                specified prediction time step.
+            specified prediction time step.
 
         Note:
             This method assumes that the optimal control input from the MPC

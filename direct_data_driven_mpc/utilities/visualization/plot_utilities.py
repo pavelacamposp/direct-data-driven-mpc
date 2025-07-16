@@ -1,3 +1,12 @@
+"""
+Utility functions and classes for static and animated control input-output
+plots.
+
+This module provides helper functions used in control input-output data plot
+generation, and a custom Matplotlib legend handler class for highlighting
+initial measurement periods in animated plots.
+"""
+
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -14,9 +23,12 @@ from matplotlib.text import Text
 from matplotlib.transforms import Transform
 
 
-# Define a custom legend handler for the rectangle representing
-# the initial input-output measurement period in plot animations
 class HandlerInitMeasurementRect(HandlerPatch):
+    """
+    A custom legend handler for the rectangle representing the initial
+    input-output measurement period in control input-output plot animations.
+    """
+
     def create_artists(
         self,
         legend: Legend,
@@ -180,7 +192,7 @@ def get_padded_limits(
 
     Returns:
         tuple[float, float]: A tuple containing padded minimum and maximum
-            limits for the combined data from `X` and `X_s`.
+        limits for the combined data from `X` and `X_s`.
     """
     # Get minimum and maximum limits from data sequences
     X_min, X_max = np.min(X), np.max(X)
@@ -212,8 +224,7 @@ def get_text_width_in_data(
             contains the axis.
 
     Returns:
-        float: The width of the text object's bounding box in data
-            coordinates.
+        float: The width of the text object's bounding box in data coordinates.
     """
     # Get the bounding box of the text object in pixel coordinates
     render = fig.canvas.get_renderer()  # type: ignore[attr-defined]
@@ -299,9 +310,10 @@ def create_input_output_figure(
 
     Returns:
         tuple: A tuple containing:
-            - Figure: The created Matplotlib figure.
-            - list[Axes]: A list of axes for control inputs subplots.
-            - list[Axes]: A list of axes for system outputs subplots.
+
+        - Figure: The created Matplotlib figure.
+        - list[Axes]: A list of axes for control inputs subplots.
+        - list[Axes]: A list of axes for system outputs subplots.
     """
     # Create figure
     fig = plt.figure(num=title, layout="constrained", figsize=figsize, dpi=dpi)
@@ -342,19 +354,52 @@ def create_input_output_figure(
     return fig, axs_u, axs_y
 
 
-def init_dict_if_none(d: dict[Any, Any] | None) -> dict[Any, Any]:
-    return {} if d is None else d
+def init_dict_if_none(input_dict: dict | None) -> dict:
+    """
+    Return an empty dictionary if the input is `None`, otherwise return the
+    input.
+
+    Args:
+        input_dict (dict | None): A dictionary or `None`.
+
+    Returns:
+        dict: The original dictionary or an empty one.
+    """
+    return {} if input_dict is None else input_dict
 
 
 def get_label_from_list(
     label_list: list[str], index: int, fallback: str
 ) -> str:
+    """
+    Get a label from a list by index, or return a fallback value if the list is
+    empty.
+
+    Args:
+        label_list (list[str]): A list of label strings.
+        index (int): The index of the desired label.
+        fallback (str): A fallback string to return if the list is empty.
+
+    Returns:
+        str: The label at the specified index or the fallback string.
+    """
     return label_list[index] if label_list else fallback
 
 
 def check_list_length(
     name: str, data_list: list | None, expected: int
 ) -> None:
+    """
+    Verify whether a list contains the expected number of elements.
+
+    Args:
+        name (str): The name of the list (for error message context).
+        data_list (list | None): The list to check.
+        expected (int): The expected number of elements in the list.
+
+    Raises:
+        ValueError: If the list length does not match the expected value.
+    """
     if data_list and len(data_list) != expected:
         raise ValueError(
             f"The length of `{name}` ({len(data_list)}) does not match "

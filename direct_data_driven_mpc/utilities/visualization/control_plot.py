@@ -1,3 +1,12 @@
+"""
+Functions for plotting control input-output data.
+
+This module provides functions for plotting input-output trajectories with
+setpoints using Matplotlib. It creates highly customizable figures with
+separate subplots for inputs and outputs, with optional highlighting of the
+initial measurement period for data-driven control systems.
+"""
+
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -57,10 +66,9 @@ def plot_input_output(
 
     This function creates a figure with two rows of subplots, with the first
     row containing control inputs, and the second row, system outputs. Each
-    subplot shows the data series for each data sequence alongside its setpoint
-    as a constant line. The appearance of plot lines and legends can be
-    customized by passing dictionaries of Matplotlib line and legend
-    properties.
+    subplot shows the data series for each data sequence alongside its
+    setpoint. The appearance of plot lines and legends can be customized by
+    passing dictionaries of Matplotlib line and legend properties.
 
     If provided, the first 'initial_steps' time steps are highlighted to
     emphasize the initial input-output data measurement period representing

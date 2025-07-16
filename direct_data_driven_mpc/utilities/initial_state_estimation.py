@@ -1,3 +1,14 @@
+"""
+Functions for estimating the initial state of LTI systems.
+
+This module provides functions related to state estimation for LTI systems,
+which include:
+
+- Calculation of Observability and Toeplitz matrices,
+- Estimation of initial states from input-output data,
+- Calculation of equilibrium input-output pairs for steady-state conditions.
+"""
+
 import numpy as np
 
 
@@ -36,10 +47,11 @@ def toeplitz_input_output_matrix(
     This matrix is used to express the linear response of the system outputs
     to the system inputs, extended over t time steps.
 
-    For t = 3, this matrix takes the form:
-    Tt = [[D   0   0],
-          [CB  D   0],
-          [CAB CB  D]]
+    For t = 3, this matrix takes the form::
+
+           [D   0   0]
+      Tt = [CB  D   0]
+           [CAB CB  D]
 
     Args:
         A (np.ndarray): The state matrix of the system.
@@ -50,7 +62,7 @@ def toeplitz_input_output_matrix(
 
     Returns:
         np.ndarray: The Toeplitz input-output matrix of the system over t
-            steps.
+        steps.
 
     Examples:
         >>> import numpy as np
@@ -160,7 +172,7 @@ def calculate_equilibrium_output_from_input(
 
     Returns:
         np.ndarray: The equilibrium output `y_eq` corresponding to the input
-            `u_eq`.
+        `u_eq`.
     """
     n = A.shape[0]  # Order of the system
 
@@ -197,7 +209,7 @@ def calculate_equilibrium_input_from_output(
 
     Returns:
         np.ndarray: The equilibrium input `u_eq` corresponding to the output
-            `y_eq`.
+        `y_eq`.
     """
     n = A.shape[0]  # Order of the system
 

@@ -1,3 +1,10 @@
+"""
+Functions for generating initial input-output data from a system.
+
+This module provides functions for generating input-output data from both LTI
+and nonlinear systems, and randomizing the initial state of LTI systems.
+"""
+
 import numpy as np
 from numpy.random import Generator
 
@@ -44,7 +51,7 @@ def randomize_initial_system_state(
 
     Returns:
         np.ndarray: A vector of shape `(n, )` representing the estimated
-            initial state of the system, where `n` is the system's order.
+        initial state of the system, where `n` is the system's order.
     """
     # Retrieve model parameters
     ns = system_model.n  # System order (simulation)
@@ -107,10 +114,10 @@ def generate_initial_input_output_data(
     Args:
         system_model (LTIModel | NonlinearSystem): An instance of `LTIModel`,
             representing a Linear Time-Invariant (LTI) system, or
-            `NonlinearSystem`, representing a Nonlinear system.
+            `NonlinearSystem`, representing a nonlinear system.
         controller_config (DataDrivenMPCParams): A dictionary containing
             parameters for a Data-Driven MPC controller designed for Linear
-            Time-Invariant (LTI) or Nonlinear systems. Includes the initial
+            Time-Invariant (LTI) or nonlinear systems. Includes the initial
             input-output trajectory length (`N`) and the range of the
             persistently exciting input (`u_range`).
         np_random (Generator): A Numpy random number generator for generating
@@ -119,11 +126,10 @@ def generate_initial_input_output_data(
 
     Returns:
         tuple[np.ndarray, np.ndarray]: A tuple containing two arrays: a
-            persistently exciting input (`u_d`) and the system's output
-            response (`y_d`). The input array has shape `(N, m)` and the
-            output array has shape `(N, p)`, where `N` is the trajectory
-            length, `m` is the number of control inputs, and `p` is the number
-            of system outputs.
+        persistently exciting input (`u_d`) and the system's output response
+        (`y_d`). The input array has shape `(N, m)` and the output array has
+        shape `(N, p)`, where `N` is the trajectory length, `m` is the number
+        of control inputs, and `p` is the number of system outputs.
     """
     # Retrieve model parameters
     m = system_model.m  # Number of inputs
@@ -189,12 +195,13 @@ def simulate_n_input_output_measurements(
 
     Returns:
         tuple[np.ndarray, np.ndarray]: A tuple containing two arrays:
-            - An array of shape `(n, m)` representing the constant input
-                setpoint applied to the system over `n` time steps, where `n`
-                is the system order and `m` is the number of control inputs.
-            - An array of shape `(n, p)` representing the output response of
-                the system, where `n` is the system order and `p` is the
-                number of system outputs.
+
+        - An array of shape `(n, m)` representing the constant input setpoint
+          applied to the system over `n` time steps, where `n` is the system
+          order and `m` is the number of control inputs.
+        - An array of shape `(n, p)` representing the output response of the
+          system, where `n` is the system order and `p` is the number of system
+          outputs.
     """
     # Retrieve model parameters
     m = system_model.m  # Number of inputs

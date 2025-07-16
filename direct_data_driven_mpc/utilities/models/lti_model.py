@@ -1,3 +1,10 @@
+"""
+Classes for modeling Linear Time-Invariant (LTI) systems.
+
+This module provides classes for representing and simulating discrete-time
+LTI systems using a state-space representation.
+"""
+
 import numpy as np
 
 from direct_data_driven_mpc.utilities.initial_state_estimation import (
@@ -81,7 +88,11 @@ class LTIModel:
         and measurement noise `w`.
 
         The system simulation follows the state-space equations:
+
+        .. math::
+
             x(k+1) = A * x(k) + B * u(k)
+
             y(k) = C * x(k) + D * u(k) + w(k)
 
         Args:
@@ -92,7 +103,7 @@ class LTIModel:
 
         Returns:
             np.ndarray: The output vector `y` of shape `(p,)` at the current
-                time step, where `p` is the number of outputs.
+            time step, where `p` is the number of outputs.
 
         Note:
             This method updates the `x` attribute, which represents the
@@ -119,7 +130,7 @@ class LTIModel:
 
         Returns:
             np.ndarray: The output matrix `Y` of shape `(steps, p)` containing
-                the simulated system outputs at each time step.
+            the simulated system outputs at each time step.
 
         Note:
             This method updates the `x` attribute, which represents the
@@ -152,7 +163,7 @@ class LTIModel:
 
         Returns:
             np.ndarray: A vector of shape `(n, )` representing the estimated
-                initial state of the system .
+            initial state of the system .
 
         Raises:
             ValueError: If `U` or `Y` are not shaped `(n, )`.
@@ -177,9 +188,8 @@ class LTIModel:
                 system.
 
         Returns:
-            np.ndarray: A vector of shape `(p, 1)` representing the
-                equilibrium output `y_eq`, where `p` is the number of outputs
-                of the system.
+            np.ndarray: A vector of shape `(p, 1)` representing the equilibrium
+            output `y_eq`, where `p` is the number of outputs of the system.
         """
         y_eq = calculate_equilibrium_output_from_input(
             A=self.A, B=self.B, C=self.C, D=self.D, u_eq=u_eq
@@ -203,9 +213,8 @@ class LTIModel:
                 the system.
 
         Returns:
-            np.ndarray: A vector of shape `(m, 1)` representing the
-                equilibrium input `u_s`, where `m` is the number of inputs to
-                the system.
+            np.ndarray: A vector of shape `(m, 1)` representing the equilibrium
+            input `u_s`, where `m` is the number of inputs to the system.
         """
         u_eq = calculate_equilibrium_input_from_output(
             A=self.A, B=self.B, C=self.C, D=self.D, y_eq=y_eq

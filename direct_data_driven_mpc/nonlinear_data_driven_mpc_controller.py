@@ -12,20 +12,34 @@ from direct_data_driven_mpc.utilities.hankel_matrix import (
 # Define the regularization types of `alpha`, considering
 # with respect to what variable it is regularized
 class AlphaRegType(Enum):
-    # Alpha regularized w.r.t. an approximation of alpha_Lin^sr(D_t),
-    # based on Remark 1 of [2].
+    """
+    Regularization types for the `alpha` variable used in the formulation of
+    Data-Driven MPC controllers for nonlinear systems.
+
+    Attributes:
+        APPROXIMATED: Regularizes `alpha` with respect to an approximation of
+            `alpha_Lin^sr(D_t)`. Based on Remark 1 of [2].
+        PREVIOUS: Regularizes `alpha` with respect to the previous optimal
+            alpha value to encourage stationary behavior. Refer to Section V of
+            [2].
+        ZERO: Regularizes `alpha` with respect to zero.
+
+    References:
+        [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+    """
+
     APPROXIMATED = 0
-    # Alpha regularized w.r.t. the previous optimal alpha value to
-    # encourage stationary behavior. Refer to Section V of [2].
     PREVIOUS = 1
-    # Alpha regularized w.r.t. zero.
     ZERO = 2
 
 
 class NonlinearDataDrivenMPCController:
     """
     A class that implements a Data-Driven Model Predictive Control (MPC)
-    controller for Nonlinear systems. The implementation is based on research
+    controller for nonlinear systems. The implementation is based on research
     by J. Berberich et al., as described in [2].
 
     Attributes:
@@ -60,10 +74,15 @@ class NonlinearDataDrivenMPCController:
         lamb_sigma_s (float): The ridge regularization weight for
             `sigma_s` for a controller that uses an approximation of
             `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
-        ext_out_incr_in (bool): The controller structure (uses an extended
-            output representation and input increments, or operates as a
-            standard controller with direct control inputs and without system
-            state extensions).
+        ext_out_incr_in (bool): The controller structure:
+
+            - If `True`, the controller uses an extended output representation
+              (y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] +
+              du[k-1]).
+            - If `False`, the controller operates as a standard controller with
+              direct control inputs and without system state extensions.
+
+            Defaults to `False`.
         update_cost_threshold (float): The tracking cost value threshold.
             Online input-output data updates are disabled when the tracking
             cost value is less than this value.
@@ -137,9 +156,9 @@ class NonlinearDataDrivenMPCController:
 
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
-            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
-            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+        Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
+        IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
+        Sept. 2022, doi: 10.1109/TAC.2022.3166851.
     """
 
     def __init__(
@@ -202,18 +221,22 @@ class NonlinearDataDrivenMPCController:
                 single input.
             alpha_reg_type (AlphaRegType): The `alpha` regularization type
                 for the Nonlinear Data-Driven MPC formulation.
-            lamb_alpha_s (float): The ridge regularization weight for
+            lamb_alpha_s (float | None): The ridge regularization weight for
                 `alpha_s` for a controller that uses an approximation of
                 `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
-            lamb_sigma_s (float): The ridge regularization weight for
+            lamb_sigma_s (float | None): The ridge regularization weight for
                 `sigma_s` for a controller that uses an approximation of
                 `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
             ext_out_incr_in (bool): The controller structure:
-                If `True`, the controller uses an extended output
-                representation (y_ext[k] = [y[k], u[k]]) and input increments
-                (u[k] = u[k-1] + du[k-1]). If `False`, the controller operates
-                as a standard controller with direct control inputs and
-                without system state extensions. Defaults to `False`.
+
+                - If `True`, the controller uses an extended output
+                  representation (y_ext[k] = [y[k], u[k]]) and input increments
+                  (u[k] = u[k-1] + du[k-1]).
+                - If `False`, the controller operates as a standard controller
+                  with direct control inputs and without system state
+                  extensions.
+
+                Defaults to `False`.
             update_cost_threshold (float | None): The tracking cost value
                 threshold. Online input-output data updates are disabled when
                 the tracking cost value is less than this value. If `None`,
@@ -225,9 +248,9 @@ class NonlinearDataDrivenMPCController:
 
         References:
             [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
-                Tracking MPC for Nonlinear Systems—Part II: The Data-Driven
-                Case," in IEEE Transactions on Automatic Control, vol. 67, no.
-                9, pp. 4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+            Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,"
+            in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
+            4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.
         """
         # Define controller structure:
         # - If `True`: The controller uses an extended output representation
@@ -274,9 +297,10 @@ class NonlinearDataDrivenMPCController:
         self.Us = Us  # Bounds for the predicted input setpoint
         # Note: Us must be a subset of U.
 
-        # Alpha regularization type for Nonlinear MPC
+        # Alpha regularization type
         self.alpha_reg_type = alpha_reg_type
-        # Nonlinear MPC parameters for the approximation of alpha_Lin^sr(D_t).
+
+        # Parameters for the approximation of alpha_Lin^sr(D_t).
         # Alpha is regularized w.r.t. this parameter, based on Remark 1
         # of [2].
         if alpha_reg_type == AlphaRegType.APPROXIMATED:
@@ -438,6 +462,7 @@ class NonlinearDataDrivenMPCController:
         Initialize the Data-Driven MPC controller.
 
         This method performs the following tasks:
+
         1. Constructs Hankel matrices from the initial input-output trajectory
            data (`u`, `y`). These matrices are used for the data-driven
            characterization of the unknown system, as defined by the system
@@ -502,6 +527,7 @@ class NonlinearDataDrivenMPCController:
         and store the optimal control input.
 
         This method performs the following tasks:
+
         1. Constructs Hankel matrices using the latest measured input-output
            data. If the tracking cost value from the previous solution is
            small enough (less than `update_cost_threshold`), omits this step
@@ -809,23 +835,23 @@ class NonlinearDataDrivenMPCController:
 
         This method defines the following constraints, as described in the
         Nonlinear Data-Driven MPC formulation in [2]:
+
         - **System dynamics**: Ensures input-output predictions are possible
-            trajectories of the system based on a data-driven characterization
-            of all its input-output trajectories. Defined by Equation (22b).
+          trajectories of the system based on a data-driven characterization of
+          all its input-output trajectories. Defined by Equation (22b).
         - **Internal state**: Ensures predictions align with the internal
-            state of the system's trajectory. This constrains the first `n`
-            input-output predictions to match the past `n` input-output
-            measurements of the system, guaranteeing that the predictions
-            consider the initial state of the system. Defined by Equation
-            (22c).
+          state of the system's trajectory. This constrains the first `n`
+          input-output predictions to match the past `n` input-output
+          measurements of the system, guaranteeing that the predictions
+          consider the initial state of the system. Defined by Equation (22c).
         - **Terminal state**: Aims to stabilize the internal state of the
-            system so it aligns with the steady-state that corresponds to the
-            input-output equilibrium pair (predicted equilibrium setpoints
-            `u_s`, `y_s`) in any minimal realization (last `n` input-output
-            predictions, as considered in [2]). Defined by Equation (22d).
+          system so it aligns with the steady-state that corresponds to the
+          input-output equilibrium pair (predicted equilibrium setpoints `u_s`,
+          `y_s`) in any minimal realization (last `n` input-output predictions,
+          as considered in [2]). Defined by Equation (22d).
         - **Input**: Constrains both the equilibrium input (predicted input
-            setpoint `u_s`) and the input trajectory (`ubar`). Defined by
-            Equation (22e).
+          setpoint `u_s`) and the input trajectory (`ubar`). Defined by
+          Equation (22e).
 
         Note:
             This method initializes the `dynamics_constraints`,
@@ -867,8 +893,8 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY system dynamic
-                constraints for the Data-Driven MPC controller, corresponding
-                to the specified MPC controller type.
+            constraints for the Data-Driven MPC controller, corresponding to
+            the specified MPC controller type.
 
         References:
             [2]: See class-level docstring for full reference details.
@@ -904,7 +930,7 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY internal state
-                constraints for the Data-Driven MPC controller.
+            constraints for the Data-Driven MPC controller.
 
         Note:
             It is essential to update the system's input-output measurements,
@@ -941,7 +967,7 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY terminal state
-                constraints for the Data-Driven MPC controller.
+            constraints for the Data-Driven MPC controller.
 
         References:
             [2]: See class-level docstring for full reference details.
@@ -968,7 +994,7 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             list[cp.Constraint]: A list containing the CVXPY input constraints
-                for the Data-Driven MPC controller.
+            for the Data-Driven MPC controller.
         """
         # Define input constraints
         if self.ext_out_incr_in:
@@ -1063,8 +1089,8 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             str: The status of the optimization problem after attempting to
-                solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
-                "unbounded").
+            solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
+            "unbounded").
 
         Note:
             This method assumes that the MPC problem has already been defined.
@@ -1082,8 +1108,8 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             str: The status of the optimization problem after attempting to
-                solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
-                "unbounded").
+            solve it (e.g., "optimal", "optimal_inaccurate", "infeasible",
+            "unbounded").
         """
         return self.problem.status
 
@@ -1094,7 +1120,7 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             float: The optimal cost value of the solved MPC optimization
-                problem.
+            problem.
         """
         return self.problem.value
 
@@ -1105,9 +1131,9 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             np.ndarray: The predicted optimal control input from time step 0
-                to L. If the controller uses an extended output representation
-                and input increments, returns the predicted optimal control
-                input increments instead.
+            to L. If the controller uses an extended output representation and
+            input increments, returns the predicted optimal control input
+            increments instead.
 
         Raises:
             ValueError: If the MPC problem solution status was not "optimal"
@@ -1152,7 +1178,7 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             np.ndarray: An array containing the optimal control input for the
-                specified prediction time step.
+            specified prediction time step.
 
         Note:
             This method assumes that the optimal control input from the MPC
@@ -1214,9 +1240,9 @@ class NonlinearDataDrivenMPCController:
 
         Returns:
             np.ndarray | None: An array containing the optimal control
-                input increment for the specified prediction time step if the
-                controller uses an extended output representation and input
-                increments. Otherwise, returns `None`.
+            input increment for the specified prediction time step if the
+            controller uses an extended output representation and input
+            increments. Otherwise, returns `None`.
 
         Note:
             This method assumes that the `optimal_du` attribute contains the
@@ -1250,9 +1276,9 @@ class NonlinearDataDrivenMPCController:
                 time step, expected to match the dimensions of prior outputs.
                 This output should correspond to the system's response to
                 `u_current`, as both represent a trajectory of the system.
-            du_current (np.ndarray): The control input increment (du[k] =
-                u[k+1] - u[k]) for the current time step, expected to match
-                the dimensions of prior inputs.
+            du_current (np.ndarray | None): The control input increment
+                (du[k] = u[k+1] - u[k]) for the current time step, expected to
+                match the dimensions of prior inputs.
 
         Raises:
             ValueError: If `u_current`, `y_current`, or `du_current` do not

@@ -1,3 +1,12 @@
+"""
+Functions for plotting multiple input-output data for control system
+comparison.
+
+This module provides functions for plotting multiple input-output trajectories
+with setpoints using Matplotlib. It enables comparing different control systems
+by plotting their control data in the same figure.
+"""
+
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -233,6 +242,35 @@ def validate_comparison_plot_parameters(
     input_labels: list[str] | None = None,
     output_labels: list[str] | None = None,
 ) -> None:
+    """
+    Validate that input/output data and plot parameter lists match the
+    expected dimensions for generating comparison plots.
+
+    Args:
+        u_data (list[np.ndarray]): A list of `M` arrays of shape (T, m)
+            containing control input data from `M` simulations. `T` is the
+            number of time steps, and `m` is the number of control inputs.
+        y_data (list[np.ndarray]): A list of `M` arrays of shape (T, p)
+            containing system output data from `M` simulations. `T` is the
+            number of time steps, and `p` is the number of system outputs.
+        inputs_line_param_list (list[dict[str, Any]] | None): A list of
+            `M` dictionaries, where each dictionary specifies Matplotlib
+            properties for customizing the plot lines corresponding to one of
+            the `M` input data arrays in `u_data`.
+        outputs_line_param_list (list[dict[str, Any]] | None): A list of
+            `M` dictionaries, where each dictionary specifies Matplotlib
+            properties for customizing the plot lines corresponding to one of
+            the `M` output data arrays in `y_data`.
+        var_suffix_list (list[str] | None): A list of strings appended to each
+            data series label in the plot legend.
+        input_labels (list[str] | None): A list of strings specifying custom
+            legend labels for input data series.
+        output_labels (list[str] | None): A list of strings specifying custom
+            legend labels for output data series.
+
+    Raises:
+        ValueError: If any parameter does not match the expected dimension.
+    """
     if not u_data or not y_data:
         raise ValueError(
             "`u_data` and `y_data` must contain at least one simulation."
