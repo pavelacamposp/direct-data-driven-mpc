@@ -3,7 +3,8 @@
 <div align="center">
 
 [![PyPi](https://img.shields.io/pypi/v/direct-data-driven-mpc)](https://pypi.org/project/direct-data-driven-mpc)
-[![GitHub Actions status](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml)
+[![CI Workflow status](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml/badge.svg)](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/ci_workflow.yml)
+[![Docs status](https://img.shields.io/github/actions/workflow/status/pavelacamposp/direct-data-driven-mpc/docs.yml?label=docs&color=brightgreen)](https://github.com/pavelacamposp/direct-data-driven-mpc/actions/workflows/docs.yml)
 [![codecov](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc/graph/badge.svg)](https://codecov.io/gh/pavelacamposp/direct-data-driven-mpc)
 [![Ruff](https://img.shields.io/badge/Lint%20%26%20Format-Ruff-blue?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
 [![Python](https://img.shields.io/badge/Python-3.10%20|%203.12-blue)](https://docs.python.org/3.10)
@@ -29,6 +30,8 @@
 This repository provides a Python implementation of Direct Data-Driven Model Predictive Control (MPC) controllers for Linear Time-Invariant (LTI) and nonlinear systems using CVXPY. It includes **robust** and **nonlinear** controllers implemented based on the Data-Driven MPC schemes presented in the papers ["Data-Driven Model Predictive Control With Stability and Robustness Guarantees"](https://ieeexplore.ieee.org/document/9109670) and ["Linear Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case"](https://ieeexplore.ieee.org/document/9756053) by J. Berberich et al.
 
 A **direct data-driven controller** maps measured input-output data from an unknown system *directly* onto the controller without requiring an explicit system identification step. This approach is particularly useful in applications where the system dynamics are too complex to be modeled accurately or where traditional system identification methods are impractical or difficult to apply.
+
+📖 View the full project documentation on our **[documentation page](https://pavelacamposp.github.io/direct-data-driven-mpc)**.
 
 ---
 ***Disclaimer:** This is an independent project based on the referenced papers and does not contain the official implementations from the authors.*
