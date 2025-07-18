@@ -84,6 +84,7 @@ GoogleDocstring._parse_attributes_section = parse_attributes_section  #  type: i
 # -- Options for HTML output --
 html_theme = "sphinx_book_theme"
 html_title = "Direct Data-Driven MPC"
+html_favicon = "_static/favicon.png"
 html_last_updated_fmt = ""
 html_static_path = ["_static"]
 html_css_files = ["styles.css"]
@@ -95,6 +96,7 @@ html_context = {
 
 html_theme_options = {
     "repository_url": "https://github.com/pavelacamposp/direct-data-driven-mpc",
+    "path_to_docs": "docs/source/",
     "use_repository_button": True,
     "use_edit_page_button": True,
     "use_issues_button": True,
