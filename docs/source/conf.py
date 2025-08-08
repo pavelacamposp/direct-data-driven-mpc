@@ -32,6 +32,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
     "sphinx_design",
+    "sphinx_sitemap",
 ]
 
 templates_path = ["_templates"]
@@ -88,6 +89,8 @@ html_favicon = "_static/favicon.png"
 html_last_updated_fmt = ""
 html_static_path = ["_static"]
 html_css_files = ["styles.css"]
+html_baseurl = "https://pavelacamposp.github.io/direct-data-driven-mpc/"
+sitemap_url_scheme = "{link}"
 
 html_context = {
     "display_version": True,
