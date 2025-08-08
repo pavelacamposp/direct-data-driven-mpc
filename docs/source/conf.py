@@ -91,6 +91,7 @@ html_static_path = ["_static"]
 html_css_files = ["styles.css"]
 html_baseurl = "https://pavelacamposp.github.io/direct-data-driven-mpc/"
 sitemap_url_scheme = "{link}"
+html_extra_path = ["googlec911518ad9a1d2fa.html"]
 
 html_context = {
     "display_version": True,
