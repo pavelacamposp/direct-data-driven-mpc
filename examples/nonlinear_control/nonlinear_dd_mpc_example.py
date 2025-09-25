@@ -26,30 +26,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 from utilities.nonlinear_cstr_model import create_nonlinear_cstr_system
 
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     AlphaRegType,
 )
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities import (
+    load_yaml_config_params,
+)
+from direct_data_driven_mpc.utilities.controller import (
     create_nonlinear_data_driven_mpc_controller,
-)
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+    generate_initial_input_output_data,
     get_nonlinear_data_driven_mpc_controller_params,
-)
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
     simulate_nonlinear_data_driven_mpc_control_loop,
 )
-from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
-    generate_initial_input_output_data,
-)
-from direct_data_driven_mpc.utilities.visualization.control_plot import (
+from direct_data_driven_mpc.utilities.visualization import (
     plot_input_output,
-)
-from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
     plot_input_output_animation,
     save_animation,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params,
 )
 
 # Directory paths

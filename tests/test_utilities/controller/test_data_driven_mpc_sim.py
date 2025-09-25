@@ -3,19 +3,19 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCController,
-)
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     NonlinearDataDrivenMPCController,
 )
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
-    print_mpc_step_info,
+from direct_data_driven_mpc.utilities.controller import (
     simulate_lti_data_driven_mpc_control_loop,
     simulate_nonlinear_data_driven_mpc_control_loop,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    print_mpc_step_info,
+)
+from direct_data_driven_mpc.utilities.models import (
+    LTIModel,
     NonlinearSystem,
 )
 

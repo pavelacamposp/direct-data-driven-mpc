@@ -10,14 +10,12 @@ from typing import TypedDict
 
 import numpy as np
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
+    AlphaRegType,
     LTIDataDrivenMPCType,
     SlackVarConstraintType,
 )
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
-    AlphaRegType,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
+from direct_data_driven_mpc.utilities import (
     load_yaml_config_params,
 )
 

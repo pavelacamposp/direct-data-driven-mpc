@@ -2,12 +2,12 @@ from typing import Any
 
 import numpy as np
 
-from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
+from direct_data_driven_mpc.utilities.controller import (
     generate_initial_input_output_data,
     randomize_initial_system_state,
     simulate_n_input_output_measurements,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import (
+from direct_data_driven_mpc.utilities.models import (
     LTIModel,
 )
 

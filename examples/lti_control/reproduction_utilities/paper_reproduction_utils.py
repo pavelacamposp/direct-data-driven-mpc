@@ -4,19 +4,15 @@ from enum import Enum
 import numpy as np
 from numpy.random import Generator
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCController,
 )
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
-    create_lti_data_driven_mpc_controller,
-)
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller import (
     LTIDataDrivenMPCParams,
-)
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    create_lti_data_driven_mpc_controller,
     simulate_lti_data_driven_mpc_control_loop,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
+from direct_data_driven_mpc.utilities.models import LTIModel
 
 
 # Define Data-Driven MPC controller schemes

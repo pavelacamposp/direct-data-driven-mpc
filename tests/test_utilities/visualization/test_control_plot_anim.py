@@ -10,10 +10,12 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 
-from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
-    initialize_data_animation,
+from direct_data_driven_mpc.utilities.visualization import (
     plot_input_output_animation,
     save_animation,
+)
+from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
+    initialize_data_animation,
     update_data_animation,
 )
 

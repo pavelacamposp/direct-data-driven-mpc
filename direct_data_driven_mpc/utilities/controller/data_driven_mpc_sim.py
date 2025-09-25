@@ -11,14 +11,12 @@ import numpy as np
 from numpy.random import Generator
 from tqdm import tqdm
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCController,
-)
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     NonlinearDataDrivenMPCController,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+from direct_data_driven_mpc.utilities.models import (
+    LTIModel,
     NonlinearSystem,
 )
 

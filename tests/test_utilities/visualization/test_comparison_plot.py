@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.utilities.visualization.comparison_plot import (
+from direct_data_driven_mpc.utilities.visualization import (
     plot_input_output_comparison,
+)
+from direct_data_driven_mpc.utilities.visualization.comparison_plot import (
     validate_comparison_plot_parameters,
 )
 

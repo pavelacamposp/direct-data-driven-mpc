@@ -5,19 +5,19 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
+    AlphaRegType,
     LTIDataDrivenMPCType,
     SlackVarConstraintType,
 )
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
-    AlphaRegType,
-)
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.controller import (
     LTIDataDrivenMPCParams,
     NonlinearDataDrivenMPCParams,
-    construct_weighting_matrix,
     get_lti_data_driven_mpc_controller_params,
     get_nonlinear_data_driven_mpc_controller_params,
+)
+from direct_data_driven_mpc.utilities.controller.controller_params import (
+    construct_weighting_matrix,
     get_weights_list_from_param,
     print_parameter_loading_details,
 )

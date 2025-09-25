@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.utilities.models.lti_model import (
+from direct_data_driven_mpc.utilities.models import (
     LTIModel,
     LTISystemModel,
 )

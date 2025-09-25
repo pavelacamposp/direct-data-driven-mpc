@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.utilities.hankel_matrix import (
+from direct_data_driven_mpc.utilities import (
     evaluate_persistent_excitation,
     hankel_matrix,
 )

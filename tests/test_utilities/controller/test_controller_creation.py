@@ -4,13 +4,11 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCController,
-)
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     NonlinearDataDrivenMPCController,
 )
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities.controller import (
     create_lti_data_driven_mpc_controller,
     create_nonlinear_data_driven_mpc_controller,
 )
