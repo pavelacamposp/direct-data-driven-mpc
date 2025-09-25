@@ -42,57 +42,111 @@ class NonlinearDataDrivenMPCController:
     controller for nonlinear systems. The implementation is based on research
     by J. Berberich et al., as described in [2].
 
-    Attributes:
-        n (int): The estimated order of the system.
-        m (int): The number of control inputs.
-        p (int): The number of system outputs.
-        u (np.ndarray): The input trajectory applied to the system.
-        y (np.ndarray): The system's output response to `u`.
-        du (np.ndarray): The input increment trajectory for a controller that
-            uses input increments (`ext_out_incr_in = True`).
-        N (int): The length of the initial input (`u`) and output (`y`)
-            trajectories.
-        L (int): The prediction horizon length.
-        Q (np.ndarray): The output weighting matrix.
-        R (np.ndarray): The input weighting matrix.
-        S (np.ndarray): The output setpoint weighting matrix.
-        y_r (np.ndarray): The system output setpoint.
-        lamb_alpha (float): The ridge regularization weight for `alpha`.
-        lamb_sigma (float): The ridge regularization weight for `sigma`.
-        U (np.ndarray): An array of shape (`m`, 2) containing the bounds for
-            the `m` predicted inputs. Each row specifies the `[min, max]`
-            bounds for a single input.
-        Us (np.ndarray): An array of shape (`m`, 2) containing the bounds for
-            the `m` predicted input setpoints. `Us` must be a subset of `U`.
-            Each row specifies the `[min, max]` bounds for a single input.
-        alpha_reg_type (AlphaRegType): The alpha regularization type for
-            the Nonlinear Data-Driven MPC formulation.
-        lamb_alpha_s (float): The ridge regularization weight for
-            `alpha_s` for a controller that uses an approximation of
-            `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
-        lamb_sigma_s (float): The ridge regularization weight for
-            `sigma_s` for a controller that uses an approximation of
-            `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
-        ext_out_incr_in (bool): The controller structure:
-
-            - If `True`, the controller uses an extended output representation
-              (y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] +
-              du[k-1]).
-            - If `False`, the controller operates as a standard controller with
-              direct control inputs and without system state extensions.
-
-            Defaults to `False`.
-        update_cost_threshold (float): The tracking cost value threshold.
-            Online input-output data updates are disabled when the tracking
-            cost value is less than this value.
-        n_mpc_step (int): The number of consecutive applications of the
-            optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
-
     References:
         [2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Linear
         Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case," in
         IEEE Transactions on Automatic Control, vol. 67, no. 9, pp. 4406-4421,
         Sept. 2022, doi: 10.1109/TAC.2022.3166851.
+    """
+
+    n: int
+    """The estimated order of the system."""
+
+    m: int
+    """The number of control inputs."""
+
+    p: int
+    """The number of system outputs."""
+
+    u: np.ndarray
+    """The persistently exciting input trajectory applied to the system."""
+
+    y: np.ndarray
+    """The system's output response to `u`."""
+
+    du: np.ndarray
+    """
+    The input increment trajectory for a controller that uses input increments
+    (`ext_out_incr_in = True`).
+    """
+
+    N: int
+    """The length of the initial input (`u`) and output (`y`) trajectories."""
+
+    L: int
+    """The prediction horizon length."""
+
+    Q: np.ndarray
+    """The output weighting matrix."""
+
+    R: np.ndarray
+    """The input weighting matrix."""
+
+    S: np.ndarray
+    """The output setpoint weighting matrix."""
+
+    y_r: np.ndarray
+    """The system output setpoint."""
+
+    lamb_alpha: float
+    """The ridge regularization weight for `alpha`."""
+
+    lamb_sigma: float
+    """The ridge regularization weight for `sigma`."""
+
+    U: np.ndarray
+    """
+    An array of shape (`m`, 2) containing the bounds for the `m` predicted
+    inputs. Each row specifies the `[min, max]` bounds for a single input.
+    """
+
+    Us: np.ndarray
+    """
+    An array of shape (`m`, 2) containing the bounds for the `m` predicted
+    input setpoints. `Us` must be a subset of `U`. Each row specifies the
+    `[min, max]` bounds for a single input.
+    """
+
+    alpha_reg_type: AlphaRegType
+    """
+    The alpha regularization type for the Nonlinear Data-Driven MPC
+    formulation.
+    """
+
+    lamb_alpha_s: float
+    """
+    The ridge regularization weight for `alpha_s` for a controller that uses an
+    approximation of `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
+    """
+
+    lamb_sigma_s: float
+    """
+    The ridge regularization weight for `sigma_s` for a controller that uses an
+    approximation of `alpha_Lin^sr(D_t)` for the regularization of `alpha`.
+    """
+
+    ext_out_incr_in: bool
+    """
+    The controller structure:
+
+    - If `True`, the controller uses an extended output representation
+      (y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] + du[k-1]).
+    - If `False`, the controller operates as a standard controller with direct
+      control inputs and without system state extensions.
+
+    Defaults to `False`.
+    """
+
+    update_cost_threshold: float
+    """
+    The tracking cost value threshold. Online input-output data updates are
+    disabled when the tracking cost value is less than this value.
+    """
+
+    n_mpc_step: int
+    """
+    The number of consecutive applications of the optimal input for an n-Step
+    Data-Driven MPC Scheme (multi-step).
     """
 
     def __init__(
@@ -239,9 +293,9 @@ class NonlinearDataDrivenMPCController:
         # of [2].
         if alpha_reg_type == AlphaRegType.APPROXIMATED:
             # Ridge regularization weight for alpha_s
-            self.lamb_alpha_s = lamb_alpha_s
+            self.lamb_alpha_s = lamb_alpha_s  # type: ignore[assignment]
             # Ridge regularization weight for sigma_s
-            self.lamb_sigma_s = lamb_sigma_s
+            self.lamb_sigma_s = lamb_sigma_s  # type: ignore[assignment]
         elif alpha_reg_type == AlphaRegType.PREVIOUS:
             # Previous alpha value initialized with 0
             self._prev_alpha_val = np.zeros((self.N - self.L - self.n, 1))

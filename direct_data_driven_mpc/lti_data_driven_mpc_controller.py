@@ -67,47 +67,97 @@ class LTIDataDrivenMPCController:
     configured as either a Nominal or a Robust controller. The implementation
     is based on research by J. Berberich et al., as described in [1].
 
-    Attributes:
-        controller_type (LTIDataDrivenMPCType): The LTI Data-Driven MPC
-            controller type.
-        n (int): The estimated order of the system.
-        m (int): The number of control inputs.
-        p (int): The number of system outputs.
-        u_d (np.ndarray): A persistently exciting input sequence.
-        y_d (np.ndarray): The system's output response to `u_d`.
-        N (int): The length of the initial input (`u_d`) and output (`y_d`)
-            trajectories.
-        u_past (np.ndarray): The past `n` input measurements (u[t-n, t-1]).
-        y_past (np.ndarray): The past `n` output measurements (y[t-n, t-1]).
-        L (int): The prediction horizon length.
-        Q (np.ndarray): The output weighting matrix.
-        R (np.ndarray): The input weighting matrix.
-        u_s (np.ndarray): The setpoint for control inputs.
-        y_s (np.ndarray): The setpoint for system outputs.
-        eps_max (float | None): The estimated upper bound of the system
-            measurement noise.
-        lamb_alpha (float | None): The ridge regularization base weight for
-            `alpha`, scaled by `eps_max`.
-        lamb_sigma (float | None): The ridge regularization weight for
-            `sigma`.
-        U (np.ndarray | None): An array of shape (`m`, 2) containing the
-            bounds for the `m` predicted inputs. Each row specifies the
-            `[min, max]` bounds for a single input. If `None`, no input bounds
-            are applied.
-        c (float | None): A constant used to define a Convex constraint for
-            the slack variable `sigma` in a Robust MPC formulation.
-        slack_var_constraint_type (SlackVarConstraintType): The constraint
-            type for the slack variable `sigma` in a Robust MPC formulation.
-        n_mpc_step (int): The number of consecutive applications of the
-            optimal input for an n-Step Data-Driven MPC Scheme (multi-step).
-        use_terminal_constraints (bool): Whether the Data-Driven MPC
-            formulation enforces terminal equality constraints
-
     References:
         [1] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, "Data-Driven
         Model Predictive Control With Stability and Robustness Guarantees," in
         IEEE Transactions on Automatic Control, vol. 66, no. 4, pp. 1702-1717,
         April 2021, doi: 10.1109/TAC.2020.3000182.
+    """
+
+    controller_type: LTIDataDrivenMPCType
+    """The LTI Data-Driven MPC controller type."""
+
+    n: int
+    """The estimated order of the system."""
+
+    m: int
+    """The number of control inputs."""
+
+    p: int
+    """The number of system outputs."""
+
+    u_d: np.ndarray
+    """The persistently exciting input trajectory applied to the system."""
+
+    y_d: np.ndarray
+    """The system's output response to `u_d`."""
+
+    u_past: np.ndarray
+    """The past `n` input measurements (u[t-n, t-1])."""
+
+    y_past: np.ndarray
+    """The past `n` output measurements (y[t-n, t-1])."""
+
+    N: int
+    """
+    The length of the initial input (`u_d`) and output (`y_d`) trajectories.
+    """
+
+    L: int
+    """The prediction horizon length."""
+
+    Q: np.ndarray
+    """The output weighting matrix."""
+
+    R: np.ndarray
+    """The input weighting matrix."""
+
+    u_s: np.ndarray
+    """The setpoint for control inputs."""
+
+    y_s: np.ndarray
+    """The setpoint for system outputs."""
+
+    eps_max: float | None
+    """The estimated upper bound of the system measurement noise."""
+
+    lamb_alpha: float | None
+    """
+    The ridge regularization base weight for `alpha`, scaled by `eps_max`.
+    """
+
+    lamb_sigma: float | None
+    """The ridge regularization weight for `sigma`."""
+
+    U: np.ndarray | None
+    """
+    An array of shape (`m`, 2) containing the bounds for the `m` predicted
+    inputs. Each row specifies the `[min, max]` bounds for a single input. If
+    `None`, no input bounds are applied.
+    """
+
+    c: float | None
+    """
+    A constant used to define a Convex constraint for the slack variable
+    `sigma` in a Robust MPC formulation.
+    """
+
+    slack_var_constraint_type: SlackVarConstraintType
+    """
+    The constraint type for the slack variable `sigma` in a Robust MPC
+    formulation.
+    """
+
+    n_mpc_step: int
+    """
+    The number of consecutive applications of the optimal input for an n-Step
+    Data-Driven MPC Scheme (multi-step).
+    """
+
+    use_terminal_constraints: bool
+    """
+    Whether the Data-Driven MPC formulation enforces terminal equality
+    constraints.
     """
 
     def __init__(
