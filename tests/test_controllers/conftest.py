@@ -14,8 +14,8 @@ from direct_data_driven_mpc.utilities.controller import (
 
 
 @pytest.fixture
-@patch.object(LTIDataDrivenMPCController, "get_optimal_control_input")
-@patch.object(LTIDataDrivenMPCController, "solve_mpc_problem")
+@patch.object(LTIDataDrivenMPCController, "_get_optimal_control_input")
+@patch.object(LTIDataDrivenMPCController, "_solve_mpc_problem")
 def dummy_lti_controller(
     mock_solve_mpc_problem: Mock,
     mock_get_optimal_control_input: Mock,
@@ -58,9 +58,9 @@ def dummy_lti_controller(
 
 
 @pytest.fixture
-@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
-@patch.object(NonlinearDataDrivenMPCController, "solve_mpc_problem")
-@patch.object(NonlinearDataDrivenMPCController, "solve_alpha_sr_Lin_Dt")
+@patch.object(NonlinearDataDrivenMPCController, "_get_optimal_control_input")
+@patch.object(NonlinearDataDrivenMPCController, "_solve_mpc_problem")
+@patch.object(NonlinearDataDrivenMPCController, "_solve_alpha_sr_Lin_Dt")
 def dummy_nonlinear_controller(
     mock_solve_alpha_problem: Mock,
     mock_solve_mpc_problem: Mock,

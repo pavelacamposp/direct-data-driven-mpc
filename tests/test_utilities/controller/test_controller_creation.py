@@ -63,8 +63,8 @@ def test_create_lti_data_driven_mpc_controller(
         ((100, 1), (100, 2), None),  # Valid: Unequal number of inputs-outputs
     ],
 )
-@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
-@patch.object(NonlinearDataDrivenMPCController, "solve_alpha_sr_Lin_Dt")
+@patch.object(NonlinearDataDrivenMPCController, "_get_optimal_control_input")
+@patch.object(NonlinearDataDrivenMPCController, "_solve_alpha_sr_Lin_Dt")
 def test_create_nonlinear_data_driven_mpc_controller(
     mock_controller_alpha_solve: Mock,
     mock_controller_get_optimal_input: Mock,

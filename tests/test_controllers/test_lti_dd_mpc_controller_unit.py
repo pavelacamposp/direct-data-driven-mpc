@@ -22,7 +22,7 @@ from direct_data_driven_mpc.utilities.controller import (
     "controller_type",
     [LTIDataDrivenMPCType.NOMINAL, LTIDataDrivenMPCType.ROBUST],
 )
-@patch.object(LTIDataDrivenMPCController, "get_optimal_control_input")
+@patch.object(LTIDataDrivenMPCController, "_get_optimal_control_input")
 def test_lti_dd_mpc_controller_init(
     mock_controller_get_optimal_input: Mock,
     controller_type: LTIDataDrivenMPCType,
