@@ -187,7 +187,7 @@ The project is structured as a Python package, encapsulating the core logic of t
 - [`direct_data_driven_mpc/lti_data_driven_mpc_controller.py`](direct_data_driven_mpc/lti_data_driven_mpc_controller.py): Implements a Data-Driven MPC controller for LTI systems in the `LTIDataDrivenMPCController` class. This implementation is based on the **Nominal and Robust Data-Driven MPC schemes** described in [[1]](#1).
 - [`direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.py`](direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.py): Implements a Data-Driven MPC controller for nonlinear systems in the `NonlinearDataDrivenMPCController` class. This implementation is based on the **Nonlinear Data-Driven MPC scheme** described in [[2]](#2).
 
-The utility module [`direct_data_driven_mpc/utilities/hankel_matrix.py`](direct_data_driven_mpc/utilities/hankel_matrix.py) is used for constructing Hankel matrices and evaluating whether data sequences are persistently exciting of a given order.
+The utility module [`direct_data_driven_mpc/utilities/hankel_matrix_utils.py`](direct_data_driven_mpc/utilities/hankel_matrix_utils.py) is used for constructing Hankel matrices and evaluating whether data sequences are persistently exciting of a given order.
 
 ### Model Simulation
 The following utility modules have been implemented to simulate LTI and nonlinear systems:

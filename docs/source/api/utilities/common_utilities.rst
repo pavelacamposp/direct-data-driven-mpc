@@ -8,6 +8,6 @@ The following modules, available in the ``direct_data_driven_mpc/utilities/`` di
 .. autosummary::
    :toctree: common_utilities
 
-   hankel_matrix
+   hankel_matrix_utils
    initial_state_estimation
    yaml_config_loading

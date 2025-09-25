@@ -1,8 +1,7 @@
-from direct_data_driven_mpc.utilities.hankel_matrix import (
+from .hankel_matrix_utils import (
     evaluate_persistent_excitation,
     hankel_matrix,
 )
-
 from .initial_state_estimation import (
     calculate_equilibrium_input_from_output,
     calculate_equilibrium_output_from_input,

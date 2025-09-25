@@ -12,7 +12,7 @@ The project is structured as a Python package, encapsulating the core logic of t
 
 - :mod:`direct_data_driven_mpc.nonlinear_data_driven_mpc_controller`: Implements a Data-Driven MPC controller for nonlinear systems in the :class:`~direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController` class. This implementation is based on the **Nonlinear Data-Driven MPC scheme** described in :ref:`[2] <nonlinear-citation>`.
 
-The utility module :mod:`direct_data_driven_mpc.utilities.hankel_matrix` is used for constructing Hankel matrices and evaluating whether data sequences are persistently exciting of a given order.
+The utility module :mod:`direct_data_driven_mpc.utilities.hankel_matrix_utils` is used for constructing Hankel matrices and evaluating whether data sequences are persistently exciting of a given order.
 
 Model Simulation
 ----------------
