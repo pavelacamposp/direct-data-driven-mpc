@@ -8,13 +8,14 @@ and nonlinear systems, and randomizing the initial state of LTI systems.
 import numpy as np
 from numpy.random import Generator
 
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+from direct_data_driven_mpc.utilities.models import (
+    LTIModel,
+    NonlinearSystem,
+)
+
+from .controller_params import (
     DataDrivenMPCParams,
     LTIDataDrivenMPCParams,
-)
-from direct_data_driven_mpc.utilities.models.lti_model import LTIModel
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
-    NonlinearSystem,
 )
 
 

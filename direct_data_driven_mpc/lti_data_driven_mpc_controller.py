@@ -3,7 +3,7 @@ from enum import Enum
 import cvxpy as cp
 import numpy as np
 
-from direct_data_driven_mpc.utilities.hankel_matrix import (
+from direct_data_driven_mpc.utilities import (
     evaluate_persistent_excitation,
     hankel_matrix,
 )

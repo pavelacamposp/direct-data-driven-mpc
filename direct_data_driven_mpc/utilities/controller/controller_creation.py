@@ -8,13 +8,12 @@ input-output measurement data.
 
 import numpy as np
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCController,
-)
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
     NonlinearDataDrivenMPCController,
 )
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+
+from .controller_params import (
     LTIDataDrivenMPCParams,
     NonlinearDataDrivenMPCParams,
 )

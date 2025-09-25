@@ -49,20 +49,18 @@ from reproduction_utilities.paper_reproduction_utils import (
     simulate_data_driven_mpc_control_loops_reproduction,
 )
 
-from direct_data_driven_mpc.utilities.controller.controller_params import (
-    get_lti_data_driven_mpc_controller_params,
+from direct_data_driven_mpc.utilities import (
+    load_yaml_config_params,
 )
-from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
+from direct_data_driven_mpc.utilities.controller import (
     generate_initial_input_output_data,
+    get_lti_data_driven_mpc_controller_params,
     randomize_initial_system_state,
     simulate_n_input_output_measurements,
 )
-from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
-from direct_data_driven_mpc.utilities.visualization.comparison_plot import (
+from direct_data_driven_mpc.utilities.models import LTISystemModel
+from direct_data_driven_mpc.utilities.visualization import (
     plot_input_output_comparison,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params,
 )
 
 # Directory paths

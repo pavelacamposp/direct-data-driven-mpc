@@ -1,18 +1,16 @@
 import numpy as np
 import pytest
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
+    AlphaRegType,
     LTIDataDrivenMPCType,
     SlackVarConstraintType,
 )
-from direct_data_driven_mpc.nonlinear_data_driven_mpc_controller import (
-    AlphaRegType,
-)
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities.controller import (
     LTIDataDrivenMPCParams,
     NonlinearDataDrivenMPCParams,
 )
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+from direct_data_driven_mpc.utilities.models import (
     NonlinearSystem,
 )
 

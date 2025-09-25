@@ -1,6 +1,6 @@
 import numpy as np
 
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
+from direct_data_driven_mpc.utilities.models import (
     NonlinearSystem,
 )
 

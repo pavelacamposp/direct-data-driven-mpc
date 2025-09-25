@@ -3,11 +3,11 @@ from functools import partial
 
 import numpy as np
 
-from direct_data_driven_mpc.utilities.models.nonlinear_model import (
-    NonlinearSystem,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
+from direct_data_driven_mpc.utilities import (
     load_yaml_config_params,
+)
+from direct_data_driven_mpc.utilities.models import (
+    NonlinearSystem,
 )
 
 

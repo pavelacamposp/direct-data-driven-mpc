@@ -4,9 +4,11 @@ import numpy as np
 import pytest
 from matplotlib.patches import Rectangle
 
+from direct_data_driven_mpc.utilities.visualization import (
+    plot_input_output,
+)
 from direct_data_driven_mpc.utilities.visualization.control_plot import (
     plot_data,
-    plot_input_output,
 )
 
 matplotlib.use("Agg")  # Prevent GUI backend

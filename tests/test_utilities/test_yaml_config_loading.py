@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
+from direct_data_driven_mpc.utilities import (
     load_yaml_config_params,
 )
 

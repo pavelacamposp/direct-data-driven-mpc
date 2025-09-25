@@ -34,33 +34,25 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
-from direct_data_driven_mpc.lti_data_driven_mpc_controller import (
+from direct_data_driven_mpc import (
     LTIDataDrivenMPCType,
     SlackVarConstraintType,
 )
-from direct_data_driven_mpc.utilities.controller.controller_creation import (
+from direct_data_driven_mpc.utilities import (
+    load_yaml_config_params,
+)
+from direct_data_driven_mpc.utilities.controller import (
     create_lti_data_driven_mpc_controller,
-)
-from direct_data_driven_mpc.utilities.controller.controller_params import (
+    generate_initial_input_output_data,
     get_lti_data_driven_mpc_controller_params,
-)
-from direct_data_driven_mpc.utilities.controller.data_driven_mpc_sim import (
+    randomize_initial_system_state,
     simulate_lti_data_driven_mpc_control_loop,
 )
-from direct_data_driven_mpc.utilities.controller.initial_data_generation import (  # noqa: E501
-    generate_initial_input_output_data,
-    randomize_initial_system_state,
-)
-from direct_data_driven_mpc.utilities.models.lti_model import LTISystemModel
-from direct_data_driven_mpc.utilities.visualization.control_plot import (
+from direct_data_driven_mpc.utilities.models import LTISystemModel
+from direct_data_driven_mpc.utilities.visualization import (
     plot_input_output,
-)
-from direct_data_driven_mpc.utilities.visualization.control_plot_anim import (
     plot_input_output_animation,
     save_animation,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params,
 )
 
 # Directory paths

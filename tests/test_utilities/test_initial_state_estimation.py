@@ -2,7 +2,7 @@ from typing import Any
 
 import numpy as np
 
-from direct_data_driven_mpc.utilities.initial_state_estimation import (
+from direct_data_driven_mpc.utilities import (
     calculate_equilibrium_input_from_output,
     calculate_equilibrium_output_from_input,
     estimate_initial_state,

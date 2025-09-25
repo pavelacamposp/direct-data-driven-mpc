@@ -7,15 +7,13 @@ LTI systems using a state-space representation.
 
 import numpy as np
 
-from direct_data_driven_mpc.utilities.initial_state_estimation import (
+from direct_data_driven_mpc.utilities import (
     calculate_equilibrium_input_from_output,
     calculate_equilibrium_output_from_input,
     estimate_initial_state,
+    load_yaml_config_params,
     observability_matrix,
     toeplitz_input_output_matrix,
-)
-from direct_data_driven_mpc.utilities.yaml_config_loading import (
-    load_yaml_config_params,
 )
 
 
