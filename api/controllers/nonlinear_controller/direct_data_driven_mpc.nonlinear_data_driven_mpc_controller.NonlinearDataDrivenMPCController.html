@@ -482,33 +482,36 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController"><code class="docutils literal notranslate"><span class="pre">NonlinearDataDrivenMPCController</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.evaluate_input_persistent_excitation"><code class="docutils literal notranslate"><span class="pre">evaluate_input_persistent_excitation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_prediction_horizon_length"><code class="docutils literal notranslate"><span class="pre">check_prediction_horizon_length()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_weighting_matrices_dimensions"><code class="docutils literal notranslate"><span class="pre">check_weighting_matrices_dimensions()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.initialize_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">initialize_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.ext_out_incr_in"><code class="docutils literal notranslate"><span class="pre">ext_out_incr_in</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n"><code class="docutils literal notranslate"><span class="pre">n</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.m"><code class="docutils literal notranslate"><span class="pre">m</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.p"><code class="docutils literal notranslate"><span class="pre">p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.u"><code class="docutils literal notranslate"><span class="pre">u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.du"><code class="docutils literal notranslate"><span class="pre">du</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y"><code class="docutils literal notranslate"><span class="pre">y</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.N"><code class="docutils literal notranslate"><span class="pre">N</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.L"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Q"><code class="docutils literal notranslate"><span class="pre">Q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y_r"><code class="docutils literal notranslate"><span class="pre">y_r</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha"><code class="docutils literal notranslate"><span class="pre">lamb_alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma"><code class="docutils literal notranslate"><span class="pre">lamb_sigma</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.U"><code class="docutils literal notranslate"><span class="pre">U</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Us"><code class="docutils literal notranslate"><span class="pre">Us</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.alpha_reg_type"><code class="docutils literal notranslate"><span class="pre">alpha_reg_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha_s"><code class="docutils literal notranslate"><span class="pre">lamb_alpha_s</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma_s"><code class="docutils literal notranslate"><span class="pre">lamb_sigma_s</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_cost_threshold"><code class="docutils literal notranslate"><span class="pre">update_cost_threshold</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n_mpc_step"><code class="docutils literal notranslate"><span class="pre">n_mpc_step</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_and_solve_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">update_and_solve_data_driven_mpc()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_variables"><code class="docutils literal notranslate"><span class="pre">define_optimization_variables()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">define_optimization_parameters()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">update_optimization_parameters()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_constraints"><code class="docutils literal notranslate"><span class="pre">define_mpc_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_system_dynamic_constraints"><code class="docutils literal notranslate"><span class="pre">define_system_dynamic_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_internal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_internal_state_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_terminal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_terminal_state_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_input_constraints"><code class="docutils literal notranslate"><span class="pre">define_input_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_cost_function"><code class="docutils literal notranslate"><span class="pre">define_cost_function()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_problem"><code class="docutils literal notranslate"><span class="pre">define_mpc_problem()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_mpc_problem"><code class="docutils literal notranslate"><span class="pre">solve_mpc_problem()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_problem_solve_status"><code class="docutils literal notranslate"><span class="pre">get_problem_solve_status()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_cost_value"><code class="docutils literal notranslate"><span class="pre">get_optimal_cost_value()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input_at_step"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input_at_step()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_previous_alpha_value"><code class="docutils literal notranslate"><span class="pre">store_previous_alpha_value()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_du_value_at_step"><code class="docutils literal notranslate"><span class="pre">get_du_value_at_step()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_input_output_measurement"><code class="docutils literal notranslate"><span class="pre">store_input_output_measurement()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.set_input_output_data"><code class="docutils literal notranslate"><span class="pre">set_input_output_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.set_output_setpoint"><code class="docutils literal notranslate"><span class="pre">set_output_setpoint()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_alpha_sr_Lin_Dt_prob"><code class="docutils literal notranslate"><span class="pre">define_alpha_sr_Lin_Dt_prob()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_alpha_sr_Lin_Dt"><code class="docutils literal notranslate"><span class="pre">solve_alpha_sr_Lin_Dt()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -530,123 +533,6 @@ document.write(`
 <dd><p>A class that implements a Data-Driven Model Predictive Control (MPC)
 controller for nonlinear systems. The implementation is based on research
 by J. Berberich et al., as described in [2].</p>
-<dl class="field-list">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul>
-<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The estimated order of the system.</p></li>
-<li><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of control inputs.</p></li>
-<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of system outputs.</p></li>
-<li><p><strong>u</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The input trajectory applied to the system.</p></li>
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The system’s output response to <cite>u</cite>.</p></li>
-<li><p><strong>du</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The input increment trajectory for a controller that
-uses input increments (<cite>ext_out_incr_in = True</cite>).</p></li>
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The length of the initial input (<cite>u</cite>) and output (<cite>y</cite>)
-trajectories.</p></li>
-<li><p><strong>L</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The prediction horizon length.</p></li>
-<li><p><strong>Q</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The output weighting matrix for the MPC formulation.</p></li>
-<li><p><strong>R</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The input weighting matrix for the MPC formulation.</p></li>
-<li><p><strong>S</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The output setpoint weighting matrix for the MPC
-formulation.</p></li>
-<li><p><strong>y_r</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The system output setpoint.</p></li>
-<li><p><strong>lamb_alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The ridge regularization weight for <cite>alpha</cite>.</p></li>
-<li><p><strong>lamb_sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The ridge regularization weight for <cite>sigma</cite>.</p></li>
-<li><p><strong>U</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array of shape (<cite>m</cite>, 2) containing the bounds for
-the <cite>m</cite> predicted inputs. Each row specifies the <cite>[min, max]</cite>
-bounds for a single input.</p></li>
-<li><p><strong>Us</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array of shape (<cite>m</cite>, 2) containing the bounds for
-the <cite>m</cite> predicted input setpoints. <cite>Us</cite> must be a subset of <cite>U</cite>.
-Each row specifies the <cite>[min, max]</cite> bounds for a single input.</p></li>
-<li><p><strong>alpha_reg_type</strong> (<a class="reference internal" href="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType" title="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlphaRegType</span></code></a>) – The alpha regularization type for
-the Nonlinear Data-Driven MPC formulation.</p></li>
-<li><p><strong>lamb_alpha_s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The ridge regularization weight for
-<cite>alpha_s</cite> for a controller that uses an approximation of
-<cite>alpha_Lin^sr(D_t)</cite> for the regularization of <cite>alpha</cite>.</p></li>
-<li><p><strong>lamb_sigma_s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The ridge regularization weight for
-<cite>sigma_s</cite> for a controller that uses an approximation of
-<cite>alpha_Lin^sr(D_t)</cite> for the regularization of <cite>alpha</cite>.</p></li>
-<li><p><strong>ext_out_incr_in</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – The controller structure:</p>
-<ul class="simple">
-<li><p>If <cite>True</cite>, the controller uses an extended output representation
-(y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] +
-du[k-1]).</p></li>
-<li><p>If <cite>False</cite>, the controller operates as a standard controller with
-direct control inputs and without system state extensions.</p></li>
-</ul>
-<p>Defaults to <cite>False</cite>.</p>
-</li>
-<li><p><strong>update_cost_threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The tracking cost value threshold.
-Online input-output data updates are disabled when the tracking
-cost value is less than this value.</p></li>
-<li><p><strong>n_mpc_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The number of consecutive applications of the
-optimal input for an n-Step Data-Driven MPC Scheme (multi-step).</p></li>
-<li><p><strong>HLn1_u</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The Hankel matrix constructed from the input data
-<cite>u</cite> (or <cite>du</cite> if the controller uses an extended output
-representation and input increments).</p></li>
-<li><p><strong>HLn1_y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The Hankel matrix constructed from the output
-data <cite>y</cite>.</p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The optimization variable for <cite>alpha</cite>.</p></li>
-<li><p><strong>ubar</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted control input variable.</p></li>
-<li><p><strong>ybar</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted system output variable.</p></li>
-<li><p><strong>u_s</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted equilibrium input variable.</p></li>
-<li><p><strong>y_s</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The predicted equilibrium output variable.</p></li>
-<li><p><strong>sigma</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.variable.Variable" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.variable.Variable</span></code></a>) – The optimization variable for <cite>sigma</cite>.</p></li>
-<li><p><strong>sigma_ubar</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vstack</span> <span class="pre">|</span> <span class="pre">None</span></code>) – A CVXPY <cite>Vstack</cite> object that stacks the
-<cite>sigma</cite> values corresponding to the input. Defined only if the
-controller uses an extended output representation.</p></li>
-<li><p><strong>u_s_tiled</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.atoms.affine.vstack.Vstack</span></code>) – A CVXPY <cite>Vstack</cite> object that stacks the predicted
-input setpoint variables for use in the cost function formulation.</p></li>
-<li><p><strong>y_s_tiled</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.atoms.affine.vstack.Vstack</span></code>) – A CVXPY <cite>Vstack</cite> object that stacks the predicted
-output setpoint variables for use in the cost function
-formulation.</p></li>
-<li><p><strong>alpha_s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">cp.Variable</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The optimization variable for <cite>alpha_s</cite>.
-Defined only if <cite>alpha</cite> is regularized with respect to an
-approximation of <cite>alpha_Lin^sr(D_t)</cite>.</p></li>
-<li><p><strong>sigma_s</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">cp.Variable</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The optimization variable for <cite>sigma_s</cite>.
-Defined only if <cite>alpha</cite> is regularized with respect to an
-approximation of <cite>alpha_Lin^sr(D_t)</cite>.</p></li>
-<li><p><strong>sigma_s_ubar</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vstack</span> <span class="pre">|</span> <span class="pre">None</span></code>) – A CVXPY <cite>Vstack</cite> object that stacks the
-<cite>sigma_s</cite> values corresponding to the input. Defined only if the
-controller uses an extended output representation and if <cite>alpha</cite> is
-regularized with respect to an approximation of
-<cite>alpha_Lin^sr(D_t)</cite>.</p></li>
-<li><p><strong>dynamics_constraint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The system dynamics
-constraints for a Data-Driven MPC formulation.</p></li>
-<li><p><strong>internal_state_constraint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The internal state
-constraints for a Data-Driven MPC formulation.</p></li>
-<li><p><strong>terminal_constraint</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The terminal state
-constraints for a Data-Driven MPC formulation.</p></li>
-<li><p><strong>input_constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The input constraints for a
-Data-Driven MPC formulation.</p></li>
-<li><p><strong>constraints</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list[cp.Constraint]</span></code>) – The combined constraints for the
-Data-Driven MPC formulation.</p></li>
-<li><p><strong>cost</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.expressions.html#cvxpy.expressions.expression.Expression" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.expressions.expression.Expression</span></code></a>) – The cost function for the Data-Driven MPC
-formulation.</p></li>
-<li><p><strong>problem</strong> (<a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.problems.html#cvxpy.Problem" title="(in CVXPY v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">cvxpy.problems.problem.Problem</span></code></a>) – The quadratic programming problem for the
-Data-Driven MPC.</p></li>
-<li><p><strong>optimal_u</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The optimal control input derived from the
-Data-Driven MPC solution.</p></li>
-<li><p><strong>optimal_du</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The optimal control input increments
-derived from the Data-Driven MPC solution. Defined only for
-controllers with an extended output representation and input
-increments.</p></li>
-<li><p><strong>prev_alpha_val</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span> <span class="pre">|</span> <span class="pre">None</span></code>) – The previous value of <cite>alpha</cite> used
-for when <cite>alpha</cite> is regularized with respect to the previous
-optimal <cite>alpha</cite> value. Defined only if <cite>alpha</cite> is regularized with
-respect to its previous optimal alpha value.</p></li>
-<li><p><strong>ones_NLn</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A vector of ones of shape (1, N - L - n).</p></li>
-<li><p><strong>ones_Ln1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A vector of ones of shape (L + n + 1, 1).</p></li>
-<li><p><strong>ones_n1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A vector of ones of shape (n + 1, 1).</p></li>
-<li><p><strong>U_const_low</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A tiled lower bound for the input trajectory
-constraints over the prediction horizon.</p></li>
-<li><p><strong>U_const_up</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – A tiled upper bound for the input trajectory
-constraints over the prediction horizon.</p></li>
-<li><p><strong>Us_const_low</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The lower bound for the equilibrium input
-constraints.</p></li>
-<li><p><strong>Us_const_up</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – The upper bound for the equilibrium input
-constraints.</p></li>
-</ul>
-</dd>
-</dl>
 <p class="rubric">References</p>
 <p>[2] J. Berberich, J. Köhler, M. A. Müller and F. Allgöwer, “Linear
 Tracking MPC for Nonlinear Systems—Part II: The Data-Driven Case,” in
@@ -728,82 +614,152 @@ in IEEE Transactions on Automatic Control, vol. 67, no. 9, pp.
 4406-4421, Sept. 2022, doi: 10.1109/TAC.2022.3166851.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.evaluate_input_persistent_excitation">
-<span class="sig-name descname"><span class="pre">evaluate_input_persistent_excitation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.evaluate_input_persistent_excitation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.evaluate_input_persistent_excitation" title="Link to this definition">#</a></dt>
-<dd><p>Evaluate whether the input data is persistently exciting of order
-(L + n + 1).</p>
-<p>This method first verifies that the length of the elements in the
-input data matches the number of inputs of the system. Then, it
-evaluates the rank of the Hankel matrix induced by the input sequence
-to determine if the input sequence is persistently exciting of order
-(L + n + 1), as described in Definition 1 [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the length of the elements in the data sequence
-    does not match the number of inputs of the system, or if the
-    input data is not persistently exciting of order (L + n + 1).</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.ext_out_incr_in">
+<span class="sig-name descname"><span class="pre">ext_out_incr_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.ext_out_incr_in" title="Link to this definition">#</a></dt>
+<dd><p>The controller structure:</p>
+<ul class="simple">
+<li><p>If <cite>True</cite>, the controller uses an extended output representation
+(y_ext[k] = [y[k], u[k]]) and input increments (u[k] = u[k-1] + du[k-1]).</p></li>
+<li><p>If <cite>False</cite>, the controller operates as a standard controller with direct
+control inputs and without system state extensions.</p></li>
+</ul>
+<p>Defaults to <cite>False</cite>.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_prediction_horizon_length">
-<span class="sig-name descname"><span class="pre">check_prediction_horizon_length</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.check_prediction_horizon_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_prediction_horizon_length" title="Link to this definition">#</a></dt>
-<dd><p>Check if the prediction horizon length, <cite>L</cite>, satisfies the MPC system
-design, as described in [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the prediction horizon <cite>L</cite> is less than the
-    required threshold based on the controller type.</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n">
+<span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n" title="Link to this definition">#</a></dt>
+<dd><p>The estimated order of the system.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_weighting_matrices_dimensions">
-<span class="sig-name descname"><span class="pre">check_weighting_matrices_dimensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.check_weighting_matrices_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_weighting_matrices_dimensions" title="Link to this definition">#</a></dt>
-<dd><p>Check if the dimensions of the output (<cite>Q</cite>), input (<cite>R</cite>), and setpoint
-(<cite>S</cite>) weighting matrices are correct for an MPC formulation based on
-their order.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the dimensions of the <cite>Q</cite>, <cite>R</cite>, or <cite>S</cite> matrices are
-    incorrect.</p>
-</dd>
-</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.m">
+<span class="sig-name descname"><span class="pre">m</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.m" title="Link to this definition">#</a></dt>
+<dd><p>The number of control inputs.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.initialize_data_driven_mpc">
-<span class="sig-name descname"><span class="pre">initialize_data_driven_mpc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.initialize_data_driven_mpc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.initialize_data_driven_mpc" title="Link to this definition">#</a></dt>
-<dd><p>Initialize the Data-Driven MPC controller.</p>
-<p>This method performs the following tasks:</p>
-<ol class="arabic simple">
-<li><p>Constructs Hankel matrices from the initial input-output trajectory
-data (<cite>u</cite>, <cite>y</cite>). These matrices are used for the data-driven
-characterization of the unknown system, as defined by the system
-dynamic constraints in the Nonlinear Data-Driven MPC formulation
-of [2].</p></li>
-<li><p>Defines the optimization variables for the Data-Driven MPC problem.</p></li>
-<li><p>Defines the constraints for the MPC problem, which include the
-system dynamics, internal state, terminal state, and input
-constraints.</p></li>
-<li><p>Defines the cost function for the MPC problem.</p></li>
-<li><p>Formulates the MPC problem as a Quadratic Programming (QP) problem.</p></li>
-<li><p>Solves the initialized MPC problem to ensure the formulation is
-valid and retrieve the optimal control input for the initial
-setup.</p></li>
-</ol>
-<p>This initialization process ensures that all necessary components for
-the Data-Driven MPC are correctly defined and that the MPC problem is
-solvable with the provided initial data.</p>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.p">
+<span class="sig-name descname"><span class="pre">p</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.p" title="Link to this definition">#</a></dt>
+<dd><p>The number of system outputs.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.u">
+<span class="sig-name descname"><span class="pre">u</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.u" title="Link to this definition">#</a></dt>
+<dd><p>The persistently exciting input trajectory applied to the system.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.du">
+<span class="sig-name descname"><span class="pre">du</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.du" title="Link to this definition">#</a></dt>
+<dd><p>The input increment trajectory for a controller that uses input increments
+(<cite>ext_out_incr_in = True</cite>).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y" title="Link to this definition">#</a></dt>
+<dd><p>The system’s output response to <cite>u</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.N">
+<span class="sig-name descname"><span class="pre">N</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.N" title="Link to this definition">#</a></dt>
+<dd><p>The length of the initial input (<cite>u</cite>) and output (<cite>y</cite>) trajectories.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.L">
+<span class="sig-name descname"><span class="pre">L</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.L" title="Link to this definition">#</a></dt>
+<dd><p>The prediction horizon length.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Q">
+<span class="sig-name descname"><span class="pre">Q</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Q" title="Link to this definition">#</a></dt>
+<dd><p>The output weighting matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.R">
+<span class="sig-name descname"><span class="pre">R</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.R" title="Link to this definition">#</a></dt>
+<dd><p>The input weighting matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.S">
+<span class="sig-name descname"><span class="pre">S</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.S" title="Link to this definition">#</a></dt>
+<dd><p>The output setpoint weighting matrix.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y_r">
+<span class="sig-name descname"><span class="pre">y_r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y_r" title="Link to this definition">#</a></dt>
+<dd><p>The system output setpoint.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha">
+<span class="sig-name descname"><span class="pre">lamb_alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha" title="Link to this definition">#</a></dt>
+<dd><p>The ridge regularization weight for <cite>alpha</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma">
+<span class="sig-name descname"><span class="pre">lamb_sigma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma" title="Link to this definition">#</a></dt>
+<dd><p>The ridge regularization weight for <cite>sigma</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.U">
+<span class="sig-name descname"><span class="pre">U</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.U" title="Link to this definition">#</a></dt>
+<dd><p>An array of shape (<cite>m</cite>, 2) containing the bounds for the <cite>m</cite> predicted
+inputs. Each row specifies the <cite>[min, max]</cite> bounds for a single input.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Us">
+<span class="sig-name descname"><span class="pre">Us</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Us" title="Link to this definition">#</a></dt>
+<dd><p>An array of shape (<cite>m</cite>, 2) containing the bounds for the <cite>m</cite> predicted
+input setpoints. <cite>Us</cite> must be a subset of <cite>U</cite>. Each row specifies the
+<cite>[min, max]</cite> bounds for a single input.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.alpha_reg_type">
+<span class="sig-name descname"><span class="pre">alpha_reg_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType.html#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType" title="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.AlphaRegType"><span class="pre">AlphaRegType</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.alpha_reg_type" title="Link to this definition">#</a></dt>
+<dd><p>The alpha regularization type for the Nonlinear Data-Driven MPC
+formulation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha_s">
+<span class="sig-name descname"><span class="pre">lamb_alpha_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha_s" title="Link to this definition">#</a></dt>
+<dd><p>The ridge regularization weight for <cite>alpha_s</cite> for a controller that uses an
+approximation of <cite>alpha_Lin^sr(D_t)</cite> for the regularization of <cite>alpha</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma_s">
+<span class="sig-name descname"><span class="pre">lamb_sigma_s</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma_s" title="Link to this definition">#</a></dt>
+<dd><p>The ridge regularization weight for <cite>sigma_s</cite> for a controller that uses an
+approximation of <cite>alpha_Lin^sr(D_t)</cite> for the regularization of <cite>alpha</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_cost_threshold">
+<span class="sig-name descname"><span class="pre">update_cost_threshold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_cost_threshold" title="Link to this definition">#</a></dt>
+<dd><p>The tracking cost value threshold. Online input-output data updates are
+disabled when the tracking cost value is less than this value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n_mpc_step">
+<span class="sig-name descname"><span class="pre">n_mpc_step</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n_mpc_step" title="Link to this definition">#</a></dt>
+<dd><p>The number of consecutive applications of the optimal input for an n-Step
+Data-Driven MPC Scheme (multi-step).</p>
 </dd></dl>
 
 <dl class="py method">
@@ -836,231 +792,6 @@ value.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_variables">
-<span class="sig-name descname"><span class="pre">define_optimization_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_optimization_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_variables" title="Link to this definition">#</a></dt>
-<dd><p>Define the optimization variables for the Data-Driven MPC controller.</p>
-<p>This method defines data-driven MPC optimization variables as
-described in the Nonlinear Data-Driven MPC formulation in [2].</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method initializes attributes that define the MPC
-optimization variables for the controller. Additional attributes
-are initialized if the MPC controller uses an extended output
-representation and input increments or if the <cite>alpha</cite>
-regularization type is <cite>APPROXIMATED</cite>.</p>
-</div>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_parameters">
-<span class="sig-name descname"><span class="pre">define_optimization_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_optimization_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_parameters" title="Link to this definition">#</a></dt>
-<dd><p>Define MPC optimization parameters that are updated at every step
-iteration.</p>
-<p>This method initializes the following MPC parameters:</p>
-<ul class="simple">
-<li><p>Output setpoint: <cite>y_r_param</cite>.</p></li>
-<li><p>Hankel matrices: <cite>HLn1_u_param</cite> and <cite>HLn1_y_param</cite>.</p></li>
-<li><p>Past inputs and outputs: <cite>u_past_param</cite> and <cite>y_past_param</cite>.</p></li>
-<li><p>Past input increments: <cite>du_past_param</cite> (if applicable).</p></li>
-<li><p>Computed value of <cite>alpha_Lin^sr(D_t)</cite>: <cite>alpha_sr_Lin_D_param</cite> (if
-<cite>alpha</cite> is not regularized with respect to zero).</p></li>
-</ul>
-<p>The value of <cite>y_r_param</cite> is initialized to <cite>y_r</cite>.</p>
-<p>These parameters are updated at each MPC iteration, except for
-<cite>y_r_param</cite>, which must be manually updated when setting a new
-controller setpoint.</p>
-<p>Using CVXPY <cite>Parameter</cite> objects allows efficient updates without the
-need of reformulating the MPC problem at every step.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_optimization_parameters">
-<span class="sig-name descname"><span class="pre">update_optimization_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.update_optimization_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_optimization_parameters" title="Link to this definition">#</a></dt>
-<dd><p>Update MPC optimization parameters.</p>
-<p>This method updates the MPC optimization parameters using the most
-recent input-output measurement data.</p>
-<p>Additionally, it updates the computed <cite>alpha_Lin^sr(D_t)</cite> value based
-on the alpha regularization type:</p>
-<ul class="simple">
-<li><p><cite>alpha_reg_type == AlphaRegType.APPROXIMATED</cite>: Computes
-<cite>alpha_Lin^sr(D_t)</cite> solving Equation (23) of [2] and updates its
-value.</p></li>
-<li><p><cite>alpha_reg_type == AlphaRegType.PREVIOUS</cite>: Updates
-<cite>alpha_Lin^sr(D_t)</cite> with the previous optimal value of <cite>alpha</cite>.</p></li>
-</ul>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_constraints">
-<span class="sig-name descname"><span class="pre">define_mpc_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_mpc_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_constraints" title="Link to this definition">#</a></dt>
-<dd><p>Define the constraints for the Data-Driven MPC formulation.</p>
-<p>This method defines the following constraints, as described in the
-Nonlinear Data-Driven MPC formulation in [2]:</p>
-<ul class="simple">
-<li><p><strong>System dynamics</strong>: Ensures input-output predictions are possible
-trajectories of the system based on a data-driven characterization of
-all its input-output trajectories. Defined by Equation (22b).</p></li>
-<li><p><strong>Internal state</strong>: Ensures predictions align with the internal
-state of the system’s trajectory. This constrains the first <cite>n</cite>
-input-output predictions to match the past <cite>n</cite> input-output
-measurements of the system, guaranteeing that the predictions
-consider the initial state of the system. Defined by Equation (22c).</p></li>
-<li><p><strong>Terminal state</strong>: Aims to stabilize the internal state of the
-system so it aligns with the steady-state that corresponds to the
-input-output equilibrium pair (predicted equilibrium setpoints <cite>u_s</cite>,
-<cite>y_s</cite>) in any minimal realization (last <cite>n</cite> input-output predictions,
-as considered in [2]). Defined by Equation (22d).</p></li>
-<li><p><strong>Input</strong>: Constrains both the equilibrium input (predicted input
-setpoint <cite>u_s</cite>) and the input trajectory (<cite>ubar</cite>). Defined by
-Equation (22e).</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method initializes the <cite>dynamics_constraints</cite>,
-<cite>internal_state_constraints</cite>, <cite>terminal_constraints</cite>,
-<cite>input_constraints</cite>, and <cite>constraints</cite> attributes to define the
-MPC constraints based on the MPC controller type.</p>
-</div>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_system_dynamic_constraints">
-<span class="sig-name descname"><span class="pre">define_system_dynamic_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_system_dynamic_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_system_dynamic_constraints" title="Link to this definition">#</a></dt>
-<dd><p>Define the system dynamic constraints for the Data-Driven MPC
-formulation.</p>
-<p>These constraints use a data-driven characterization of all the
-input-output trajectories of a system, as defined by Theorem 1 [2], to
-ensure predictions are possible system trajectories. This is analogous
-to the system dynamics constraints in a typical MPC formulation.</p>
-<p>These constraints are defined according to Equation (22b) of [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY system dynamic
-constraints for the Data-Driven MPC controller, corresponding to
-the specified MPC controller type.</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_internal_state_constraints">
-<span class="sig-name descname"><span class="pre">define_internal_state_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_internal_state_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_internal_state_constraints" title="Link to this definition">#</a></dt>
-<dd><p>Define the internal state constraints for the Data-Driven MPC
-formulation.</p>
-<p>These constraints ensure predictions align with the internal state of
-the system’s trajectory. This way, the first <cite>n</cite> input-output
-predictions are constrained to match the past <cite>n</cite> input-output
-measurements of the system, guaranteeing that the predictions consider
-the initial state of the system.</p>
-<p>These constraints are defined according to Equation (22c) of [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY internal state
-constraints for the Data-Driven MPC controller.</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is essential to update the system’s input-output measurements,
-<cite>u</cite>, <cite>y</cite>, and <cite>du</cite>, at each MPC iteration.</p>
-</div>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_terminal_state_constraints">
-<span class="sig-name descname"><span class="pre">define_terminal_state_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_terminal_state_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_terminal_state_constraints" title="Link to this definition">#</a></dt>
-<dd><p>Define the terminal state constraints for the Data-Driven MPC
-formulation.</p>
-<p>These constraints aim to stabilize the internal state of the system so
-it aligns with the steady-state that corresponds to the input-output
-pair (predicted equilibrium setpoints <cite>u_s</cite>, <cite>y_s</cite>) in any minimal
-realization, specifically the last <cite>n</cite> input-output predictions, as
-considered in [2].</p>
-<p>These constraints are defined according to Equation (22d) of [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY terminal state
-constraints for the Data-Driven MPC controller.</p>
-</dd>
-</dl>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_input_constraints">
-<span class="sig-name descname"><span class="pre">define_input_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://www.cvxpy.org/api_reference/cvxpy.constraints.html#cvxpy.constraints.constraint.Constraint" title="(in CVXPY v1.7)"><span class="pre">Constraint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_input_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_input_constraints" title="Link to this definition">#</a></dt>
-<dd><p>Define the input constraints for the Data-Driven MPC formulation.</p>
-<p>These constraints are defined according to Equation (22e) of [2].</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>list[cp.Constraint]</em> – A list containing the CVXPY input constraints
-for the Data-Driven MPC controller.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_cost_function">
-<span class="sig-name descname"><span class="pre">define_cost_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_cost_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_cost_function" title="Link to this definition">#</a></dt>
-<dd><p>Define the cost function for the Data-Driven MPC formulation.</p>
-<p>This method defines the MPC cost function as described in the
-Nonlinear Data-Driven MPC formulation in Section IV of [2]. The value
-of <cite>alpha_Lin^sr(D_t)</cite> is computed during the cost function
-definition.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method initializes the <cite>cost</cite> attribute to define the MPC
-cost function.</p>
-</div>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_problem">
-<span class="sig-name descname"><span class="pre">define_mpc_problem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_mpc_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_problem" title="Link to this definition">#</a></dt>
-<dd><p>Define the optimization problem for the Data-Driven MPC formulation.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method initializes the <cite>problem</cite> attribute to define the MPC
-problem of the Data-Driven MPC controller, which is formulated as
-a Quadratic Programming (QP) problem. It assumes that the <cite>cost</cite>
-(objective function) and <cite>constraints</cite> attributes have already
-been defined.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_mpc_problem">
-<span class="sig-name descname"><span class="pre">solve_mpc_problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.solve_mpc_problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_mpc_problem" title="Link to this definition">#</a></dt>
-<dd><p>Solve the optimization problem for the Data-Driven MPC formulation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>str</em> – The status of the optimization problem after attempting to
-solve it (e.g., “optimal”, “optimal_inaccurate”, “infeasible”,
-“unbounded”).</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method assumes that the MPC problem has already been defined.
-It solves the problem and updates the <cite>problem</cite> attribute with the
-solution status.</p>
-</div>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_problem_solve_status">
 <span class="sig-name descname"><span class="pre">get_problem_solve_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.get_problem_solve_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_problem_solve_status" title="Link to this definition">#</a></dt>
 <dd><p>Get the solve status of the optimization problem of the Data-Driven MPC
@@ -1085,33 +816,6 @@ the Data-Driven MPC formulation.</p>
 problem.</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input">
-<span class="sig-name descname"><span class="pre">get_optimal_control_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.get_optimal_control_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input" title="Link to this definition">#</a></dt>
-<dd><p>Retrieve and store either the optimal control input or the optimal
-control input increments from the MPC solution.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>np.ndarray</em> – The predicted optimal control input from time step 0
-to L. If the controller uses an extended output representation and
-input increments, returns the predicted optimal control input
-increments instead.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the MPC problem solution status was not “optimal”
-    or “optimal_inaccurate”.</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method should be called after the MPC problem has been
-solved. It stores the predicted optimal control input in the
-<cite>optimal_u</cite> attribute, or the predicted optimal control input
-increments in the <cite>optimal_du</cite> attribute if the controller uses an
-extended output representation and input increments.</p>
-</div>
 </dd></dl>
 
 <dl class="py method">
@@ -1144,13 +848,6 @@ input increment computed from the previous MPC solution
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If <cite>n_step</cite> is not within the range [0, L].</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_previous_alpha_value">
-<span class="sig-name descname"><span class="pre">store_previous_alpha_value</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.store_previous_alpha_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_previous_alpha_value" title="Link to this definition">#</a></dt>
-<dd><p>Store the previous optimal value of <cite>alpha</cite> for regularization in
-subsequent MPC iterations.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1263,39 +960,6 @@ to update the data-driven MPC controller setpoint.</p>
 </div>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_alpha_sr_Lin_Dt_prob">
-<span class="sig-name descname"><span class="pre">define_alpha_sr_Lin_Dt_prob</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.define_alpha_sr_Lin_Dt_prob"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_alpha_sr_Lin_Dt_prob" title="Link to this definition">#</a></dt>
-<dd><p>Define a Quadratic Programming (QP) problem for computing an
-approximation of <cite>alpha_Lin^sr(D_t)</cite> using the latest input-output
-system measurements for the current iteration. The QP formulation is
-based on Equation (23) of [2].</p>
-<p class="rubric">References</p>
-<p>[2]: See class-level docstring for full reference details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_alpha_sr_Lin_Dt">
-<span class="sig-name descname"><span class="pre">solve_alpha_sr_Lin_Dt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></span><a class="reference internal" href="../../../_modules/direct_data_driven_mpc/nonlinear_data_driven_mpc_controller.html#NonlinearDataDrivenMPCController.solve_alpha_sr_Lin_Dt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_alpha_sr_Lin_Dt" title="Link to this definition">#</a></dt>
-<dd><p>Compute the approximation of <cite>alpha_Lin^sr(D_t)</cite> using the latest
-input-output system measurements for the current iteration.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>np.ndarray</em> – The computed approximation of <cite>alpha_Lin^sr(D_t)</cite>.</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the QP solver fails to converge to an optimal
-    solution.</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method assumes that the Quadratic Programming (QP) problem
-for computing the approximation of <cite>alpha_Lin^sr(D_t)</cite>
-(<cite>alpha_sr_Lin_Dt_prob</cite>) has already been defined.</p>
-</div>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -1347,33 +1011,36 @@ for computing the approximation of <cite>alpha_Lin^sr(D_t)</cite>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController"><code class="docutils literal notranslate"><span class="pre">NonlinearDataDrivenMPCController</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.evaluate_input_persistent_excitation"><code class="docutils literal notranslate"><span class="pre">evaluate_input_persistent_excitation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_prediction_horizon_length"><code class="docutils literal notranslate"><span class="pre">check_prediction_horizon_length()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.check_weighting_matrices_dimensions"><code class="docutils literal notranslate"><span class="pre">check_weighting_matrices_dimensions()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.initialize_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">initialize_data_driven_mpc()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.ext_out_incr_in"><code class="docutils literal notranslate"><span class="pre">ext_out_incr_in</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n"><code class="docutils literal notranslate"><span class="pre">n</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.m"><code class="docutils literal notranslate"><span class="pre">m</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.p"><code class="docutils literal notranslate"><span class="pre">p</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.u"><code class="docutils literal notranslate"><span class="pre">u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.du"><code class="docutils literal notranslate"><span class="pre">du</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y"><code class="docutils literal notranslate"><span class="pre">y</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.N"><code class="docutils literal notranslate"><span class="pre">N</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.L"><code class="docutils literal notranslate"><span class="pre">L</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Q"><code class="docutils literal notranslate"><span class="pre">Q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.R"><code class="docutils literal notranslate"><span class="pre">R</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.S"><code class="docutils literal notranslate"><span class="pre">S</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.y_r"><code class="docutils literal notranslate"><span class="pre">y_r</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha"><code class="docutils literal notranslate"><span class="pre">lamb_alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma"><code class="docutils literal notranslate"><span class="pre">lamb_sigma</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.U"><code class="docutils literal notranslate"><span class="pre">U</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.Us"><code class="docutils literal notranslate"><span class="pre">Us</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.alpha_reg_type"><code class="docutils literal notranslate"><span class="pre">alpha_reg_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_alpha_s"><code class="docutils literal notranslate"><span class="pre">lamb_alpha_s</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.lamb_sigma_s"><code class="docutils literal notranslate"><span class="pre">lamb_sigma_s</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_cost_threshold"><code class="docutils literal notranslate"><span class="pre">update_cost_threshold</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.n_mpc_step"><code class="docutils literal notranslate"><span class="pre">n_mpc_step</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_and_solve_data_driven_mpc"><code class="docutils literal notranslate"><span class="pre">update_and_solve_data_driven_mpc()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_variables"><code class="docutils literal notranslate"><span class="pre">define_optimization_variables()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">define_optimization_parameters()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.update_optimization_parameters"><code class="docutils literal notranslate"><span class="pre">update_optimization_parameters()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_constraints"><code class="docutils literal notranslate"><span class="pre">define_mpc_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_system_dynamic_constraints"><code class="docutils literal notranslate"><span class="pre">define_system_dynamic_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_internal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_internal_state_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_terminal_state_constraints"><code class="docutils literal notranslate"><span class="pre">define_terminal_state_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_input_constraints"><code class="docutils literal notranslate"><span class="pre">define_input_constraints()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_cost_function"><code class="docutils literal notranslate"><span class="pre">define_cost_function()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_mpc_problem"><code class="docutils literal notranslate"><span class="pre">define_mpc_problem()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_mpc_problem"><code class="docutils literal notranslate"><span class="pre">solve_mpc_problem()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_problem_solve_status"><code class="docutils literal notranslate"><span class="pre">get_problem_solve_status()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_cost_value"><code class="docutils literal notranslate"><span class="pre">get_optimal_cost_value()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_optimal_control_input_at_step"><code class="docutils literal notranslate"><span class="pre">get_optimal_control_input_at_step()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_previous_alpha_value"><code class="docutils literal notranslate"><span class="pre">store_previous_alpha_value()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.get_du_value_at_step"><code class="docutils literal notranslate"><span class="pre">get_du_value_at_step()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.store_input_output_measurement"><code class="docutils literal notranslate"><span class="pre">store_input_output_measurement()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.set_input_output_data"><code class="docutils literal notranslate"><span class="pre">set_input_output_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.set_output_setpoint"><code class="docutils literal notranslate"><span class="pre">set_output_setpoint()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.define_alpha_sr_Lin_Dt_prob"><code class="docutils literal notranslate"><span class="pre">define_alpha_sr_Lin_Dt_prob()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct_data_driven_mpc.nonlinear_data_driven_mpc_controller.NonlinearDataDrivenMPCController.solve_alpha_sr_Lin_Dt"><code class="docutils literal notranslate"><span class="pre">solve_alpha_sr_Lin_Dt()</span></code></a></li>
 </ul>
 </li>
 </ul>
