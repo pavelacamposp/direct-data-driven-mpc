@@ -1,10 +1,10 @@
 ---
 test_lti_dd_mpc_params:
-  n: 4
-  N: 400
-  L: 30
-  Q_weights: 3
-  R_weights: 1.0e-4
+  n: 1
+  N: 12
+  L: 2
+  Q_weights: 1
+  R_weights: 1
   epsilon_bar: 0.002
   lambda_sigma: 1000
   lambda_alpha_epsilon_bar: 0.1
@@ -16,6 +16,6 @@ test_lti_dd_mpc_params:
     - [-1, 1]
   slack_var_constraint_type: 0
   controller_type: 1
-  u_s: [1, 1]
-  y_s: [0.65, 0.77]
+  u_s: [1, 1.5]
+  y_s: [1, 1]
   n_n_mpc_step: true

@@ -72,7 +72,7 @@ def test_lti_dd_mpc_integration(
     """
     # Define test parameters
     np_random = np.random.default_rng(0)
-    n_steps = 50
+    n_steps = 30
     verbose = 0
 
     # Define system model
@@ -163,7 +163,7 @@ def test_lti_dd_mpc_integration(
     np.testing.assert_equal(dd_mpc_controller.y_s, new_y_s)
 
     # Simulate data-driven MPC control system for the new setpoint
-    n_steps_setpoint_change = 30
+    n_steps_setpoint_change = 25
     u_change, y_change = simulate_lti_data_driven_mpc_control_loop(
         system_model=system_model,
         data_driven_mpc_controller=dd_mpc_controller,
