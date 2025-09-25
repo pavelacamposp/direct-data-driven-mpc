@@ -21,7 +21,7 @@ from direct_data_driven_mpc.utilities.controller import (
         AlphaRegType.ZERO,
     ],
 )
-@patch.object(NonlinearDataDrivenMPCController, "get_optimal_control_input")
+@patch.object(NonlinearDataDrivenMPCController, "_get_optimal_control_input")
 def test_nonlinear_dd_mpc_controller_init(
     mock_controller_get_optimal_input: Mock,
     alpha_reg_type: AlphaRegType,

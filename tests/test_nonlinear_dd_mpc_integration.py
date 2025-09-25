@@ -142,7 +142,7 @@ def test_nonlinear_dd_mpc_integration(
 
     dd_mpc_controller.set_output_setpoint(new_y_r)
 
-    np.testing.assert_equal(dd_mpc_controller.y_r_param.value, new_y_r)
+    np.testing.assert_equal(dd_mpc_controller.y_r, new_y_r)
 
     # Simulate data-driven MPC control system for the new setpoint
     n_steps_setpoint_change = 75
