@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>direct_data_driven_mpc.utilities.hankel_matrix &#8212; Direct Data-Driven MPC</title>
+    <title>direct_data_driven_mpc.utilities.hankel_matrix_utils &#8212; Direct Data-Driven MPC</title>
   
   
   
@@ -45,8 +45,8 @@
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/utilities/hankel_matrix';</script>
-    <link rel="canonical" href="https://pavelacamposp.github.io/direct-data-driven-mpc/_modules/direct_data_driven_mpc/utilities/hankel_matrix.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/direct_data_driven_mpc/utilities/hankel_matrix_utils';</script>
+    <link rel="canonical" href="https://pavelacamposp.github.io/direct-data-driven-mpc/_modules/direct_data_driven_mpc/utilities/hankel_matrix_utils.html" />
     <link rel="icon" href="../../../_static/favicon.png"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -254,7 +254,7 @@
 </ul>
 </details></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/utilities/common_utilities.html">Common Utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html">direct_data_driven_mpc.utilities.hankel_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix_utils.html">direct_data_driven_mpc.utilities.hankel_matrix_utils</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.initial_state_estimation.html">direct_data_driven_mpc.utilities.initial_state_estimation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.yaml_config_loading.html">direct_data_driven_mpc.utilities.yaml_config_loading</a></li>
 </ul>
@@ -338,7 +338,7 @@
       
       
       
-      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/utilities/hankel_matrix.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/pavelacamposp/direct-data-driven-mpc/issues/new?title=Issue%20on%20page%20%2F_modules/direct_data_driven_mpc/utilities/hankel_matrix_utils.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -416,7 +416,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for direct_data_driven_mpc.utilities.hankel_matrix</h1><div class="highlight"><pre>
+  <h1>Source code for direct_data_driven_mpc.utilities.hankel_matrix_utils</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for constructing Hankel matrices and evaluating persistent</span>
 <span class="sd">excitation.</span>
@@ -432,7 +432,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="hankel_matrix">
-<a class="viewcode-back" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html#direct_data_driven_mpc.utilities.hankel_matrix.hankel_matrix">[docs]</a>
+<a class="viewcode-back" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix_utils.html#direct_data_driven_mpc.utilities.hankel_matrix_utils.hankel_matrix">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hankel_matrix</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Construct a Hankel matrix from the input data matrix `X` with a window</span>
@@ -486,7 +486,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="evaluate_persistent_excitation">
-<a class="viewcode-back" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix.html#direct_data_driven_mpc.utilities.hankel_matrix.evaluate_persistent_excitation">[docs]</a>
+<a class="viewcode-back" href="../../../api/utilities/common_utilities/direct_data_driven_mpc.utilities.hankel_matrix_utils.html#direct_data_driven_mpc.utilities.hankel_matrix_utils.evaluate_persistent_excitation">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">evaluate_persistent_excitation</span><span class="p">(</span>
     <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
