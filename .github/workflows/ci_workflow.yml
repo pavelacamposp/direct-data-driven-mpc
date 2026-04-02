@@ -10,7 +10,7 @@ on:
 jobs:
   code_quality_unit_tests:
     runs-on: ubuntu-latest
-    container: python:3.12-slim-bullseye
+    container: python:3.12-slim-bookworm
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,7 +63,7 @@ jobs:
 
   integration_tests:
     runs-on: ubuntu-latest
-    container: python:3.12-slim-bullseye
+    container: python:3.12-slim-bookworm
     strategy:
       matrix:
         test_type: [lti_integration, nonlinear_integration]
@@ -104,7 +104,7 @@ jobs:
   coverage_report:
     needs: [code_quality_unit_tests, integration_tests]
     runs-on: ubuntu-latest
-    container: python:3.12-slim-bullseye
+    container: python:3.12-slim-bookworm
     steps:
       - name: Checkout
         uses: actions/checkout@v4
